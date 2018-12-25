@@ -1,0 +1,10 @@
+deploy ob1=OBI();
+deploy ob1.reboot;
+sleep 10;
+deploy ob1.create_client;
+show tables;
+
+let $p=deploy_get_value(ob1.fs0.ip);
+let $a=deploy_get_value(ob1.mysql_p  select count(*)   from __all_server where cluster_id=1 and svr_type='mergeserver' and svr_ip='$p');
+--echo $a
+deploy ob1.stop;

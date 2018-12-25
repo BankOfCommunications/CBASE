@@ -1,0 +1,4 @@
+-- fail, values can not be identier
+insert into user values (user_id+1, user_name||'new', 45, 'have identifer');
+Unknown value user_id
+Resolve error!

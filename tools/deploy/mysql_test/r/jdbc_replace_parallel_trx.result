@@ -1,0 +1,145 @@
+case1:two trx commit
+drop table if exists t1;
+create table t1(c0 int primary key, c1 int);
+prepare stmt_r_1 from replace into t1 values(?,?),(?,?);
+prepare stmt_u_1 from update t1 set c1=? where c0=?;
+prepare stmt_d_1 from delete from t1 where c0=?;
+prepare stmt_s_1 from select c0,c1 from t1 where c0=? for update;
+prepare stmt_select_1 from select * from t1;
+set autocommit=0;
+set @a1=1;
+set @a2=2;
+set @b1=1;
+set @b2=2;
+execute stmt_r_1 using @a1,@b1,@a2,@b2;
+execute stmt_u_1 using @b2,@a1;
+execute stmt_d_1 using @a2;
+execute stmt_s_1 using @a1;
+c0	c1
+1	2
+execute stmt_s_1 using @a2;
+c0	c1
+prepare stmt_r_2 from replace into t1 values(?,?),(?,?);
+prepare stmt_u_2 from update t1 set c1=? where c0=?;
+prepare stmt_d_2 from delete from t1 where c0=?;
+prepare stmt_s_2 from select c0,c1 from t1 where c0=? for update;
+prepare stmt_select_2 from select * from t1;
+set autocommit=0;
+set @a1=1;
+set @a2=3;
+set @b1=2;
+set @b2=3;
+execute stmt_r_2 using @a1,@b1,@a2,@b2;
+ERROR HY000: Exclusive lock conflict 'int:1' for key 'PRIMARY'
+execute stmt_u_2 using @b2,@a1;
+ERROR HY000: Exclusive lock conflict 'int:1' for key 'PRIMARY'
+execute stmt_d_2 using @a2;
+execute stmt_s_2 using @a1;
+ERROR HY000: Exclusive lock conflict 'int:1' for key 'PRIMARY'
+execute stmt_s_2 using @a2;
+c0	c1
+commit;
+set autocommit=1;
+execute stmt_select_1;
+c0	c1
+1	2
+commit;
+set autocommit=1;
+execute stmt_select_2;
+c0	c1
+1	2
+case2: 1 rollbake 2 commit
+drop table if exists t1;
+create table t2(c0 int primary key, c1 int);
+prepare stmt_r_1 from replace into t2 values(?,?),(?,?);
+prepare stmt_u_1 from update t2 set c1=? where c0=?;
+prepare stmt_d_1 from delete from t2 where c0=?;
+prepare stmt_s_1 from select c0,c1 from t2 where c0=? for update;
+prepare stmt_select_1 from select * from t2;
+set autocommit=0;
+set @a1=1;
+set @a2=2;
+set @b1=1;
+set @b2=2;
+execute stmt_r_1 using @a1,@b1,@a2,@b2;
+execute stmt_u_1 using @b2,@a1;
+execute stmt_d_1 using @a2;
+execute stmt_s_1 using @a1;
+c0	c1
+1	2
+execute stmt_s_1 using @a2;
+c0	c1
+prepare stmt_r_2 from replace into t2 values(?,?),(?,?);
+prepare stmt_u_2 from update t2 set c1=? where c0=?;
+prepare stmt_d_2 from delete from t2 where c0=?;
+prepare stmt_s_2 from select c0,c1 from t2 where c0=? for update;
+prepare stmt_select_2 from select * from t2;
+set autocommit=0;
+set @a1=4;
+set @a2=3;
+set @b1=4;
+set @b2=3;
+execute stmt_r_2 using @a1,@b1,@a2,@b2;
+execute stmt_u_2 using @b2,@a1;
+execute stmt_d_2 using @a2;
+execute stmt_s_2 using @a1;
+c0	c1
+4	3
+execute stmt_s_2 using @a2;
+c0	c1
+rollback;
+set autocommit=1;
+execute stmt_select_1;
+c0	c1
+commit;
+set autocommit=1;
+execute stmt_select_2;
+c0	c1
+4	3
+case2: 1 rollbake 2 rollback
+drop table if exists t2;
+create table t3(c0 int primary key, c1 int);
+prepare stmt_r_1 from replace into t3 values(?,?),(?,?);
+prepare stmt_u_1 from update t3 set c1=? where c0=?;
+prepare stmt_d_1 from delete from t3 where c0=?;
+prepare stmt_s_1 from select c0,c1 from t3 where c0=? for update;
+prepare stmt_select_1 from select * from t3;
+set autocommit=0;
+set @a1=1;
+set @a2=2;
+set @b1=1;
+set @b2=2;
+execute stmt_r_1 using @a1,@b1,@a2,@b2;
+execute stmt_u_1 using @b2,@a1;
+execute stmt_d_1 using @a2;
+execute stmt_s_1 using @a1;
+c0	c1
+1	2
+execute stmt_s_1 using @a2;
+c0	c1
+prepare stmt_r_2 from replace into t3 values(?,?),(?,?);
+prepare stmt_u_2 from update t3 set c1=? where c0=?;
+prepare stmt_d_2 from delete from t3 where c0=?;
+prepare stmt_s_2 from select c0,c1 from t3 where c0=? for update;
+prepare stmt_select_2 from select * from t3;
+set autocommit=0;
+set @a1=4;
+set @a2=3;
+set @b1=4;
+set @b2=3;
+execute stmt_r_2 using @a1,@b1,@a2,@b2;
+execute stmt_u_2 using @b2,@a1;
+execute stmt_d_2 using @a2;
+execute stmt_s_2 using @a1;
+c0	c1
+4	3
+execute stmt_s_2 using @a2;
+c0	c1
+rollback;
+set autocommit=1;
+execute stmt_select_1;
+c0	c1
+rollback;
+set autocommit=1;
+execute stmt_select_2;
+c0	c1

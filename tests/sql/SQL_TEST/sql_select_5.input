@@ -1,0 +1,4 @@
+-- fail, order by clause gets the column name from the first select
+select user_id, user_name from user union select item_id, item_name from item order by item_id;
+Unkown column name item_id
+Resolve error!

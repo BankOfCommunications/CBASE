@@ -1,0 +1,32 @@
+drop table if exists t1,t2;
+
+create table t1(c1 int primary key, c2 varchar(20));
+
+Update /*hotspot*/ t1 set c2='aaaa' where c1=1;
+Update /*hotspot*/ t1 set c2='aaaa';
+select * from t1;
+replace into t1 values (0,'zzzz'),(1,'aaaa'),(2,'bbbb'),(3,'cccc');
+select * from t1;
+Update /*hotspot*/ t1 set c2='aaab' where c1=1;
+select * from t1;
+Update /*hotspot*/ t1 set c2='aaac' where c1=1;
+select * from t1;
+Update /*hotspot*/ t1 set c2='aaad' where c1=1;
+select * from t1;
+
+set @a='aaae';
+prepare stmt from Update /*hotspot*/ t1 set c2=? where c1=1;
+prepare stmt0 from Update /*hotspot*/ t1 set c2=? where c1=0;
+execute stmt using @a;
+execute stmt0 using @a;
+select * from t1;
+set @a='aaaf';
+execute stmt using @a;
+execute stmt0 using @a;
+select * from t1;
+set @a='aaag';
+execute stmt using @a;
+execute stmt0 using @a;
+select * from t1;
+
+drop table t1;

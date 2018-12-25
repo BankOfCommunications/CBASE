@@ -1,0 +1,36 @@
+using database test;
+drop table if exists ie_quote;
+create table ie_quote
+(
+it0 int,
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256) not null,
+primary key(it0, vc0)
+);
+select * from ie_quote;
+it0	vc0	vc1	vc2
+0	a	NULL	
+1	b	NULL	sun
+2	c	hello"the"world	huafda
+3	d	''''	1111
+4	e	"""	1111
+5	f	hello'the'world	''''''''''
+6	""""	""""	""""
+7	
+
+x
+
+y
+	
+
+x
+
+y
+	
+
+x
+
+y
+
+8			

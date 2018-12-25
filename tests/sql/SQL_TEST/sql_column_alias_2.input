@@ -1,0 +1,30 @@
+-- ok allow same alias names
+select user_id myid, item_id myid from order_list;
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1003, TableName:order_list, AliasName:NULL, Type:BASE_TABLE, RefId: 1003}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:3, ColumnName:user_id, TableRef:1003}
+            {Num 1, ColumnId:4, ColumnName:item_id, TableRef:1003}
+        <ColumnItemList End>
+        SELECT ::= <1, myid>, <2, myid>
+        FROM ::= <1003>
+        ObSelectStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 3]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (NULL : 18446744073709551612)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 4]
+        ObSqlRawExpr 1 End
+    <ExprList End>
+<logical_plan End>
+

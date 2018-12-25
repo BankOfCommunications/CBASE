@@ -1,0 +1,37 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+
+
+#
+# Bug#11299 'prepared statement makes wrong SQL syntax in binlog which stops
+# replication': check that errouneous queries with placeholders are not
+# allowed
+#
+
+create table t1 (a int primary key, b int);
+
+--error 5001
+prepare stmt from 'select ??';
+--error 5001
+prepare stmt from 'select ?FROM t1';
+--error 5001
+prepare stmt from 'select FROM t1 WHERE?=1';
+--error 5001
+prepare stmt from 'update t1 set @a=a+?WHERE 1';
+
+
+--error 5001
+select ?;
+--error 5001
+select ??;
+
+
+--error 5001
+select ? from t1;
+
+drop table t1;
+
+
+--error 5001
+select ?;

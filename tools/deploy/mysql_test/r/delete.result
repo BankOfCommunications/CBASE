@@ -1,0 +1,205 @@
+drop table if exists t1;
+drop table if exists t2;
+drop table if exists t3;
+drop table if exists t4;
+create table t1(a int primary key, b int);
+insert into t1 values(1,0),(2,0),(3,0);
+delete from t1;
+delete from t1 where a = 1;
+delete from t1 where a = 2;
+delete from t1 where a = 3;
+select * from t1;
+a	b
+insert into t1 values(1,0),(2,0),(3,0);
+delete from t1 where a=1;
+select * from t1;
+a	b
+2	0
+3	0
+insert into t1 values(1,0);
+replace into t1 values(2,0),(3,0);
+delete from t1 where a=1;
+delete from t1 where a=2;
+delete from t1 where a=1 or a=2 or a=3;
+select * from t1;
+a	b
+insert into t1 values(1,0),(2,0);
+delete from t1 where a=1;
+delete from t1 where a=2;
+delete from t1 where a=3;
+select * from t1;
+a	b
+drop table t1;
+create table t2 (p1 int, p2 int, p3 int, p4 int, primary key(p1,p2,p3));
+insert into t2 values(1,1,1,0),(2,2,2,0),(3,3,3,0),(4,4,4,0),(5,4,4,0),(6,4,4,0),(7,4,6,0),(8,4,6,0),(9,4,6,0),(10,4,6,0),(11,4,6,0),(12,4,6,0), (13,4,6,0);
+delete from t2 where p1 = 1;
+delete from t2 where p1=13 and p2 = 13 and p3=13;
+delete from t2 where p1=12 and p2 = 12 and p3=12;
+delete from t2 where p1=11 and p2 = 11 and p3=11;
+delete from t2 where p1=10 and p2 = 10 and p3=10;
+delete from t2 where p1=9 and p2 = 9 and p3=9;
+delete from t2 where p1=8 and p2 = 8 and p3=8;
+delete from t2 where p1=7 and p2 = 7 and p3=7;
+delete from t2 where p1=6 and p2 = 6 and p3=6;
+delete from t2 where p1=5 and p2 = 5 and p3=5;
+delete from t2 where p1=4 and p2 = 4 and p3=4;
+delete from t2 where p1=3 and p2 = 3 and p3=3;
+delete from t2 where p1=2 and p2 = 2 and p3=2;
+delete from t2 where p1=1 and p2 = 1 and p3=1;
+select * from t2;
+p1	p2	p3	p4
+5	4	4	0
+6	4	4	0
+7	4	6	0
+8	4	6	0
+9	4	6	0
+10	4	6	0
+11	4	6	0
+12	4	6	0
+13	4	6	0
+select p1,p3 from t2;
+p1	p3
+5	4
+6	4
+7	6
+8	6
+9	6
+10	6
+11	6
+12	6
+13	6
+replace into t2 values(1,1,1,0),(2,2,2,0),(3,3,3,0),(4,4,4,0),(5,4,4,0),(6,4,4,0),(7,4,6,0),(8,4,6,0),(9,4,6,0),(10,4,6,0),(11,4,6,0),(12,4,6,0), (13,4,6,0);
+delete from t2 where p1=1 and p2 =1 and p3=1;
+select * from t2;
+p1	p2	p3	p4
+2	2	2	0
+3	3	3	0
+4	4	4	0
+5	4	4	0
+6	4	4	0
+7	4	6	0
+8	4	6	0
+9	4	6	0
+10	4	6	0
+11	4	6	0
+12	4	6	0
+13	4	6	0
+select p1,p3 from t2;
+p1	p3
+2	2
+3	3
+4	4
+5	4
+6	4
+7	6
+8	6
+9	6
+10	6
+11	6
+12	6
+13	6
+replace into t2 values(1,1,1,0),(2,2,2,0),(3,3,3,0),(4,4,4,0),(5,4,4,0),(6,4,4,0),(7,4,6,0),(8,4,6,0),(9,4,6,0),(10,4,6,0),(11,4,6,0),(12,4,6,0), (13,4,6,0);
+delete from t2 where p1 in (1,2,3,6,13,0);
+select * from t2;
+p1	p2	p3	p4
+4	4	4	0
+5	4	4	0
+7	4	6	0
+8	4	6	0
+9	4	6	0
+10	4	6	0
+11	4	6	0
+12	4	6	0
+drop table t2;
+create table t3 (p1 int, p2 int, p3 int, primary key(p1,p2));
+insert into t3 values(1,1,1),(2,2,2),(3,3,3),(4,4,4),(5,4,4),(6,4,4),(7,4,6),(8,4,6),(9,4,6),(10,4,6),(11,4,6),(12,4,6), (13,4,6);
+delete from t3 where p1=1 and p2=1 and p3=1;
+select * from t3;
+p1	p2	p3
+2	2	2
+3	3	3
+4	4	4
+5	4	4
+6	4	4
+7	4	6
+8	4	6
+9	4	6
+10	4	6
+11	4	6
+12	4	6
+13	4	6
+select p1,p3 from t3;
+p1	p3
+2	2
+3	3
+4	4
+5	4
+6	4
+7	6
+8	6
+9	6
+10	6
+11	6
+12	6
+13	6
+replace into t3 values(1,1,1),(2,2,2),(3,3,3),(4,4,4),(5,4,4),(6,4,4),(7,4,6),(8,4,6),(9,4,6),(10,4,6),(11,4,6),(12,4,6), (13,4,6);
+delete from t3 where p1>3 or p3 >=6;
+select * from t3;
+p1	p2	p3
+1	1	1
+2	2	2
+3	3	3
+select p1,p3 from t3;
+p1	p3
+1	1
+2	2
+3	3
+delete from t3 where p1=1 and p3 =2;
+select * from t3;
+p1	p2	p3
+1	1	1
+2	2	2
+3	3	3
+select p1,p3 from t3;
+p1	p3
+1	1
+2	2
+3	3
+delete from t3 where p1=1 and p2 =1 and p3=1;
+select * from t3;
+p1	p2	p3
+2	2	2
+3	3	3
+select p1,p3 from t3;
+p1	p3
+2	2
+3	3
+replace into t3 values(1,1,1),(2,2,2),(3,3,3),(4,4,4),(5,4,4),(6,4,4),(7,4,6),(8,4,6),(9,4,6),(10,4,6),(11,4,6),(12,4,6), (13,4,6);
+delete from t3 where p1 in (1,2,3,6,13,0);
+select * from t3;
+p1	p2	p3
+4	4	4
+5	4	4
+7	4	6
+8	4	6
+9	4	6
+10	4	6
+11	4	6
+12	4	6
+drop table t3;
+create table t4 (p1 varchar(100), p2 int, p3 datetime, p4 int, primary key(p1,p2,p3));
+insert into t4 values('a', 41, '2012-10-23 17:14:00',0), ('b', 42, '2012-10-23 17:15:00',0), ('c', 43, '2012-10-23 17:16:00',0);
+delete from t4 where p3='2012-10-23 17:14:00';
+select * from t4;
+p1	p2	p3	p4
+b	42	2012-10-23 17:15:00	0
+c	43	2012-10-23 17:16:00	0
+delete from t4 where p2='42';
+select * from t4;
+p1	p2	p3	p4
+c	43	2012-10-23 17:16:00	0
+delete from t4 where p2<'401' and p1='c';
+delete from t4 where p1='a' and p2=41 and p3='2012-10-23 17:14:00';
+select * from t4;
+p1	p2	p3	p4
+drop table t4;

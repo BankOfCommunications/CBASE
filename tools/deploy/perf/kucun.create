@@ -1,0 +1,70 @@
+CREATE TABLE ipm_inventory (
+  user_id int NOT NULL, 
+  item_id int NOT NULL, 
+  sku_id int NOT NULL, 
+  type int NOT NULL, 
+  store_code varchar(128) NOT NULL, 
+  quantity int NOT NULL, 
+  reserve_quantity int NOT NULL, 
+  gmt_create datetime NOT NULL, 
+  gmt_modified datetime NOT NULL, 
+  cofirm_quantity int NOT NULL, 
+  version int NOT NULL, 
+  is_deleted int NOT NULL, 
+  status int NOT NULL, 
+  feature varchar(5000) DEFAULT NULL, 
+  user_nick varchar(32) DEFAULT NULL, 
+  primary key (item_id,sku_id,type,store_code)
+);
+
+CREATE TABLE ipm_inventory_detail (
+  opt_type int NOT NULL, 
+  opt_num int NOT NULL, 
+  inventory_id int NOT NULL, 
+  user_id int NOT NULL, 
+  item_id int NOT NULL, 
+  sku_id int NOT NULL, 
+  bizorderid int DEFAULT NULL, 
+  gmt_create datetime NOT NULL, 
+  gmt_modified datetime NOT NULL, 
+  childbizorderid int DEFAULT NULL, 
+  quantity int NOT NULL, 
+  status int NOT NULL, 
+  version int NOT NULL, 
+  time_out datetime DEFAULT NULL, 
+  time_number int DEFAULT NULL, 
+  opt_gmt_create datetime DEFAULT NULL, 
+  area_id int DEFAULT NULL, 
+  feature varchar(5000) DEFAULT NULL,
+  flag int DEFAULT NULL, 
+  store_code varchar(128) DEFAULT NULL, 
+  reserved_by_cache int DEFAULT NULL, 
+  timeout_status  int DEFAULT NULL,
+  own_sign varchar(32) DEFAULT NULL,
+  redo_count  int,
+  store_quantity int DEFAULT NULL, 
+  reserved_quantity int DEFAULT NULL, 
+  primary key (item_id,sku_id,opt_num,opt_type)
+);
+
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(1,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(2,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(3,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(4,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(5,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(6,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(7,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(8,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(9,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(10,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(11,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(12,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(13,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(14,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(15,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(16,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(17,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(18,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(19,0,901,'IC', 1, 1);
+insert into ipm_inventory (item_id, sku_id, type, store_code, version, reserve_quantity) values(20,0,901,'IC', 1, 1);
+

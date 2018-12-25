@@ -1,0 +1,37 @@
+--source $LOCAL_DIR/mysql_test/import-export/include.inc 
+
+--let $TABLE=ie_keep_double
+--let $DB=test
+--let $TEST_NAME=$TABLE
+--let $IM_FILE=$IM_DEL/$TEST_NAME.del
+--let $EX_FILE=$EX_DEL/$TEST_NAME.del
+
+eval using database $DB;
+# --disable_warnings
+eval drop table if exists $TABLE;
+# --enable_warnings
+
+eval create table $TABLE
+(
+it0 int,
+
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256),
+
+primary key(it0, vc0)
+
+);
+
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE
+--keep-double-quotation-marks
+&> /dev/null;
+
+eval select * from $TABLE;

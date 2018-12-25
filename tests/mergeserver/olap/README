@@ -1,0 +1,60 @@
+1. schema设计
+具体参见schema.ini
+
+rowkey:32位无符号整数的big endian表示，保证rowkey的字典序与整数的序相同。
+
+一共有26列，列明为a-z。
+
+[a,b,c,d]是rowkey的big endian表示，即列a是rowkey表示的整数的most significant字节，
+列d是rowkey的整数表示的least significant字节。 
+
+[e-z]，每一列的的值是一个uint32_t，与rowkey的整数表示相等。
+
+这样的schema可以通过rowkey确定每个列的值。同时[a-d]列设计便于设计实现group by、where
+相关的case。 
+
+举例来说：
+select sum(z) from olap  group by a;
+对于这个sql，我们知道会产生256个group，且可以计算每个group的聚集列的值。
+
+select a,b,x from olap where d = 255;
+对于这个sql，我们知道每255条记录会产生一个结果。类似的还可以测试where c < 125 and c > 50的case。
+
+2. case执行
+2.1 环境部署
+deploy.py是测试环境的部署脚本。执行命令
+./deploy.py -f olappress.conf -a deploy
+脚本会按照配置文件中的配置部署oceanbase测试环境。 部署步骤包括：
+a. 部署执行环境，包括生成oceanbase各个模块的配置文件
+b. 生成静态数据，10分钟左右的时间
+
+在部署结束后，执行脚本
+./deploy.py -f olappress.conf -a start
+启动oceanbase环境。
+
+2.2 启动压力客户端
+./olappress olapress.conf
+
+在遇到任何错误的时候，olappress会退出，并打印相应的warning日志。
+
+3. 新增case
+a. 增加OlapBaseCase(base_case.h)的子类，实现想要测试的case，
+   测试case的示例见SelectWhereOrderLimit(select_where_order_limit.h)，
+   OlapBaseCase的子类最好是状态的，至少需要多线程安全。
+b. 在case_list.cpp:case_list[]数组定义中增加添加的case
+c. 重新编译当前目录
+d. 执行olappress压力客户端
+
+case的执行机理是每次工作线程会从case_list.cpp::case_list[]中随机挑选一个case执行。
+这样保证添加case基本只有实现case最核心部分的代价。
+
+4. NOTES
+每个人可以增加自己的测试case，最好不要修改测试框架本身。每个case需要在case_desc.txt中增加
+对case本身的描述。 
+
+case描述示例：
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Case: SelectWhereOrderLimit
+Auth: wushi.ly@taobao.com
+File: select_where_order_limit.(h|cpp)
+Desc: SELECT * FROM olap WHERE d = 255 ORDER BY z DESC

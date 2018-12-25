@@ -1,0 +1,37 @@
+drop table if exists t1;
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1 (c1 int primary key ,c2 int,c3 int );
+create index il0 on t1(c2) storing (c3);
+"merge"
+[major_freeze] err=0
+drop table __3001__idx__il0;
+select * from __3001__idx__il0;
+ERROR 42S02: table 'test.__3001__idx__il0' does not exist
+create index il0 on t1(c2) storing (c3);
+drop table t1;
+select * from __3001__idx__il0;
+ERROR 42S02: table 'test.__3001__idx__il0' does not exist
+create table t1 (c1 int primary key ,c2 int,c3 int );
+create index il1 on t1(c2) storing (c3);
+create index il2 on t1(c2) storing (c3);
+create index il3 on t1(c2) storing (c3);
+create index il4 on t1(c2) storing (c3);
+"merge"
+[major_freeze] err=0
+drop index il1 on t1;
+show index on t1;
+index_name	status
+__3004__idx__il2	1
+__3004__idx__il3	1
+__3004__idx__il4	1
+drop index il2,il3,il4 on t1;
+drop index il1 on t1;
+ERROR HY000: OB-152: no index to drop!
+drop index il5 on t1;
+ERROR HY000: OB-152: no index to drop!
+drop index il6 on t2;
+ERROR 42S02: table 'test.t2' does not exist
+show index on t1;
+index_name	status
+drop table t1;

@@ -1,0 +1,7 @@
+PREPARE stmt FROM "replace into collect_info /*+rowkey,a:8*/ (a, user_nick) values(?,'mynickname')";
+SET @a = date'2011-11-11';
+EXECUTE stmt USING @a;
+1
+select user_nick from collect_info where /*+rowkey,a:8 */ a = date'2011-11-11';
+user_nick
+'mynickname'

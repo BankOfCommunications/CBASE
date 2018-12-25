@@ -1,0 +1,40 @@
+using database test;
+drop table if exists ie_incorrect_column_mapping;
+create table ie_incorrect_column_mapping
+(
+id int,
+it0 int,
+it1 int,
+it2 int,
+bg0 bigint,
+bg1 bigint,
+bg2 bigint,
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256),
+primary key(id, bg0, vc0)
+);
+ERROR parse_column_map_grammar
+Datafile column can't not be set when sequence function is used! 
+ERROR parse_column_map_grammar
+A string as default token must be contained by single quote like 'apple' in column map syntex! 
+ERROR parse_column_map_grammar
+Repeatedly set default token in column map syntex! 
+ERROR parse_column_map_grammar
+Repeated column name or datafile column id in column map syntex! 
+ERROR parse_column_map_grammar
+Repeatedly set datafile column id in column map syntex! 
+ERROR parse_column_map_grammar
+Repeated column name or datafile column id in column map syntex! 
+ERROR parse_column_map_grammar
+Wrong number of parameters for a column name in column map syntex! 
+ERROR parse_column_map_grammar
+Redundant punctuations in column map syntex! 
+ERROR parse_column_map_grammar
+Wrong number of parameters for a column name in column map syntex! 
+ERROR parse_column_map_grammar
+Wrong number of parameters for a column name in column map syntex! 
+ERROR parse_column_map_grammar
+Wrong sum of columns in column map syntex! 
+select * from ie_incorrect_column_mapping;
+id	it0	it1	it2	bg0	bg1	bg2	vc0	vc1	vc2

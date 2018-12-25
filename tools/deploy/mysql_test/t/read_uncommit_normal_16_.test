@@ -1,0 +1,17 @@
+drop table if exists c;
+create table c (c1 int primary key, c2 varchar(8));
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+set autocommit= 0 ;
+insert into c values(1,1);
+update c set c1 = 2 where c1 = 1;	
+connection conn2;	
+set autocommit= 0 ;	
+--error 5049
+select * from c where c1 = 1 for update;
+--error 5049
+select * from c where c1 = 2 for update;
+commit;
+connection conn1;
+commit;

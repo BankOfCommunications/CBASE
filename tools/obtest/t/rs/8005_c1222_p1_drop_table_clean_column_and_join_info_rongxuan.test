@@ -1,0 +1,20 @@
+deploy ob1=OBI(cluster=1222, use_fms=0);
+deploy ob1.reboot;
+sleep 2;
+deploy ob1.create_client;
+sleep 1;
+create table rongxuan(c int, c2 int, primary key(c));
+sleep 2;
+let $table_id=query_get_value(select table_id from __first_tablet_entry where table_name='rongxuan', table_id, 1);
+echo $table_id;
+drop table rongxuan;
+sleep 2;
+let $ret = deploy_get_value(ob1.mysql_p select count(*) from __all_all_column where table_id=$table_id);
+echo $ret;
+let $ret = deploy_get_value(ob1.mysql_p select count(*) from __all_join_info where left_table_id=$table_id);
+echo $ret;
+let $ret = deploy_get_value(ob1.mysql_p select count(*) from __all_table_privilege where table_id=$table_id);
+echo $ret;
+let $ret = deploy_get_value(ob1.mysql_p select count(*) from __all_join_info where right_table_id=$table_id);
+echo $ret;
+

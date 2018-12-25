@@ -1,0 +1,7 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\client\jdbc_example
+2
+3
+3:src|2|0|0|0|5cfaad0268ad11e8a8030002c8c1274c|0
+7:pom.xml|1|166f774d318|f9f|309d0166|9edab07268ad11e8a8030002c8c1274c|0
+6:run.sh|1|166f774d33b|c9|34133f2c|a16ab08e68ad11e8a8030002c8c1274c|0

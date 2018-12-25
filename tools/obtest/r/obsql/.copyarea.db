@@ -1,0 +1,17 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\obtest\r\obsql
+2
+d
+41:5006_c1244_ms_outflow_control_master_50_only_select_yiming.result|1|166f777d089|1c1|edef9bed|673bbb7668c211e8a8030002c8c1274c|0
+27:5010_c1244_dcl_master_100_yiming.result|1|166f777d0c8|17c|43c47ca5|698bbb9268c211e8a8030002c8c1274c|0
+34:5004_c1244_ms_outflow_control_master_0_yiming.result|1|166f777d103|22e|c9b7bca9|6cbbbbae68c211e8a8030002c8c1274c|0
+25:5011_c1244_dcl_master_0_yiming.result|1|166f777d13e|218|2d17b6cf|6febbbca68c211e8a8030002c8c1274c|0
+26:5012_c1244_dcl_master_50_yiming.result|1|166f777d17e|218|27e4b6d8|71fbbbe668c211e8a8030002c8c1274c|0
+24:5002_c1244_kill_one_cs_yiming.result|1|166f777d1bc|d6|9e0448df|742bbc0268c211e8a8030002c8c1274c|0
+27:5007_c1244_ddl_master_100_yiming.result|1|166f777d1fb|e7|9f274c7e|763bbc1e68c211e8a8030002c8c1274c|0
+26:5009_c1244_ddl_master_50_yiming.result|1|166f777d23c|183|b386b1|783bbc3a68c211e8a8030002c8c1274c|0
+25:5008_c1244_ddl_master_0_yiming.result|1|166f777d273|183|89286a8|7a4bbc5668c211e8a8030002c8c1274c|0
+36:5003_c1244_ms_outflow_control_master_100_yiming.result|1|166f777d2a4|1b3|d0c78d1d|7c5bbc7268c211e8a8030002c8c1274c|0
+35:5005_c1244_ms_outflow_control_master_50_yiming.result|1|166f777d2d4|22e|c54abcb2|7e9bbc8e68c211e8a8030002c8c1274c|0
+27:5013_c1244_switch_cluster_yiming.result|1|166f777d306|1ca|ddb19567|815bbcaa68c211e8a8030002c8c1274c|0
+24:5001_c1244_kill_one_ms_yiming.result|1|166f777d346|d6|9f3048e9|835bbcc668c211e8a8030002c8c1274c|0

@@ -1,0 +1,192 @@
+[public]
+pid_file = ./log/chunk.pid
+log_file = ./log/chunk.log
+log_level = info
+
+[chunk_server]
+dev_name = bond0
+port = 2600
+
+# 读任务队列大小，可以reload
+task_queue_size = 1000
+# 处理线程池大小，OLAP应用中建议配置为cpu核的2倍左右，不能reload
+task_thread_count = 50
+# libeasy 处理IO的线程个数
+io_thread_count = 3
+
+## sstable相关选项，可以通过switch schema来reload，需要保证reload时所有cs没有做每日合并 ##
+# cs上统一配置的每个表的sstable最大大小，在schema中也可以为每个
+# 表单独配置max_sstable_size，如果schema中配置了该选项，以schema
+# 中的配置为准，否则使用cs的这个配置值，默认值256M，对于OLAP应用
+# 的表，建议配置为32M或64M，OLTP应用的表，建议配置为128M或256M
+max_sstable_size = 268435456
+# cs上统一配置的每个表的sstable的block大小，在schema中也可以为每个
+# 表单独配置block_size，schema中与该选项对应的选项名为block_size，
+# 如果schema中配置了该选项，以schema中的配置为准，否则使用cs的这
+# 个配置值，默认值64KB，对于get比较多个表，可以适当设置得小一些，可
+# 以设置为16K或32K
+sstable_block_size = 65535
+
+# sstable数据路径，一定要配置为绝对路径，不支持相对路径
+datadir_path = /data
+application_name = collect
+
+## 网络超时相关配置，可以reload，但lease_check_interval不能reload ##
+# cs向其他server发送同步请求时失败的重试次数
+retry_times=3
+# cs向其他server发送同步请求时的超时时间，默认值3秒，单位：微秒
+# ms向cs发送的查询请求都带了超时时间，这个超时时间对get/scan不起作用，
+# 对于cs上tablet特别多的应用，建议将该配置修改为3~5秒，cs向rs汇报tablet使
+# 用这个配置值，汇报失败，可能会导致每日合并失败
+network_timeout= 3000000
+# cs每日合并时向ups请求数据的超时时间，默认值10秒，当ups的转储文件比
+# 较多时，可以将该配置值设置为20~30秒，保证每日合并向ups读取数据不会超时
+merge_timeout=10000000
+# lease检查间隔，默认5秒，请不要修改
+lease_check_interval=5000000
+
+## 迁移相关选项，可以reload ##
+# cs允许同时做migrate线程的数量，超过这个值，cs返回错误码-1010，
+# rs在做tablet balance时往往将几十个迁移任务一次性发给cs，cs由
+# 于这个参数的限制，会返回-1010错误，rs会打印相关日志，直接忽略
+max_migrate_task_count=1
+# 每个migrate线程使用网络的带宽限制，注意考虑max_migrate_task_count选项
+# 避免migrate的线程过多，占用太多网络带宽
+migrate_band_limit_kbps=51200
+# 是否允许每日合并与migrate并行进行，默认值为0，不允许，每日合并竞争migrate，
+# 可以避免很多不必要的问题，如果合并过程中rs发起迁移，cs返回-1010错误码
+merge_migrate_concurrency = 0
+
+## 每日合并相关选项，可以reload，除了max_merge_thread_num不能reload ##
+# 每日合并时用于merge的cell array的内存限制，默认64M，10个线程会占用640M
+# 内存，该部分内存不会释放，每日合并重复利用，在收藏夹项目中，merge完成
+# 的64M cell array，在join时，ups返回的join表数据略小于一个网络包2M大小。
+# 所以在其它应用情况下该选项可以配置为32M或16M
+merge_mem_limit=67108864
+# 每个disk默认一个合并线程，建议保持默认值，除非需要更快的每日合并速度，每
+# 日合并线程数越多，对查询的响应时间影响比较大，不建议配置这个选项
+# merge_thread_per_disk=1
+# 每日合并时系统load的限制阈值，超过该阈值，cs就会暂停一部分合并线程，如果
+# 合并的线程数max_merge_thread_num设置值大于10，可以适当增大该设置值到20
+merge_load_threshold_high=16
+# 每日合并时每秒get/scan请求最大阈值，如果每秒get/scan请求数超过该阈值，则
+# 暂停部分合并线程
+merge_threshold_request_high=3000
+# 最大每日合并线程数量，默认10，需要快速合并时，可以适当增加，一般不超过20
+# 不能reload
+max_merge_thread_num=10
+# OB集群错峰合并时间，单位：分钟，如果rs配置了该选项，以rs的配置为准
+merge_delay_interval_minutes = 10
+# 每日合并开始时，如果需要读取备ups，等待备ups与主ups同步的frozen_version，
+# 该选项不能设置为0，默认60秒，在0.3版本ups主备同步有重大改进，可以将该选
+# 项设置为10秒
+merge_delay_for_lsync_second = 10
+# 两次合并最小时间间隔，单位：秒
+min_merge_interval_second = 600
+# 每日合并完成，等待多长时间drop cache，该选项一定不能设置为小于10秒，每日合
+# 并完成后，会切换到新的静态数据版本提供查询服务，但可能还有一些请求仍在访问
+# 旧版本的静态数据和旧版本数据的cache，该选项避免删除正在使用的cache导致cs core，
+# 默认值为300秒，如果需要连续每日合并，减少两次合并启动时间，可以将该选项设置
+# 为20秒左右
+min_drop_cache_wait_second = 300
+# 合并减速选项，平均merge多少行检查一次，默认2000行
+merge_pause_row_count = 2000
+# 合并减速选项，如果该配置项>0, 每合并 了merge_pause_row_count行 以后，sleep
+# 的微秒数, 单位微秒，默认值为0
+merge_pause_sleep_time_us = 0
+# 合并减速选项，如果该配置项>0，每合并了merge_pause_row_count行以后，检查一次
+# load, load高于merge_load_threshold_high以后，sleep的秒数，默认值为2秒，设置
+# 为0，表示不做合并减速，最好不要修改该选项
+merge_high_load_sleep_time_us = 2000000
+# 每日合并完成后，是否做cache迁移，默认值0，表示合并完成后不做cache迁移
+switch_cache_after_merge = 0
+# 每日合并时写sstable采用的IO方式，0表示buffer IO，1表示direct IO, 默认值为0
+write_sstable_io_type = 1
+# 是否启动时延迟加载sstable，默认值为1，当单个cs上的tablet数量上万时，延时
+# 加载sstable会大大加快cs的启动速度
+lazy_load_sstable = 1
+# 每日合并优化选项，对于没有修改的sstable是否需要参与每日合并，默认值为0，没有
+# 修改的sstable也参与每日合并，对于旁路导入的集群，sstable size设置比较小，很多
+# sstable不修改的集群，或则多应用共用的线下测试集群，强烈建议设置该选项为1,该
+# 选项需要所有chunkserver在非合并期间统一修改，严禁合并过程中修改并重新加载
+unmerge_if_unchanged = 0
+# 当每日合并完成合并一个tablet时，是否将tablet image同步到index文件中，
+# 默认值为1，当单个cs上的tablet数量很多时，比如超过了20000，建议将这个选项
+# 设置为0，频繁的sync meta需要消耗较多IO资源，特别是meta文件比较大时,但该
+# 选项设置为0有风险，如果在合并过程中重启了cs，当前版本已经合并的所有tablet
+# 将重新合并
+each_tablet_sync_meta = 1
+# 当前合并的sstable的size大于max_sstable_size多少时才允许分裂该sstable，默认值0，
+# 0表示无论原始sstable的大小按照分裂算法进行分裂，如果大于0，比如25，表示当原始
+# sstable的大小大于max_sstable_size * 1.25时，才会按照合并算法对该sstable进行分
+# 裂, 这个选项可以防止分裂出太多很小的tablet，但可能合并出某个很大的tablet，对
+# tablet已经分布均匀，每个tablet修改少的场景建议设置该选项为50左右，该选项需要
+# 所有chunkserver在非合并期间统一修改，严禁合并过程中修改并重新加载
+over_size_percent_to_split = 50
+
+## get/scan查询的内存限制选项，可以reload ##
+# 每个查询可能经过多轮merge操作，每轮merge时如果存储数据的cell array的内存
+# 大于本选项设置的阈值，本轮merge操作完成，默认8M，加大该值不能加快merge速度
+merge_mem_size_mbyte = 8
+# 用于merge的cell array的内存最大值，如果大于该阈值，在clear时所占内存被free，
+# 本选项一般比merge_mem_size_mbyte大，避免重复分配释放内存
+max_merge_mem_size_mbyte = 16
+# 用于group by的cell array的内存限制，默认值8M，本选项暂时用处不大，使用默认值
+groupby_mem_size_mbyte = 8
+# 当查询的数据比较大，并且做完groupby或orderby或数据量仍然比较大，用于cell array
+# 的内存如果超过了本选项设置的阈值，在clear时会free，默认值为16M，在OLAP应用中，
+# 如果经常有大查询需要排序或求topk，建议将改值修改为128M，避免频繁分配释放内存
+max_groupby_mem_size_mbyte = 16
+
+# compactsstable cache是在ups冻结后，cs主动从ups获取数据，缓存在本地
+# compactsstable cache的size,如果为0，则表示不开启该功能
+compactsstable_cache_size_mb = 0
+# 后台获取ups分发数据的线程数，默认为1，最大为16
+compactsstable_cache_thread_num = 1
+# 新旁路导入加载sstable的线程数，默认为0，默认不启用该功能，如果需要配置该值，
+# 该设置值一般与磁盘数量相等，每个磁盘一个加载线程，不能reload
+bypass_sstable_loader_thread_num = 0
+
+## 流控选项，可以reload ##
+# 流控选项，请求预留给ms的处理时间，单位；微秒，默认值300毫秒，如果一个请求的
+# 超时时间减去在packet quene中等待的时间小于本选项设置的阈值，则放弃处理该请求，
+# 返回超时错误-12，如果超时时间为1秒，预留给ms的处理时间设置为200~300毫秒比较
+# 合适，对于OLAP应用，如果ms有比较大的计算量，超时时间也比较长，可以适当将该
+# 选项设置得更大些，可以设置为500~1000毫秒
+task_left_time_us = 300000
+# 鉴定为慢查询的超时时间，如果查询时间超过本选项设置的阈值，cs打印一条慢查询日志
+slow_query_warn_time_us = 500000
+
+## ups list相关选项，可以reload ##
+# cs定期向rs获取ups list的时间间隔，默认值为5秒
+upslist_interval_us = 5000000
+# ups在black list呆的最大时间，默认值5秒
+blacklist_timeout_us = 5000000
+# 从ups读取失败多少次后，加入黑名单，默认值100次
+blacklist_fail_count = 100
+
+#内建join功能每小批的条数，需要根据内置cache大小配置，太大会导致cache内存不够导致join失败
+join_batch_count = 3000
+
+## cache相关选项，不能reload ##
+[memory_cache]
+# block cache的内存大小，单位：M，默认值10G，在内存为48G的cs上，建议配置在10G以上，
+# 内存为24G的机器上，建议配置在5G左右
+block_cache_memsize_mb = 10240
+# 缓存的文件句柄数量，默认值8192，在tablet数据比较多的OB集群，适当加大该设置值
+file_info_cache_max_cache_num = 8192
+# block index cache的内存大小，默认值1024M，在tablet数据比较多的OB集群，适当加大
+# 该设置值，一定要保证经常访问的sstable的block index数据在cache中
+block_index_cache_memsize_mb = 1024
+# join cache的内存大小，默认值5120M，如果没有表需要join，该选项配置不起作用，
+# 该选项主要用于收藏夹，保证该cache能缓存住每天join表的所有更新，加快合并速度
+join_cache_memsize_mb=5120
+# sstable row cache的内存大小，默认值0，表示不启用sstable row cache，设置为大于0
+# 的值，启用sstable row cache，主要用于优化get查询性能，对于有大规模get查询的应用，
+# 该选项适当设置得大一点，cache多多益善
+sstable_row_cache_memsize_mb = 1024
+
+## rootserver相关选项，不可reload ##
+[root_server]
+vip = 10.1.1.1
+port=2500

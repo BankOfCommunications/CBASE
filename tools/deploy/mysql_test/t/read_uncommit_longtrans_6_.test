@@ -1,0 +1,19 @@
+drop table if exists c;
+
+create table c (c1 int primary key, c2 varchar(8));
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+connection conn1;
+begin;							
+insert into c values(1,1);
+
+connection conn2;
+begin;
+--error 5049
+delete from c where c1 = 1;
+commit;
+
+connection conn1;
+commit;

@@ -1,0 +1,370 @@
+#!/usr/bin/env python2.6
+
+# This file defines some structs and its operations about mysql test,
+# and will be part of `deploy.py' script.
+# Author: Fufeng
+# Last change: 2012-12-18 17:29:06 #
+
+import re
+from subprocess import Popen, PIPE
+import shlex
+import glob
+import errno
+import pprint
+from os import chdir, getcwd, makedirs
+from os.path import basename, join, dirname, realpath
+from time import strftime, time
+import os
+import sys
+import shlex
+import glob
+import errno
+import pprint
+import os
+from optparse import OptionParser
+
+def pheader(msg):
+    print '\033[32m[==========]\033[0m %s' % msg
+    sys.stdout.flush()
+
+def pinfo(msg):
+    print '\033[32m[----------]\033[0m %s' % msg
+    sys.stdout.flush()
+
+def prun(msg):
+    print '\033[32m[ RUN      ]\033[0m %s' % msg
+    sys.stdout.flush()
+
+def pfail(msg):
+    print '\033[31m[  FAILED  ]\033[0m %s' % msg
+    sys.stdout.flush()
+
+def psucc(msg):
+    print '\033[32m[       OK ]\033[0m %s' % msg
+    sys.stdout.flush()
+
+def ppasslst(msg):
+    print '\033[32m[ PASS LST ]\033[0m %s' % msg
+    sys.stdout.flush()
+
+def ppass(msg):
+    print '\033[32m[  PASSED  ]\033[0m %s' % msg
+    sys.stdout.flush()
+
+def pfaillst(msg):
+    print '\033[31m[ FAIL LST ]\033[0m %s' % msg
+    sys.stdout.flush()
+
+class Arguments:
+    def add(self, k, v = None):
+        self.args.update({k:v});
+
+    def __str__(self):
+        str = ""
+        for k,v in self.args.items():
+            if v != None:
+                if re.match("^--\w", k):
+                    str += " %s=%s" % (k, v)
+                else:
+                    str += " %s %s" % (k, v)
+            else:
+                str += " %s" % k
+        return str
+
+    def __init__(self, opt):
+        self.args = dict()
+
+        if "test-file" in opt:
+            self.add("-test_file", opt["test-file"])
+
+        # Number of lines of resut to include in failure report
+        #self.add("--tail-lines", ("tail-lines" in opt and opt["tail-lines"]) or 20);
+
+        if "record" in opt and opt["record"] and "record-file" in opt:
+            self.add("-record")
+            self.add("-result_file", opt["record-file"])
+        else:                                    # diff result & file
+            self.add("--result_file", opt["result-file"])
+
+class Tester:
+    def __init__(self):
+        pass
+
+    def run(self, test, opt):
+        #opt["test-file"] = join(opt["test-dir"], test + ".test")
+        opt["result-file"] = join(opt["result-dir"], test + ".result")
+        opt["record-file"] = join(opt["record-dir"], test + ".record")
+
+        retcode = 0
+        output = ""
+        errput = ""
+        cmd = str(Arguments(opt))
+        #print ("./mytest " + cmd )
+        try:
+            #a=shlex.split( "./mytest" + cmd)
+            #print opt["record"]
+            #print opt["local"]
+            #print "./mytest " + test + opt["record"] + opt["local"] 
+            a=shlex.split( "./mytest " + test + opt["record"] + opt["local"])
+        
+            p = Popen(a, stdout = PIPE, stderr = PIPE)
+            output, errput = p.communicate()
+            
+            log_fp = open(os.path.join(opt["var-dir"], test) + '.log', "w")
+            log_fp.write(output);
+            log_fp.close()
+            lines = 10
+            print errput
+            if p.returncode != 0:
+                log_fp = open(os.path.join(opt["var-dir"], test) + '.log', "r")
+                all_line=[]
+                for line in log_fp.readlines():
+                    all_line.append(line)
+                for i in range(lines-2*lines,0):
+                    if abs(i) <= len(all_line):
+                        sys.stderr.write(all_line[i])
+                log_fp.close()
+            
+            retcode = p.returncode
+        except Exception as e:
+            errput = e;
+            retcode = 255;
+        return {"name" : test, "ret" : retcode, "output" : output,\
+                "cmd" : cmd, "errput" : errput}
+
+class Manager:
+    test_set = None
+    test = None
+    opt = None
+    before_one = None
+    after_one = None
+    log_fp = None
+    case_index = None
+    stop = False
+
+    def __init__(self, opt):
+        '''Check and autofill "opt" before run a "Tester".
+        Check list contains "test-dir", "result-dir", "record-dir"
+        '''
+        cwd = getcwd()
+        chdir(dirname(realpath(__file__)))
+        if ("test-dir" in opt and opt["test-dir"] != None):
+            opt["test-dir"] = [realpath(item) for item in opt["test-dir"] ]
+        else:
+            if opt["test-dir"] != None:
+                opt["test-dir"] = realpath("t")
+            else:
+                opt["test-dir"] = []
+        if "result-dir" in opt:
+            opt["result-dir"] = realpath(opt["result-dir"])
+        else:
+            opt["result-dir"] = realpath("r")
+        if "record-dir" in opt:
+            opt["record-dir"] = realpath(opt["record-dir"])
+        else:
+            opt["record-dir"] = realpath("r")
+        
+        chdir(cwd)
+
+
+        self.opt = opt
+
+    def check_tests(self):
+        self.opt["test-pattern"] = "*.test"
+        if "test-set" in self.opt:
+            self.test_set = self.opt["test-set"]
+        else:
+            if not "test-pattern" in self.opt:
+                self.opt["test-pattern"] = "*.test"
+        
+        self.test_set = []
+        for testdir in self.opt["test-dir"]:
+            pat = join(testdir, self.opt["test-pattern"])
+            casedir = basename(testdir);
+            if casedir.strip() != '':
+                casedir = casedir + "."
+                self.test_set += [casedir + basename(test).rsplit('.', 1)[0] for test in glob.glob(pat)]
+            
+            sub_items = os.listdir(testdir)
+            for item in sub_items:
+                test_dir = join(testdir,item)
+                pat = join(test_dir, self.opt["test-pattern"])
+                self.test_set += [item + "."+basename(test).rsplit('.', 1)[0] for test in glob.glob(pat)]
+
+            # exclude somt tests.
+            if "exclude" not in self.opt:
+                self.opt["exclude"] = None
+              
+            self.test_set = filter(lambda k: k not in self.opt["exclude"], self.test_set)
+            #self.test_set = sorted(self.test_set)
+        if self.opt["test-file"] != None:
+            self.test_set += self.opt["test-file"]
+        
+        #self.test_set=set(self.test_set)
+        #self.test_set = sorted(self.test_set)
+    
+    def shrink_errmsg(self, errmsg):
+        if type(errmsg) == str:
+            return re.split("\nThe result from queries just before the failure was:", errmsg, 1)[0]
+        elif isinstance(errmsg, Exception):
+            return errmsg
+        else:
+            return "UNKNOWN ERR MSG"
+
+    def result_stat(self):
+        ret = ""
+        total = len(self.result)
+        succ = len(filter(lambda item: item["ret"] == 0, self.result))
+        fail = total - succ
+        ret += "\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n"
+        ret += "success %d out of %d\n" % (succ, total)
+        ret += "fail tests list:\n"
+        for line in [ "%-12s: %s\n" % (item["name"], item["errput"]) for item in self.result ]:
+            ret += line
+        ret += ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n"
+        return ret
+
+    def run_one(self, test):
+        self.log_fp.write('============================================================\n')
+        self.log_fp.write('%s INFO: [ %s ] case start!\n' % (strftime("%Y-%m-%d %X"), test))
+        self.test = test
+        if self.before_one:
+            self.before_one(self)
+
+        prun("%s [ %d / %d ]" % (test, self.case_index, len(self.test_set)))
+        self.case_index += 1
+        start = time()
+        result = Tester().run(test, self.opt)
+        during = time() - start;
+        if result["ret"] == 0:
+            self.log_fp.write('%s INFO: [ %s ] case success!\n' % (strftime("%Y-%m-%d %X"), result["name"]))
+            psucc("%s ( %f s )" % (test, during))
+        else:
+            self.log_fp.write('%s INFO: [ %s ] case failed!\n' % (strftime("%Y-%m-%d %X"), result["name"]))
+            self.log_fp.write("%s\n" % str(result["errput"]).strip())
+            pfail(self.shrink_errmsg(result["errput"]))
+
+        if self.after_one:
+            self.after_one(self)
+
+        return result
+
+    def start(self):
+        def is_passed():
+            return len(filter(lambda x: x["ret"] != 0, self.result)) == 0
+	
+        self.check_tests()
+        log_file = join(self.opt["log-dir"], \
+                        (self.opt["log-temp"] or "obtest-%s.log") %\
+                        strftime("%Y-%m-%d_%X"))
+
+        runmode = "record" in self.opt and self.opt["record"] and "Record" or "Test"
+        pheader("Running %d cases ( %s Mode )" % (len(self.test_set), runmode))
+        pinfo(strftime("%F %X"))
+        try:
+            self.log_fp = open(log_file, "w")
+            self.case_index = 1
+            self.result = [ self.stop or self.run_one(test) for test in self.test_set ]
+            self.result = filter(lambda item: type(item) == dict, self.result);
+            self.log_fp.write(self.result_stat())
+        except Exception as e:
+            raise
+        finally:
+            self.log_fp.close()
+
+        passcnt = len(filter(lambda x: x["ret"] == 0, self.result))
+        totalcnt = len(self.result)
+        failcnt = totalcnt - passcnt
+        pheader("%d tests run done!" % len(self.result))
+        if is_passed():
+            ppass("%d tests" % len(self.result))
+        else:
+            pfail("%d tests are failed out of %s total" % (failcnt, totalcnt))
+            passlst,faillst='',''
+            for i,t in enumerate(self.result):
+                if t["ret"] == 0:
+                    passlst=t["name"] if passlst == '' else (passlst+','+t["name"])
+                else:
+                    faillst=t["name"] if faillst == '' else (faillst+','+t["name"])
+            ppasslst(passlst)
+            pfaillst(faillst)
+        return self.result
+
+if __name__ == '__main__':
+    exclude_set = [ ]
+#   test_set=["ct.1025_c1244_p0_master_cluster_ms_down_yangxiu"]
+    
+    	
+    opt = dict(
+    {
+        "test-dir":"t",
+        "test-file":None,
+        "result-dir":"r",
+        "recored-dir":"record",
+        "record":"",
+        "local":"",
+        "log-dir":"log",
+        "var-dir":"var",
+        "exclude" : exclude_set,
+        "log-temp" : "obtest-%s.log",
+#       "test-set" : test_set,
+    })
+
+    parser = OptionParser(usage = "%prog -d [dir1,dir2,...] -f [file1,file2,...] record\n       %prog [quicktest|primetest]")
+    parser.add_option("-d","--dir",
+                      action = "store",
+                      type = "string",
+                      dest = "test_dirs",
+                      default = None,
+                      help="Enter the test dirs name"
+                     ) 
+    parser.add_option("-f","--file",
+                      action = "store",
+                      type = "string",
+                      dest = "test_files",
+                      default = None,
+                      help="Enter the test files name"
+                     )
+    (options, args) = parser.parse_args()
+     
+    if options.test_dirs != None:
+        opt["test-dir"] = ["t/"+dir for dir in options.test_dirs.split(",")]
+    else:
+        if options.test_files != None:
+            opt["test-dir"] = None
+    
+    if options.test_files != None:
+        opt["test-file"] = options.test_files.split(",")
+ 
+    for arg in args:
+        if arg == "record":
+            opt["record"] = " -record"
+        if arg == "quick":
+            opt["local"] = " -local"
+            opt["test-dir"] = None
+            opt["test-file"] = [
+                                "quick.c1111_p0_one_cluster_yangxiu",
+                                "quick.c1111_p0_two_cluster_yangxiu"
+                               ]
+        if arg == "quicktest":
+            opt["test-dir"] = None
+            opt["test-file"] = [
+                                "quick.c1111_p0_one_cluster_yangxiu",
+                                "quick.c1111_p0_two_cluster_yangxiu"
+                               ]
+        if arg == "primetest":
+            opt["test-dir"] = None
+            opt["test-file"] = ["quick.c1233_p0_two_cluster_yangxiu"] 
+
+
+    mgr = Manager(opt)
+    mgr.start()
+
+__all__ = ["Manager", "pinfo"]
+
+# Local Variables:
+# time-stamp-line-limit: 1000
+# time-stamp-start: "Last change:[ \t]+"
+# time-stamp-end: "[ \t]+#"
+# time-stamp-format: "%04y-%02m-%02d %02H:%02M:%02S"
+# End:

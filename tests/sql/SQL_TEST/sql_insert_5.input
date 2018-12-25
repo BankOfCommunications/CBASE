@@ -1,0 +1,4 @@
+-- fail
+insert into user as u values (100, 'da fen qi', 15, 'a turtle');
+parse_sql error!
+syntax error at 1:18

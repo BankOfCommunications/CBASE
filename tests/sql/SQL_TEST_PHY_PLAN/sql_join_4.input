@@ -1,0 +1,9 @@
+-- fail, unknown table not_exist_table
+<<Part 1 : SQL STRING>>
+select user_name, id, qty from user left outer join not_exist_table on user.user_id = not_exist_table.user_id;
+[2012-07-17 15:19:16] ERROR add_table_item (ob_stmt.cpp:55) [47123780730880] unknown table not_exist_table
+
+<<Part 2 : PARSE TREE>>
+Resolve error!
+
+

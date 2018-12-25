@@ -1,0 +1,66 @@
+drop table if exists t1,t2,t3,t4;
+create table t1(i1 int, i2 int, c1 varchar, c2 varchar, d1 datetime, d2 datetime, i3 int, c3 varchar , d3 datetime,ct1 createtime, primary key(i1,i2,c1,c2,d1,d2));
+insert 1,4,10,40 
+insert into t1(i1,i2,c1,c2,d1,d2,i3,c3,d3) values(1,2,'a','b','2012-12-25','2012-12-26',3,'c','2012-12-27');
+insert into t1(i1,i2,c1,c2,d1,d2,i3,c3,d3) values(4,2,'a','b','2012-12-25','2012-12-26',3,'c','2012-12-27');
+insert into t1(i1,i2,c1,c2,d1,d2,i3,c3,d3) values(10,2,'a','b','2012-12-25','2012-12-26',3,'c','2012-12-27');
+insert into t1(i1,i2,c1,c2,d1,d2,i3,c3,d3) values(40,2,'a','b','2012-12-25','2012-12-26',3,'c','2012-12-27');
+select * from t1;
+ct1	i1	i2	c1	c2	d1	d2	i3	c3	d3
+createtime	1	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	3	c	2012-12-27 00:00:00
+createtime	4	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	3	c	2012-12-27 00:00:00
+createtime	10	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	3	c	2012-12-27 00:00:00
+createtime	40	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	3	c	2012-12-27 00:00:00
+begin;
+insert 2 
+insert into t1(i1,i2,c1,c2,d1,d2,i3,c3,d3) values(2,2,'a','b','2012-12-25','2012-12-26',3,'c','2012-12-27');
+insert 20
+insert into t1(i1,i2,c1,c2,d1,d2,i3,c3,d3) values(20,2,'a','b','2012-12-25','2012-12-26',3,'c','2012-12-27');
+update 2, i3=30
+update t1 set i3=30 where i1=2 and i2=2 and c1 = 'a' and c2 = 'b' and d1 = '2012-12-25' and d2 = '2012-12-26';
+update 2, c3='cc'
+update t1 set c3='cc' where i1=2 and i2=2 and c1 = 'a' and c2 = 'b' and d1 = '2012-12-25' and d2 = '2012-12-26';
+update 1, c3='cc'
+update t1 set c3='cc' where i1=1 and i2=2 and c1 = 'a' and c2 = 'b' and d1 = '2012-12-25' and d2 = '2012-12-26';
+delete 10
+delete from t1 where i1=10 and i2=2 and c1 = 'a' and c2 = 'b' and d1 = '2012-12-25' and d2 = '2012-12-26';
+delete 20
+delete from t1 where i1=20 and i2=2 and c1 = 'a' and c2 = 'b' and d1 = '2012-12-25' and d2 = '2012-12-26';
+begin;
+insert 3
+insert into t1(i1,i2,c1,c2,d1,d2,i3,c3,d3) values(3,2,'a','b','2012-12-25','2012-12-26',3,'c','2012-12-27');
+insert 30
+insert into t1(i1,i2,c1,c2,d1,d2,i3,c3,d3) values(30,2,'a','b','2012-12-25','2012-12-26',3,'c','2012-12-27');
+update 3, i3=300
+update t1 set i3=300 where i1=3 and i2=2 and c1 = 'a' and c2 = 'b' and d1 = '2012-12-25' and d2 = '2012-12-26';
+update 3, c3='ccc'
+update t1 set c3='ccc' where i1=3 and i2=2 and c1 = 'a' and c2 = 'b' and d1 = '2012-12-25' and d2 = '2012-12-26';
+update 4, c3='cc'
+update t1 set c3='cc' where i1=4 and i2=2 and c1 = 'a' and c2 = 'b' and d1 = '2012-12-25' and d2 = '2012-12-26';
+delete 40
+delete from t1 where i1=40 and i2=2 and c1 = 'a' and c2 = 'b' and d1 = '2012-12-25' and d2 = '2012-12-26';
+delete 30
+delete from t1 where i1=30 and i2=2 and c1 = 'a' and c2 = 'b' and d1 = '2012-12-25' and d2 = '2012-12-26';
+commit;
+commit;
+select * from t1;
+ct1	i1	i2	c1	c2	d1	d2	i3	c3	d3
+createtime	1	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	3	cc	2012-12-27 00:00:00
+createtime	2	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	30	cc	2012-12-27 00:00:00
+createtime	3	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	300	ccc	2012-12-27 00:00:00
+createtime	4	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	3	cc	2012-12-27 00:00:00
+insert into t1(i1,i2,c1,c2,d1,d2,i3,c3,d3) values(10,2,'a','b','2012-12-25','2012-12-26',3,'c','2012-12-27');
+insert into t1(i1,i2,c1,c2,d1,d2,i3,c3,d3) values(20,2,'a','b','2012-12-25','2012-12-26',3,'c','2012-12-27');
+insert into t1(i1,i2,c1,c2,d1,d2,i3,c3,d3) values(40,2,'a','b','2012-12-25','2012-12-26',3,'c','2012-12-27');
+insert into t1(i1,i2,c1,c2,d1,d2,i3,c3,d3) values(30,2,'a','b','2012-12-25','2012-12-26',3,'c','2012-12-27');
+select * from t1;
+ct1	i1	i2	c1	c2	d1	d2	i3	c3	d3
+createtime	1	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	3	cc	2012-12-27 00:00:00
+createtime	2	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	30	cc	2012-12-27 00:00:00
+createtime	3	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	300	ccc	2012-12-27 00:00:00
+createtime	4	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	3	cc	2012-12-27 00:00:00
+createtime	10	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	3	c	2012-12-27 00:00:00
+createtime	20	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	3	c	2012-12-27 00:00:00
+createtime	30	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	3	c	2012-12-27 00:00:00
+createtime	40	2	a	b	2012-12-25 00:00:00	2012-12-26 00:00:00	3	c	2012-12-27 00:00:00
+drop table t1;

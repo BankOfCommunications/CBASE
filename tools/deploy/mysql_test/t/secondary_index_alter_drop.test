@@ -1,0 +1,19 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+create table t1 (c1 int ,c2 int,c3 int,c4 int,primary key (c1,c2) );
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+insert into t1 values(1,1,1,1),(2,2,2,2),(3,3,3,3);
+create index il on t1(c2) storing (c3);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 700
+--error 5002 
+alter table t1 drop c2 ;
+--error 65535
+alter table t1 drop c3;
+
+alter table t1 drop c4;
+
+drop table t1;

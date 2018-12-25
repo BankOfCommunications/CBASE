@@ -1,0 +1,23 @@
+drop table if exists c;
+create table c (c1 int primary key, c2 varchar(8));
+begin;
+let $i=1001;
+while($i < 4001) 
+{
+    eval insert into c(c1,c2) values($i,'1');
+    inc $i;
+}
+insert into c values(1,1);
+insert into c values(10,2);
+insert into c values(100,3);	
+insert into c values(1000,4);	
+insert into c values(10000,5);	
+insert into c values(100000,6);
+select * from c where c1 = 1;
+select * from c where c1 = 100;
+select * from c where c1 = 100000;
+select * from c where c2 = 2;
+select * from c where c2 = 4;
+select * from c where c2 = 6;
+select * from c ;						
+commit;

@@ -1,0 +1,35 @@
+-- ok
+select id from order_list where order_desc like '%china%' not like 'zzzzzz';
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1003, TableName:order_list, AliasName:NULL, Type:BASE_TABLE, RefId: 1003}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:2, ColumnName:id, TableRef:1003}
+            {Num 1, ColumnId:7, ColumnName:order_desc, TableRef:1003}
+        <ColumnItemList End>
+        WHERE ::= <2>
+        SELECT ::= <1, id>
+        FROM ::= <1003>
+        ObSelectStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (1003 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 2]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_OP_NOT_LIKE
+            T_OP_LIKE
+                T_REF_COLUMN : [table_id, column_id] = [1003, 7]
+                T_STRING : %china%
+            T_STRING : zzzzzz
+        ObSqlRawExpr 1 End
+    <ExprList End>
+<logical_plan End>
+

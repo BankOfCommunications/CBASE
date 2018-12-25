@@ -1,0 +1,107 @@
+ob1=OBI(cluster=1211);
+ob1.reboot;
+ob1.mysql set global ob_read_consistency=3;
+ob1.mysql_p show variables like 'ob_read_consistency';
+variable_name	value
+ob_read_consistency	3
+ob1.mysql_p select name,value from __all_sys_config_stat where name = 'read_master_master_ups_percent' or name = 'read_slave_master_ups_percent';
+name	value
+read_master_master_ups_percent	50
+read_slave_master_ups_percent	50
+ob1.$m_ups.status;
+master
+ob1.$s_ups.status;
+sync
+ob1.create_client;
+drop table if exists t1;
+create table t1(c1 int primary key, c2 int);
+set session ob_query_timeout=8000000;
+set session ob_query_timeout=15000000;
+case 1 lock a non-exist row
+set autocommit=0;
+select * from t1 where c1=1 for update;
+c1	c2
+insert into t1 values(2,2);
+update t1 set c2=0 where c1=3;
+delete from t1 where c1=4;
+replace into t1 values(5,5);
+set autocommit=0;
+select * from t1 where c1=1 for update;
+ERROR HY000: Exclusive lock conflict 'int:1' for key 'PRIMARY'
+insert into t1 values(2,2);
+ERROR HY000: Exclusive lock conflict 'int:2' for key 'PRIMARY'
+update t1 set c2=0 where c1=3;
+ERROR HY000: Exclusive lock conflict 'int:3' for key 'PRIMARY'
+delete from t1 where c1=4;
+ERROR HY000: Exclusive lock conflict 'int:4' for key 'PRIMARY'
+replace into t1 values(1,1);
+ERROR HY000: Exclusive lock conflict 'int:1' for key 'PRIMARY'
+commit;
+commit;
+select * from t1;
+c1	c2
+2	2
+5	5
+select * from t1;
+c1	c2
+2	2
+5	5
+select * from t1;
+c1	c2
+2	2
+5	5
+select * from t1;
+c1	c2
+2	2
+5	5
+select * from t1;
+c1	c2
+2	2
+5	5
+select * from t1;
+c1	c2
+2	2
+5	5
+select * from t1;
+c1	c2
+2	2
+5	5
+select * from t1;
+c1	c2
+2	2
+5	5
+select * from t1;
+c1	c2
+2	2
+5	5
+select * from t1;
+c1	c2
+2	2
+5	5
+commit;
+case 2 deadlock of update
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=5;
+update t1 set c2=c2+1 where c1=5;
+update t1 set c2=c2+1 where c1=2;
+ERROR HY000: Exclusive lock conflict 'int:5' for key 'PRIMARY'
+commit;
+commit;
+select * from t1;
+c1	c2
+2	4
+5	6
+commit;
+case 2 deadlock of replace
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=5;
+replace into t1 values(5,0);
+update t1 set c2=c2+1 where c1=2;
+ERROR HY000: Exclusive lock conflict 'int:5' for key 'PRIMARY'
+commit;
+commit;
+select * from t1;
+c1	c2
+2	6
+5	7
+commit;

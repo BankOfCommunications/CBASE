@@ -1,0 +1,10 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\script\data_dispatcher\etc\collect_huating\collect_info
+2
+6
+f:data_syntax.ini|1|166f77aef37|27f|1dd78e|a56cc73668d711e8a8030002c8c1274c|0
+11:configuration.xml|1|166f77aefe7|e92|1de6de21|a7dcc75268d711e8a8030002c8c1274c|0
+b:sample.conf|1|166f77af04a|32b|33b50449|a9fcc76e68d711e8a8030002c8c1274c|0
+9:range.lst|1|166f77af0b6|c8|173b23b4|ac0cc78a68d711e8a8030002c8c1274c|0
+a:schema.ini|1|166f77af1a2|1f3|eeffb582|ae1cc7a668d711e8a8030002c8c1274c|0
+a:import.ini|1|166f77af1d4|32b|63cfbede|b02cc7c268d711e8a8030002c8c1274c|0

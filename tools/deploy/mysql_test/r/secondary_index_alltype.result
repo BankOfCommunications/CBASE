@@ -1,0 +1,129 @@
+drop table if exists t1;
+create table t1 (c1 int primary key ,c2 varchar(8),c3 bool,c4 datetime ,c5  decimal(4,3));
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create index il on t1(c2) storing (c3);
+create index il1 on t1 (c3) storing (c4);
+create index il2 on t1 (c4) storing (c5);
+create index il3 on t1 (c5) storing (c2);
+"merge"
+[major_freeze] err=0
+insert into t1 values(1,'maosi',0,'2015-01-01 12:00:00',3.142),(2,'zhand',1,'1258-04-09 12:24:00',3.438);
+select * from  __3001__idx__il;
+c1	c2	c3
+1	maosi	0
+2	zhand	1
+select * from  __3001__idx__il1;
+c1	c3	c4
+1	0	2015-01-01 12:00:00
+2	1	1258-04-09 12:24:00
+select * from  __3001__idx__il2;
+c1	c4	c5
+2	1258-04-09 12:24:00	3.438
+1	2015-01-01 12:00:00	3.142
+select * from  __3001__idx__il3;
+c1	c2	c5
+1	maosi	3.142
+2	zhand	3.438
+drop table t1;
+create table t1 (c1 int primary key ,c2 varchar(8),c3 bool,c4 datetime ,c5  decimal(4,3));
+create index il on t1(c2,c3) storing (c4);
+create index il1 on t1 (c3,c4) storing (c5);
+create index il2 on t1 (c4,c5) storing (c2);
+create index il3 on t1 (c5,c2) storing (c3);
+"merge"
+[major_freeze] err=0
+insert into t1 values(1,'maosi',0,'2015-01-01 12:00:00',3.142),(2,'zhand',1,'1258-04-09 12:24:00',3.438);
+select * from  __3006__idx__il;
+c1	c2	c3	c4
+1	maosi	0	2015-01-01 12:00:00
+2	zhand	1	1258-04-09 12:24:00
+select * from  __3006__idx__il1;
+c1	c3	c4	c5
+1	0	2015-01-01 12:00:00	3.142
+2	1	1258-04-09 12:24:00	3.438
+select * from  __3006__idx__il2;
+c1	c2	c4	c5
+2	zhand	1258-04-09 12:24:00	3.438
+1	maosi	2015-01-01 12:00:00	3.142
+select * from  __3006__idx__il3;
+c1	c2	c3	c5
+1	maosi	0	3.142
+2	zhand	1	3.438
+drop table t1;
+create table t1 (c1 int primary key ,c2 varchar(8),c3 bool,c4 datetime ,c5  decimal(4,3));
+create index il on t1(c2,c3) storing (c4);
+create index il1 on t1 (c3,c4) storing (c5);
+create index il2 on t1 (c4,c5) storing (c2);
+create index il3 on t1 (c5,c2) storing (c3);
+"merge"
+[major_freeze] err=0
+insert into t1 values(1,'maosi',0,'2015-01-01 12:00:00',3.142),(2,'zhand',1,'1258-04-09 12:24:00',3.438),(3,'tain',0,'4013-09-09 13:34:34',3.438),(4,'shil',1,'1258-04-09 12:24:00',3.142);
+select * from  __3011__idx__il;
+c1	c2	c3	c4
+1	maosi	0	2015-01-01 12:00:00
+4	shil	1	1258-04-09 12:24:00
+3	tain	0	4013-09-09 13:34:34
+2	zhand	1	1258-04-09 12:24:00
+select * from  __3011__idx__il1;
+c1	c3	c4	c5
+1	0	2015-01-01 12:00:00	3.142
+3	0	4013-09-09 13:34:34	3.438
+2	1	1258-04-09 12:24:00	3.438
+4	1	1258-04-09 12:24:00	3.142
+select * from  __3011__idx__il2;
+c1	c2	c4	c5
+4	shil	1258-04-09 12:24:00	3.142
+2	zhand	1258-04-09 12:24:00	3.438
+1	maosi	2015-01-01 12:00:00	3.142
+3	tain	4013-09-09 13:34:34	3.438
+select * from  __3011__idx__il3;
+c1	c2	c3	c5
+1	maosi	0	3.142
+4	shil	1	3.142
+3	tain	0	3.438
+2	zhand	1	3.438
+drop table t1;
+create table t1 (c1 timestamp primary key ,c2 createtime ,c3 datetime ,c4 int,c5 modifytime);
+create index il on t1(c1,c3) storing (c4);
+create index il1 on t1 (c3,c4) storing (c2);
+create index il2 on t1 (c4,c1) storing (c2);
+create index il3 on t1 (c4,c2) storing (c3);
+ERROR HY000: column 'c2' with createtime type as primary key not support
+create index il3 on t1 (c5,c1) storing (c3);
+ERROR HY000: column 'c5' with modifytime type as primary key not support
+"merge"
+[major_freeze] err=0
+insert into t1(c1,c3,c4) values('2015-06-24 11:29:34.798924','2015-07-22 13:38:34.598924',1);
+insert into t1(c1,c3,c4) values('2015-06-25 12:29:34.805737','2015-07-23 14:37:34.198924',1);
+insert into t1(c1,c3,c4) values('2015-06-26 13:49:34.505737','2015-07-24 15:36:34.298924',1);
+insert into t1(c1,c3,c4) values('2015-06-27 14:49:34.405737','2015-07-25 16:35:34.398924',1);
+insert into t1(c1,c3,c4) values('2015-06-28 15:39:34.305737','2015-07-26 17:34:34.498924',1);
+select c1,c3,c4 from t1;
+c1	c3	c4
+2015-06-24 11:29:34.798924	2015-07-22 13:38:34.598924	1
+2015-06-25 12:29:34.805737	2015-07-23 14:37:34.198924	1
+2015-06-26 13:49:34.505737	2015-07-24 15:36:34.298924	1
+2015-06-27 14:49:34.405737	2015-07-25 16:35:34.398924	1
+2015-06-28 15:39:34.305737	2015-07-26 17:34:34.498924	1
+select * from  __3016__idx__il;
+c1	c3	c4
+2015-06-24 11:29:34.798924	2015-07-22 13:38:34.598924	1
+2015-06-25 12:29:34.805737	2015-07-23 14:37:34.198924	1
+2015-06-26 13:49:34.505737	2015-07-24 15:36:34.298924	1
+2015-06-27 14:49:34.405737	2015-07-25 16:35:34.398924	1
+2015-06-28 15:39:34.305737	2015-07-26 17:34:34.498924	1
+select c1,c3,c4 from  __3016__idx__il1;
+c1	c3	c4
+2015-06-24 11:29:34.798924	2015-07-22 13:38:34.598924	1
+2015-06-25 12:29:34.805737	2015-07-23 14:37:34.198924	1
+2015-06-26 13:49:34.505737	2015-07-24 15:36:34.298924	1
+2015-06-27 14:49:34.405737	2015-07-25 16:35:34.398924	1
+2015-06-28 15:39:34.305737	2015-07-26 17:34:34.498924	1
+select c1,c4 from  __3016__idx__il2;
+c1	c4
+2015-06-24 11:29:34.798924	1
+2015-06-25 12:29:34.805737	1
+2015-06-26 13:49:34.505737	1
+2015-06-27 14:49:34.405737	1
+2015-06-28 15:39:34.305737	1

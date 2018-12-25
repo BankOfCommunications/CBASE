@@ -1,0 +1,43 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+deploy ob2.rs0.set master=ob1.rs0;
+	   
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=100 where cluster_id=1;
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=0 where cluster_id=2;
+deploy ob1.mysql  set global ob_read_consistency=4;
+deploy ob1.mysql  alter system set read_master_master_ups_percent=0 server_type=rootserver cluster=1;
+deploy ob1.mysql  alter system set read_master_master_ups_percent=50 server_type=rootserver cluster=2;
+deploy ob1.mysql  alter system set read_slave_master_ups_percent=50 server_type=rootserver;
+sleep 10;
+deploy ob1.create_client;
+create table t1(c1 int primary key, c2 varchar(20));
+sleep 60;
+--disable_query_log
+--disable_result_log
+
+let $cnt=500;
+while($cnt)
+{
+   eval replace into t1 values($cnt,'aa');
+   eval select * from t1 where c1 = $cnt;       
+   eval select * from t1;       
+   dec $cnt;
+}
+
+let $master_ups=deploy_get_value(ob1.get_master_ups);
+let $slave_ups=deploy_get_value(ob1.get_slave_ups);
+
+let $a=deploy_get_value(ob1.$master_ups.monitor scan_count);
+let $b=deploy_get_value(ob1.$master_ups.monitor get_count);
+let $c=deploy_get_value(ob1.$slave_ups.monitor scan_count);
+let $d=deploy_get_value(ob1.$slave_ups.monitor get_count);
+let $ob1_master_ups=math($a+$b);
+let $ob1_slave_ups=math($c+$d);
+
+if($ob1_master_ups>=1000)
+{
+--echo SUCCESS
+}

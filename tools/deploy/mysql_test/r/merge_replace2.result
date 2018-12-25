@@ -1,0 +1,1159 @@
+drop table if exists sbtest;
+alter system set merge_delay_interval='1s' server_type=chunkserver,min_major_freeze_interval='1s' server_type=updateserver;
+alter system set merge_delay_for_lsync='1s' server_type=chunkserver;
+alter system set min_drop_cache_wait_time='10s' server_type=chunkserver;
+alter system set merge_thread_per_disk=10 server_type=chunkserver;
+alter system set each_tablet_sync_meta=False server_type=chunkserver;
+CREATE TABLE sbtest (id INTEGER  NOT NULL, name varchar, whenn datetime,  k integer  DEFAULT '0' NOT NULL,pad char(60) DEFAULT '' NOT NULL, whenn1 datetime, stat1 bool, PRIMARY KEY  (id,name,whenn) ) ;
+replace 100 rows to ups
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(1,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(2,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(3,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(4,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(5,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(6,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(7,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(8,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(9,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(10,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(11,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(12,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(13,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(14,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(15,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(16,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(17,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(18,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(19,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(20,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(21,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(22,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(23,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(24,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(25,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(26,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(27,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(28,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(29,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(30,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(31,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(32,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(33,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(34,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(35,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(36,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(37,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(38,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(39,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(40,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(41,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(42,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(43,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(44,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(45,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(46,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(47,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(48,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(49,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(50,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(51,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(52,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(53,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(54,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(55,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(56,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(57,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(58,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(59,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(60,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(61,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(62,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(63,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(64,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(65,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(66,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(67,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(68,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(69,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(70,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(71,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(72,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(73,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(74,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(75,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(76,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(77,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(78,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(79,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(80,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(81,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(82,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(83,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(84,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(85,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(86,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(87,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(88,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(89,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(90,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(91,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(92,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(93,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(94,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(95,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(96,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(97,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(98,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(99,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(100,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+merge
+[major_freeze] err=0
+select * from sbtest where id = 1 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+1	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 2 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+2	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 3 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+3	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 4 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+4	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 5 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+5	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 6 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+6	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 7 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+7	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 8 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+8	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 9 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+9	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 10 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+10	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 11 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+11	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 12 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+12	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 13 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+13	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 14 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+14	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 15 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+15	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 16 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+16	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 17 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+17	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 18 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+18	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 19 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+19	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 20 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+20	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 21 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+21	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 22 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+22	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 23 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+23	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 24 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+24	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 25 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+25	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 26 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+26	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 27 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+27	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 28 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+28	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 29 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+29	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 30 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+30	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 31 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+31	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 32 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+32	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 33 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+33	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 34 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+34	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 35 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+35	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 36 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+36	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 37 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+37	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 38 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+38	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 39 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+39	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 40 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+40	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 41 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+41	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 42 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+42	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 43 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+43	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 44 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+44	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 45 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+45	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 46 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+46	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 47 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+47	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 48 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+48	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 49 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+49	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 50 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+50	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 51 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+51	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 52 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+52	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 53 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+53	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 54 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+54	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 55 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+55	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 56 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+56	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 57 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+57	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 58 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+58	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 59 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+59	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 60 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+60	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 61 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+61	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 62 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+62	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 63 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+63	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 64 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+64	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 65 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+65	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 66 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+66	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 67 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+67	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 68 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+68	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 69 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+69	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 70 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+70	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 71 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+71	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 72 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+72	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 73 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+73	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 74 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+74	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 75 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+75	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 76 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+76	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 77 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+77	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 78 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+78	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 79 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+79	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 80 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+80	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 81 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+81	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 82 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+82	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 83 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+83	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 84 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+84	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 85 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+85	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 86 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+86	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 87 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+87	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 88 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+88	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 89 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+89	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 90 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+90	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 91 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+91	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 92 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+92	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 93 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+93	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 94 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+94	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 95 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+95	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 96 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+96	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 97 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+97	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 98 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+98	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 99 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+99	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 100 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+100	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+replace another 100 rows to ups
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(101,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(102,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(103,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(104,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(105,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(106,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(107,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(108,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(109,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(110,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(111,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(112,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(113,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(114,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(115,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(116,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(117,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(118,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(119,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(120,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(121,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(122,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(123,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(124,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(125,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(126,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(127,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(128,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(129,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(130,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(131,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(132,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(133,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(134,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(135,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(136,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(137,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(138,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(139,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(140,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(141,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(142,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(143,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(144,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(145,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(146,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(147,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(148,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(149,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(150,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(151,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(152,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(153,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(154,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(155,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(156,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(157,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(158,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(159,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(160,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(161,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(162,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(163,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(164,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(165,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(166,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(167,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(168,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(169,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(170,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(171,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(172,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(173,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(174,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(175,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(176,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(177,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(178,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(179,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(180,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(181,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(182,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(183,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(184,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(185,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(186,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(187,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(188,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(189,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(190,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(191,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(192,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(193,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(194,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(195,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(196,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(197,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(198,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(199,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(200,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+merge
+[major_freeze] err=0
+select * from sbtest where id = 101 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+101	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 102 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+102	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 103 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+103	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 104 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+104	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 105 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+105	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 106 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+106	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 107 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+107	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 108 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+108	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 109 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+109	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 110 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+110	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 111 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+111	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 112 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+112	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 113 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+113	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 114 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+114	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 115 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+115	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 116 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+116	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 117 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+117	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 118 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+118	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 119 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+119	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 120 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+120	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 121 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+121	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 122 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+122	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 123 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+123	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 124 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+124	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 125 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+125	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 126 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+126	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 127 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+127	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 128 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+128	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 129 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+129	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 130 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+130	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 131 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+131	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 132 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+132	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 133 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+133	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 134 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+134	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 135 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+135	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 136 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+136	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 137 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+137	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 138 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+138	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 139 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+139	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 140 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+140	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 141 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+141	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 142 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+142	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 143 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+143	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 144 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+144	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 145 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+145	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 146 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+146	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 147 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+147	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 148 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+148	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 149 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+149	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 150 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+150	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 151 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+151	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 152 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+152	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 153 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+153	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 154 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+154	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 155 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+155	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 156 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+156	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 157 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+157	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 158 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+158	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 159 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+159	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 160 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+160	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 161 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+161	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 162 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+162	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 163 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+163	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 164 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+164	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 165 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+165	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 166 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+166	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 167 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+167	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 168 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+168	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 169 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+169	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 170 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+170	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 171 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+171	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 172 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+172	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 173 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+173	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 174 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+174	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 175 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+175	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 176 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+176	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 177 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+177	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 178 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+178	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 179 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+179	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 180 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+180	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 181 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+181	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 182 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+182	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 183 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+183	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 184 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+184	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 185 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+185	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 186 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+186	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 187 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+187	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 188 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+188	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 189 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+189	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 190 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+190	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 191 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+191	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 192 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+192	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 193 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+193	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 194 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+194	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 195 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+195	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 196 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+196	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 197 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+197	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 198 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+198	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 199 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+199	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 200 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+200	yulan	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+replace another 100 rows to ups
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(201,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(202,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(203,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(204,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(205,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(206,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(207,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(208,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(209,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(210,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(211,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(212,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(213,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(214,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(215,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(216,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(217,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(218,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(219,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(220,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(221,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(222,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(223,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(224,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(225,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(226,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(227,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(228,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(229,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(230,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(231,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(232,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(233,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(234,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(235,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(236,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(237,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(238,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(239,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(240,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(241,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(242,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(243,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(244,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(245,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(246,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(247,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(248,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(249,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(250,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(251,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(252,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(253,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(254,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(255,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(256,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(257,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(258,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(259,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(260,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(261,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(262,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(263,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(264,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(265,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(266,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(267,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(268,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(269,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(270,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(271,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(272,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(273,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(274,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(275,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(276,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(277,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(278,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(279,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(280,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(281,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(282,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(283,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(284,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(285,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(286,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(287,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(288,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(289,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(290,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(291,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(292,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(293,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(294,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(295,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(296,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(297,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(298,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(299,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+REPLACE INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(300,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(1,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 1 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+1	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(6,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 6 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+6	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(11,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 11 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+11	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(16,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 16 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+16	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(21,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 21 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+21	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(26,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 26 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+26	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(31,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 31 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+31	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(36,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 36 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+36	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(41,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 41 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+41	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(46,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 46 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+46	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(51,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 51 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+51	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(56,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 56 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+56	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(61,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 61 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+61	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(66,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 66 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+66	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(71,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 71 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+71	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(76,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 76 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+76	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(81,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 81 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+81	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(86,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 86 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+86	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(91,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 91 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+91	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(96,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 96 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+96	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(101,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 101 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+101	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(106,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 106 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+106	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(111,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 111 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+111	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(116,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 116 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+116	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(121,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 121 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+121	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(126,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 126 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+126	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(131,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 131 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+131	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(136,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 136 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+136	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(141,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 141 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+141	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(146,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 146 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+146	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(151,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 151 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+151	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(156,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 156 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+156	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(161,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 161 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+161	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(166,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 166 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+166	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(171,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 171 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+171	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(176,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 176 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+176	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(181,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 181 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+181	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(186,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 186 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+186	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(191,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 191 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+191	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(196,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 196 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+196	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(201,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 201 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+201	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(206,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 206 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+206	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(211,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 211 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+211	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(216,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 216 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+216	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(221,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 221 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+221	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(226,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 226 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+226	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(231,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 231 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+231	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(236,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 236 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+236	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(241,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 241 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+241	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(246,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 246 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+246	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(251,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 251 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+251	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(256,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 256 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+256	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(261,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 261 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+261	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(266,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 266 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+266	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(271,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 271 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+271	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(276,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 276 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+276	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(281,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 281 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+281	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(286,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 286 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+286	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(291,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 291 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+291	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(296,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 296 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+296	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+replace into sbtest(id, name , whenn, k, pad, whenn1) VALUES(301,'yulan','2013-1-6 14:44:00', 1,'qqqqqqqq', '2013-1-7 14:44:00');
+select * from sbtest where id = 301 and name='yulan' and whenn='2013-1-6 14:44:00';
+id	name	whenn	k	pad	whenn1	stat1
+301	yulan	2013-01-06 14:44:00	1	qqqqqqqq	2013-01-07 14:44:00	NULL
+drop table sbtest;

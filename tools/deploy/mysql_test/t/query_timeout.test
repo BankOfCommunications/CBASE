@@ -1,0 +1,51 @@
+drop table if exists t1;
+create table t1 (c1 int, c2 int, primary key(c1, c2), c3 int);
+insert into t1 values (1, 2, 3);
+set ob_query_timeout=15000;
+--error 12
+select * from t1;
+
+drop table if exists t1;
+create table t1(c1 int primary key, c2 int);
+set ob_query_timeout=50000;
+replace into t1 values(1,1);
+
+--echo set query timeout to 500ms
+set ob_query_timeout=500000;
+
+select * from t1 where c1=1;
+select count(*) from t1;
+select * from t1 union select * from t1;
+update t1 set c2=2 where c1=1;
+
+--echo set query timeout to 100ms
+set ob_query_timeout=100000;
+
+select * from t1 where c1=1;
+select count(*) from t1;
+select * from t1 union select * from t1;
+update t1 set c2=2 where c1=1;
+
+--echo set query timeout to 25ms
+set ob_query_timeout=25000;
+--error 12
+select * from t1 where c1=1;
+--error 12
+select count(*) from t1;
+--error 12
+select * from t1 union select * from t1;
+
+set ob_query_timeout=30000;
+update t1 set c2=2 where c1=1;
+
+--echo set query timeout to 10ms
+set ob_query_timeout=10000;
+
+--error 12
+select count(*) from t1;
+--error 12
+select * from t1 union select * from t1;
+--error 12
+select * from t1 where c1=1;
+
+drop table t1;

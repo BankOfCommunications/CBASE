@@ -1,0 +1,3 @@
+ob1=OBI(cluster=1111)
+ob1.reboot
+ob1.random_start 5

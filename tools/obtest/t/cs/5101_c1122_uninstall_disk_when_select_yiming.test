@@ -1,0 +1,40 @@
+deploy ob1=OBI(cluster=1122, sub_dir_list=1);
+deploy ob1.reboot;
+
+sleep 60;
+
+deploy ob1.source include/merge.inc;
+deploy ob1.source include/migrate.inc;
+sleep 10;
+
+deploy ob1.prepare;
+deploy ob1.major_freeze; 
+
+deploy ob1.check_cs_version 2;
+
+deploy ob1.start_check;
+
+deploy ob1.cs0.cs_admin uninstall_disk  1;
+deploy ob1.cs0.rm_sstable 1;
+let $io_num1=deploy_get_value(ob1.cs0.monitor sstable_disk_io_num);
+
+sleep 60;
+
+let $io_num2=deploy_get_value(ob1.cs0.monitor sstable_disk_io_num);
+
+if( $io_num1 == $io_num2 )
+{
+  --echo io_num check OK
+}
+
+let $user=deploy_get_value(ob1.sh_p whoami);
+deploy ob1.cs0.cs_admin install_disk  /home/$user/obtest_data/1;
+sleep 60;
+
+let $tabletnum = deploy_get_value(ob1.cs0.monitor old_ver_tablets_num);
+if($tabletnum >0)
+{
+	echo migrate begin;
+}
+
+deploy ob1.stop_check;

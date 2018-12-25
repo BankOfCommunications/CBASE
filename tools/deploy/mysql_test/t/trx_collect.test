@@ -1,0 +1,56 @@
+--disable_warnings
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn3,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn4,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+# trx: A B C D
+
+###
+# Case: update cs data
+###
+--echo --conn1 update cs row: user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828
+
+connection conn1;
+begin;
+select  user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828 for update;
+update collect_info set  category = 808, collect_time_precise = '820', tag = '807', user_nick = '800', is_shared = 801, stat = 804, note = '802', collect_time = '803' where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+
+connection conn2;
+begin;
+delete from collect_info where user_id=3472328296227682617 and item_type=53 and item_id=3472328296228010297;
+--error 23
+update collect_info set  category = 808, collect_time_precise = '820', tag = '807', user_nick = '801', is_shared = 801, stat = 804, note = '802', collect_time = '803' where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+
+connection conn1;
+commit;
+connection conn2;
+rollback;
+
+select  user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+
+select  user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id=3472328296227682617 and item_type=53 and item_id=3472328296228010297;
+
+--echo --conn1 update the above row again: user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828
+
+connection conn1;
+begin;
+select  user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828 for update;
+update collect_info set  category = 808, collect_time_precise = '820', tag = '807', user_nick = '8000', is_shared = 801, stat = 804, note = '802', collect_time = '803' where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+
+select  user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+
+connection conn2;
+begin;
+--error 23
+update collect_info set  category = 808, collect_time_precise = '820', tag = '807', user_nick = '8001', is_shared = 801, stat = 804, note = '802', collect_time = '803' where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+
+connection conn1;
+commit;
+connection conn2;
+rollback;
+
+select  user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+
+
+

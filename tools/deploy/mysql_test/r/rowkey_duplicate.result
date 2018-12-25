@@ -1,0 +1,60 @@
+drop table if exists t1;
+create table t1(pk int primary key,a int);
+insert into t1(pk) values(1);
+select * from t1;
+pk	a
+1	NULL
+insert into t1(pk) values(1);
+ERROR 23000: Duplicate entry ' <3001.16>=int32:1' for key 'PRIMARY'
+select * from t1;
+pk	a
+1	NULL
+drop table t1;
+create table t1(pk varchar(128) primary key,a int);
+insert into t1(pk) values('c1');
+select * from t1;
+pk	a
+c1	NULL
+insert into t1(pk) values('c1');
+ERROR 23000: Duplicate entry ' <3002.16>=varchar:c1' for key 'PRIMARY'
+select * from t1;
+pk	a
+c1	NULL
+drop table t1;
+create table t1(pk datetime primary key,a datetime);
+insert into t1(pk) values('2012-02-02 12:00:00');
+select * from t1;
+pk	a
+2012-02-02 12:00:00	NULL
+insert into t1(pk) values('2012-02-02 12:00:00');
+ERROR 23000: Duplicate entry ' <3003.16>=precisedatetime:1328155200000000' for key 'PRIMARY'
+select * from t1;
+pk	a
+2012-02-02 12:00:00	NULL
+drop table t1;
+create table t1(pk createtime primary key, a int);
+ERROR HY000: column 'pk' with createtime type as primary key not support
+insert into t1(a) values(1);
+ERROR 42S02: table 'test.t1' does not exist
+insert into t1(a) values(2);
+ERROR 42S02: table 'test.t1' does not exist
+select * from t1;
+ERROR 42S02: table 'test.t1' does not exist
+drop table t1;
+ERROR 42S02: table 'test.t1' does not exist
+create table t1(pk modifytime primary key, a int);
+ERROR HY000: column 'pk' with modifytime type as primary key not support
+insert into t1(a) values(1);
+ERROR 42S02: table 'test.t1' does not exist
+insert into t1(a) values(2);
+ERROR 42S02: table 'test.t1' does not exist
+select * from t1;
+ERROR 42S02: table 'test.t1' does not exist
+insert into t1(a) values(1);
+ERROR 42S02: table 'test.t1' does not exist
+insert into t1(a) values(2);
+ERROR 42S02: table 'test.t1' does not exist
+select * from t1;
+ERROR 42S02: table 'test.t1' does not exist
+drop table t1;
+ERROR 42S02: table 'test.t1' does not exist

@@ -1,0 +1,64 @@
+drop table if exists t1,t2;
+create table t1(c1 int primary key, c2 varchar(20));
+Update /*hotspot*/ t1 set c2='aaaa' where c1=1;
+Update /*hotspot*/ t1 set c2='aaaa';
+select * from t1;
+c1	c2
+replace into t1 values (0,'zzzz'),(1,'aaaa'),(2,'bbbb'),(3,'cccc');
+select * from t1;
+c1	c2
+0	zzzz
+1	aaaa
+2	bbbb
+3	cccc
+Update /*hotspot*/ t1 set c2='aaab' where c1=1;
+select * from t1;
+c1	c2
+0	zzzz
+1	aaab
+2	bbbb
+3	cccc
+Update /*hotspot*/ t1 set c2='aaac' where c1=1;
+select * from t1;
+c1	c2
+0	zzzz
+1	aaac
+2	bbbb
+3	cccc
+Update /*hotspot*/ t1 set c2='aaad' where c1=1;
+select * from t1;
+c1	c2
+0	zzzz
+1	aaad
+2	bbbb
+3	cccc
+set @a='aaae';
+prepare stmt from Update /*hotspot*/ t1 set c2=? where c1=1;
+prepare stmt0 from Update /*hotspot*/ t1 set c2=? where c1=0;
+execute stmt using @a;
+execute stmt0 using @a;
+select * from t1;
+c1	c2
+0	aaae
+1	aaae
+2	bbbb
+3	cccc
+set @a='aaaf';
+execute stmt using @a;
+execute stmt0 using @a;
+select * from t1;
+c1	c2
+0	aaaf
+1	aaaf
+2	bbbb
+3	cccc
+set @a='aaag';
+execute stmt using @a;
+execute stmt0 using @a;
+select * from t1;
+c1	c2
+0	aaag
+1	aaag
+2	bbbb
+3	cccc
+drop table t1;

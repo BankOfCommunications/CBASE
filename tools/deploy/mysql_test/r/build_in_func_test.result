@@ -1,0 +1,227 @@
+drop table if exists build_in_func_test_table;
+create table build_in_func_test_table (varchar_c varchar(255) primary key, date_c datetime,v varchar(255));
+insert into build_in_func_test_table values ('hello', '2012-11-01 19:14:32',null);
+select substr(varchar_c, 1, 1) from build_in_func_test_table;
+substr(varchar_c, 1, 1)
+h
+select substr(varchar_c, 0, 1) from build_in_func_test_table;
+substr(varchar_c, 0, 1)
+h
+select substr(varchar_c, -1, 1) from build_in_func_test_table;
+substr(varchar_c, -1, 1)
+o
+select substr(varchar_c, -5, 1) from build_in_func_test_table;
+substr(varchar_c, -5, 1)
+h
+select substr(varchar_c, -6, 1) from build_in_func_test_table;
+substr(varchar_c, -6, 1)
+
+select substr(varchar_c, -100, 1) from build_in_func_test_table;
+substr(varchar_c, -100, 1)
+
+select substr(varchar_c, 3, 1) from build_in_func_test_table;
+substr(varchar_c, 3, 1)
+l
+select substr(varchar_c, 5, 1) from build_in_func_test_table;
+substr(varchar_c, 5, 1)
+o
+select substr(varchar_c, 6, 1) from build_in_func_test_table;
+substr(varchar_c, 6, 1)
+
+select substr(varchar_c, 6, -1) from build_in_func_test_table;
+substr(varchar_c, 6, -1)
+
+select substr(varchar_c, 5, -1) from build_in_func_test_table;
+substr(varchar_c, 5, -1)
+
+select substr(varchar_c, 4, -1) from build_in_func_test_table;
+substr(varchar_c, 4, -1)
+
+select substr(varchar_c, -1, -1) from build_in_func_test_table;
+substr(varchar_c, -1, -1)
+
+select substr(varchar_c, 0, 5) from build_in_func_test_table;
+substr(varchar_c, 0, 5)
+hello
+select substr(varchar_c, 0, 6) from build_in_func_test_table;
+substr(varchar_c, 0, 6)
+hello
+select substr(varchar_c, 0, 100) from build_in_func_test_table;
+substr(varchar_c, 0, 100)
+hello
+select substr(varchar_c, -6, 10) from build_in_func_test_table;
+substr(varchar_c, -6, 10)
+
+select substr(varchar_c, -5, 10) from build_in_func_test_table;
+substr(varchar_c, -5, 10)
+hello
+select substr(varchar_c, -5, 3) from build_in_func_test_table;
+substr(varchar_c, -5, 3)
+hel
+select substr(v,5,10) from build_in_func_test_table;
+substr(v,5,10)
+NULL
+select substr(varchar_c,null,10) from build_in_func_test_table;
+substr(varchar_c,null,10)
+NULL
+select substr(varchar_c,2,null) from build_in_func_test_table;
+substr(varchar_c,2,null)
+NULL
+select substr(varchar_c, -6) from build_in_func_test_table;
+substr(varchar_c, -6)
+
+select substr(varchar_c, -5) from build_in_func_test_table;
+substr(varchar_c, -5)
+hello
+select substr(varchar_c, -4) from build_in_func_test_table;
+substr(varchar_c, -4)
+ello
+select substr(varchar_c, -0) from build_in_func_test_table;
+substr(varchar_c, -0)
+hello
+select substr(varchar_c, 1) from build_in_func_test_table;
+substr(varchar_c, 1)
+hello
+select substr(varchar_c, 2) from build_in_func_test_table;
+substr(varchar_c, 2)
+ello
+select substr(varchar_c, 5) from build_in_func_test_table;
+substr(varchar_c, 5)
+o
+select substr(varchar_c, 6) from build_in_func_test_table;
+substr(varchar_c, 6)
+
+select substr(varchar_c,null) from build_in_func_test_table;
+substr(varchar_c,null)
+NULL
+select substr(v,1) from build_in_func_test_table;
+substr(v,1)
+NULL
+select substr(date_c, 0) from build_in_func_test_table;
+substr(date_c, 0)
+2012-11-01 19:14:32.000000
+select substr(date_c, 10) from build_in_func_test_table;
+substr(date_c, 10)
+1 19:14:32.000000
+select substr(1024, 1, 2) from build_in_func_test_table;
+substr(1024, 1, 2)
+10
+select coalesce(cast(null as int), null) from build_in_func_test_table;
+coalesce(cast(null as int), null)
+NULL
+select coalesce(null, 'monkey59', 123) from build_in_func_test_table;
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select coalesce(date_c,null, 'monkey59', 123) from build_in_func_test_table;
+ERROR HY000: coalesce function parameters type invalid
+select coalesce('jasimin', null, 'a,a', 123) from build_in_func_test_table;
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select coalesce(cast(null as int), null, 32.23) from build_in_func_test_table;
+coalesce(cast(null as int), null, 32.23)
+32.23
+select lower('ABC&*03_+abc') from build_in_func_test_table;
+lower('ABC&*03_+abc')
+abc&*03_+abc
+select lower(varchar_c) from build_in_func_test_table;
+lower(varchar_c)
+hello
+select lower(null) from build_in_func_test_table;
+lower(null)
+NULL
+select upper('ABC&*03_+abc') from build_in_func_test_table;
+upper('ABC&*03_+abc')
+ABC&*03_+ABC
+select upper(varchar_c) from build_in_func_test_table;
+upper(varchar_c)
+HELLO
+select upper(null) from build_in_func_test_table;
+upper(null)
+NULL
+select cast(12 as  datetime) from build_in_func_test_table;
+cast(12 as  datetime)
+1970-01-01 08:00:00.000012
+select cast('12' as  datetime) from build_in_func_test_table;
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select cast(cast('1970-01-01 08:00:12' as  datetime) as int) from build_in_func_test_table;
+ERROR 0A000: OB-7: Not supported feature or function
+select cast('1970-01-01 08:00:12' as int) from build_in_func_test_table;
+cast('1970-01-01 08:00:12' as int)
+1970
+select cast(cast('12' as decimal) as  datetime) from build_in_func_test_table;
+cast(cast('12' as decimal) as  datetime)
+1970-01-01 08:00:00.000012
+select cast(cast('12' as decimal) as datetime) from build_in_func_test_table;
+cast(cast('12' as decimal) as datetime)
+1970-01-01 08:00:00.000012
+select cast(cast('12' as decimal) as datetime) from build_in_func_test_table;
+cast(cast('12' as decimal) as datetime)
+1970-01-01 08:00:00.000012
+select cast(v as int) from build_in_func_test_table;
+cast(v as int)
+NULL
+select trim('aba' from 'ababa') from build_in_func_test_table;
+trim('aba' from 'ababa')
+ba
+select length(trim('aba' from 'aba')) from build_in_func_test_table;
+length(trim('aba' from 'aba'))
+0
+select trim('aba' from 'aba') from build_in_func_test_table;
+trim('aba' from 'aba')
+
+select trim('  hello  ') from build_in_func_test_table;
+trim('  hello  ')
+hello
+select trim('h' from 'hhhhello!')  from build_in_func_test_table;
+trim('h' from 'hhhhello!')
+ello!
+select trim('o!' from 'hhhhello!')  from build_in_func_test_table;
+trim('o!' from 'hhhhello!')
+hhhhell
+select trim('h' from 'hhhhaaaahhhh')  from build_in_func_test_table;
+trim('h' from 'hhhhaaaahhhh')
+aaaa
+select trim(LEADING 'h' from 'hhhhaaaahhhh') from build_in_func_test_table;
+trim(LEADING 'h' from 'hhhhaaaahhhh')
+aaaahhhh
+select trim(TRAILING 'h' from 'hhhhaaaahhhh')  from build_in_func_test_table;
+trim(TRAILING 'h' from 'hhhhaaaahhhh')
+hhhhaaaa
+select trim(BOTH 'h' from 'hhhhaaaahhhh')  from build_in_func_test_table;
+trim(BOTH 'h' from 'hhhhaaaahhhh')
+aaaa
+select trim(BOTH  from '  hhhhaaaa  ')  from build_in_func_test_table;
+trim(BOTH  from '  hhhhaaaa  ')
+hhhhaaaa
+select trim(123 from 123542) from build_in_func_test_table;
+trim(123 from 123542)
+542
+select trim(2 from cast(12312312 as datetime)) from build_in_func_test_table;
+trim(2 from cast(12312312 as datetime))
+1970-01-01 08:00:12.31231
+select length(trim('     hi' || 'dir ')) from build_in_func_test_table;
+length(trim('     hi' || 'dir '))
+5
+select trim(1) from build_in_func_test_table;
+trim(1)
+1
+select trim(cast(111 as varchar)) from build_in_func_test_table;
+trim(cast(111 as varchar))
+111
+select trim(LEADING 1 from cast(111 as varchar)) from build_in_func_test_table;
+trim(LEADING 1 from cast(111 as varchar))
+
+select trim(TRAILING 1 from cast(111 as varchar)) from build_in_func_test_table;
+trim(TRAILING 1 from cast(111 as varchar))
+
+select trim(v) from build_in_func_test_table;
+trim(v)
+NULL
+select trim(leading v from 'v'),trim(leading varchar_c from 'he') from build_in_func_test_table;
+trim(leading v from 'v')	trim(leading varchar_c from 'he')
+NULL	he
+select coalesce(lower(null), length(lower(upper('yssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxddsd'))), 'dir') from build_in_func_test_table;
+coalesce(lower(null), length(lower(upper('yssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxddsd'))), 'dir')
+466
+select 'NAME:'||varchar_c,'ADDR:'||v from build_in_func_test_table;
+'NAME:'||varchar_c	'ADDR:'||v
+NAME:hello	NULL
+drop table build_in_func_test_table;

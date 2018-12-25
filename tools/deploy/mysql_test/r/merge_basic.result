@@ -1,0 +1,80 @@
+drop table if exists sbtest;
+alter system set merge_delay_interval='1s' server_type=chunkserver,min_major_freeze_interval='1s' server_type=updateserver;
+alter system set merge_delay_for_lsync='1s' server_type=chunkserver;
+alter system set min_drop_cache_wait_time='10s' server_type=chunkserver;
+alter system set merge_thread_per_disk=10 server_type=chunkserver;
+alter system set each_tablet_sync_meta=False server_type=chunkserver;
+create table t1(pk int primary key, a int);
+insert into t1 values(1,0),(2,0),(4,0),(3,0);
+insert into t1 values(0,0);
+insert into t1 values(5,0),(6,0),(8,0),(7,0);
+update t1 set a=1 where pk = 0;
+update t1 set a=1 where pk = 1;
+replace into t1(pk, a) values(0,2);
+replace into t1(pk, a) values(2,2);
+delete from t1 where pk = 2;
+delete from t1 where pk = 1;
+delete from t1 where pk = 5;
+select * from t1;
+pk	a
+0	2
+3	0
+4	0
+6	0
+7	0
+8	0
+[major_freeze] err=0
+insert into t1 values(100,0),(200,0),(101,0);
+insert into t1 values(102,0);
+insert into t1 values(104,0),(103,0);
+insert into t1 values(2,0);
+update  t1 set a=1 where pk = 7;
+update  t1 set a=1 where pk = 3;
+delete from t1 where pk=0;
+delete from t1 where pk=7;
+delete from t1 where pk=103;
+select * from t1;
+pk	a
+2	0
+3	1
+4	0
+6	0
+8	0
+100	0
+101	0
+102	0
+104	0
+200	0
+[major_freeze] err=0
+insert into t1 values(0,0),(7,0);
+insert into t1 values(307,0),(103,0);
+insert into t1 values(300,0),(305,0),(301,0);
+insert into t1 values(302,0);
+insert into t1 values(304,0),(303,0);
+update  t1 set a=1 where pk = 7;
+update  t1 set a=1 where pk = 3;
+update  t1 set a=1 where pk = 102;
+update  t1 set a=1 where pk = 101;
+delete from t1 where pk=4;
+delete from t1 where pk=200;
+delete from t1 where pk=300;
+select * from t1;
+pk	a
+0	0
+2	0
+3	1
+6	0
+7	1
+8	0
+100	0
+101	1
+102	1
+103	0
+104	0
+301	0
+302	0
+303	0
+304	0
+305	0
+307	0
+drop table t1;

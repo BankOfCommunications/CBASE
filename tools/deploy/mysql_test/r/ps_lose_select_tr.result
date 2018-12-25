@@ -1,0 +1,185 @@
+drop table if exists t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from select a,b from t1;
+execute stmt1;
+a	b
+1	a
+2	b
+3	c
+alter table t1 add d varchar(255);
+set autocommit=0;
+execute stmt1;
+a	b
+1	a
+2	b
+3	c
+commit;
+set autocommit=1;
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt1;
+prepare stmt2 from select a,b from t1;
+execute stmt2;
+a	b
+1	a
+2	b
+3	c
+alter table t1 drop d;
+set autocommit=0;
+execute stmt2;
+a	b
+1	a
+2	b
+3	c
+commit;
+set autocommit=1;
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt2;
+prepare stmt3 from select a,b from t1;
+execute stmt3;
+a	b
+1	a
+2	b
+3	c
+alter table t1 drop b;
+set autocommit=0;
+execute stmt3;
+ERROR 42S22: Unkown column name b
+commit;
+set autocommit=1;
+select * from t1;
+a	c
+1	2
+2	3
+3	4
+deallocate prepare stmt3;
+alter table t1 add b varchar(255);
+prepare stmt4 from select a,b from t1;
+execute stmt4;
+a       b
+1       NULL
+2       NULL
+3       NULL
+alter table t1 drop b;
+alter table t1 add b varchar(255);
+set autocommit=0;
+execute stmt4;
+a	b
+1	NULL
+2	NULL
+3	NULL
+commit;
+set autocommit=1;
+select * from t1;
+a	c	b
+1	2	NULL
+2	3	NULL
+3	4	NULL
+deallocate prepare stmt4;
+prepare stmt5 from select a,b from t1;
+execute stmt5;
+a	b
+1	NULL
+2	NULL
+3	NULL
+alter table t1 drop b;
+alter table t1 add b int;
+set autocommit=0;
+execute stmt5;
+a	b
+1	NULL
+2	NULL
+3	NULL
+commit;
+set autocommit=1;
+select * from t1;
+a	c	b
+1	2	NULL
+2	3	NULL
+3	4	NULL
+deallocate prepare stmt5;
+prepare stmt6 from select a,b from t1;
+execute stmt6;
+a	b
+1	NULL
+2	NULL
+3	NULL
+drop table t1;
+set autocommit=0;
+execute stmt6;
+ERROR 42S02: table 't1' does not exist
+commit;
+set autocommit=1;
+deallocate prepare stmt6;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt7 from select a,b from t1 where a=?;
+set @a=1;
+execute stmt7 using @a;
+a	b
+1	a
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+set autocommit=0;
+execute stmt7 using @a;
+a	b
+1	a
+commit;
+set autocommit=1;
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt7;
+prepare stmt8 from select a,b from t1 where a=?;
+set @a=2;
+execute stmt8 using @a;
+a	b
+2	b
+drop table t1;
+create table t1( a int primary key,b varchar(255));
+insert into t1 values(1,'a'),(2,'b'),(3,'c');
+set autocommit=0;
+execute stmt8 using @a;
+a	b
+2	b
+commit;
+set autocommit=1;
+select * from t1;
+a	b
+1	a
+2	b
+3	c
+deallocate prepare stmt8;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt9 from select a,b from t1 where a=?;
+set @a=1;
+execute stmt9 using @a;
+a       b
+1       a
+drop table t1;
+create table t1( a int primary key,c int);
+insert into t1 values(1,2),(2,3),(3,4);
+set autocommit=0;
+execute stmt9 using @a;
+ERROR 42S22: Unkown column name b
+commit;
+set autocommit=1;
+select * from t1;
+a	c
+1	2
+2	3
+3	4
+deallocate prepare stmt9;

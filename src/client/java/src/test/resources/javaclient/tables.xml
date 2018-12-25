@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<!--ItemInfoColumns-->
+	<bean id="itemTitleColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="title"></constructor-arg>
+		<constructor-arg type="long" value="2"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.ItemInfoStringColumnRule"></bean>
+		</constructor-arg>
+	</bean>
+	<bean id="itemPicurlColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="picurl"></constructor-arg>
+		<constructor-arg type="long" value="3"></constructor-arg>
+		<constructor-arg>
+			<bean
+				class="com.taobao.oceanbase.base.rule.ItemInfoStringColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+		<bean id="itemOwnerIdColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="owner_id"></constructor-arg>
+		<constructor-arg type="long" value="4"></constructor-arg>
+		<constructor-arg>
+			<bean
+				class="com.taobao.oceanbase.base.rule.ItemInfoNumberColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="itemOwnerNickColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="owner_nick"></constructor-arg>
+		<constructor-arg type="long" value="5"></constructor-arg>
+		<constructor-arg>
+			<bean
+				class="com.taobao.oceanbase.base.rule.ItemInfoStringColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="itemPriceColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="price"></constructor-arg>
+		<constructor-arg type="long" value="6"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.ItemInfoFloatColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="itemEndsColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="ends"></constructor-arg>
+		<constructor-arg type="long" value="7"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.ItemInfoTimeColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="itemProperXmlColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="proper_xml"></constructor-arg>
+		<constructor-arg type="long" value="8"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.ItemInfoStringColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="itemCommentCountColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="comment_count"></constructor-arg>
+		<constructor-arg type="long" value="9"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.ItemInfoNumberColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="itemCollectorCountColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="collector_count"></constructor-arg>
+		<constructor-arg type="long" value="10"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.ItemInfoNumberColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="itemCollectCountColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="collect_count"></constructor-arg>
+		<constructor-arg type="long" value="11"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.ItemInfoNumberColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="itemMoneyColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="money"></constructor-arg>
+		<constructor-arg type="long" value="12"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.ItemInfoDoubleColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<!-- ItemInfo Table -->
+	<bean id="itemInfoTable" class="com.taobao.oceanbase.base.table.ItemInfoTable">
+		<property name="str2col">
+			<map>
+				<entry key="title"><ref bean="itemTitleColumn"/></entry>
+				<entry key="picurl"><ref bean="itemPicurlColumn"/></entry>
+				<entry key="owner_id"><ref bean="itemOwnerIdColumn"/></entry>
+				<entry key="owner_nick"><ref bean="itemOwnerNickColumn"/></entry>
+				<entry key="price"><ref bean="itemPriceColumn"/></entry>
+				<entry key="ends"><ref bean="itemEndsColumn"/></entry>
+				<entry key="proper_xml"><ref bean="itemProperXmlColumn"/></entry>
+				<entry key="comment_count"><ref bean="itemCommentCountColumn"/></entry>
+				<entry key="collector_count"><ref bean="itemCollectorCountColumn"/></entry>
+				<entry key="collect_count"><ref bean="itemCollectCountColumn"/></entry>
+				<entry key="money"><ref bean="itemMoneyColumn"/></entry>
+			</map>
+		</property>
+		<property name="tableName" value="item_info"></property>
+	</bean>
+	<!--CollectInfoColumns-->
+	<bean id="collectInfoUserNickColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="user_nick"></constructor-arg>
+		<constructor-arg type="long" value="2"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.CollectInfoStringColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="collectInfoIsSharedColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="is_shared"></constructor-arg>
+		<constructor-arg type="long" value="3"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.CollectInfoNumberColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="collectInfoNoteColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="note"></constructor-arg>
+		<constructor-arg type="long" value="4"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.CollectInfoStringColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="collectInfoCollectTimeColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="collect_time"></constructor-arg>
+		<constructor-arg type="long" value="5"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.CollectInfoTimeColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="collectInfoStatusColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="status"></constructor-arg>
+		<constructor-arg type="long" value="6"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.CollectInfoNumberColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="collectInfoGmCreateColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="gm_create"></constructor-arg>
+		<constructor-arg type="long" value="7"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.CollectInfoPreciseTimeColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="collectInfoGmModifiedColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="gm_modified"></constructor-arg>
+		<constructor-arg type="long" value="8"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.CollectInfoPreciseTimeColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="collectInfoTagColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="tag"></constructor-arg>
+		<constructor-arg type="long" value="9"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.CollectInfoStringColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="collectInfoCategoryColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="category"></constructor-arg>
+		<constructor-arg type="long" value="10"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.CollectInfoNumberColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="collectInfoCollectTimePreciseColumn" class="com.taobao.oceanbase.base.column.Column">
+		<constructor-arg type="java.lang.String" value="collect_time_precise"></constructor-arg>
+		<constructor-arg type="long" value="22"></constructor-arg>
+		<constructor-arg>
+			<bean class="com.taobao.oceanbase.base.rule.CollectInfoPreciseTimeColumnRule">
+			</bean>
+		</constructor-arg>
+	</bean>
+	<!--CollectInfoTable-->
+	<bean id="collectInfoTable" class="com.taobao.oceanbase.base.table.CollectInfoTable">
+		<property name="str2col">
+			<map>
+				<entry key="user_nick"><ref bean="collectInfoUserNickColumn"/></entry>
+				<entry key="is_shared"><ref bean="collectInfoIsSharedColumn"/></entry>
+				<entry key="note"><ref bean="collectInfoNoteColumn"/></entry>
+				<entry key="collect_time"><ref bean="collectInfoCollectTimeColumn"/></entry>
+				<entry key="status"><ref bean="collectInfoStatusColumn"/></entry>
+				<entry key="gm_create"><ref bean="collectInfoGmCreateColumn"/></entry>
+				<entry key="gm_modified"><ref bean="collectInfoGmModifiedColumn"/></entry>
+				<entry key="tag"><ref bean="collectInfoTagColumn"/></entry>
+				<entry key="category"><ref bean="collectInfoCategoryColumn"/></entry>
+				<entry key="collect_time_precise"><ref bean="collectInfoCollectTimePreciseColumn"/></entry>
+			</map>
+		</property>
+		<property name="jstr2col">
+			<map>
+				<entry key="title"><ref bean="itemTitleColumn"/></entry>
+				<entry key="picurl"><ref bean="itemPicurlColumn"/></entry>
+				<entry key="owner_id"><ref bean="itemOwnerIdColumn"/></entry>
+				<entry key="owner_nick"><ref bean="itemOwnerNickColumn"/></entry>
+				<entry key="price"><ref bean="itemPriceColumn"/></entry>
+				<entry key="ends"><ref bean="itemEndsColumn"/></entry>
+				<entry key="proper_xml"><ref bean="itemProperXmlColumn"/></entry>
+				<entry key="comment_count"><ref bean="itemCommentCountColumn"/></entry>
+				<entry key="collector_count"><ref bean="itemCollectorCountColumn"/></entry>
+				<entry key="collect_count"><ref bean="itemCollectCountColumn"/></entry>
+				<entry key="total_money"><ref bean="itemMoneyColumn"/></entry>
+			</map>
+		</property>
+		<property name="tableName" value="collect_info"></property>
+	</bean>
+</beans>

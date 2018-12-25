@@ -1,0 +1,2161 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+
+# dooba ---
+#
+# Filename: dooba
+# Description: `dooba' is a easy tools monitoring oceanbase cluster for
+#               oceanbase admins. It's based on python curses library, and is a
+#               powerful tool for watching oceanbase cluster status with
+#               straightfoward vision.
+# Author: 符风 <fufeng.syd@alipay.com>
+# Created: 2013-07-23 21:05:08 (+0800)
+# Version: 1.0
+# Last-Updated: 2013-09-04 13:29:41 (+0800)
+#           By: Shi Yudi
+#     Update #: 4803
+#
+
+# Change Log:
+# 2013-09-04    Shi Yudi
+#    Last-Updated: 2013-09-04 10:52:02 (+0800) #4786 (Shi Yudi)
+#    1. add machine stat
+#    2. fix many bugs
+#    3. add ssh, mysql login
+#    4. add delete and restore widgets
+#
+# 2013-08-20    Shi Yudi
+#    Last-Updated: 2013-08-20 15:29:45 (+0800) #2012 (Shi Yudi)
+#    1. support instant statistics monitor for ups/cs/ms
+#    2. keyboard response for switch between widget
+#    3. rewrite help page
+#
+# 2013-08-16    Shi Yudi
+#    Last-Updated: 2013-08-16 16:07:32 (+0800) #1052 (Shi Yudi)
+#    1. add header column widget descripe each server
+#    2. add instant stat list (only for ms now)
+#    3. add mergeserver header info
+#
+# 2013-08-14    Shi Yudi
+#    Last-Updated: 2013-08-14 16:11:40 (+0800) #576 (Shi Yudi)
+#    1. add MessageBox for dooba, key 'p' for test
+#    2. add selective mode, TAB for swtich between widgets
+#    3. add supermode option, just a husk right now
+#
+# 2013-08-07    Shi Yudi
+#    Last-Updated: 2013-08-07 10:38:33 (+0800) #479 (Shi Yudi)
+#    1. fix term evironment setting bug
+#    2. fix getting appname bug
+#    3. refact main method
+#
+# 2013-08-06    Shi Yudi
+#    Last-Updated: 2013-08-06 20:47:35 (+0800) #443 (Shi Yudi)
+#    1. OceanBase alive checker before running
+#    2. colorfull widgets
+#    3. fix some promptions
+#    4. change header widget and status widget style with horizontal line
+#    5. remove page border
+#
+# 2013-08-06    Shi Yudi
+#    Last-Updated: 2013-08-06 16:46:39 (+0800) #347 (Shi Yudi)
+#    1. add chunkserver, mergeserver, updateserver info widgets
+#    2. fix non-lexical closures problem
+#    3. dynamic helper widget promption
+#    4. change some pages' index
+#
+# 2013-07-31    Shi Yudi
+#    Last-Updated: 2013-07-31 19:11:19 (+0800) #14 (Shi Yudi)
+#    1. redesign helper bar and status bar
+#    2. add more pages for dooba
+#    3. beauty python coding style
+#
+# 2013-07-23    Shi Yudi
+#    1. header with app name, and other mocks.
+#    2. sql rt, sql count, cs rt, ups rt are added to screen.
+#
+#
+
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; see the file COPYING.  If not, write to
+# the Free Software Foundation, Inc., 51 Franklin Street, Fifth
+# Floor, Boston, MA 02110-1301, USA.
+#
+#
+
+# Code:
+
+from collections import deque
+from datetime import datetime, timedelta
+from errno import *
+from getopt import getopt, GetoptError
+from os import environ, read, setsid
+from pprint import pformat
+from random import shuffle
+from subprocess import Popen, PIPE, STDOUT, call
+from telnetlib import Telnet
+from threading import Thread
+from time import sleep, strftime
+from urllib2 import urlopen, URLError
+import curses
+import curses.textpad
+import os
+import select
+import signal
+import socket
+import sys
+import textwrap
+
+class Global:
+    MAX_LINES = 100
+    WIDGET_HEIGHT = 7
+
+
+class Options(object):
+    host = '127.0.0.1'
+    port = 2828
+    user = 'admin'
+    password = 'admin'
+    supermode = False
+    interval = 1
+    dataid = None
+    using_ip_port = False
+    env = 'unknown'
+    machine_interval = 5
+
+    def __str__(self):
+        result = {}
+        for k in dir(self):
+            v = getattr(self, k)
+            if k.find('__') == 0:
+                continue
+            result[k] = v
+        return pformat(result)
+
+
+def mem_str(mem_int, bit=False):
+    mem_int = int(mem_int)
+    if mem_int < 1024:
+        return str(mem_int) + (bit and 'b' or '')
+    mem_int = float(mem_int)
+    mem_int /= 1024
+    if mem_int < 1024:
+        return "%.2fK" % mem_int + (bit and 'b' or '')
+    mem_int /= 1024
+    if mem_int < 1024:
+        return "%.2fM" % mem_int + (bit and 'b' or '')
+    mem_int /= 1024
+    if mem_int < 1024:
+        return "%.2fG" % mem_int + (bit and 'b' or '')
+    return "UNKNOW"
+
+
+class Cowsay(object):
+    '''Copyright 2011 Jesse Chan-Norris <jcn@pith.org>
+       https://github.com/jcn/cowsay-py/blob/master/cowsay.py'''
+    def __init__(self, str, length=40):
+        self.__result = self.build_bubble(str, length) + self.build_cow()
+
+    def __str__(self):
+        return self.__result
+
+    def build_cow(self):
+        return """
+         \   ^__^
+          \  (oo)\_______
+             (__)\       )\/\\
+                 ||----w |
+                 ||     ||
+                """
+
+    def build_bubble(self, str, length=40):
+        bubble = []
+        lines = self.normalize_text(str, length)
+        bordersize = len(lines[0])
+        bubble.append("  " + "_" * bordersize)
+
+        for index, line in enumerate(lines):
+            border = self.get_border(lines, index)
+            bubble.append("%s %s %s" % (border[0], line, border[1]))
+            bubble.append("  " + "-" * bordersize)
+
+        return "\n".join(bubble)
+
+    def normalize_text(self, str, length):
+        lines  = textwrap.wrap(str, length)
+        maxlen = len(max(lines, key=len))
+        return [ line.ljust(maxlen) for line in lines ]
+
+    def get_border(self, lines, index):
+        if len(lines) < 2:
+            return [ "<", ">" ]
+        elif index == 0:
+            return [ "/", "\\" ]
+        elif index == len(lines) - 1:
+            return [ "\\", "/" ]
+        else:
+            return [ "|", "|" ]
+
+
+class OceanBase(object):
+    instant_key_list = [
+    # mergeserver
+    'ms_memory_limit', 'ms_memory_total', 'ms_memory_parser',
+    'ms_memory_transformer', 'ms_memory_ps_plan', 'ms_memory_rpc_request',
+    'ms_memory_sql_array', 'ms_memory_expression', 'ms_memory_row_store',
+    'ms_memory_session',
+    # chunkserver
+    'serving_version', 'old_ver_tablets_num', 'old_ver_merged_tablets_num',
+    'new_ver_tablets_num', 'new_ver_tablets_num', 'memory_used_default',
+    'memory_used_network', 'memory_used_thread_buffer', 'memory_used_tablet',
+    'memory_used_bi_cache', 'memory_used_block_cache',
+    'memory_used_bi_cache_unserving', 'memory_used_block_cache_unserving',
+    'memory_used_join_cache', 'memory_used_sstable_row_cache',
+    'memory_used_merge_buffer', 'memory_used_merge_split_buffer',
+    # updateserver
+    'memory_total', 'memory_limit', 'memtable_total', 'memtable_used',
+    'total_rows', 'active_memtable_limit', 'active_memtable_total',
+    'active_memtable_used', 'active_total_rows', 'frozen_memtable_limit',
+    'frozen_memtable_total', 'frozen_memtable_used', 'frozen_total_rows',
+    # machine stat
+    'load1', 'load5', 'load15', 'MemTotal', 'MemFree',
+    ]
+
+    def __init__(self):
+        self.__q = {}
+        self.__stop = True
+        self.__machine_stat = {}
+
+    def dosql(self, sql, host=None, port=None):
+        if host is None:
+            host = Options.host
+        if port is None:
+            port = Options.port
+        mysql = "mysql --connect_timeout=2 -s -N -h%s -P%d -u%s -p%s" % (host, port, Options.user, Options.password)
+        cmd = "%s -e \"%s\"" % (mysql, sql)
+        p = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
+        output = p.communicate()[0]
+        err = p.wait()
+        if err:
+            raise Exception('popen Fail', cmd)
+        return output
+
+    def mysql(self, host=None, port=None):
+        if host is None:
+            host = Options.host
+        if port is None:
+            port = Options.port
+        cmd = "mysql --connect_timeout=2 -h%s -P%d -u%s -p%s" % (host, port, Options.user, Options.password)
+        environ['MYSQL_PS1'] = "(\u@\h) [%s]> " % self.__app
+        call('clear')
+        try:
+            call(cmd, shell=True)
+        except KeyboardInterrupt:
+            pass
+        call('clear')
+
+    def ssh(self, host):
+        cmd = "ssh -o StrictHostKeyChecking=no %s" % host
+        call('clear')
+        try:
+            call(cmd, shell=True)
+        except KeyboardInterrupt:
+            pass
+        call('clear')
+
+    def test_alive(self, fatal=True, do_false=None, do_true=None, host=None, port=None):
+        if host is None:
+            host = Options.host
+        if port is None:
+            port = Options.port
+        try:
+            oceanbase.dosql('select 1', host=host, port=port)
+            if do_true is not None:
+                do_true("Check oceanbase alive successfully! [%s:%d]" % (host, port))
+        except Exception:
+            if do_false is not None:
+                do_false("Can't connect oceanbase, plz check options!\n"
+                         "Options: [IP:%s] [PORT:%d] [USER:%s] [PASS:%s]"
+                         % (host, port, Options.user, Options.password))
+            if fatal:
+                exit(1)
+            else:
+                return False
+        return True
+
+    def __get_all_stat(self):
+        res = self.dosql('select current_time(),svr_type,svr_ip,svr_port,name,value '
+                    'from (select * from __all_server_stat) t;')
+        r = dict()
+        time = ''
+        if not self.__using_server_time():
+            time = str(datetime.now())
+        for one in res.split("\n")[:-1]:
+            a = one.split("\t")
+            if self.__using_server_time():
+                time = a[0]
+            now = datetime.strptime(time, '%Y-%m-%d %H:%M:%S.%f')
+            type = a[1]
+            ip = a[2]
+            port = a[3]
+            name = a[4]
+            value = int(a[5])
+            if type not in r:
+                r[type] = dict()
+            if ip not in r[type]:
+                r[type][ip] = dict()
+            r[type][ip][name] = value
+            r['time'] = now
+        return r
+
+    def __sub_stat(self, now, prev):
+        r = {}
+        for k in now.keys():
+            if k in self.instant_key_list:
+                r[k] = now[k]
+            elif type(now[k]) == dict:
+                r.update({k: self.__sub_stat(now[k], prev[k])})
+            elif type(now[k]) == int:
+                r[k] = now[k] - prev[k]
+            elif type(now[k]) == float:
+                r[k] = now[k] - prev[k]
+            elif type(now[k]) == type(datetime.min):
+                r[k] = now[k] - prev[k]
+            else:
+                print type(now[k])
+        return r
+
+    def __update_oceanbase_stat_runner(self):
+        q = self.__q
+        prev = self.__get_all_stat()
+        while not self.__stop:
+            sleep(Options.interval)
+            if self.__stop:
+                break
+            cur = self.__get_all_stat()
+            try:
+                q.append(self.__sub_stat(cur, prev))
+                if (len(q) > Global.MAX_LINES):
+                    q.popleft()
+            except KeyError:
+                pass
+            prev = cur
+
+    def __do_ssh(self, host, cmd):
+        BUFFER_SIZE = 1 << 16
+        ssh = Popen(['ssh', '-o', 'PreferredAuthentications=publickey',
+                     '-o', 'StrictHostKeyChecking=no', host, cmd],
+                    stdout=PIPE, stderr=PIPE, preexec_fn=setsid, shell=False)
+        output = ssh.communicate()[0]
+        err = ssh.wait()
+        if err:
+            raise Exception('popen Fail', "%s: %s" % (host, cmd))
+        return output
+
+    def __get_machine_stat(self, ip):
+        cmd = ("cat <(date +%s%N) <(cat /proc/stat | head -1 | cut -d' ' -f 3-9) "
+               "/proc/loadavg  <(cat /proc/meminfo) <(echo END_MEM) "
+               "<(cat /proc/net/dev | sed -n 3~1p) <(echo END_NET) "
+               "<(cat /proc/diskstats | grep '  8  ') <(echo END_DISK)")
+        try:
+            output = self.__do_ssh(ip, cmd)
+        except Exception:
+            return {}
+
+        lines = output.split('\n')
+
+        res = {}
+        res['time'] = float(lines[0]) / 1000   # ms
+        lines = lines[1:]
+
+        cpuinfo = lines[0]
+        columns = cpuinfo.split(" ")
+        res['user'] = int(columns[0])
+        res['nice'] = int(columns[1])
+        res['sys'] = int(columns[2])
+        res['idle'] = int(columns[3])
+        res['iowait'] = int(columns[4])
+        res['irq'] = int(columns[5])
+        res['softirq'] = int(columns[6])
+        res['total'] = 0
+        for c in columns:
+            res['total'] += int(c)
+        lines = lines[1:]
+
+        loadavg = lines[0]
+        columns = loadavg.split(" ")
+        res['load1'] = columns[0]
+        res['load5'] = columns[1]
+        res['load15'] = columns[2]
+        lines = lines[1:]
+
+        # mem
+        for line in lines:
+            if 'END_MEM' == line:
+                break
+            kv = line.split()
+            k = kv[0][:-1]
+            v = kv[1]
+            res[k] = int(v) * 1024
+        idx = lines.index('END_MEM')
+        lines = lines[idx + 1:]
+
+        # net
+        res['net'] = {}
+        for line in lines:
+            if 'END_NET' == line:
+                break
+            colon = line.find(':')
+            assert colon > 0, line
+            name = line[:colon].strip()
+            res['net'][name] = {}
+            fields = line[colon+1:].strip().split()
+            res['net'][name]['bytes_recv'] = int(fields[0])
+            res['net'][name]['packets_recv'] = int(fields[1])
+            res['net'][name]['errin'] = int(fields[2])
+            res['net'][name]['dropin'] = int(fields[3])
+            res['net'][name]['bytes_sent'] = int(fields[8])
+            res['net'][name]['packets_sent'] = int(fields[9])
+            res['net'][name]['errout'] = int(fields[10])
+            res['net'][name]['dropout'] = int(fields[11])
+        idx = lines.index('END_NET')
+        lines = lines[idx + 1:]
+
+        res['disk'] = {}
+        SECTOR_SIZE = 512
+        for line in lines:
+            # http://www.mjmwired.net/kernel/Documentation/iostats.txt
+            if 'END_DISK' == line:
+                break
+            _, _, name, reads, _, rbytes, rtime, writes, _, wbytes, wtime = line.split()[:11]
+            res['disk'][name] = {}
+            res['disk'][name]['rbytes'] = int(rbytes) * SECTOR_SIZE
+            res['disk'][name]['wbytes'] = int(wbytes) * SECTOR_SIZE
+            res['disk'][name]['reads'] = int(reads)
+            res['disk'][name]['writes'] = int(writes)
+            res['disk'][name]['rtime'] = int(rtime)
+            res['disk'][name]['wtime'] = int(wtime)
+        return res
+        idx = lines.index('END_DISK')
+        lines = lines[idx + 1:]
+
+    def __update_server_stat_runner(self):
+        prev = {}
+        for ip in self.ip_list:
+            prev[ip] = self.__get_machine_stat(ip)
+        while not self.__stop:
+            sleep(Options.machine_interval)
+            shuffle(self.ip_list)
+            for ip in self.ip_list:
+                if self.__stop:
+                    break
+                cur = self.__get_machine_stat(ip)
+                try:
+                    result = self.__sub_stat(cur, prev[ip])
+                    self.__machine_stat.update({ip: result})
+                except KeyError:
+                    pass
+                prev[ip] = cur
+
+    def __update_version(self):
+        self.version = "Unknown"
+        res = self.dosql("show variables like 'version_comment'")
+        for one in res.split("\n")[:-1]:
+            a = one.split("\t")
+            self.version = a[1]
+        self.__app = oceanbase.dosql("select value from __all_sys_config_stat"
+                                     " where name='appname' limit 1;")[:-1]
+
+    def __using_server_time(self):
+        if self.version.find('0.4.1') >= 0:
+            return False
+        elif self.version.find('0.4.2') >= 0:
+            return True
+        return False
+
+    def start(self):
+        self.__stop = False
+        self.__q = deque([])
+        self.__th = Thread(target=self.__update_oceanbase_stat_runner, args=())
+        self.__th.daemon = True
+        self.__th.start()
+        if Options.env == 'online':
+            self.__update_ip_list()
+            self.__machine_stat = {}
+            self.__svr_th = Thread(target=self.__update_server_stat_runner, args=())
+            self.__svr_th.daemon = True
+            self.__svr_th.start()
+
+    def now(self):
+        return self.__q[-1]
+
+    def stat_count(self):
+        return len(self.__q)
+
+    def latest(self, num=1):
+        return list(self.__q)[-num:]
+
+    def machine_stat(self):
+        return self.__machine_stat
+
+    def update_cluster_info(self):
+        class Cluster:
+            def __init__(self, id, vip, port, role):
+                self.id = id
+                self.vip = vip
+                try:
+                    self.port = int(port)
+                except ValueError:
+                    self.port = 0
+                self.role = role
+                self.selected = False
+                self.svr_list = {'chunkserver':[], 'mergeserver':[], 'rootserver':[], 'updateserver':[]}
+
+        res = self.dosql('SELECT cluster_id,cluster_vip,cluster_port,cluster_role FROM __all_cluster')
+        self.cluster = []
+        for line in res.split("\n")[:-1]:
+            clu = line.split("\t")
+            self.cluster.append(Cluster(int(clu[0]), clu[1], clu[2], int(clu[3])))
+
+        svrs = oceanbase.dosql("select svr_type,cluster_id,svr_ip,svr_port from __all_server")
+        for line in svrs.rstrip("\n").split("\n"):
+            svr = line.split("\t")
+            for clu in self.cluster:
+                if clu.id == int(svr[1]):
+                    clu.svr_list[svr[0]].append({'ip': svr[2], 'port': int(svr[3])})
+
+        if Options.dataid:
+            self.update_lms()
+
+        self.__update_version()
+        self.__update_sample()
+        self.__update_ip_list()
+
+    def __update_sample(self):
+        self.sample = self.__get_all_stat()
+        self.sample['time'] = timedelta()
+
+    def __update_ip_list(self):
+        ip_list = []
+        ip_map = {}
+        svr_list = oceanbase.find_svr_list()
+        for name in ('chunkserver', 'mergeserver', 'updateserver', 'rootserver'):
+            ip_list += [svr['ip'] for svr in svr_list[name]]
+            for ip in [svr['ip'] for svr in svr_list[name]]:
+                if ip in ip_map:
+                    ip_map[ip].append(name)
+                else:
+                    ip_map[ip] = [name]
+        self.ip_list = list(set(ip_list))
+        self.ip_map = ip_map
+
+    def update_lms(self):
+        svrs = oceanbase.dosql("select svr_ip,svr_port from (select * from __all_server_stat) t where svr_type='updateserver' limit 1")
+        for line in svrs.rstrip("\n").split("\n"):
+            svr = line.split("\t")
+            ip = svr[0]
+            try:
+                port = int(svr[1])
+            except ValueError:            # no lms
+                return
+        for clu in self.cluster:
+            for ups in clu.svr_list['updateserver']:
+                if ups['ip'] == ip and ups['port'] == port:
+                    Options.host = clu.vip
+                    Options.port = clu.port
+                    return
+
+    def find_svr_list(self):
+        svrs = oceanbase.dosql("select svr_ip,svr_port from (select * from __all_server_stat) t where svr_type='rootserver' limit 1")
+        for line in svrs.rstrip("\n").split("\n"):
+            svr = line.split("\t")
+            ip = svr[0]
+            port = int(svr[1])
+        for clu in self.cluster:
+            for ups in clu.svr_list['rootserver']:
+                if ups['ip'] == ip and ups['port'] == port:
+                    if Options.dataid:
+                        Options.host, Options.port = clu.vip, clu.port
+                    return clu.svr_list
+        return None
+
+    def stop(self):
+        self.__stop = True
+
+    def switch_cluster(self, vip):
+        for clu in self.cluster:
+            if clu.vip == vip:
+                clu.selected = True
+                self.__q.clear()
+                Options.host, Options.port = clu.vip, clu.port
+            else:
+                clu.selected = False
+        # @todo clear machine stat info
+        self.__update_version()
+        self.__update_sample()
+        self.__update_ip_list()
+
+
+class Page(object):
+    def __init__(self, parent, layout, y, x, height, width):
+        self.__parent = parent
+        self.__layout = layout
+        self.__widgets = []
+        self.__win = parent.derwin(height, width, y, x)
+        self.__y = y
+        self.__x = x
+        self.__height = height
+        self.__width = width
+        self.border()
+        self.__win.nodelay(1)
+        self.__win.timeout(0)
+        self.move(y, x)
+        self.resize(height, width)
+        self.__cur_select = 0
+        self.__shown_widget_num = 0
+
+    def add_widget(self, widget):
+        if 0 == len(self.__widgets):
+            widget.select(True)
+        self.__widgets.append(widget)
+        self.__rearrange()
+
+    def update_widgets(self):
+        pass
+
+    def __rearrange(self):
+        undeleted_widgets = filter(lambda w: False == w.delete(), self.__widgets)
+        self.__layout.rearrange(0, 0, self.__height, self.__width, undeleted_widgets)
+
+    def update(self):
+        self.update_widgets()
+
+    def clear_widgets(self):
+        self.__widgets = []
+
+    def resize(self, height, width):
+        self.__height = height
+        self.__width = width
+        self.__win.resize(height, width)
+        self.__rearrange()
+
+    def move(self, y, x):
+        self.__x = x
+        self.__y = y
+        self.__win.mvderwin(y, x)
+        self.__rearrange()
+
+    def __reset_widgets(self):
+        if len(self.__widgets) <= 0:
+            return
+        shown_widgets = self.shown_widgets()
+        map(lambda w: w.select(False), self.__widgets)
+        map(lambda w: w.delete(False), self.__widgets)
+        self.__cur_select = 0
+        self.__widgets[self.__cur_select].select(True)
+        self.__rearrange()
+
+    def __delete_current_widget(self):
+        shown_widgets = self.shown_widgets()
+        if len(shown_widgets) <= 0:
+            return
+        shown_widgets[self.__cur_select].select(False)
+        shown_widgets[self.__cur_select].delete(True)
+        self.__cur_select -= 1
+        self.select_next()
+        self.__rearrange()
+
+    def border(self):
+        pass
+
+    def process_key(self, ch):
+        if ch == ord('d'):
+            self.__delete_current_widget()
+        elif ch == ord('R'):
+            self.__reset_widgets()
+        elif ch == ord('m'):
+            curses.endwin()
+            oceanbase.mysql()
+            curses.doupdate()
+        elif ch == ord('j'):
+            curses.endwin()
+            w = self.selected_widget()
+            oceanbase.ssh(w.host())
+            curses.doupdate()
+
+    def redraw(self):
+        self.erase()
+        self.__layout.redraw(self.shown_widgets())
+
+    def getch(self):
+        return self.__win.getch()
+
+    def erase(self):
+        self.__win.erase()
+
+    def win(self):
+        return self.__win
+
+    def title(self):
+        return 'Untitled'
+
+    def select_next(self):
+        shown_widgets = self.shown_widgets()
+        if len(shown_widgets) <= 0:
+            return
+        shown_widgets[self.__cur_select].select(False)
+        self.__cur_select = (self.__cur_select + 1) % len(shown_widgets)
+        shown_widgets[self.__cur_select].select(True)
+
+    def parent(self):
+        return self.__parent
+
+    def shown_widgets(self):
+        '''Actually shown widgets that is all widgets except for
+        1. deleted widgets and,
+        2. couldn\'t display widgets as no space for them.
+        '''
+        return filter(lambda w: w.show() and False == w.delete(), self.__widgets)
+
+    def valid_widgets(self):
+        '''All widgets excpet for the deleted widgets.'''
+        return filter(lambda w: False == w.delete(), self.__widgets)
+
+    def all_widgets(self):
+        return self.__widgets
+
+    def selected_widget(self):
+        return self.shown_widgets()[self.__cur_select]
+
+
+class Layout(object):
+    def __init__(self):
+        pass
+
+    def redraw(self, widgets):
+        for widget in widgets:
+            try:
+                if widget.show():
+                    widget.redraw()
+            except Exception:
+                raise
+
+    def __calc_widget_height(self, height, width, widgets):
+        max_min_height = max([ widget.min_height() for widget in widgets ])
+        for widget in widgets:
+            widget.min_height(max_min_height)
+
+        wwidths = [ widget.min_width() for widget in widgets ]
+        cur_width = 0
+        nline = 1
+        for wwidth in wwidths:
+            if cur_width + wwidth <= width:
+                cur_width += wwidth
+            else:
+                cur_width = wwidth
+                nline += 1
+        widget_height = height / nline
+        return max(widget_height, max_min_height)
+
+    def rearrange(self, y, x, height, width, widgets):
+        if height <= 0 or width <= 0 or len(widgets) <= 0:
+            return 0
+        widget_height = self.__calc_widget_height(height, width, widgets)
+
+        for widget in widgets:
+            widget.show(False)
+        cur_y = 0
+        cur_x = 0
+        for index,widget in enumerate(widgets):
+            if cur_x + widget.min_width() > width:
+                cur_y += widget_height
+                cur_x = 0
+            try:
+                widget.move(0, 0)
+                widget.resize(widget_height, widget.min_width())
+                widget.move(cur_y + y, cur_x + x)
+                widget.show(True)
+            except curses.error:
+                return index
+            cur_x += widget.min_width()
+        return len(widgets)
+
+
+class Widget(object):
+    def __init__(self, min_height, min_width, parent, use_win=False):
+        if use_win:
+            self.__win = parent
+        else:
+            self.__win = parent.derwin(min_height, min_width, 0, 0)
+        self.__min_height = min_height
+        self.__min_width = min_width
+        self.__height, self.__width = self.__win.getmaxyx()
+        self.__y, self.__x = self.__win.getmaxyx()
+        self.__select = False
+        self.__show = False
+        self.__deleted = False
+
+    def resize(self, height, width):
+        self.__height = height
+        self.__width = width
+        self.__win.resize(height, width)
+
+    def move(self, y, x):
+        self.__win.mvderwin(y, x)
+        self.__y = y
+        self.__x = x
+
+    def mvwin(self, y, x):
+        self.__win.mvwin(y, x)
+        self.__y = y
+        self.__x = x
+
+    def min_height(self, height=None):
+        if height:
+            self.__min_height = height
+        return self.__min_height
+
+    def min_width(self, width=None):
+        if width:
+            self.__min_width = width
+        return self.__min_width
+
+    def geometry(self):
+        return self.__y, self.__x, self.__height, self.__width
+
+    def height(self):
+        return self.__height
+
+    def width(self):
+        return self.__width
+
+    def redraw(self):
+        pass
+
+    def refresh(self):
+        self.__win.refresh()
+
+    def erase(self):
+        self.__win.erase()
+
+    def win(self):
+        return self.__win
+
+    def select(self, select = None):
+        if select is not None:
+            self.__select = select
+        return self.__select
+
+    def win(self):
+        return self.__win
+
+    def show(self, show=None):
+        if show is not None:
+            self.__show = show
+        return self.__show
+
+    def update(self):
+        pass
+
+    def delete(self, delete=None):
+        if delete is not None:
+            self.__deleted = delete
+        return self.__deleted
+
+
+class Column(object):
+    def __init__(self, name, filter, width, duration=False):
+        self.__name = name
+        self.__filter = filter
+        self.__width = width
+        self.__duration = duration
+
+    def header(self):
+        return self.__name.center(self.__width)
+
+    def value(self, stat):
+        def seconds(td):
+            return float(td.microseconds +
+                         (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6;
+
+        d = self.__filter(stat)
+        if type(d) == type(0.0):
+            div = (seconds(stat['time']) or 1.0) if self.__duration else 1.0
+            v = d / div
+            if (v > 100):
+                v = int(v)
+                return str(v).center(self.__width)
+            return ("%.2f" % v).center(self.__width)
+        elif type(d) == type(0):
+            div = (seconds(stat['time']) or 1.0) if self.__duration else 1.0
+            v = int(d / div)
+            if (self.__name == 'inet' or self.__name == 'onet'):
+                return mem_str(v).center(self.__width)
+            return str(v).center(self.__width)
+        elif type(d) == type(''):
+            return d.center(self.__width)
+
+
+class MachineStatWidget(Widget):
+    def __init__(self, name, parent, border=True):
+        self.__name = name
+        self.__border = border
+        width = 48
+        Widget.__init__(self, 25, width, parent)
+
+    def host(self):
+        return self.__name.split(':')[0]
+
+    def type_str(self):
+        return self.__name.split(':')[1]
+
+    def redraw(self):
+        if self.__border:
+            if self.select():
+                self.win().attron(curses.color_pair(1) | curses.A_BOLD)
+                self.win().box()
+                self.win().attroff(curses.color_pair(1) | curses.A_BOLD)
+            else:
+                self.win().box()
+            self.win().addstr(0, 2, " " + self.__name + " ", curses.color_pair(3))
+
+        try:
+            stat = oceanbase.machine_stat()[self.host()]
+        except KeyError:
+            return
+
+        if self.__border:
+            # cpu info
+            self.win().addstr(1, 2, "%-7s%4s%%" % ("CPU", "100"), curses.color_pair(7) | curses.A_BOLD)
+            # self.win().attron(curses.color_pair(8))
+            self.win().addstr(1, 17, "%-7s%4.1f%%" % ("nice:", float(stat['nice']) / stat['total'] * 100))
+            self.win().addstr(2, 2, "%-7s%4.1f%%" % ("user:", float(stat['user']) / stat['total'] * 100))
+            self.win().addstr(2, 17, "%-7s%4.1f%%" % ("iowait:", float(stat['iowait']) / stat['total'] * 100))
+            self.win().addstr(3, 2, "%-7s%4.1f%%" % ("sys:", float(stat['sys']) / stat['total'] * 100))
+            self.win().addstr(3, 17, "%-7s%4.1f%%" % ("irq:", float(stat['irq']) / stat['total'] * 100))
+            self.win().addstr(4, 2, "%-7s%4.1f%%" % ("idle:", float(stat['idle']) / stat['total'] * 100))
+            self.win().addstr(4, 17, "%-7s%4.1f%%" % ("sirq:", float(stat['softirq']) / stat['total'] * 100))
+            # self.win().attroff(curses.color_pair(8))
+
+            # load
+            self.win().addstr(1, 32, "%-7s%6s" % ("Load", "x-core"), curses.color_pair(7) | curses.A_BOLD)
+            # self.win().attron(curses.color_pair(8))
+            self.win().addstr(2, 32, "%-7s%6s" % ("1 min:", stat['load1']))
+            self.win().addstr(3, 32, "%-7s%6s" % ("5 min:", stat['load5']))
+            self.win().addstr(4, 32, "%-7s%6s" % ("15 min:", stat['load15']))
+            # self.win().attroff(curses.color_pair(8))
+
+            # mem info
+            self.win().addstr(6, 2, "%-6s%7s" % ("Mem", mem_str(stat['MemTotal'])), curses.color_pair(7) | curses.A_BOLD)
+            self.win().addstr(7, 2, "%-6s%7s" % ("used:", mem_str(stat['MemTotal'] - stat['MemFree'])))
+            self.win().addstr(8, 2, "%-6s%7s" % ("free:", mem_str(stat['MemFree'])))
+
+            # net info
+            self.win().addstr(6, 17, "%-9s%9s%9s" % ("Network", 'Rx/s', 'Tx/s'), curses.color_pair(7) | curses.A_BOLD)
+            for idx,item in enumerate(stat['net'].items()):
+                if idx > 5:
+                    break
+                self.win().addstr(7 + idx, 17, "%-9s%9s%9s" %
+                                  (item[0],
+                                   mem_str(item[1]['bytes_recv'] * pow(10, 6) / float(stat['time']), bit=True),
+                                   mem_str(item[1]['bytes_sent'] * pow(10, 6) / float(stat['time']), bit=True)))
+
+            # disk io info
+            self.win().addstr(14, 2, "%-5s%6s%9s" % ("Disk I/O", 'In/s', 'Out/s'), curses.color_pair(7) | curses.A_BOLD)
+            idx = 15
+            for item in stat['disk'].items():
+                if idx >= self.height() - 1:
+                    break
+                if item[1]['rbytes'] <= 0 and item[1]['wbytes'] <= 0:
+                    continue
+                self.win().addstr(idx, 2, "%-5s%9s%9s" %
+                                  (item[0],
+                                   mem_str(item[1]['rbytes'] * pow(10, 6) / float(stat['time'])),
+                                   mem_str(item[1]['wbytes'] * pow(10, 6) / float(stat['time']))))
+                idx += 1
+
+
+class ColumnWidget(Widget):
+    def __init__(self, name, columns, parent, border=True):
+        self.__origin_columns = columns[:]
+        self.__filter_columns(columns)
+        self.__name = name
+        self.__columns = columns
+        self.__border = border
+        width = len(" ".join([c.header() for c in columns])) + 2 # 2 padding
+        width = max(width, 18)
+        if border:
+            width += 2
+        Widget.__init__(self, Global.WIDGET_HEIGHT, width, parent)
+
+    def __filter_columns(self, columns):
+        old_columns = columns[:]
+        for c in old_columns:
+            try:
+                c.value(oceanbase.sample)
+            except KeyError:
+                columns.remove(c)
+                # no such item
+                pass
+
+    def update(self):
+        columns = self.__origin_columns[:]
+        self.__filter_columns(columns)
+        self.columns = columns
+        width = len(" ".join([c.header() for c in columns])) + 2 # 2 border + 2 padding
+        if border:
+            width += 2
+        self.min_width(width)
+
+    def redraw(self):
+        def stat_count():
+            return oceanbase.stat_count()
+        def latest(num):
+            return oceanbase.latest(num)
+        if self.__border:
+            if self.select():
+                self.win().attron(curses.color_pair(1) | curses.A_BOLD)
+                self.win().box()
+                self.win().attroff(curses.color_pair(1) | curses.A_BOLD)
+            else:
+                self.win().box()
+            if self.__name:
+                self.win().addstr(0, 2, " " + self.__name + " ", curses.color_pair(3))
+            print_lines = min(stat_count(), self.height() - 3)
+            self.win().addstr(1, 1, " " + " ".join([ c.header() for c in self.__columns ]) + " ", curses.color_pair(2))
+            border_offset = 1
+        else:
+            print_lines = min(stat_count(), self.height() - 1)
+            self.win().addstr(0, 0, " " + " ".join([ c.header() for c in self.__columns ]) + " ", curses.color_pair(2))
+            border_offset = 0
+        latest = latest(print_lines)
+        li = []
+        for i in range(0, len(latest)):
+            item = []
+            for c in self.__columns:
+                item.append(str(c.value(latest[i])))
+            li.append(" " + " ".join(item))
+            for i in range(0, len(li)):
+                self.win().addstr(i + 1 + border_offset, border_offset, li[i])
+
+
+class HeaderColumnWidget(Widget):
+    def __init__(self, name, columns, parent, padding=0, get_header=None):
+        self.__name = name
+        self.__padding = padding
+        self.__get_header = get_header
+        Widget.__init__(self, Global.WIDGET_HEIGHT, 0, parent)
+        self.__column_widget = ColumnWidget(None, columns, self.win(), border=False)
+        self.min_width(self.__column_widget.min_width() + 2)
+        self.resize(self.min_height(), self.min_width())
+
+    def redraw(self):
+        if self.select():
+            self.win().attron(curses.color_pair(1))
+            self.win().box()
+            self.win().attroff(curses.color_pair(1))
+        else:
+            self.win().box()
+
+        nline = 1
+        if self.__get_header and oceanbase.stat_count() > 0:
+            header = self.__get_header(oceanbase.now())
+            string = ""
+            for item in header.items():
+                item_str = ": ".join([item[0], str(item[1])])
+                if (len(string) + len(item_str) + 2 > self.min_width() - 2):
+                    string = string[2:]
+                    self.win().addstr(nline, 1, string.center(self.min_width() - 2))
+                    string = ""
+                    nline += 1
+                string += "  " + item_str
+            if string:
+                string = string[2:]
+                self.win().addstr(nline, 1, string.center(self.min_width() - 2))
+                self.__set_padding(nline)
+            else:                         # fix ob 0.4.1 wired bug
+                self.__set_padding(0)
+        self.__column_widget.redraw()
+        if self.__name:
+            self.win().addstr(0, 2, " " + self.__name + " ", curses.color_pair(3))
+
+    def resize(self, height, width):
+        Widget.resize(self, height, width)
+        maxy, maxx = self.win().getmaxyx()
+        self.__column_widget.resize(maxy - self.__padding - 2, maxx - 2)
+
+    def move(self, y, x):
+        self.win().mvderwin(y, x)
+        self.__column_widget.win().mvderwin(self.__padding + 1, 1)
+
+    def __set_padding(self, padding):
+        self.min_height(padding + 2 + 2)
+        maxy, maxx = self.win().getmaxyx()
+        self.__padding = padding
+        self.__column_widget.move(0, 0)
+        self.__column_widget.resize(maxy - self.__padding - 2, maxx - 2)
+        self.__column_widget.move(self.__padding + 1, 1)
+
+    def update(self):
+        self.__column_widget.update()
+
+    def host(self):
+        return self.__name.split(":")[0]
+
+    def sql_port(self):
+        return self.__name.split(":")[1]
+
+
+class StatusWidget(Widget):
+    def __init__(self, parent):
+        self.__parent = parent
+        maxy, maxx = parent.getmaxyx()
+        Widget.__init__(self, 2, maxx, parent)
+
+        self.resize(2, maxx)
+        self.move(maxy - 2, 0)
+        self.__app = oceanbase.dosql("select value from "
+                                     "__all_sys_config_stat where name='appname' limit 1;")[:-1]
+        self.win().bkgd(curses.color_pair(1))
+
+    def redraw(self):
+        now = strftime("%Y-%m-%d %X")
+        maxy, maxx = self.win().getmaxyx()
+        tps = self.__get_tps()
+        qps = self.__get_qps()
+        svr_list = oceanbase.find_svr_list()
+        statstr = "HOST: %s:%d " % (Options.host, Options.port)
+        statstr += "APP: %s TPS: %-6d QPS: %-6d " % (self.__app, tps, qps)
+        statstr += "RUMC: %d,%d,%d,%d" % (len(svr_list['rootserver']),
+                                          len(svr_list['updateserver']),
+                                          len(svr_list['mergeserver']),
+                                          len(svr_list['chunkserver']))
+        try:
+            self.win().addstr(1, maxx - len(now) - 2, now)
+            self.win().addstr(1, 2, statstr)
+            self.win().hline(0, 0, curses.ACS_HLINE, 1024)
+        except curses.error:
+            pass
+
+    def __seconds(self, td):
+        return float(td.microseconds +
+                     (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6;
+
+    def __get_tps(self):
+        if oceanbase.stat_count() > 1:
+            last = oceanbase.now()
+            insert = sum([item["sql_insert_count"]
+                            for item in last["mergeserver"].values()])
+            replace = sum([item["sql_replace_count"]
+                            for item in last["mergeserver"].values()])
+            delete = sum([item["sql_delete_count"]
+                            for item in last["mergeserver"].values()])
+            update = sum([item["sql_update_count"]
+                            for item in last["mergeserver"].values()])
+            tps = float(insert + replace + delete + update) / self.__seconds(last['time'])
+            return int(tps)
+        else:
+            return 0
+
+    def __get_qps(self):
+        if oceanbase.stat_count() > 1:
+            last = oceanbase.now()
+            total = float(sum([item["sql_select_count"]
+                               for item in last["mergeserver"].values()]))
+            qps = total / self.__seconds(last['time'])
+            return int(qps)
+        else:
+            return 0
+
+
+class HeaderWidget(Widget):
+    def __init__(self, parent):
+        maxy, maxx = parent.getmaxyx()
+        Widget.__init__(self, 2, maxx, parent)
+        self.__page = None
+        self.win().bkgd(curses.color_pair(1))
+
+    def redraw(self):
+        self.erase()
+        if self.__page is None:
+            try:
+                self.win().addstr(0, 2, '1:Help 2:Gallery 3:SQL(MergeServer) 4:UpdateServer '
+                                    '5:ChunkServer 6: Machine stat 7. Blank...', curses.A_BOLD)
+                self.win().hline(1, 0, curses.ACS_HLINE, 1024, curses.A_BOLD)
+            except curses.error:
+                pass
+        else:
+            maxy, maxx = self.win().getmaxyx()
+            shown_num = len(self.__page.shown_widgets())
+            valid_num = len(self.__page.valid_widgets())
+            all_num = len(self.__page.all_widgets())
+            shown_str = 'Shown: %d / Valid: %d / Total: %d' % (shown_num, valid_num, all_num)
+            try:
+                self.win().addstr(0, 2, self.__page.title(), curses.A_BOLD)
+                self.win().addstr(0, maxx - len(shown_str) - 4, shown_str, curses.A_BOLD)
+                self.win().hline(1, 0, curses.ACS_HLINE, 1024, curses.A_BOLD)
+            except curses.error:
+                pass
+
+    def switch_page(self, page):
+        self.__page = page
+
+
+class MessageBox(object):
+    def __init__(self, parent, msg):
+        self.msg = msg
+        self.parent = parent
+        maxy, maxx = parent.getmaxyx()
+        width = min(maxx - 20, len(msg)) + 10
+        height = 5
+        y = (maxy - height) / 2
+        x = (maxx - width) / 2
+        self.win = parent.derwin(height, width, y, x)
+        self.win.erase()
+        self.win.attron(curses.color_pair(1))
+        self.win.box()
+        self.win.attroff(curses.color_pair(1))
+        self.win.addstr(2, 4, self.msg, curses.color_pair(0))
+
+    def run(self, anykey=False):
+        res = True
+        while (1):
+            c = self.win.getch()
+            if anykey:
+                break
+            elif c == ord('y'):
+                res = True
+                break
+            elif c == ord('n'):
+                res = False
+                break
+            elif c == ord('q'):
+                res = False
+                break
+        self.win.erase()
+        self.win.refresh()
+        return res
+
+
+class SelectionBox(Widget):
+    __padding_left = 5
+    __padding_top = 0
+    __offset_y = 0
+    __offset_x = 0
+
+    def __init__(self, name, items, parent, **args):
+        self.__index = 0
+        self.__name = name
+        self.items = items
+        self.parent = parent
+        try:
+            self.__offset_y = args['offset_y']
+        except KeyError:
+            pass
+        try:
+            self.__offset_x = args['offset_x']
+        except KeyError:
+            pass
+        maxy, maxx = parent.getmaxyx()
+        width = max(len(name) + 6, max([len(it) + 4 for it in items]))
+        height = len(items) + 2
+        Widget.__init__(self, height, width, parent)
+        self.resize(height, width)
+        y = (maxy - height - self.__offset_y) / 2
+        x = (maxx - width - self.__offset_x) / 2
+        self.mvwin(self.__offset_y + y, self.__offset_x + x)
+        self.move(self.__offset_y + y, self.__offset_x + x)
+        self.win().nodelay(1)
+        self.win().timeout(0)
+        self.win().keypad(1)
+
+    def __do_key(self):
+        ch = self.win().getch()
+        stop = False
+        if self.__fm is not None and ch != -1:
+            self.__fm()
+            self.__fm = None
+        if ch in [ ord('j'), ord('\t'), ord('J'), ord('n'), ord('N'), curses.KEY_DOWN ]:
+            self.__index = min(len(self.items) - 1, self.__index + 1)
+        elif ch in [ ord('k'), ord('K'), ord('p'), ord('P'), curses.KEY_UP ]:
+            self.__index = max(0, self.__index - 1)
+        elif ch in [ord('\n'), ord(' ')]:
+            stop = True
+        elif ch in [ ord('q'), ord('Q') ]:
+            self.__index = -1
+            stop = True
+        return stop
+
+    def __redraw(self):
+        self.win().erase()
+        self.win().attron(curses.color_pair(1))
+        self.win().box()
+        self.win().attroff(curses.color_pair(1))
+        self.win().addstr(0, 2, ' %s ' % self.__name, curses.color_pair(3))
+        for idx, item in enumerate(self.items):
+            if idx == self.__index:
+                self.win().addstr(idx + self.__padding_top + 1, 1,
+                                item.center(self.width() - 2), curses.A_BOLD | curses.color_pair(5))
+            else:
+                self.win().addstr(idx + self.__padding_top + 1,
+                                1, item.center(self.width() - 2))
+
+    def run(self, first_movement=None):
+        self.__fm = first_movement
+        res = True
+        while (1):
+            if self.__do_key():
+                self.win().erase()
+                self.win().refresh()
+                return self.__index
+            self.__redraw()
+            self.win().refresh()
+
+
+class InputBox(Widget):
+    def __init__(self, parent, password=False, width=30):
+        self.__index = 0
+        self.__name = "name"
+        self.__offset_x = 0
+        self.__offset_y = 0
+        self.__password = password
+        height = 3
+        win = curses.newwin(0, 0, 0, 0)
+        Widget.__init__(self, height, width, win, True)
+        self.resize(height, width)
+        maxy, maxx = parent.getmaxyx()
+        y = (maxy - height - self.__offset_y) / 2
+        x = (maxx - width - self.__offset_x) / 2
+        self.mvwin(y, x)
+        win.box()
+        win.refresh()
+        self.__prompt = "Password: "
+        win.addstr(1, 1, self.__prompt)
+        win.move(1, 1 + len(self.__prompt))
+        self.__textbox = curses.textpad.Textbox(win)
+        self.__result = ""
+
+    def validator(self, ch):
+        y, x = self.win().getyx()
+        if ch == 127:
+            new_x = max(x - 1, len(self.__prompt) + 1)
+            self.win().delch(y, new_x)
+            self.win().insch(' ')
+            self.win().move(y, new_x)
+            self.__result = self.__result[:-1]
+            return 0
+        elif ch == 7 or ch == 10:                             # submit
+            return 7
+        elif x == self.width() - 2:
+            return 0
+        elif ch < 256:
+            self.__result += chr(ch)
+            if self.__password:
+                return ord('*')
+            else:
+                return ch
+
+    def run(self):
+        curses.noecho()
+        curses.curs_set(1)
+        self.__textbox.edit(self.validator)
+        curses.curs_set(0)
+        return self.__result
+
+
+class GalleryPage(Page):
+    def __add_widgets(self):
+        sql_count_widget = ColumnWidget("SQL COUNT", [
+            Column("select", lambda stat:
+                    sum([item["sql_select_count"]
+                              for item in stat["mergeserver"].values()]),
+                    8, True),
+            Column("insert", lambda stat:
+                    sum([ item["sql_insert_count"]
+                             for item in stat["mergeserver"].values() ]),
+                    8, True),
+            Column("replace", lambda stat:
+                    sum([ item["sql_replace_count"]
+                             for item in stat["mergeserver"].values() ]),
+                    8, True),
+            Column("delete", lambda stat:
+                    sum([ item["sql_delete_count"]
+                             for item in stat["mergeserver"].values() ]),
+                    8, True),
+            Column("update", lambda stat:
+                    sum([ item["sql_update_count"]
+                             for item in stat["mergeserver"].values() ]),
+                    8, True)
+            ], self.win())
+        sql_rt_widget = ColumnWidget("SQL RT", [
+            Column("select", lambda stat:
+                    (sum([ item["sql_select_time"] for item in stat["mergeserver"].values() ])
+                     / float(sum([ item["sql_select_count"] for item in stat["mergeserver"].values() ]) or 1) / 1000),
+                    8),
+                Column("insert", lambda stat:
+                    (sum([ item["sql_insert_time"] for item in stat["mergeserver"].values() ])
+                     / float(sum([ item["sql_insert_count"] for item in stat["mergeserver"].values() ]) or 1) / 1000),
+                    8),
+                Column("update", lambda stat:
+                    (sum([ item["sql_update_time"] for item in stat["mergeserver"].values() ])
+                     / float(sum([ item["sql_update_count"] for item in stat["mergeserver"].values() ]) or 1) / 1000),
+                    8),
+            ], self.win())
+        ups_rt_widget = ColumnWidget("UPS RT", [
+            Column("apply", lambda stat:
+                   (sum([ item["apply_time"] for item in stat["updateserver"].values() ])
+                     / float(sum([ item["apply_count"] for item in stat["updateserver"].values() ]) or 1) / 1000),
+                    8),
+            Column("get", lambda stat:
+                    (sum([ item["get_time"] for item in stat["updateserver"].values() ])
+                     / float(sum([ item["get_count"] for item in stat["updateserver"].values() ]) or 1) / 1000),
+                    8),
+            Column("scan", lambda stat:
+                    (sum([ item["scan_time"] for item in stat["updateserver"].values() ])
+                     / float(sum([ item["scan_count"] for item in stat["updateserver"].values() ]) or 1) / 1000),
+                    8)
+            ], self.win())
+        cs_rt_widget = ColumnWidget("CS RT", [
+            Column("get", lambda stat:
+                    (sum([ item["get_time"] for item in stat["chunkserver"].values() ])
+                     / float(sum([ item["get_count"] for item in stat["chunkserver"].values() ]) or 1) / 1000),
+                    8),
+                  Column("scan", lambda stat:
+                    (sum([ item["scan_time"] for item in stat["chunkserver"].values() ])
+                    / float(sum([ item["scan_count"] for item in stat["chunkserver"].values() ]) or 1) / 1000),
+                    8)
+            ], self.win())
+        self.add_widget(sql_count_widget)
+        self.add_widget(sql_rt_widget)
+        self.add_widget(ups_rt_widget)
+        self.add_widget(cs_rt_widget)
+
+    def __init__(self, y, x, h, w, parent):
+        Page.__init__(self, parent, Layout(), y, x, h, w)
+        self.__add_widgets()
+
+    def title(self):
+        return "Gallery"
+
+    def process_key(self, ch):
+        if ch == ord('j'):
+            pass
+        else:
+            Page.process_key(self, ch)
+
+class ChunkServerPage(Page):
+    def update_widgets(self):
+        def chunkserver_info(stat,ip):
+            def try_add(name, key, wrapper):
+                try:
+                    result[name] = wrapper(stat[svr][ip][key])
+                except Exception:
+                    pass
+            result = {}
+            try:
+                result['MERGE PERCENT'] = str(int(stat[svr][ip]['old_ver_merged_tablets_num']
+                                                  / float(stat[svr][ip]['old_ver_tablets_num'] or 1) * 100)) + '%'
+            except Exception:
+                pass
+            try_add('VERSION', 'serving_version', stat)
+            try_add('OLD TABLETS', 'old_ver_tablets_num', stat)
+            try_add('Def Mem', 'memory_used_default', mem_str)
+            try_add('Net Mem', 'memory_used_network', mem_str)
+            try_add('Thread Buff Mem', 'memory_used_thread_buffer', mem_str)
+            try_add('Tablet Mem', 'memory_used_tablet', mem_str)
+            try_add('BIC Mem', 'memory_used_bi_cache', mem_str)
+            try_add('BC Mem', 'memory_used_block_cache', mem_str)
+            try_add('unBIC Mem', 'memory_used_bi_cache_unserving', mem_str)
+            try_add('unBC Mem', 'memory_used_block_cache_unserving', mem_str)
+            try_add('JC Mem', 'memory_used_join_cache', mem_str)
+            try_add('RC Mem', 'memory_used_sstable_row_cache', mem_str)
+            try_add('Merge Buff Mem', 'memory_used_merge_buffer', mem_str)
+            try_add('Merge Split Mem', 'memory_used_merge_split_buffer', mem_str)
+            return result
+
+        svr = 'chunkserver'
+        self.clear_widgets()
+        for cs in oceanbase.find_svr_list()[svr]:
+            ip = cs['ip']
+            widget = HeaderColumnWidget(ip, [
+                Column("gt cnt", lambda stat,ip=ip: stat[svr][ip]['get_count'], 6, True),
+                Column("gt rt", lambda stat,ip=ip:
+                    (stat[svr][ip]['get_time']
+                      / float(stat[svr][ip]['get_count'] or 1) / 1000),
+                    6),
+                Column("sc cnt", lambda stat,ip=ip: stat[svr][ip]['scan_count'], 6, True),
+                Column("sc rt", lambda stat,ip=ip:
+                    (stat[svr][ip]['scan_time']
+                      / float(stat[svr][ip]['scan_count'] or 1) / 1000),
+                    6),
+                Column("bc", lambda stat,ip=ip: 100 * (stat[svr][ip]['block_cache_hit'] or 1)
+                       / float(stat[svr][ip]['block_cache_hit'] + stat[svr][ip]['block_cache_miss'] or 1), 6),
+                Column("bic", lambda stat,ip=ip: 100 * (stat[svr][ip]['block_index_cache_hit'] or 1)
+                       / float(stat[svr][ip]['block_index_cache_hit'] + stat[svr][ip]['block_index_cache_miss'] or 1), 6),
+                Column("rowc", lambda stat,ip=ip: 100 * (stat[svr][ip]['sstable_row_cache_hit'] or 1)
+                       / float(stat[svr][ip]['sstable_row_cache_hit'] + stat[svr][ip]['sstable_row_cache_miss'] or 1), 6),
+                Column("qtime", lambda stat,ip=ip: stat[svr][ip]['queue_wait_time'] / float(stat[svr][ip]['get_count'] or 1) / 1000, 6),
+                Column("inet", lambda stat,ip=ip: stat[svr][ip]['rpc_bytes_in'], 7, True),
+                Column("onet", lambda stat,ip=ip: stat[svr][ip]['rpc_bytes_out'], 7, True),
+                Column("io", lambda stat,ip=ip: stat[svr][ip]['sstable_disk_io_num'], 6, True),
+                Column("iob", lambda stat,ip=ip: mem_str(stat[svr][ip]['sstable_disk_io_bytes']
+                                                         / (stat[svr][ip]['sstable_disk_io_num'] or 1)), 7),
+                ], self.win(), get_header=lambda stat,ip=ip: chunkserver_info(stat,ip))
+            self.add_widget(widget)
+
+    def __init__(self, y, x, h, w, parent):
+        Page.__init__(self, parent, Layout(), y, x, h, w)
+        self.update_widgets()
+
+    def title(self):
+        return 'ChunkServer'
+
+
+class SQLPage(Page):
+    def update_widgets(self):
+        def mergeserver_info(stat,ip):
+            def try_add(name, key, wrapper):
+                try:
+                    result[name] = wrapper(stat[svr][ip][key])
+                except Exception:
+                    pass
+            result = {}
+            try_add('Limit Mem', 'Limit Mem', mem_str)
+            try_add('Total Mem', 'ms_memory_total', mem_str)
+            try_add('Parser Mem', 'ms_memory_parser', mem_str)
+            try_add('Transformer Mem', 'ms_memory_transformer', mem_str)
+            try_add('PS Mem', 'ms_memory_ps_plan', mem_str)
+            try_add('RPC Mem', 'ms_memory_rpc_request', mem_str)
+            try_add('SQL Array Mem', 'ms_memory_sql_array', mem_str)
+            try_add('Expres Mem', 'ms_memory_expression', mem_str)
+            try_add('Sess Mem', 'ms_memory_session', mem_str)
+            try_add('Row Mem', 'ms_memory_row_store', mem_str)
+            return result
+
+        svr = 'mergeserver'
+        self.clear_widgets()
+        for ms in oceanbase.find_svr_list()[svr]:
+            ip = ms['ip']
+            port = ms['port']
+            widget = HeaderColumnWidget("%s:%d" % (ip,port), [
+                Column("sel cnt", lambda stat,ip=ip: stat[svr][ip]['sql_select_count'], 7, True),
+                Column("sel", lambda stat,ip=ip: stat[svr][ip]['sql_select_time'] / float(stat[svr][ip]['sql_select_count'] or 1) / 1000, 6),
+                Column("ins", lambda stat,ip=ip: stat[svr][ip]['sql_insert_time'] / float(stat[svr][ip]['sql_insert_count'] or 1) / 1000, 6),
+                Column("upd", lambda stat,ip=ip: stat[svr][ip]['sql_update_time'] / float(stat[svr][ip]['sql_update_count'] or 1) / 1000, 6),
+                Column("rep", lambda stat,ip=ip: stat[svr][ip]['sql_replace_time'] / float(stat[svr][ip]['sql_replace_count'] or 1) / 1000, 6),
+                Column("del", lambda stat,ip=ip: stat[svr][ip]['sql_delete_time'] / float(stat[svr][ip]['sql_delete_count'] or 1) / 1000, 6),
+                Column("locc", lambda stat,ip=ip: 100 * (stat[svr][ip]['location_cache_hit'] or 1)
+                       / float(stat[svr][ip]['location_cache_hit'] + stat[svr][ip]['location_cache_miss'] or 1), 6),
+                Column("selc", lambda stat,ip=ip: 100 * (stat[svr][ip]['sql_query_cache_hit'] or 1)
+                       / float(stat[svr][ip]['sql_query_cache_hit'] + stat[svr][ip]['sql_query_cache_miss'] or 1), 6),
+                Column("insc", lambda stat,ip=ip: 100 * (stat[svr][ip]['sql_insert_cache_hit'] or 1)
+                       / float(stat[svr][ip]['sql_insert_cache_hit'] + stat[svr][ip]['sql_insert_cache_miss'] or 1), 6),
+                Column("updc", lambda stat,ip=ip: 100 * (stat[svr][ip]['sql_update_cache_hit'] or 1)
+                       / float(stat[svr][ip]['sql_update_cache_hit'] + stat[svr][ip]['sql_update_cache_miss'] or 1), 6),
+                Column("inet", lambda stat,ip=ip: stat[svr][ip]['rpc_bytes_in'], 7, True),
+                Column("onet", lambda stat,ip=ip: stat[svr][ip]['rpc_bytes_out'], 7, True),
+                ], self.win(), get_header=lambda stat,ip=ip: mergeserver_info(stat,ip))
+            self.add_widget(widget)
+
+    def __init__(self, y, x, h, w, parent):
+        Page.__init__(self, parent, Layout(), y, x, h, w)
+        self.update_widgets()
+
+    def process_key(self, ch):
+        if ch == ord('m'):
+            curses.endwin()
+            w = self.selected_widget()
+            oceanbase.mysql(host=w.host(), port=int(w.sql_port()))
+            curses.doupdate()
+        else:
+            Page.process_key(self, ch)
+
+    def title(self):
+        return 'MergeServer(SQL)'
+
+
+class UpdateServerPage(Page):
+    def update_widgets(self):
+        def updateserver_info(stat, ip):
+            def try_add(name, key, wrapper):
+                try:
+                    result[name] = wrapper(stat[svr][ip][key])
+                except Exception:
+                    pass
+            result = {}
+            try_add('Mem Total', 'memory_total', mem_str)
+            try_add('Mem Limit', 'memory_limit', mem_str)
+            try_add('MemT Total', 'memtable_total', mem_str)
+            try_add('MemT Limit', 'memtable_used', mem_str)
+            try_add('Rows Total', 'total_rows', mem_str)
+            try_add('AMemT Limit', 'active_memtable_limit', mem_str)
+            try_add('AMemT Total', 'active_memtable_total', mem_str)
+            try_add('AMemT Used', 'active_memtable_used', mem_str)
+            try_add('ARows Total', 'active_total_rows', mem_str)
+            try_add('FMemT Limit', 'frozen_memtable_limit', mem_str)
+            try_add('FMemT Total', 'frozen_memtable_total', mem_str)
+            try_add('FMemT Used', 'frozen_memtable_used', mem_str)
+            try_add('FRows Total', 'frozen_total_rows', mem_str)
+            return result
+
+        svr = 'updateserver'
+        self.clear_widgets()
+        for ups in oceanbase.find_svr_list()[svr]:
+            ip = ups['ip']
+            widget = HeaderColumnWidget(ip, [
+                Column("gt cnt", lambda stat,ip=ip: stat[svr][ip]['get_count'], 6, True),
+                Column("gt rt", lambda stat,ip=ip:
+                    (stat[svr][ip]['get_time']
+                      / float(stat[svr][ip]['get_count'] or 1) / 1000),
+                    6),
+                Column("gt qt", lambda stat,ip=ip:
+                    (stat[svr][ip]['get_qtime']
+                      / float(stat[svr][ip]['get_count'] or 1) / 1000),
+                    6),
+                Column("sc cnt", lambda stat,ip=ip: stat[svr][ip]['scan_count'], 6, True),
+                Column("sc rt", lambda stat,ip=ip:
+                    (stat[svr][ip]['scan_time']
+                      / float(stat[svr][ip]['scan_count'] or 1) / 1000),
+                    6),
+                Column("sc qt", lambda stat,ip=ip:
+                    (stat[svr][ip]['scan_qtime']
+                      / float(stat[svr][ip]['scan_count'] or 1) / 1000),
+                    6),
+                Column("ap cnt", lambda stat,ip=ip: stat[svr][ip]['apply_count'], 6, True),
+                Column("ap rt", lambda stat,ip=ip:
+                    (stat[svr][ip]['apply_time']
+                      / float(stat[svr][ip]['apply_count'] or 1) / 1000),
+                    6),
+                Column("ap qt", lambda stat,ip=ip:
+                       min(max(stat[svr][ip]['apply_qtime'], 0)
+                           / float(stat[svr][ip]['apply_count'] or 1) / 1000, 1000),
+                           6),
+                Column("ap ct", lambda stat,ip=ip:
+                    (stat[svr][ip]['apply_ctime']
+                      / float(stat[svr][ip]['apply_count'] or 1) / 1000),
+                    6),
+                Column("ap ft", lambda stat,ip=ip:
+                    (stat[svr][ip]['apply_ftime']
+                      / float(stat[svr][ip]['apply_count'] or 1) / 1000),
+                    6),
+                Column("inet", lambda stat,ip=ip: stat[svr][ip]['rpc_bytes_in'], 7, True),
+                Column("onet", lambda stat,ip=ip: stat[svr][ip]['rpc_bytes_out'], 7, True),
+                ], self.win(), get_header=lambda stat,ip=ip: updateserver_info(stat,ip))
+            self.add_widget(widget)
+
+    def __init__(self, y, x, h, w, parent):
+        Page.__init__(self, parent, Layout(), y, x, h, w)
+        self.update_widgets()
+
+    def title(self):
+        return 'updateServer'
+
+
+class MachineStatPage(Page):
+    def update_widgets(self):
+        self.clear_widgets()
+        self.__add_widgets()
+
+    def __add_widgets(self):
+        name_map = {'rootserver':'R', 'updateserver':'U',
+                    'mergeserver':'M', 'chunkserver':'C'}
+        widgets = []
+        for ip in oceanbase.ip_list:
+            name = ip + ':'
+            for svr_name in ['rootserver', 'updateserver',
+                             'mergeserver', 'chunkserver']:
+                if svr_name in oceanbase.ip_map[ip]:
+                    name += name_map[svr_name]
+            widgets.append(MachineStatWidget(name, self.win()))
+
+        def sort_cmp(l, r):
+            idx_map = 'RUMC'
+            ch_l = l.type_str()[0]
+            ch_r = r.type_str()[0]
+            return cmp(idx_map.index(ch_l), idx_map.index(ch_r))
+
+        for widget in sorted(widgets, cmp=sort_cmp):
+            self.add_widget(widget)
+
+    def __init__(self, y, x, h, w, parent):
+        Page.__init__(self, parent, Layout(), y, x, h, w)
+        self.__add_widgets()
+
+    def title(self):
+        return "Machine Stat"
+
+
+class HelpPage(Page):
+    def __init__(self, y, x, h, w, parent):
+        Page.__init__(self, parent, Layout(), y, x, h, w)
+        self.win().bkgd(curses.color_pair(4))
+
+    def redraw(self):
+        nline = [0]                       # hack mutating outer variables for python2
+        def addline(x, line, attr=0):
+            self.win().addstr(nline[0], x, line, attr)
+            nline[0] += 1
+        def addkeys(keys):
+            for key_item in keys:
+                if 0 == len(key_item):
+                    string = ""
+                else:
+                    string = "    %-14s: %s" % key_item
+                addline(4, string)
+            nline[0] += 1
+        def addgroup(group_name, keys):
+            addline(4, group_name, curses.color_pair(4) | curses.A_BOLD)
+            addline(2, "----------------------------------------------", curses.color_pair(4) | curses.A_BOLD)
+            addkeys(keys)
+        try:
+            Page.redraw(self)
+            ob_keys = [('c', 'Switch between clusters'), ('C', 'Switch between different apps'),]
+            addgroup("Global Keys  -  OceanBase", ob_keys)
+            widget_keys = [('Tab','Select next widget'),
+                           ('m', 'Connect to oceanbase lms for this cluster using mysql'),
+                           ('j', 'ssh to selected host')]
+            addgroup("Global Keys  -  Widget", widget_keys)
+            pages_keys = [('1 F1', 'Help page'), ('2 F2', 'Gallery page'),
+                          ('3 F3', 'MergeServer(SQL) page'), ('4 F4', 'UpdateServer page'),
+                          ('5 F5', 'ChunkServer page'), ('6 F6', 'Machine Stat page'),
+                          ('d', 'Delete selected widget'), ('R', 'Restore deleted widgets')]
+            addgroup("Global Keys  -  Page", pages_keys)
+            test_keys = [('p', 'Messsage box tooltips')]
+            addgroup("Global Keys  -  Test", test_keys)
+            select_keys = [('DOWN TAB J P', 'Next item'), ('UP K N', 'Previous item'),
+                           ('SPC ENTER', 'Select current item'),
+                           ('Q q', 'Quit selection box')]
+            addgroup("Global Keys  -  Selection Box", select_keys)
+            system_keys = [('q', 'quit dooba')]
+            addgroup("Global Keys  -  System", system_keys)
+            support = [
+                ('Author', 'Yudi Shi (fufeng.syd)'),
+                ('Mail', 'fufeng.syd@alipay.com'),
+                (),
+                ('project page', 'http://gitlab.alibaba-inc.com/fufeng.syd/dooba'),
+                ('bug report', 'http://gitlab.alibaba-inc.com/fufeng.syd/dooba/issues'),
+                ('feature req', 'http://gitlab.alibaba-inc.com/fufeng.syd/dooba/issues')
+                ]
+            addgroup("Support", support)
+        except curses.error:
+            pass
+
+    def title(self):
+        return 'Help'
+
+
+class BlankPage(Page):
+    def __init__(self, y, x, h, w, parent):
+        Page.__init__(self, parent, Layout(), y, x, h, w)
+
+    def title(self):
+        return 'Blank Page'
+
+
+class Dooba(object):
+    def build_oceanbase(self):
+        return '''
+  ___                       ____
+ / _ \  ___ ___  __ _ _ __ | __ )  __ _ ___  ___
+| | | |/ __/ _ \/ _` | \'_ \|  _ \ / _` / __|/ _ \\
+| |_| | (_|  __/ (_| | | | | |_) | (_| \__ \  __/
+ \___/ \___\___|\__,_|_| |_|____/ \__,_|___/\___|'''
+
+    def build_dooba(self):
+        return '''
+     _             _
+  __| | ___   ___ | |__   __ _
+ / _` |/ _ \ / _ \| \'_ \ / _` |
+| (_| | (_) | (_) | |_) | (_| |
+ \__,_|\___/ \___/|_.__/ \__,_|'''
+
+    def __init_curses(self, win):
+        self.stdscr = win
+        self.stdscr.keypad(1)
+        self.stdscr.nodelay(1)
+        self.stdscr.timeout(0)
+        self.maxy, self.maxx = self.stdscr.getmaxyx()
+        curses.curs_set(0)
+        curses.noecho()
+        self.__term = curses.termname()
+        self.__init_colors()
+
+    def __init_colors(self):
+        if curses.has_colors():
+            curses.use_default_colors()
+            curses.init_pair(1, curses.COLOR_RED, -1)   # header widget and status widget
+            curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_GREEN) # column header
+            curses.init_pair(3, curses.COLOR_MAGENTA, -1) # widget title
+            curses.init_pair(4, curses.COLOR_YELLOW, -1) # help page color
+            curses.init_pair(5, curses.COLOR_RED, curses.COLOR_CYAN)
+            curses.init_pair(6, curses.COLOR_GREEN, -1) # column header
+            curses.init_pair(7, curses.COLOR_WHITE, -1) # machine stat header
+            # curses.init_pair(8, curses.COLOR_GRAY, -1)  # machine stat text
+
+    def __resize_term(self):
+        self.maxy, self.maxx = self.stdscr.getmaxyx()
+        try:
+            self.help_w.move(0, 0)
+            self.help_w.mvwin(0, 0)
+            self.help_w.resize(2, self.maxx)
+            self.stat_w.move(self.maxy - 2, 0)
+            self.stat_w.resize(2, self.maxx)
+            for page in self.__all_page:
+                page.resize(self.maxy - 4, self.maxx)
+        except curses.error:
+            pass
+        self.stdscr.erase()
+
+    def __do_key(self):
+        ch = self.__all_page[self.__page_index].getch()
+        if ch == ord('q'):
+            curses.endwin()
+            return True
+        elif ch >= ord('0') and ch <= ord('9'):
+            self.__page_index = ch - ord('0')
+            self.help_w.switch_page(self.__all_page[self.__page_index])
+        elif ch >= curses.KEY_F1 and ch <= curses.KEY_F9:
+            self.__page_index = ch - curses.KEY_F1
+            self.help_w.switch_page(self.__all_page[self.__page_index])
+        elif ch == ord('\t'):
+            self.__all_page[self.__page_index].select_next()
+        elif ch == ord('p'):
+            MessageBox(self.stdscr, "[TEST] Are you a girl??? [Y/N]").run()
+        elif ch == ord('i'):
+            result = InputBox(self.stdscr).run()
+            MessageBox(self.stdscr, "[TEST] %s" % result).run(anykey=True)
+        elif ch == ord('C'):
+            dataid_bk = Options.dataid
+            self.stdscr.erase()
+            self.__show_logo()
+            while True:
+                if self.__select_dataid() < 0:
+                    Options.dataid = dataid_bk
+                    break
+                elif self.__update_lms():
+                    break
+            if dataid_bk != Options.dataid:
+                oceanbase.stop()
+                oceanbase.start()
+                for page in self.__all_page:
+                    page.update()
+        elif ch == ord('c'):
+            if Options.dataid is None:
+                MessageBox(self.stdscr, "Switch cluster doesn't supported unless dataid provided!").run(anykey=True)
+            else:
+                self.__select_cluster()
+        self.__all_page[self.__page_index].process_key(ch)
+
+    def __run(self):
+        while (1):
+            self.stdscr.erase()
+
+            self.help_w.redraw()
+            self.__all_page[self.__page_index].redraw()
+            self.stat_w.redraw()
+
+            if (curses.is_term_resized(self.maxy, self.maxx)):
+                self.__resize_term()
+            if self.__do_key():
+                break
+
+            self.stdscr.refresh()
+            sleep(0.05)
+
+    def __select_cluster(self):
+        idx = SelectionBox('Select Cluster', [
+            "%s [%s] %s:%d  " % ('*' if clu.selected else ' ',
+                               'M' if clu.role == 1 else 'S', clu.vip, clu.port)
+                               for clu in oceanbase.cluster], self.stdscr).run()
+        if idx >= 0 and not oceanbase.cluster[idx].selected:
+            vip = oceanbase.cluster[idx].vip
+            oceanbase.switch_cluster(vip)
+            for page in self.__all_page:
+                page.update()
+            return True
+        return False
+
+    def __show_logo(self):
+        self.stdscr.hline(7, 0, curses.ACS_HLINE, 1024, curses.A_BOLD | curses.color_pair(1))
+        self.stdscr.refresh()
+        oceanbase_width = max([len(line) for line in self.build_oceanbase().split('\n')])
+        oceanbase_height = len(self.build_oceanbase().split('\n'))
+        ob_win = curses.newwin(oceanbase_height + 1, oceanbase_width + 1, 0, 10)
+        ob_win.addstr(self.build_oceanbase(), curses.A_BOLD | curses.color_pair(1))
+        ob_win.refresh()
+
+        dooba_width = max([len(line) for line in self.build_dooba().split('\n')])
+        dooba_height = len(self.build_dooba().split('\n'))
+        dooba_win = curses.newwin(dooba_height + 1, dooba_width + 1, 0, self.maxx - dooba_width - 10)
+        dooba_win.addstr(self.build_dooba(), curses.A_BOLD | curses.color_pair(6))
+        dooba_win.refresh()
+
+    def __cowsay(self, saying):
+        cowsay = str(Cowsay(saying))
+        cowsay_width = max([len(line) for line in cowsay.split('\n')])
+        cowsay_height = len(cowsay.split('\n'))
+        cowsay_win = curses.newwin(cowsay_height + 1, cowsay_width + 1,
+                                   self.maxy - cowsay_height - 2, self.maxx - cowsay_width - 10)
+        cowsay_win.addstr(cowsay, curses.color_pair(3))
+        cowsay_win.refresh()
+        self.__cowsay_win = cowsay_win
+
+    def __select_dataid(self):
+        def clear_cowsay():
+            try:
+                self.__cowsay_win.erase()
+                self.__cowsay_win.refresh()
+            except AttributeError:
+                pass
+
+        dataid_list = ObConfigHelper().get_dataid_list()
+        if len(dataid_list) == 0:
+            MessageBox(self.stdscr, "Can't fetch dataid list, plz check your environment!").run(anykey=True)
+            curses.endwin()
+            exit(1)
+        idx = SelectionBox('Select OceanBase dataID',
+                           dataid_list, self.stdscr, offset_y=8).run(first_movement=clear_cowsay)
+        if idx >= 0:
+            Options.dataid = dataid_list[idx]
+        return idx
+
+    def __update_lms(self):
+        if Options.dataid is not None:
+            lms_list = ObConfigHelper().get_lms_list(Options.dataid)
+            if not lms_list or len(lms_list) <= 0:
+                self.__cowsay('Get lms list fail, plz check'
+                              + ' [ dataid = %s, lms_list = %s ]' % (Options.dataid, lms_list))
+            else:
+                for lms in lms_list:
+                    self.__cowsay('checking lms [%s:%s]' % lms)
+                    if oceanbase.test_alive(host=lms[0], port=lms[1], fatal=False,
+                                            do_false=self.__cowsay, do_true=self.__cowsay):
+                        Options.host = lms[0]
+                        Options.port = lms[1]
+                        oceanbase.update_cluster_info()
+                        return True
+        return False
+
+    def __init__(self, win):
+        self.__all_page = []
+        self.__page_index = 2
+
+        self.__init_curses(win)
+
+        self.__show_logo()
+        if (not Options.using_ip_port) and (Options.dataid is None):
+            while True:
+                if self.__select_dataid() < 0:
+                    curses.endwin()
+                    exit(0)
+                if self.__update_lms() and self.__select_cluster():
+                    break
+
+        oceanbase.start()
+
+        self.stat_w = StatusWidget(self.stdscr)
+        self.help_w = HeaderWidget(self.stdscr)
+
+        self.__all_page.append(BlankPage(2, 0, self.maxy - 4, self.maxx, self.stdscr)) # 0
+        self.__all_page.append(HelpPage(2, 0, self.maxy - 4, self.maxx, self.stdscr)) # 1
+        self.__all_page.append(GalleryPage(2, 0, self.maxy - 4, self.maxx, self.stdscr)) # 2
+        self.__all_page.append(SQLPage(2, 0, self.maxy - 4, self.maxx, self.stdscr)) # 3
+        self.__all_page.append(UpdateServerPage(2, 0, self.maxy - 4, self.maxx, self.stdscr)) # 4
+        self.__all_page.append(ChunkServerPage(2, 0, self.maxy - 4, self.maxx, self.stdscr)) # 5
+        self.__all_page.append(MachineStatPage(2, 0, self.maxy - 4, self.maxx, self.stdscr)) # 6
+        self.__all_page.append(BlankPage(2, 0, self.maxy - 4, self.maxx, self.stdscr)) # 7
+        self.__all_page.append(BlankPage(2, 0, self.maxy - 4, self.maxx, self.stdscr)) # 8
+        self.__all_page.append(BlankPage(2, 0, self.maxy - 4, self.maxx, self.stdscr)) # 9
+
+        self.__run()
+
+
+class ObConfigHelper(object):
+    def __init__(self):
+        self.__host = self.__get_host()
+
+    def __make_obconfig_url(self, host, dataid):
+        template = 'http://%s/ob-config/config.co?dataId=%s'
+        return template % (host, dataid)
+
+    def __make_dataid_list_url(self, host):
+        template = 'http://%s/config_data/list_pro'
+        return template % host
+
+    def __get_host(self):
+        alipay_online_host = 'obconfigserver.db.alipay.com'
+        alibaba_online_host = 'obconfigserver.tbsite.net'
+        all_offline_host = 'obconsole.test.alibaba-inc.com'
+
+        if Options.env == 'offline':
+            return all_offline_host
+        elif Options.env == 'online':
+            try:
+                Telnet().open(alipay_online_host, 80, 0.2)
+                return alipay_online_host
+            except socket.error:
+                return alibaba_online_host
+        else:
+            try:
+                Telnet().open(alipay_online_host, 80, 0.2)
+                Options.env = 'online'
+                return alipay_online_host
+            except socket.error:
+                try:
+                    if socket.gethostname().find('sqa') > 0:
+                        Options.env = 'offline'
+                        return all_offline_host
+                    else:
+                        Options.env = 'online'
+                        return alibaba_online_host
+                except socket.error:
+                    pass
+        return all_offline_host
+
+    def get_dataid_list(self):
+        url = self.__make_dataid_list_url(self.__get_host())
+        dataid_list = []
+        try:
+            dataid_str = urlopen(url, timeout=1).readlines()
+        except URLError:
+            return []
+        for line in dataid_str:
+            line = line.strip('\r\n')
+            dataid_str = line.split(';')[0]
+            if len(dataid_str) == 0:
+                continue
+            dataid_list.append(dataid_str.split('=')[1])
+        return dataid_list
+
+    def get_lms_list(self, dataid):
+        url = self.__make_obconfig_url(self.__get_host(), dataid)
+        lmses = None
+        try:
+            lms_list = urlopen(url, timeout=1).readlines()
+        except URLError:
+            return []
+        for line in lms_list:
+            line = line.strip('\r\n')
+            if line.find('clusterAddress') == 0:
+                kv = line.split('=')
+                lms_list = kv[1].split(',')
+                lmses = [ (lms.split(':')[0], int(lms.split(':')[1])) for lms in lms_list ]
+                return lmses
+
+    def __init__(self):
+        pass
+
+
+class DoobaMain(object):
+    '''NAME
+        dooba - A curses powerful tool for OceanBase admin, more than a monitor
+
+SYNOPSIS
+        dooba [OPTIONS]
+
+Options
+
+    ·   --host=HOST, -h HOST
+
+        Connect to OceanBase on the given host.
+
+    ·   --port=PORT, -p PORT
+
+        The TCP/IP port to use for connecting to OceanBase server.
+
+    ·   --user=USER, -u USER
+
+        The user to use for connecting to OceanBase server.
+
+    ·   --password=PASSWORD, -P PASSWORD
+
+        The password to use for connecting to OceanBase server.
+    '''
+
+    def __usage(self):
+        print('Usage: dooba [-h|--host=HOST] [-P|--port=PORT]')
+        print('Usage: dooba [--dataid=DATAID]')
+
+
+    def __set_env(self):
+        environ['TERM'] = 'xterm'
+
+    def __parse_options(self):
+        try:
+            opts, args = getopt(sys.argv[1:], '?dh:i:I:p:P:su:',
+                                ['debug', 'help', 'host=', 'interval=', 'port=',
+                                 'password=', 'supermode', 'user=', 'dataid=',
+                                 'online', 'offline', 'machine-interval='])
+        except GetoptError as err:
+            print str(err) # will print something like "option -a not recognized"
+            self.__usage()
+            exit(2)
+        for o, v in opts:
+            if o in ('-?', '--help'):
+                print self.__doc__
+                exit(1)
+            if o in ('-d', '--debug'):
+                Options.debug = True
+            elif o in ('-h', '--host'):
+                Options.host = v
+                Options.using_ip_port = True
+            elif o in ('-P', '--port'):
+                Options.port = int(v)
+                Options.using_ip_port = True
+            elif o in ('-u', '--user'):
+                Options.user = v
+            elif o in ('-p', '--password'):
+                Options.password = v
+            elif o in ('-s', '--supermode'):
+                Options.supermode = True
+            elif o in ('-i', '--interval'):
+                Options.interval = float(v)
+            elif o in ('-I', '--machine-interval'):
+                Options.machine_interval = float(v)
+            elif o in ('--dataid'):
+                Options.dataid = v
+            elif o in ('--online'):
+                Options.env = 'online'
+            elif o in ('--offline'):
+                Options.env = 'offline'
+            else:
+                assert False, 'unhandled option [%s]' & o
+
+    def __ignore_signal(self):
+        def signal_handler(signal, frame):
+            pass
+        signal.signal(signal.SIGINT, signal_handler)
+
+    def __init__(self):
+        global oceanbase
+        self.__set_env()
+
+        oceanbase = OceanBase()
+        self.__parse_options()
+
+        def myprint(info):
+            print info
+            print
+            self.__usage()
+        if Options.using_ip_port:
+            oceanbase.test_alive(do_false=myprint)
+            oceanbase.update_cluster_info()
+
+        try:
+            curses.wrapper(Dooba)
+        except KeyboardInterrupt:
+            pass
+
+if __name__ == "__main__":
+    DoobaMain()
+#
+# dooba ends here

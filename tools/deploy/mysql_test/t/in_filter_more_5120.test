@@ -1,0 +1,88 @@
+--disable_warnings
+drop table if exists t1;
+--disable_warnings
+
+##create table t1
+#--echo set ob_query_timeout=90000000000
+set ob_query_timeout=9000000;
+create table t1 (id int primary key, age int);
+--let $insert_head =insert into t1 values(1,1)
+--let $insert_sql=
+--let $m=(
+--let $n=)
+--let $d=,
+--let $id_int=5130
+
+while($id_int!=1)
+{
+--let $insert_sql=$insert_sql$d$m$id_int$d$id_int$n
+dec $id_int;
+}
+eval $insert_head$insert_sql;
+
+#insert into t1 values(1,1),(2,3);
+#filter512
+--let $head = select id from t1 where age in (
+--let $sql_512 = 
+--let $x=,
+--let $count=512
+while ($count!=1)
+{
+--let $sql_512=$sql_512$x$count
+dec $count;
+}
+--let $end=)
+eval $head$count$sql_512$end;
+
+
+
+#filter 5116
+--let $age_int=5116
+--let $head=$head$age_int
+--let $sql_5116=
+while($age_int!=1)
+{
+dec $age_int;
+--let $sql_5116=$sql_5116$x$age_int
+}
+--echo succ select 5116
+eval $head$sql_5116$end;
+
+
+#filter 5117
+--let $age_int_5117=5117
+eval $head$sql_5116$x$age_int_5117$end;
+--echo succ select  5117
+#filter 5118
+--let $age_int_5118=5118
+eval $head$sql_5116$x$age_int_5117$x$age_int_5118$end;
+--echo succ select  5118
+#filter 5119
+--let $age_int_5119=5119
+# --error 16 for 842
+eval $head$sql_5116$x$age_int_5117$x$age_int_5118$x$age_int_5119$end;
+#filter 5120
+# --echo select  5120 error
+--let $age_int_5120=5120
+--error 16
+eval $head$sql_5116$x$age_int_5117$x$age_int_5118$x$age_int_5119$x$age_int_5120$end;
+
+#filter 5121
+--echo select  5121 error
+--let $age_int_5121=5121
+--error 16
+eval $head$sql_5116$x$age_int_5117$x$age_int_5118$x$age_int_5119$x$age_int_5120$x$age_int_5121$end;
+
+--let $age_int_5122=5122
+--error 16
+eval $head$sql_5116$x$age_int_5117$x$age_int_5118$x$age_int_5119$x$age_int_5120$x$age_int_5121$x$age_int_5122$end;
+
+#--let $age_int_5123=5123
+#--error 16
+#eval $head$sql_5116$x$age_int_5117$x$age_int_5118$x$age_int_5119$x$age_int_5120$x$age_int_5121$x$age_int_5122$x$age_int_5122$end;
+#--let $age_int_5124=5117
+#--error 16
+#eval $head$sql_5119$x$age_int_5120$x$age_int_5121$x$age_int_5122$x$age_int_5123$x$age_int_5124$end;
+#--let $age_int_5125=5118
+#--error 16
+#eval $head$sql_5119$x$age_int_5120$x$age_int_5121$x$age_int_5122$x$age_int_5123$x$age_int_5124$x$age_int_5125$end;

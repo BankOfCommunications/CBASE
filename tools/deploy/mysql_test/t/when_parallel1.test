@@ -1,0 +1,172 @@
+set global  ob_query_timeout=30000000;
+
+drop table if exists t1;
+
+create table t1(c1 int primary key, c2 int);
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+connection conn1;
+begin;
+send select * from t1 where c1=1 when row_count(insert into t1 values(1,1))=1;
+--real_sleep 1
+connection conn2;
+begin;
+send select * from t1 where c1=1 when row_count(insert into t1 values(1,1))=1;
+connection conn1;
+reap;
+rollback;
+connection conn2;
+reap;
+commit;
+select * from t1;
+drop table t1;
+
+create table t1(c1 int primary key, c2 int);
+connection conn1;
+begin;
+send select * from t1 where c1=1 when row_count(insert into t1 values(1,1))=1;
+--real_sleep 1
+connection conn2;
+begin;
+send select * from t1 where c1=1 when row_count(insert into t1 values(1,1))=1;
+connection conn1;
+reap;
+commit;
+connection conn2;
+--error 5024
+reap;
+commit;
+select * from t1;
+drop table t1;
+
+
+
+create table t1(c1 int primary key, c2 int);
+connection conn1;
+begin;
+send select * from t1 where c1=1 when row_count(insert into t1 values(2,2))=1;
+--real_sleep 1
+connection conn2;
+begin;
+send select * from t1 where c1=2 when row_count(insert into t1 values(1,1))=1;
+connection conn1;
+reap;
+commit;
+connection conn2;
+reap;
+commit;
+select * from t1;
+drop table t1;
+
+create table t1(c1 int primary key, c2 int);
+connection conn1;
+begin;
+send select * from t1 where c1=1 when row_count(insert into t1 values(2,2),(1,1))=2;
+--real_sleep 1
+connection conn2;
+begin;
+send select * from t1 where c1=2 when row_count(insert into t1 values(1,1),(2,2))=2;
+connection conn1;
+reap;
+rollback;
+connection conn2;
+reap;
+commit;
+select * from t1;
+drop table t1;
+
+create table t1(c1 int primary key, c2 int);
+connection conn1;
+begin;
+send select * from t1 where c1=1 when row_count(insert into t1 values(2,2),(1,1))=2;
+--real_sleep 1
+connection conn2;
+begin;
+send select * from t1 where c1=2 when row_count(insert into t1 values(1,1),(2,2))=2;
+connection conn1;
+reap;
+commit;
+connection conn2;
+--error 5024
+reap;
+commit;
+select * from t1;
+drop table t1;
+
+create table t1(c1 int primary key, c2 int);
+connection conn1;
+begin;
+send select * from t1 where c1=1 when row_count(insert into t1 values(2,2),(1,1))=2;
+--real_sleep 1
+connection conn2;
+begin;
+send select * from t1 where c1=2 when row_count(insert into t1 values(3,3),(4,4))=2;
+connection conn1;
+reap;
+commit;
+connection conn2;
+reap;
+commit;
+select * from t1;
+drop table t1;
+
+
+create table t1(c1 int primary key, c2 int);
+insert into t1 values(1,0);
+connection conn1;
+begin;
+update t1 set c2=c2+1 where c1=1;
+send select * from t1 where c1=1 when row_count(update t1 set c2=c2+1 where c1=1)=1;
+--real_sleep 1
+connection conn2;
+begin;
+send update t1 set c2=c2+1 where c1=1;
+connection conn1;
+reap;
+commit;
+connection conn2;
+reap;
+send select * from t1 where c1=1 when row_count(update t1 set c2=c2+1 where c1=1)=1;
+reap;
+commit;
+select * from t1;
+drop table t1;
+
+
+
+
+
+
+
+
+
+create table t1(c1 int primary key, c2 int);
+insert into t1 values(1,0);
+connection conn1;
+begin;
+update t1 set c2=c2+1 where c1=1;
+send select * from t1 where c1=1 when row_count(update t1 set c2=c2+1 where c1=1)=1;
+--real_sleep 1
+connection conn2;
+begin;
+send update t1 set c2=c2+1 where c1=1;
+connection conn1;
+reap;
+rollback;
+connection conn2;
+reap;
+send select * from t1 where c1=1 when row_count(update t1 set c2=c2+1 where c1=1)=1;
+reap;
+commit;
+select * from t1;
+drop table t1;
+
+
+
+
+
+
+
+

@@ -1,0 +1,16 @@
+[app_name]
+name=favorite
+max_table_id=1014
+#schema_version = 3
+
+[collect_info]
+table_id=1001
+max_column_id=2048
+table_type=1
+rowkey_is_fixed_length=1
+compress_func_name=lzo_1.0
+column_info=1,1025,info_user_nick,varchar,128
+column_info=1,1026,info_is_shared,int
+rowkey_max_length=17
+rowkey_split=8
+ 

@@ -1,0 +1,65 @@
+ob1=OBI(cluster=1133)
+ob1.reboot
+ob1.prepare
+ob1.start_check
+ob1.cs0.cs_admin uninstall_disk   1
+ob1.cs0.cs_admin uninstall_disk   2
+ob1.cs0.cs_admin uninstall_disk   3
+ob1.cs0.cs_admin uninstall_disk   4
+ob1.cs0.cs_admin uninstall_disk   5
+ob1.cs0.cs_admin uninstall_disk   6
+ob1.cs0.cs_admin uninstall_disk   7
+ob1.cs0.cs_admin uninstall_disk   8
+ob1.cs0.cs_admin uninstall_disk   9
+ob1.cs0.cs_admin uninstall_disk  10
+ob1.cs1.cs_admin uninstall_disk   1
+ob1.cs1.cs_admin uninstall_disk   2
+ob1.cs1.cs_admin uninstall_disk   3
+ob1.cs1.cs_admin uninstall_disk   4
+ob1.cs1.cs_admin uninstall_disk   5
+ob1.cs1.cs_admin uninstall_disk   6
+ob1.cs1.cs_admin uninstall_disk   7
+ob1.cs1.cs_admin uninstall_disk   8
+ob1.cs1.cs_admin uninstall_disk   9
+ob1.cs1.cs_admin uninstall_disk  10
+ob1.cs0.rm_sstable 1
+ob1.cs0.rm_sstable 2
+ob1.cs0.rm_sstable 3
+ob1.cs0.rm_sstable 4
+ob1.cs0.rm_sstable 5
+ob1.cs0.rm_sstable 6
+ob1.cs0.rm_sstable 7
+ob1.cs0.rm_sstable 8
+ob1.cs0.rm_sstable 9
+ob1.cs0.rm_sstable 10
+ob1.cs1.rm_sstable 1
+ob1.cs1.rm_sstable 2
+ob1.cs1.rm_sstable 3
+ob1.cs1.rm_sstable 4
+ob1.cs1.rm_sstable 5
+ob1.cs1.rm_sstable 6
+ob1.cs1.rm_sstable 7
+ob1.cs1.rm_sstable 8
+ob1.cs1.rm_sstable 9
+ob1.cs1.rm_sstable 10
+ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/1
+ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/2
+ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/3
+ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/4
+ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/5
+ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/6
+ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/7
+ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/8
+ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/9
+ob1.cs0.cs_admin install_disk  /home/$user/obtest_data/10
+ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/1
+ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/2
+ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/3
+ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/4
+ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/5
+ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/6
+ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/7
+ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/8
+ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/9
+ob1.cs1.cs_admin install_disk  /home/$user/obtest_data/10
+ob1.stop_check

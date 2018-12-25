@@ -1,0 +1,54 @@
+create database round;
+using database round;
+drop table if exists t_round,t_date;
+creat table
+create table t_round(i1 int primary key,de decimal(38,5));
+create table t_date(i1 int primary key,dat date);
+insert into t_round values(1,5.58);
+insert into t_round values(2,5.48);
+insert into t_round values(3,-5.48);
+insert into t_round values(4,-5.58);
+insert into t_date values(1,'2015-12-12');
+start round
+select round(2.149,0);
+round(2.149,0)
+2
+select round(2.15,1);
+round(2.15,1)
+2.2
+select round(2.149,1);
+round(2.149,1)
+2.1
+select round(-1.475,2);
+round(-1.475,2)
+-1.48
+select round(21.5,-1);
+round(21.5,-1)
+20
+select round(de+(1.2*5/36),0) from t_round where i1 = 1;
+round(de+(1.2*5/36),0)
+6
+select round(21.5,1.0);
+ERROR HY000: the second argument is invalid type is 12
+select round('2.5',0);
+ERROR HY000: the first argument is invalid type is 6
+select round(dat,0) from t_date;
+ERROR HY000: the first argument is invalid type is 13
+select round(1);
+ERROR HY000: Param num of function 'round' must be 2, ret=-5054
+select round(1,1,1);
+ERROR HY000: Param num of function 'round' must be 2, ret=-5054
+select round();
+ERROR HY000: Param num of function 'round' must be 2, ret=-5054
+select round(99999999999999999999999999999999999999999999999999.2,0) ;
+ERROR HY004: decimal overflow!
+select round(999.99,-6);
+round(999.99,-6)
+0
+select round(999.99,6);
+round(999.99,6)
+999.99
+select round(NULL,1);
+round(NULL,1)
+NULL
+drop table t_round,t_date;

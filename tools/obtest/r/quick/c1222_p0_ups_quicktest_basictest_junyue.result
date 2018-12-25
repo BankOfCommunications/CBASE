@@ -1,0 +1,721 @@
+ob1=OBI(cluster=1222);
+ob1.reboot;
+ob1.mysql set global ob_read_consistency=3;
+variable_name	value
+ob_read_consistency	3
+ups0 status is sync
+ups1 status is master
+ob1.create_client;
+create table t1(c1 int primary key, c2 int);
+select * from t1;
+c1	c2
+select * from t1;
+c1	c2
+select * from t1;
+c1	c2
+select * from t1;
+c1	c2
+select * from t1;
+c1	c2
+select * from t1;
+c1	c2
+select * from t1;
+c1	c2
+select * from t1;
+c1	c2
+select * from t1;
+c1	c2
+select * from t1;
+c1	c2
+insert into t1 values(1,1);
+insert into t1 values(1,1);
+ERROR 23000: Duplicate entry ' <3001.16>=int:1' for key 'PRIMARY'
+insert into t1 values(2,2),(3,3);
+insert into t1 values(4,4),(4,5);
+ERROR 23000: Duplicate entry 'int:4' for key 'PRIMARY'
+select * from t1 where c1 >=1 and c1 <=4;
+c1	c2
+1	1
+2	2
+3	3
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	2
+select * from t1 where c1=3;
+c1	c2
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1 where c1 >=1 and c1 <=4;
+c1	c2
+1	1
+2	2
+3	3
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	2
+select * from t1 where c1=3;
+c1	c2
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1 where c1 >=1 and c1 <=4;
+c1	c2
+1	1
+2	2
+3	3
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	2
+select * from t1 where c1=3;
+c1	c2
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1 where c1 >=1 and c1 <=4;
+c1	c2
+1	1
+2	2
+3	3
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	2
+select * from t1 where c1=3;
+c1	c2
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1 where c1 >=1 and c1 <=4;
+c1	c2
+1	1
+2	2
+3	3
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	2
+select * from t1 where c1=3;
+c1	c2
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1 where c1 >=1 and c1 <=4;
+c1	c2
+1	1
+2	2
+3	3
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	2
+select * from t1 where c1=3;
+c1	c2
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1 where c1 >=1 and c1 <=4;
+c1	c2
+1	1
+2	2
+3	3
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	2
+select * from t1 where c1=3;
+c1	c2
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1 where c1 >=1 and c1 <=4;
+c1	c2
+1	1
+2	2
+3	3
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	2
+select * from t1 where c1=3;
+c1	c2
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1 where c1 >=1 and c1 <=4;
+c1	c2
+1	1
+2	2
+3	3
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	2
+select * from t1 where c1=3;
+c1	c2
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1 where c1 >=1 and c1 <=4;
+c1	c2
+1	1
+2	2
+3	3
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	2
+select * from t1 where c1=3;
+c1	c2
+3	3
+select * from t1 where c1=4;
+c1	c2
+update t1 set c2=0 where c1=1;
+select * from t1 where c1=1;
+c1	c2
+1	0
+select * from t1 where c1=1;
+c1	c2
+1	0
+select * from t1 where c1=1;
+c1	c2
+1	0
+select * from t1 where c1=1;
+c1	c2
+1	0
+select * from t1 where c1=1;
+c1	c2
+1	0
+select * from t1 where c1=1;
+c1	c2
+1	0
+select * from t1 where c1=1;
+c1	c2
+1	0
+select * from t1 where c1=1;
+c1	c2
+1	0
+select * from t1 where c1=1;
+c1	c2
+1	0
+select * from t1 where c1=1;
+c1	c2
+1	0
+update t1 set c2=c2+1 where c1=2;
+select * from t1 where c1=2;
+c1	c2
+2	3
+select * from t1 where c1=2;
+c1	c2
+2	3
+select * from t1 where c1=2;
+c1	c2
+2	3
+select * from t1 where c1=2;
+c1	c2
+2	3
+select * from t1 where c1=2;
+c1	c2
+2	3
+select * from t1 where c1=2;
+c1	c2
+2	3
+select * from t1 where c1=2;
+c1	c2
+2	3
+select * from t1 where c1=2;
+c1	c2
+2	3
+select * from t1 where c1=2;
+c1	c2
+2	3
+select * from t1 where c1=2;
+c1	c2
+2	3
+update t1 set c2=-2*c1 where c1=2;
+select * from t1 where c1=2;
+c1	c2
+2	-4
+select * from t1 where c1=2;
+c1	c2
+2	-4
+select * from t1 where c1=2;
+c1	c2
+2	-4
+select * from t1 where c1=2;
+c1	c2
+2	-4
+select * from t1 where c1=2;
+c1	c2
+2	-4
+select * from t1 where c1=2;
+c1	c2
+2	-4
+select * from t1 where c1=2;
+c1	c2
+2	-4
+select * from t1 where c1=2;
+c1	c2
+2	-4
+select * from t1 where c1=2;
+c1	c2
+2	-4
+select * from t1 where c1=2;
+c1	c2
+2	-4
+update t1 set c2=0 where c1=4;
+delete from t1 where c1=1;
+select * from t1 where c1=1;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=1;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=1;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=1;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=1;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=1;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=1;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=1;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=1;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=1;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+delete from t1 where c1=4;
+select * from t1 where c1=4;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+select * from t1 where c1=4;
+c1	c2
+select * from t1;
+c1	c2
+2	-4
+3	3
+replace into t1 values(5,5);
+replace into t1 values(6,6),(7,7);
+replace into t1 values(8,8),(8,8);
+replace into t1 values(5,5);
+replace into t1(c1) values(9);
+replace into t1(c1) values(10),(11);
+replace into t1(c1) values(12),(12);
+replace into t1(c1) values(10);
+select * from t1 where c1=5;
+c1	c2
+5	5
+select * from t1 where c1=6;
+c1	c2
+6	6
+select * from t1 where c1=7;
+c1	c2
+7	7
+select * from t1 where c1=8;
+c1	c2
+8	8
+select * from t1 where c1=9;
+c1	c2
+9	NULL
+select * from t1 where c1=10;
+c1	c2
+10	NULL
+select * from t1;
+c1	c2
+2	-4
+3	3
+5	5
+6	6
+7	7
+8	8
+9	NULL
+10	NULL
+11	NULL
+12	NULL
+select * from t1 where c1=5;
+c1	c2
+5	5
+select * from t1 where c1=6;
+c1	c2
+6	6
+select * from t1 where c1=7;
+c1	c2
+7	7
+select * from t1 where c1=8;
+c1	c2
+8	8
+select * from t1 where c1=9;
+c1	c2
+9	NULL
+select * from t1 where c1=10;
+c1	c2
+10	NULL
+select * from t1;
+c1	c2
+2	-4
+3	3
+5	5
+6	6
+7	7
+8	8
+9	NULL
+10	NULL
+11	NULL
+12	NULL
+select * from t1 where c1=5;
+c1	c2
+5	5
+select * from t1 where c1=6;
+c1	c2
+6	6
+select * from t1 where c1=7;
+c1	c2
+7	7
+select * from t1 where c1=8;
+c1	c2
+8	8
+select * from t1 where c1=9;
+c1	c2
+9	NULL
+select * from t1 where c1=10;
+c1	c2
+10	NULL
+select * from t1;
+c1	c2
+2	-4
+3	3
+5	5
+6	6
+7	7
+8	8
+9	NULL
+10	NULL
+11	NULL
+12	NULL
+select * from t1 where c1=5;
+c1	c2
+5	5
+select * from t1 where c1=6;
+c1	c2
+6	6
+select * from t1 where c1=7;
+c1	c2
+7	7
+select * from t1 where c1=8;
+c1	c2
+8	8
+select * from t1 where c1=9;
+c1	c2
+9	NULL
+select * from t1 where c1=10;
+c1	c2
+10	NULL
+select * from t1;
+c1	c2
+2	-4
+3	3
+5	5
+6	6
+7	7
+8	8
+9	NULL
+10	NULL
+11	NULL
+12	NULL
+select * from t1 where c1=5;
+c1	c2
+5	5
+select * from t1 where c1=6;
+c1	c2
+6	6
+select * from t1 where c1=7;
+c1	c2
+7	7
+select * from t1 where c1=8;
+c1	c2
+8	8
+select * from t1 where c1=9;
+c1	c2
+9	NULL
+select * from t1 where c1=10;
+c1	c2
+10	NULL
+select * from t1;
+c1	c2
+2	-4
+3	3
+5	5
+6	6
+7	7
+8	8
+9	NULL
+10	NULL
+11	NULL
+12	NULL
+select * from t1 where c1=5;
+c1	c2
+5	5
+select * from t1 where c1=6;
+c1	c2
+6	6
+select * from t1 where c1=7;
+c1	c2
+7	7
+select * from t1 where c1=8;
+c1	c2
+8	8
+select * from t1 where c1=9;
+c1	c2
+9	NULL
+select * from t1 where c1=10;
+c1	c2
+10	NULL
+select * from t1;
+c1	c2
+2	-4
+3	3
+5	5
+6	6
+7	7
+8	8
+9	NULL
+10	NULL
+11	NULL
+12	NULL
+select * from t1 where c1=5;
+c1	c2
+5	5
+select * from t1 where c1=6;
+c1	c2
+6	6
+select * from t1 where c1=7;
+c1	c2
+7	7
+select * from t1 where c1=8;
+c1	c2
+8	8
+select * from t1 where c1=9;
+c1	c2
+9	NULL
+select * from t1 where c1=10;
+c1	c2
+10	NULL
+select * from t1;
+c1	c2
+2	-4
+3	3
+5	5
+6	6
+7	7
+8	8
+9	NULL
+10	NULL
+11	NULL
+12	NULL
+select * from t1 where c1=5;
+c1	c2
+5	5
+select * from t1 where c1=6;
+c1	c2
+6	6
+select * from t1 where c1=7;
+c1	c2
+7	7
+select * from t1 where c1=8;
+c1	c2
+8	8
+select * from t1 where c1=9;
+c1	c2
+9	NULL
+select * from t1 where c1=10;
+c1	c2
+10	NULL
+select * from t1;
+c1	c2
+2	-4
+3	3
+5	5
+6	6
+7	7
+8	8
+9	NULL
+10	NULL
+11	NULL
+12	NULL
+select * from t1 where c1=5;
+c1	c2
+5	5
+select * from t1 where c1=6;
+c1	c2
+6	6
+select * from t1 where c1=7;
+c1	c2
+7	7
+select * from t1 where c1=8;
+c1	c2
+8	8
+select * from t1 where c1=9;
+c1	c2
+9	NULL
+select * from t1 where c1=10;
+c1	c2
+10	NULL
+select * from t1;
+c1	c2
+2	-4
+3	3
+5	5
+6	6
+7	7
+8	8
+9	NULL
+10	NULL
+11	NULL
+12	NULL
+select * from t1 where c1=5;
+c1	c2
+5	5
+select * from t1 where c1=6;
+c1	c2
+6	6
+select * from t1 where c1=7;
+c1	c2
+7	7
+select * from t1 where c1=8;
+c1	c2
+8	8
+select * from t1 where c1=9;
+c1	c2
+9	NULL
+select * from t1 where c1=10;
+c1	c2
+10	NULL
+select * from t1;
+c1	c2
+2	-4
+3	3
+5	5
+6	6
+7	7
+8	8
+9	NULL
+10	NULL
+11	NULL
+12	NULL
+ups0 status is sync
+ups1 status is master

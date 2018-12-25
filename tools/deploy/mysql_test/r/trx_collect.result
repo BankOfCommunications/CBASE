@@ -1,0 +1,35 @@
+--conn1 update cs row: user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828
+begin;
+select  user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828 for update;
+user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	collect_count	total_money	collect_time_precise	user_id	item_type	item_id
+00000034700000734-32	943833	00000034700000734-34	2010-11-16 19:14:50	943836	00000034700000734-39	943840	00000734-32	00000734-33	73434	00000734-35	73436	2010-11-16 21:39:52	00000734-38	73439	73440	73441	73442	2010-11-16 19:14:33	3472328296227681076	55	3472328296228139828
+update collect_info set  category = 808, collect_time_precise = '820', tag = '807', user_nick = '800', is_shared = 801, stat = 804, note = '802', collect_time = '803' where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+begin;
+delete from collect_info where user_id=3472328296227682617 and item_type=53 and item_id=3472328296228010297;
+update collect_info set  category = 808, collect_time_precise = '820', tag = '807', user_nick = '801', is_shared = 801, stat = 804, note = '802', collect_time = '803' where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+ERROR HY000: Exclusive lock conflict 'int:3472328296227681076,int:55,int:3472328296228139828' for key 'PRIMARY'
+commit;
+rollback;
+select  user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	collect_count	total_money	collect_time_precise	user_id	item_type	item_id
+800	801	802	1970-01-01 08:00:00	804	807	808	00000734-32	00000734-33	73434	00000734-35	73436	2010-11-16 21:39:52	00000734-38	73439	73440	73441	73442	1970-01-01 08:00:00	3472328296227681076	55	3472328296228139828
+select  user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id=3472328296227682617 and item_type=53 and item_id=3472328296228010297;
+user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	collect_count	total_money	collect_time_precise	user_id	item_type	item_id
+00000099500000599-32	2594333	00000099500000599-34	2010-11-16 14:39:45	2594336	00000099500000599-39	2594340	00000599-32	00000599-33	59934	00000599-35	59936	2010-11-16 21:42:07	00000599-38	59939	59940	59941	59942	2010-11-16 14:39:28	3472328296227682617	53	3472328296228010297
+--conn1 update the above row again: user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828
+begin;
+select  user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828 for update;
+user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	collect_count	total_money	collect_time_precise	user_id	item_type	item_id
+800	801	802	1970-01-01 08:00:00	804	807	808	00000734-32	00000734-33	73434	00000734-35	73436	2010-11-16 21:39:52	00000734-38	73439	73440	73441	73442	1970-01-01 08:00:00	3472328296227681076	55	3472328296228139828
+update collect_info set  category = 808, collect_time_precise = '820', tag = '807', user_nick = '8000', is_shared = 801, stat = 804, note = '802', collect_time = '803' where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+select  user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	collect_count	total_money	collect_time_precise	user_id	item_type	item_id
+800	801	802	1970-01-01 08:00:00	804	807	808	00000734-32	00000734-33	73434	00000734-35	73436	2010-11-16 21:39:52	00000734-38	73439	73440	73441	73442	1970-01-01 08:00:00	3472328296227681076	55	3472328296228139828
+begin;
+update collect_info set  category = 808, collect_time_precise = '820', tag = '807', user_nick = '8001', is_shared = 801, stat = 804, note = '802', collect_time = '803' where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+ERROR HY000: Exclusive lock conflict 'int:3472328296227681076,int:55,int:3472328296228139828' for key 'PRIMARY'
+commit;
+rollback;
+select  user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	collect_count	total_money	collect_time_precise	user_id	item_type	item_id
+8000	801	802	1970-01-01 08:00:00	804	807	808	00000734-32	00000734-33	73434	00000734-35	73436	2010-11-16 21:39:52	00000734-38	73439	73440	73441	73442	1970-01-01 08:00:00	3472328296227681076	55	3472328296228139828

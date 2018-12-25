@@ -1,0 +1,36 @@
+ob1=OBI(cluster=1122);
+ob2=OBI(cluster=1122);
+ob1.reboot;
+ob2.reboot;
+sleep 30;
+
+#create client
+ob1.create_client;
+
+create table t1 (a int primary key,b int);
+insert into t1 values(1,1),(2,2),(0,0);
+select * from t1;
+
+let $lms_ip = deploy_get_value(ob2.fs0.ip);
+let $lms_port = deploy_get_value(ob2.fs0.mysql_port);
+let $lms= $lms_ip:$lms_port;
+ob1.set_diamond  clusterAddress=$lms;
+
+sleep 70;
+#ob1.stop;
+
+create table t1 (a int primary key,b int);
+insert into t1 values(1,1),(2,2);
+select * from t1;
+
+let $lms_ip = deploy_get_value(ob1.fs0.ip);
+let $lms_port = deploy_get_value(ob1.fs0.mysql_port);
+let $lms= $lms_ip:$lms_port;
+ob1.set_diamond  clusterAddress=$lms;
+
+sleep 70;
+
+ob2.stop;
+
+select * from t1;
+

@@ -1,0 +1,4 @@
+-- fail, Unkown column name qty
+select user_id, qty, order_desc from (select user_id, sum(qty), t.order_desc, t.order_desc from order_list t group by user_id) o;
+Unkown column name qty
+Resolve error!

@@ -1,0 +1,4 @@
+-- fail
+delete from user as u where user_name='zhang wu ji';
+parse_sql error!
+syntax error at 1:18

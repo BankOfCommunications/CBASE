@@ -1,0 +1,43 @@
+#round test case
+create database round;
+using database round;
+sleep 5;
+--disable_warnings
+drop table if exists t_round,t_date;
+--enable_warnings
+
+--echo creat table
+create table t_round(i1 int primary key,de decimal(38,5));
+create table t_date(i1 int primary key,dat date);
+insert into t_round values(1,5.58);
+insert into t_round values(2,5.48);
+insert into t_round values(3,-5.48);
+insert into t_round values(4,-5.58);
+insert into t_date values(1,'2015-12-12');
+
+--echo start round
+select round(2.149,0);
+select round(2.15,1);
+select round(2.149,1);
+select round(-1.475,2);
+select round(21.5,-1);
+select round(de+(1.2*5/36),0) from t_round where i1 = 1;
+--error 2
+select round(21.5,1.0);
+--error 2
+select round('2.5',0);
+--error 2
+select round(dat,0) from t_date;
+--error 5054
+select round(1);
+--error 5054
+select round(1,1,1);
+--error 5054
+select round();
+--error 1
+select round(99999999999999999999999999999999999999999999999999.2,0) ;
+select round(999.99,-6);
+select round(999.99,6);
+select round(NULL,1);
+
+drop table t_round,t_date;

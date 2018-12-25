@@ -1,0 +1,49 @@
+drop table if exists t1,t2,t3,t4,t5,t6;
+create table t1(a int primary key, b int);
+insert into t1(a) values(1000);
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1) union
+(select avg(1) from t1) union (select avg(1) from t1) union (select avg(1) from t1);
+avg(1)
+1
+drop table t1;

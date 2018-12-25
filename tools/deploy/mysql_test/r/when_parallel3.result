@@ -1,0 +1,96 @@
+drop table if exists t1;
+create table t1(pk int primary key, c1 int);
+begin;
+replace into t1 values(1,10) when row_count(insert into t1 values(1,1))=1;
+begin;
+replace into t1 values(1,1000) when row_count(insert into t1 values(1,100))>0;
+rollback;
+select * from t1;
+pk	c1
+commit;
+select * from t1;
+pk	c1
+1	1000
+drop table t1;
+create table t1(pk int primary key, c1 int);
+begin;
+replace into t1 values(1,10),(2,20) when row_count(insert into t1 values(1,1),(2,2))=2;
+begin;
+replace into t1 values(1,1000) when row_count(insert into t1 values(1,100) when row_count(delete from t1 where pk=1)>0)>0;
+commit;
+select * from t1;
+pk	c1
+1	10
+2	20
+commit;
+select * from t1;
+pk	c1
+1	1000
+2	20
+drop table t1;
+create table t1(pk int primary key, c1 int);
+begin;
+insert into t1 values(2,20) when row_count(delete from t1 where pk=2 when row_count(replace into t1 values(1,1),(2,2))=2)=1;
+begin;
+insert into t1 values(1,20) when row_count(delete from t1 where pk=1 when row_count(replace into t1 values(3,3),(4,4))=2)=1;
+commit;
+select * from t1;
+pk	c1
+1	1
+2	20
+rollback;
+select * from t1;
+pk	c1
+1	1
+2	20
+drop table t1;
+create table t1(pk int primary key, c1 int);
+begin;
+insert into t1 values(2,20) when row_count(delete from t1 where pk=2 when row_count(replace into t1 values(1,1),(2,2))=2)=1;
+begin;
+insert into t1 values(1,20) when row_count(delete from t1 where pk=1 when row_count(replace into t1 values(3,3),(4,4))=2)=1;
+commit;
+select * from t1;
+pk	c1
+1	1
+2	20
+commit;
+select * from t1;
+pk	c1
+1	20
+2	20
+3	3
+4	4
+drop table t1;
+create table t1(pk int primary key, c1 int);
+begin;
+insert into t1 values(2,2) when row_count(replace into t1 values(1,10) when row_count(insert into t1 values(1,1))=1)=1;
+begin;
+insert into t1 values(3,3) when row_count(replace into t1 values(3,3) when row_count(insert into t1 values(3,3))=1)=1;
+commit;
+select * from t1;
+pk	c1
+1	10
+2	2
+ERROR 23000: Duplicate entry ' <3005.16>=int32:3' for key 'PRIMARY'
+commit;
+select * from t1;
+pk	c1
+1	10
+2	2
+drop table t1;
+create table t1(pk int primary key, c1 int);
+begin;
+replace into t1 values(2,2) when row_count(insert into t1 values(1,10) when row_count(insert into t1 values(1,1))=1)<2;
+begin;
+insert into t1 values(4,4) when row_count(replace into t1 values(3,3) when row_count(insert into t1 values(3,3))=1)=1;
+ERROR 23000: Duplicate entry ' <3006.16>=int32:1' for key 'PRIMARY'
+commit;
+select * from t1;
+pk	c1
+commit;
+select * from t1;
+pk	c1
+3	3
+4	4
+drop table t1;

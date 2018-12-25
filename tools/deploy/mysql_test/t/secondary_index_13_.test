@@ -1,0 +1,50 @@
+--disable_warnings
+drop table if exists t1,t2;
+--enable_warnings
+#1301
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1 (c1 int ,c2 int ,c3 int ,c4 int ,c5 int ,c6 int ,c7 int ,c8 int ,c9 int ,
+				c10 int , c11 int ,c12 int ,c13 int ,c14 int ,c15 int ,c16 int,c17 int,c18 int,
+				primary key(c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16) );
+--error 5007
+create index il on t1(c17,c18);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 600
+show index on t1;
+drop table t1;
+create table t1 (c1 int primary key,c2 int ,c3 int ,c4 int ,c5 int ,c6 int ,c7 int ,c8 int ,c9 int ,
+				c10 int , c11 int ,c12 int ,c13 int ,c14 int ,c15 int ,c16 int,c17 int,c18 int);
+# create index 1212
+--error 5007
+create index il on t1(c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 400
+show index on t1;
+drop table t1;
+#1302
+create table t1(c1 int primary key ,c2 int,c3 int);
+create index il on t1(c1);
+--error 17
+create index il on t1(c2);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 350
+show index on t1;
+drop table t1;
+#1303
+create table t1(c1 int primary key ,c2 int,c3 int);
+--error 5031
+create index il on t1(c4);
+
+#1304
+--error 65535
+create index il1 on t1(c2) storing(c2);
+#1305
+--error 5001
+create index il2 on t1() storing(c2);
+drop table t1;
+--error 5001
+create index il2 on t1(c2) storing();

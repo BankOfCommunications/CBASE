@@ -1,0 +1,40 @@
+drop table if exists t1;
+create table t1 (c1 int primary key ,c2 int,c3 int );
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create index il0 on t1(c2) storing (c3);
+show index on t1;
+index_name	status
+__3001__idx__il0	4
+create index il1 on t1(c2) storing (c3);
+create index il2 on t1(c2);
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+__3001__idx__il0	1
+__3001__idx__il1	1
+__3001__idx__il2	1
+show index on t1;
+index_name	status
+__3001__idx__il0	1
+__3001__idx__il1	1
+__3001__idx__il2	1
+show index on t1 like '%il_';
+index_name	status
+__3001__idx__il0	1
+__3001__idx__il1	1
+__3001__idx__il2	1
+show index on t1 like '%idx\\__il0';
+index_name	status
+__3001__idx__il0	1
+show index on t1 like '%1';
+index_name	status
+__3001__idx__il1	1
+show index on t1 where index_name='__3033__idx__il1' and status=1;
+index_name	status
+show index on t1 where index_name like '%il_'and status=1;
+index_name	status
+__3001__idx__il0	1
+__3001__idx__il1	1
+__3001__idx__il2	1

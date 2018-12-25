@@ -1,0 +1,18 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\obtest\r\collect
+2
+e
+2b:2063_c1233_p0_collectinfo_add_junyue.result|1|166f777bb15|1540|5777097e|209bb80e68c211e8a8030002c8c1274c|0
+21:2052_c1244_p0_query_junyue.result|1|166f777bbed|e67|3d928b96|259bb84668c211e8a8030002c8c1274c|0
+8:a.result|1|166f777bdc0|13e0|cbbc846f|2c2bb89a68c211e8a8030002c8c1274c|0
+2c:2059_c1233_p0_collect_new_item_junyue.result|1|166f777bd29|30b926|20f25f78|29bbb87e68c211e8a8030002c8c1274c|0
+21:2050_c1233_p0_query_junyue.result|1|166f777be31|695c53|f8b432e7|2e7bb8b668c211e8a8030002c8c1274c|0
+2f:2061_c1233_p0_collect_info_change_junyue.result|1|166f777be65|10e4|738aa8da|30fbb8d268c211e8a8030002c8c1274c|0
+41:2058_c1233_p0_collectinfo_is_null_after_item_delete_junyue.result|1|166f777bf21|2f1750|3b6c7728|358bb90a68c211e8a8030002c8c1274c|0
+24:2062_c1233_p0_item_add_junyue.result|1|166f777bec8|30dc6d|9622b2ef|333bb8ee68c211e8a8030002c8c1274c|0
+39:2057_c1233_p0_new_user_collect_updated_item_junyue.result|1|166f777ca77|2f0ff3|6f7eecbb|38cbb92668c211e8a8030002c8c1274c|0
+29:3002_c1233_P0_cluster_switch_yulan.result|1|166f777bb58|3541|c8a61471|22abb82a68c211e8a8030002c8c1274c|0
+2e:2060_c1233_p0_delete_collectinfo_junyue.result|1|166f777cabe|2ffb5|d2f0f7b2|3b0bb94268c211e8a8030002c8c1274c|0
+28:2054_c1233_p0_data_correct_junyue.result|1|166f777cb15|1ec9e|775fb3ed|3d2bb95e68c211e8a8030002c8c1274c|0
+35:2056_c1233_p0_new_user_collect_old_item_junyue.result|1|166f777cb5c|2fbb8|557ca37a|3f6bb97a68c211e8a8030002c8c1274c|0
+2a:3001_c1233_P0_master_ups_down_yulan.result|1|166f777bc41|34bd|f734e66b|279bb86268c211e8a8030002c8c1274c|0

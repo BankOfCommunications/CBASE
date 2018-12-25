@@ -1,0 +1,104 @@
+#--disable_abort_on_error
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+
+--let $loop=3
+
+while($loop)
+{
+
+#
+### 100 columns
+###
+#
+--let $head = create table t1(pk int primary key
+--let $sql =
+--let $column=100
+
+--let $x=, c
+--let $y= varchar(20)
+while($column)
+{
+
+    --let $sql=$sql$x$column $y
+    dec $column;
+}
+--let $z=)
+eval $head$sql$z;
+
+let $a=1000;
+--disable_query_log
+while($a)
+{
+   eval insert into t1(pk,c1) values($a,'$a');
+   dec $a;
+}
+--enable_query_log
+
+select c1 from t1;
+select * from t1;
+show create table t1;
+drop table t1;
+
+
+
+# modify after secondary index 496 -> 495
+### 495 columns will succeed
+###
+#
+--let $head = create table t1(pk int primary key
+--let $sql =
+--let $column=494
+
+--let $x=, c
+--let $y= varchar(20)
+while($column)
+{
+
+    --let $sql=$sql$x$column $y
+    dec $column;
+}
+--let $z=)
+eval $head$sql$z;
+
+let $a=1000;
+--disable_query_log
+while($a)
+{
+   eval insert into t1(pk,c1) values($a,'$a');
+   dec $a;
+}
+--enable_query_log
+
+select c1 from t1;
+select * from t1;
+show create table t1;
+drop table t1;
+
+
+# modify after secondary index 
+### 496 columns will fail
+###
+#
+--let $head = create table t1(pk int primary key
+--let $sql =
+--let $column=495
+
+--let $x=, c
+--let $y= varchar(20)
+while($column)
+{
+
+    --let $sql=$sql$x$column $y
+    dec $column;
+}
+--let $z=)
+--error 5042
+eval $head$sql$z;
+--error 5019
+show create table t1;
+drop table if exists t1;
+
+dec $loop;
+}

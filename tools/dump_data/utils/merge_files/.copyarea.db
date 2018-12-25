@@ -1,0 +1,10 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\dump_data\utils\merge_files
+2
+6
+4:conf|2|0|0|0|cf7b811e68bd11e8a8030002c8c1274c|0
+3:src|2|0|0|0|bf8b804268bd11e8a8030002c8c1274c|0
+6:README|1|166f776ea8c|58|25d11d51|cd7b810268bd11e8a8030002c8c1274c|0
+b:obrename.py|1|166f776eba1|34d|a71d075b|d24b813a68bd11e8a8030002c8c1274c|0
+9:build.xml|1|166f776ebe4|a80|e1ef6f65|d50b815668bd11e8a8030002c8c1274c|0
+3:lib|2|0|0|0|d7eb817e68bd11e8a8030002c8c1274c|0

@@ -1,0 +1,44 @@
+ob1=OBI(cluster=1244)
+ob1.reboot
+ob1.prepare
+ob1.start_check
+ob1.create_client
+create table t1(c1 int primary key,c2 int);
+insert into t1 values(-1,1),(-2,2),(-3,3),(-4,4);
+select * from t1;
+c1	c2
+-4	4
+-3	3
+-2	2
+-1	1
+ob1.fs0.kill -9
+ob1.fs0.kill -6
+1
+ob1.fs0.kill -9
+ob1.fs0.kill -6
+1
+ob1.fs0.kill -9
+ob1.fs0.kill -6
+1
+ob1.fs0.kill -9
+ob1.fs0.kill -6
+1
+ob1.fs0.kill -9
+ob1.fs0.kill -6
+1
+ob1.fs0.kill -9
+ob1.fs0.kill -6
+1
+ob1.fs0.kill -9
+ob1.fs0.kill -6
+1
+ob1.fs0.kill -9
+ob1.fs0.kill -6
+1
+ob1.fs0.kill -9
+ob1.fs0.kill -6
+1
+ob1.fs0.kill -9
+ob1.fs0.kill -6
+1
+ob1.stop_check

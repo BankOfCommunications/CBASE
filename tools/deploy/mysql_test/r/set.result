@@ -1,0 +1,132 @@
+set a=1;
+ERROR HY000: System variable a Unknown
+set global a=1;
+ERROR HY000: System variable a Unknown
+set b=str;
+ERROR HY000: Unknown value str
+set c='str';
+ERROR HY000: System variable c Unknown
+set a;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'a' at line 1
+set a=;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near '=' at line 1
+set =;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near '=' at line 1
+set @a=1;
+select @a;
+@a
+1
+set @b=str;
+ERROR HY000: Unknown value str
+set @c='str';
+select @c;
+@c
+str
+set @a=1+@a;
+select @a;
+@a
+2
+set @a= 1 +@a;
+select @a;
+@a
+3
+set @a=1+a;
+ERROR HY000: Unknown value a
+select @a;
+@a
+3
+set @a;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near '@a' at line 1
+set @b=1;
+select @b;
+@b
+1
+set @a=@b;
+select @a;
+@a
+1
+set @a=1;
+select @a;
+@a
+1
+set @b='str';
+select @b;
+@b
+str
+set @c=@a+@b;
+select @c;
+@c
+1
+set @b=2;
+set @c=@a+@b;
+select @c;
+@c
+3
+set @c=@a/@b;
+select @c;
+@c
+0
+set @c=@a-@b;
+select @c;
+@c
+-1
+set @c=@a*@b;
+select @c;
+@c
+2
+set @c=@c/0;
+ERROR 22012: OB-78: Divided by zero
+select @c;
+@c
+2
+set @a=100;
+set @a=@a%100;
+select @a;
+@a
+0
+set @status=1;
+conn1
+set max_allowed_packet=2048000;
+set ob_read_consistency=0;
+show variables like '%max_allowed_packet%';
+variable_name	value
+max_allowed_packet	2048000
+show variables like '%ob_read_consistency%';
+variable_name	value
+ob_read_consistency	0
+conn2
+show variables like '%max_allowed_packet%';
+variable_name	value
+max_allowed_packet	1048576
+show variables like '%ob_read_consistency%';
+variable_name	value
+ob_read_consistency	3
+conn1
+set global max_allowed_packet=2048000;
+set global ob_read_consistency=0;
+show variables like '%max_allowed_packet%';
+variable_name	value
+max_allowed_packet	2048000
+show variables like '%ob_read_consistency%';
+variable_name	value
+ob_read_consistency	0
+conn2
+show variables like '%max_allowed_packet%';
+variable_name	value
+max_allowed_packet	1048576
+show variables like '%ob_read_consistency%';
+variable_name	value
+ob_read_consistency	3
+create conn3
+show variables like '%max_allowed_packet%';
+variable_name	value
+max_allowed_packet	2048000
+show variables like '%ob_read_consistency%';
+variable_name	value
+ob_read_consistency	0
+drop table if exists t1;
+create table t1(c1 varchar(20) primary key, c2 int);
+replace into t1 values('s1',1);
+set @a='s1';
+update t1 set c2=0 where c1=@a;
+drop table t1;

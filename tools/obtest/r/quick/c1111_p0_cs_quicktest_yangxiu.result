@@ -1,0 +1,68 @@
+ob1=OBI(cluster=1111,use_fms=0);
+ob1.reboot;
+ob1.source include/merge.inc;
+ob1.major_freeze;
+ob1.check_cs_version 2;
+ob1.mysql create table t1(pk1 int , pk2 varchar, pk3 datetime, a int, b varchar, c datetime, primary key(pk1,pk2,pk3));
+ob1.mysql create table t2(pk1 int , pk2 varchar, pk3 timestamp, pk4 int, b varchar, c datetime, primary key(pk1,pk2,pk3,pk4)) TABLET_MAX_SIZE=500,EXPIRE_INFO='b=''Test''';
+ob1.mysql select * from t1;
+ob1.mysql select * from t1 where pk1=1 and pk2=2 and pk3=3;
+ob1.create_client;
+ob1.prepare;
+select * from t1 where pk2 like '%test%' order by pk1 desc limit 10;
+pk1	pk2	pk3	a	b	c
+100	test100	2012-12-12 12:00:00 100	test100	2013-12-12 12:00:00
+99	test99	2012-12-12 12:00:00 100	test99	2013-12-12 12:00:00
+98	test98	2012-12-12 12:00:00 100	test98	2013-12-12 12:00:00
+97	test97	2012-12-12 12:00:00 100	test97	2013-12-12 12:00:00
+96	test96	2012-12-12 12:00:00 100	test96	2013-12-12 12:00:00
+95	test95	2012-12-12 12:00:00 100	test95	2013-12-12 12:00:00
+94	test94	2012-12-12 12:00:00 100	test94	2013-12-12 12:00:00
+93	test93	2012-12-12 12:00:00 100	test93	2013-12-12 12:00:00
+92	test92	2012-12-12 12:00:00 100	test92	2013-12-12 12:00:00
+91	test91	2012-12-12 12:00:00 100	test91	2013-12-12 12:00:00
+select count(*) from t1;
+count(*)
+100
+select count(*) from t2;
+count(*)
+100
+alter system set unmerge_if_unchanged='False' server_type=chunkserver;
+ob1.start_check;
+ob1.major_freeze;
+ob1.check_cs_version 3;
+ob1.stop_check;
+select count(*) from t1;
+count(*)
+100
+select count(*) from t2;
+count(*)
+100
+alter system set unmerge_if_unchanged='True' server_type=chunkserver;
+ob1.major_freeze;
+ob1.cs0.restart;
+ob1.check_cs_version 4;
+select count(*) from __all_server;
+count(*)
+4
+alter system set minor_num_limit=8 server_type=updateserver;
+ob1.minor_freeze;
+ob1.minor_freeze;
+ob1.minor_freeze;
+ob1.minor_freeze;
+ob1.minor_freeze;
+ob1.major_freeze;
+ob1.check_cs_version 5;
+select count(*) from t1;
+count(*)
+200
+ob1.major_freeze;
+ob1.check_cs_version 6;
+ob1.mysql alter system set active_mem_limit='$mem$unit' server_type=updateserver;
+ob1.ups_admin -t store_memtable;
+ob1.major_freeze;
+ob1.check_cs_version 7;
+drop table t1;
+drop table t2;
+ob1.major_freeze;
+ob1.check_cs_version 8;

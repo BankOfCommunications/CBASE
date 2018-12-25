@@ -1,0 +1,137 @@
+drop table if exists t1, t2;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',3),(4,'d',4),(5,'e',5),(6,'f',6),(7,'g',7),(8,'h',8),(9,'i',9),(10,'j',10);
+create table t2( a int primary key,b varchar(255),c int);
+prepare stmt1 from select * from t1 where a=? for update when row_count(update t1 set b='modify' where a=? when row_count(insert into t2 values(?,'t2',10)) =1 ) = 1;
+set @x=4;
+execute stmt1 using @x,@x,@x;
+a	b	c
+4	modify	4
+drop table t2;
+create table t2( a int primary key,b varchar(255),c int);
+set @x=5;
+execute stmt1 using @x,@x,@x;
+a	b	c
+5	modify	5
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	3
+4	modify	4
+5	modify	5
+6	f	6
+7	g	7
+8	h	8
+9	i	9
+10	j	10
+select * from t2;
+a	b	c
+5	t2	10
+deallocate prepare stmt1;
+drop table t1,t2;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',3),(4,'d',4),(5,'e',5),(6,'f',6),(7,'g',7),(8,'h',8),(9,'i',9),(10,'j',10);
+create table t2( a int primary key,b varchar(255),c int);
+prepare stmt1 from select * from t1 where a=? for update when row_count(update t1 set b='modify' where a=? when row_count(insert into t2 values(?,'t2',10))=1) = 1;
+set @x=4;
+execute stmt1 using @x,@x,@x;
+a	b	c
+4	modify	4
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',3),(4,'d',4),(5,'e',5),(6,'f',6),(7,'g',7),(8,'h',8),(9,'i',9),(10,'j',10);
+set @x=5;
+execute stmt1 using @x,@x,@x;
+a	b	c
+5	modify	5
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	3
+4	d	4
+5	modify	5
+6	f	6
+7	g	7
+8	h	8
+9	i	9
+10	j	10
+deallocate prepare stmt1;
+drop table t1,t2;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',3),(4,'d',4),(5,'e',5),(6,'f',6),(7,'g',7),(8,'h',8),(9,'i',9),(10,'j',10);
+create table t2( a int primary key,b varchar(255),c int);
+prepare stmt1 from select * from t1 where a=? for update when row_count(update t1 set b='modify' where a=? when row_count(insert into t2 values(?,'t2',10))=1) = 1;
+set @x=4;
+execute stmt1 using @x,@x,@x;
+a	b	c
+4	modify	4
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',3),(4,'d',4),(5,'e',5),(6,'f',6),(7,'g',7),(8,'h',8),(9,'i',9),(10,'j',10);
+set @x=5;
+execute stmt1 using @x,@x,@x;
+a	b	c
+5	modify	5
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	3
+4	d	4
+5	modify	5
+6	f	6
+7	g	7
+8	h	8
+9	i	9
+10	j	10
+select * from t2;
+a	b	c
+4	t2	10
+5	t2	10
+deallocate prepare stmt1;
+drop table t1,t2;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',3),(4,'d',4),(5,'e',5),(6,'f',6),(7,'g',7),(8,'h',8),(9,'i',9),(10,'j',10);
+create table t2( a int primary key,b varchar(255),c int);
+prepare stmt1 from select * from t1 where a=? for update when row_count(update t1 set b='modify' where a=? when row_count(insert into t2 values(?,'t2',10)) =1) = 1;
+set @x=4;
+execute stmt1 using @x,@x,@x;
+a	b	c
+4	modify	4
+drop table t1;
+set @x=5;
+execute stmt1 using @x,@x,@x;
+ERROR 42S02: table 't1' does not exist
+select * from t2;
+a	b	c
+4	t2	10
+deallocate prepare stmt1;
+drop table t2;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',3),(4,'d',4),(5,'e',5),(6,'f',6),(7,'g',7),(8,'h',8),(9,'i',9),(10,'j',10);
+create table t2( a int primary key,b varchar(255),c int);
+prepare stmt1 from select * from t1 where a=? for update when row_count(update t1 set b='modify' where a=? when row_count(insert into t2 values(?,'t2',10)) =1) = 1;
+set @x=4;
+execute stmt1 using @x,@x,@x;
+a	b	c
+4	modify	4
+drop table t2;
+set @x=5;
+execute stmt1 using @x,@x,@x;
+ERROR 42S02: table 't2' does not exist
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	3
+4	modify	4
+5	e	5
+6	f	6
+7	g	7
+8	h	8
+9	i	9
+10	j	10
+deallocate prepare stmt1;
+drop table t1;

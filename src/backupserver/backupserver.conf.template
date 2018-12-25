@@ -1,0 +1,19 @@
+[public]
+task_queue_size=10000
+task_thread_count=8
+io_thread_count=8
+#second
+network_timeout=30
+#millisecond
+task_left_time=300
+#java home
+java_home=/home/yunti/java-current/
+[hadoop]
+#hdfs config
+hdfs_conf_dir=/home/admin/config
+#hadoop home
+hadoop_home=/home/yunti/hadoop-current/
+#mem use to cache hadoop meta (bytes)
+mem_limit=10000000
+#buffer use to read file from yunti in one work thread, so total memory is buf_size * task_thread_count (bytes)
+buf_size=64000000

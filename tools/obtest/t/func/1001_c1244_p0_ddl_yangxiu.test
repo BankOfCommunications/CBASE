@@ -1,0 +1,73 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.cs3.set status=disable;
+deploy ob1.ms3.set status=disable;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+
+deploy ob1.source include/merge.inc;
+deploy ob1.source include/migrate.inc;
+
+deploy ob1.create_client;
+
+create table t1(a int primary key,b int);
+sleep 60;
+
+insert into t1 values(1,1),(-1,-1),(0,1);
+select * from t1;
+
+alter table t1 add c varchar(20);
+
+deploy ob1.major_freeze;
+deploy ob1.check_cs_version 2,3;
+
+select * from t1;
+
+alter table t1 drop column  b;
+
+deploy ob1.major_freeze;
+
+deploy ob1.check_cs_version 3,3;
+
+deploy ob1.cs0.stop;
+sleep 10;
+
+select * from t1;
+
+deploy ob1.cs3.set status=enable;
+deploy ob1.ms3.set status=enable;
+
+deploy ob1.ms3.start;
+deploy ob1.cs3.start;
+
+create table t2 (a int primary key,b int);
+sleep 60;
+
+deploy ob1.switch_cluster ob2;
+
+drop table t1;
+
+create table t3(a int primary key,b int);
+sleep 60;
+
+insert into t3 values(1,1),(-1,-1);
+
+deploy ob1.stop;
+sleep 20;
+
+deploy ob1.nstart;
+
+select * from t2;
+select * from t3;
+
+
+
+ 
+
+
+
+

@@ -1,0 +1,50 @@
+deploy ob1=OBI(cluster=1244);
+
+deploy ob1.reboot;
+sleep 20;
+
+deploy ob1.prepare;
+deploy ob1.start_check;
+
+deploy ob1.mysql alter system set location_cache_timeout='5s' server_type=mergeserver;
+
+#rm obdatasource 
+deploy ob1.sh rm -rf ~/logs/obdatasource/*;
+
+deploy ob1.create_client;
+create table t1(a int primary key,b int);
+
+--disable_query_log
+--disable_result_log
+let $cnt=100;
+while($cnt)
+{
+	eval insert into t1 values($cnt,$cnt);
+	eval select * from t1 where a = $cnt;
+	if($cnt == 1)
+	{
+		deploy ob1.cs3.restart;
+		sleep 10;
+	}
+	if($cnt == 25)
+	{
+		deploy ob1.cs2.restart;
+		sleep 10;
+	}
+	if($cnt == 50)
+	{
+		deploy ob1.cs0.restart;
+		sleep 10;
+	}
+	if($cnt == 75)
+	{
+		deploy ob1.cs1.restart;
+		sleep 10;
+	}
+	dec $cnt;
+}
+
+#check client is error
+let $a = deploy_get_value(ob1.sh_p if grep ERROR ~/logs/obdatasource/*; then echo false; else echo true;fi);
+
+deploy ob1.stop_check;

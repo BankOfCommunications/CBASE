@@ -1,0 +1,45 @@
+deploy ob1=OBI(cluster=1244);
+
+deploy ob1.reboot;
+sleep 10;
+
+deploy ob1.source include/merge.inc;
+sleep 10;
+
+#sql
+deploy ob1.create_client;
+create table t1 (a int primary key,b int,c int) EXPIRE_INFO='b < 0';
+insert into t1 values(1,1,-1),(2,1,0),(5,0,2),(8,2,-1),(0,10,2);
+
+select * from t1;
+
+update t1 set b=b-2 where a=1;
+update t1 set b=b-2 where a=8;
+
+#merge
+deploy ob1.major_freeze;
+sleep 10;
+deploy ob1.check_cs_version 2;
+
+select * from t1;
+
+#drop the column;
+alter table t1 drop column b;
+
+#sql
+insert into t1 values(1000,-1),(20000,2);
+
+#merge
+deploy ob1.major_freeze;
+sleep 10;
+deploy ob1.check_cs_version 3;
+
+select * from t1;
+
+
+
+
+
+
+
+

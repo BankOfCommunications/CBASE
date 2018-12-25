@@ -1,0 +1,181 @@
+////===================================================================
+ //
+ // cs_blockreader.cpp / hash / common / Oceanbase
+ //
+ // Copyright (C) 2010 Taobao.com, Inc.
+ //
+ // Created on 2010-08-17 by Yubai (yubai.lk@taobao.com) 
+ //
+ // -------------------------------------------------------------------
+ //
+ // Description
+ //
+ //
+ // -------------------------------------------------------------------
+ // 
+ // Change Log
+ //
+////====================================================================
+
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <pthread.h>
+#include <new>
+#include <algorithm>
+#include "ob_define.h"
+#include "cs_block_reader.h"
+
+namespace oceanbase
+{
+  namespace chunkserver
+  {
+    using namespace common;
+    BlockReader::BlockReader() : inited_(false), memblock_cache_(NULL),
+                                cur_memblock_(NULL), cur_memblock_pos_(0),
+                                cur_memblock_handle_(0)
+    {
+      pthread_mutex_init(&mutex_, NULL);
+    }
+
+    BlockReader::~BlockReader()
+    {
+      pthread_mutex_destroy(&mutex_);
+    }
+
+    int BlockReader::init(MemBlockCache *memblock_cache, const int64_t max_cache_num, const int64_t min_gc_timeo)
+    {
+      int ret = OB_SUCCESS;
+      MutexLocker locker(mutex_);
+      if (inited_)
+      {
+        TBSYS_LOG(WARN, "have already inited");
+        ret = OB_ERROR;
+      }
+      else if (NULL == memblock_cache)
+      {
+        TBSYS_LOG(WARN, "invalid param");
+        ret = OB_ERROR;
+      }
+      else if (OB_SUCCESS != fileinfo_cache_.init(max_cache_num, min_gc_timeo))
+      {
+        TBSYS_LOG(WARN, "init fileinfo cache fail");
+        ret = OB_ERROR;
+      }
+      else
+      {
+        memblock_cache_ = memblock_cache;
+        inited_ = true;
+      }
+      return ret;
+    }
+
+    int BlockReader::destroy()
+    {
+      int ret = OB_SUCCESS;
+      MutexLocker locker(mutex_);
+      if (!inited_)
+      {
+        TBSYS_LOG(WARN, "have not inited");
+      }
+      else if (OB_SUCCESS != fileinfo_cache_.destroy())
+      {
+        TBSYS_LOG(WARN, "destroy fileinfo cache fail");
+        ret = OB_ERROR;
+      }
+      else
+      {
+        if (NULL != cur_memblock_)
+        {
+          memblock_cache_->revert(cur_memblock_handle_);
+        }
+        inited_ = false;
+        memblock_cache_ = NULL;
+      }
+      return ret;
+    }
+
+    int BlockReader::pread(uint64_t sstable_id, int64_t offset, int64_t nbyte,
+                          uint64_t &memblock_handle, int64_t &data_pos)
+    {
+      int ret = OB_SUCCESS;
+      ReadBuffer read_buffer;
+      FileInfo *file_info = NULL;
+      if (!inited_)
+      {
+        TBSYS_LOG(WARN, "have not inited");
+        ret = OB_ERROR;
+      }
+      else if (0 >= nbyte)
+      {
+        TBSYS_LOG(WARN, "invalid param sstable_id=%lu offset=%ld nbyte=%ld", sstable_id, offset, nbyte);
+        ret = OB_ERROR;
+      }
+      else if (!get_read_buf_(offset, nbyte, read_buffer))
+      {
+        TBSYS_LOG(WARN, "get read buffer fail sstable_id=%lu offset=%ld nbyte=%ld", sstable_id, offset, nbyte);
+        ret = OB_ERROR;
+      }
+      else if (NULL == (file_info = fileinfo_cache_.get_fileinfo(sstable_id)))
+      {
+        TBSYS_LOG(WARN, "get file info fail sstable_id=%lu offset=%ld nbyte=%ld", sstable_id, offset, nbyte);
+        ret = OB_ERROR;
+      }
+      else
+      {
+        int64_t read_ret = 0;
+        if (read_buffer.read_size != (read_ret = ::pread(file_info->get_fd(), read_buffer.read_buffer,
+                                                        read_buffer.read_size, read_buffer.read_offset)))
+        {
+          TBSYS_LOG(WARN, "pread file fail errno=%u fd=%d read_ret=%ld read_buffer=%p read_size=%ld read_offset=%ld",
+                    errno, file_info->get_fd(), read_ret, read_buffer.read_buffer, read_buffer.read_size, read_buffer.read_offset);
+          ret = OB_ERROR;
+        }
+        else
+        {
+          memblock_handle = cur_memblock_handle_;
+          data_pos = read_buffer.data_pos;
+        }
+        fileinfo_cache_.revert_fileinfo(sstable_id);
+      }
+      return ret;
+    }
+
+    bool BlockReader::get_read_buf_(int64_t offset, int64_t nbyte, ReadBuffer &read_buffer)
+    {
+      bool bret = true;
+      MutexLocker locker(mutex_);
+      if (NULL == cur_memblock_
+          || cur_memblock_pos_ + nbyte > memblock_cache_->get_block_size())
+      {
+        uint64_t handle_tmp = 0;
+        char *memblock_tmp = NULL;
+        if (NULL != cur_memblock_)
+        {
+          memblock_cache_->revert(cur_memblock_handle_);
+        }
+        if (OB_SUCCESS == memblock_cache_->alloc(handle_tmp)
+            && NULL != (memblock_tmp = memblock_cache_->get(handle_tmp)))
+        {
+          cur_memblock_handle_ = handle_tmp;
+          cur_memblock_ = memblock_tmp;
+          cur_memblock_pos_ = 0;
+        }
+        else
+        {
+          bret = false;
+        }
+      }
+      if (bret)
+      {
+        read_buffer.read_offset = offset;
+        read_buffer.read_size = nbyte;
+        read_buffer.read_buffer = cur_memblock_ + cur_memblock_pos_;
+        read_buffer.data_pos = cur_memblock_pos_;
+        cur_memblock_pos_ += nbyte;
+      }
+      return bret;
+    }
+  }
+}
+

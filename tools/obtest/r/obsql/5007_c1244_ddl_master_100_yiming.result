@@ -1,0 +1,16 @@
+ob1=OBI(cluster=1244, ct=obsqlclient)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.register obsql
+ob1.ct0.sync
+ob1.ct0.stop
+ob1.ct0.start ddl.test
+running
+ob1.ct0.stop
+ob2.sql_succ_query_count
+0
+0
+0
+0

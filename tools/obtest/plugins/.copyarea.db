@@ -1,0 +1,7 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\obtest\plugins
+2
+3
+b:proxyserver|2|0|0|0|280c051a68c811e8a8030002c8c1274c|0
+9:importcli|2|0|0|0|2eac057268c811e8a8030002c8c1274c|0
+c:importserver|2|0|0|0|314c059a68c811e8a8030002c8c1274c|0

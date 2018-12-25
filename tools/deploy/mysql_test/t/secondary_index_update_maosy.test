@@ -1,0 +1,659 @@
+#update 
+--disable_warnings 
+drop table if exists t1,t2;
+--enable_warnings
+
+set ob_query_timeout=30000000;
+create table t1 (c1 int ,c2 decimal(3,2),c3 double ,c4 datetime ,c5 bool,c6 real ,c7 varchar(8),c8 decimal(4,3),c9 int ,primary key (c1,c2));
+insert into t1 values(1,1.23,1.234587,'2015-05-05 12:00:00',1,1.2324,'subeima',3.125,1),(2,1.23,1.234587,'2015-05-05 12:00:00',1,1.2334324,'su2343a',1.659,5),(3,1.21,1.2345344,'2085-02-28 18:00:00',1,1.2324,'hellokitty',5.987,2);
+select * from t1;
+create index index0 on t1 (c6,c3,c8) storing(c9,c5,c4);
+create index index1 on t1 (c4,c9,c2,c6,c5) ;
+create index index2 on t1 (c8,c2,c3,c1) storing(c9,c5,c6,c4);
+create index index3 on t1 (c6,c9,c1,c3) storing(c7,c5,c8);
+create index index4 on t1 (c8,c3,c6,c2) storing(c4,c7,c5);
+
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+
+
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 700
+
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+--let $table_head =__
+--let $table_end =__idx__index0
+--let $table_name=$table_head$n$table_end
+echo $table_name;
+#--real_sleep 600
+eval select * from $table_name;
+
+--let $table_end1=__idx__index1
+--let $table_name1=$table_head$n$table_end1
+eval select * from $table_name1;
+
+--let $table_end2=__idx__index2
+--let $table_name2=$table_head$n$table_end2
+eval select * from $table_name2;
+
+--let $table_end3=__idx__index3
+--let $table_name3=$table_head$n$table_end3
+eval select * from $table_name3;
+--let $table_end4=__idx__index4
+--let $table_name4=$table_head$n$table_end4
+eval select * from $table_name4;
+#3101
+update t1 set c9=12 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3102,3103
+update t1 set c4= '5045-01-08 15:00:55' where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3104 decimal type
+update t1 set c8 = 1.1 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3104 varchar type
+update t1 set c7='ontime' where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3104 double type
+update t1 set c3=1.5698 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3105 calculate primary key 
+update t1 set c9 =7*8 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3106 calculate index cloumn
+update t1 set c3=1.235*12.54 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3107 calculate storing column 
+update t1 set c6 =8/15.28 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3108 calculate decimal column 
+update t1 set c8 = 5/9 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3109 cloumn +number primary key ,3110,3111
+update t1 set c9= c1+8 where c1=3 and c2=1.21;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3112 decimal
+--error 58
+update t1 set c8=c2+18 where c1=3 and c2=1.21;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3112 double 
+update t1 set c6=c3*5.396 where c1=3 and c2=1.21;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3114//////////////////////////////////////////////////////////////3
+#3101
+update t1 set c9=122,c3=7.86 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3102,3103
+update t1 set c4= '4445-01-08 12:00:55' where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3104 decimal type
+update t1 set c8 = 1.131,c6=7.892 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3104 varchar type
+update t1 set c7='alittlegril',c8=4.554 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3104 double type
+update t1 set c3=3.38565 ,c6=8.66842 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3105 calculate primary key 
+update t1 set c9 =9/7,c3=4.56*7.89 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3106 calculate index cloumn
+update t1 set c3=1.2365655*12.54 ,c6=7.58/9.5412 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3107 calculate storing column 
+update t1 set c6 =8/18 ,c5=8-8 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3108 calculate decimal column
+--error 58
+update t1 set c8 = 4569/9 ,c9=87*554 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3109 cloumn +number primary key ,3110,3111
+update t1 set c9= c1+123,c6=c3-5.941 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3112 decimal
+update t1 set c8=c2+7.981,c3=c6*5.6561 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3112 double 
+update t1 set c6=c3*4354.96 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+
+#3115 transaction ////////////////////////////////////////////////////////////////////////////////////
+
+#3101
+set autocommit=0;
+update t1 set c9=88 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3a02,3103
+update t1 set c4= '2011-02-13' where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3104 decimal type
+update t1 set c8 = 9.654 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3104 varchar type
+update t1 set c7='during ' where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3104 double type
+update t1 set c3=5.89 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3105 calculate primary key 
+update t1 set c9 =9*5 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3106 calculate index cloumn
+update t1 set c3=8*12.54 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3107 calculate storing column 
+update t1 set c6 =89/3 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3108 calculate decimal column 
+update t1 set c8 = 87/9 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3109 cloumn +number primary key ,3110,3111
+update t1 set c9= c1*88 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3112 decimal
+update t1 set c8=c2+4.56 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3112 double 
+update t1 set c6=c3*5.396 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3114//////////////////////////////////////////////////////////////
+
+#3101
+update t1 set c9=1,c3=0 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3102,3103
+update t1 set c4= '4445-01-08 12:00:55' , c5=0 where c1=1  and c2 =1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3104 decimal type
+update t1 set c8 = 1.131,c6=7.892 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3104 varchar type
+update t1 set c7='alittlegril',c8=4.554 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3104 double type
+update t1 set c3=3.38565 ,c6=8.66842 where c1=1 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3105 calculate primary key 
+update t1 set c9 =9/7,c3=4.56*7.89 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3106 calculate index cloumn
+update t1 set c3=1.2365655*12.54 ,c6=7.58/9.5412 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3107 calculate storing column 
+update t1 set c6 =8/18 ,c5=8-8 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3108 calculate decimal column
+--error 58
+update t1 set c8 = 4569/9 ,c9=87*554 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#3109 cloumn +number primary key ,3110,3111
+update t1 set c9= c1+123,c6=c3-5.941 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3112 decimal
+update t1 set c8=c2+7.981,c3=c6*5.6561 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+#3112 double 
+update t1 set c6=c3*4354.96 where c1=2 and c2=1.23;
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+commit ; 
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+
+drop table t1;
+
+#3115
+#create table t1 ( c1 int primary key ,c2 decimal(5,3),c3 double ,c4 varchar(8),c5 float);
+#insert into t1 values (1,1.232,23.43,'hello',3.54),(2,1.232,23.43,'hello',3.54),(3,1.232,23.43,'hello',3.54);
+#create index ili on t1 (c2,c4)storing(c5,c3); 
+#create index ilj on t1 (c2,c4)storing(c5,c3);
+#--echo "merge"
+#$LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+
+#exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+#--real_sleep 600
+
+#let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+
+#--let $table_endj =__idx__ilj
+#--let $table_namej=$table_head$n$table_endj
+#eval select * from $table_namej;
+
+#eval update $table_namej set c5=8.36 where c1=1 and c2=1.23;
+#update t1 set c2=5.65,c4='mimn' where c1=2 and c2=1.23;
+
+#show index on t1;
+

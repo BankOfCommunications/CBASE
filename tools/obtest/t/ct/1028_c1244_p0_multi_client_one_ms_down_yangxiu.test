@@ -1,0 +1,28 @@
+deploy ob1=OBI(cluster=1244,ct_num=2);
+deploy ob1.reboot;
+
+deploy ob1.prepare;
+deploy ob1.create_client;
+deploy ob1.start_check;
+
+create table t1(c1 int primary key,c2 int);
+
+deploy ob1.ct0.sh rm -rf ~/.obdatasource/*;
+deploy ob1.ct1.sh rm -rf ~/.obdatasource/*;
+deploy ob1.ct0.reboot;
+deploy ob1.ct1.reboot;
+
+#stop one ms
+sleep 10;
+deploy ob1.ms1.stop;
+sleep 10;
+
+deploy ob1.ct0.exist;
+deploy ob1.ct1.exist;
+
+sleep 100;
+
+deploy ob1.ct0.stop;
+deploy ob1.ct1.stop;
+
+deploy ob1.stop_check;

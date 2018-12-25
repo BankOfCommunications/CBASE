@@ -1,0 +1,16 @@
+select @@version_comment limit 1;
+@@version_comment
+ob_version_info
+SELECT @@session.auto_increment_increment;
+@@session.auto_increment_increment
+1
+SHOW COLLATION;
+Collation	Charset	Id	Default	Compiled	Sortlen
+binary	binary	63	Yes	Yes	1
+SHOW CHARACTER SET;
+Charset	Description	Default collation	Maxlen
+binary	Binary pseudo charset	binary	1
+SET NAMES latin1;
+SELECT @@session.tx_isolation;
+@@session.tx_isolation
+READ-COMMITTED

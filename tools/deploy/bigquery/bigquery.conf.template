@@ -1,0 +1,8 @@
+[bigquerytest]
+#ob_ip = ${proxyserver0.ip}
+#ob_port = ${proxyserver0.port}
+ob_addr = ${ms0.ip}:${ms0.mysql_port} ${ms1.ip}:${ms1.mysql_port} ${ms2.ip}:${ms2.mysql_port}
+
+read_thread_count = ${read_thread_count}
+write_thread_count = ${write_thread_count}
+

@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\sysbench\sysbench\drivers\oracle
+2
+4
+b:Makefile.am|1|166f776288f|379|e498216c|844b3d3268b811e8a8030002c8c1274c|0
+e:CMakeLists.txt|1|166f77628ad|4c|6d96179c|863b3d4e68b811e8a8030002c8c1274c|0
+c:drv_oracle.c|1|166f77628e8|6848|4d7cb804|886b3d6a68b811e8a8030002c8c1274c|0
+b:Makefile.in|1|166f776290a|4254|9f6f3275|8a7b3d8668b811e8a8030002c8c1274c|0

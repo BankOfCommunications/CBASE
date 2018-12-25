@@ -1,0 +1,138 @@
+#insert repalce nested test
+drop table if exists t1;
+create table t1(pk int primary key, c1 int);
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+#case1: insert -> replace, conn1 rollback, conn2 commit
+connection conn1;
+begin;
+send replace into t1 values(1,10) when row_count(insert into t1 values(1,1))=1;
+
+connection conn2;
+--real_sleep 1
+begin;
+send replace into t1 values(1,1000) when row_count(insert into t1 values(1,100))>0;
+
+connection conn1;
+reap;
+rollback;
+select * from t1;
+
+connection conn2;
+reap;
+commit;
+select * from t1;
+drop table t1;
+#case2: insert -> replace, conn1 commit, conn2 commit
+create table t1(pk int primary key, c1 int);
+connection conn1;
+begin;
+send replace into t1 values(1,10),(2,20) when row_count(insert into t1 values(1,1),(2,2))=2;
+
+connection conn2;
+begin;
+--real_sleep 1
+send replace into t1 values(1,1000) when row_count(insert into t1 values(1,100) when row_count(delete from t1 where pk=1)>0)>0;
+
+connection conn1;
+reap;
+commit;
+select * from t1;
+
+connection conn2;
+reap;
+commit;
+select * from t1;
+drop table t1;
+
+#case3: repalce -> delete-> insert ,conn1 commit and conn2 rollback
+create table t1(pk int primary key, c1 int);
+connection conn1;
+begin;
+send insert into t1 values(2,20) when row_count(delete from t1 where pk=2 when row_count(replace into t1 values(1,1),(2,2))=2)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+send insert into t1 values(1,20) when row_count(delete from t1 where pk=1 when row_count(replace into t1 values(3,3),(4,4))=2)=1;
+
+connection conn1;
+reap;
+commit;
+select * from t1;
+
+connection conn2;
+reap;
+rollback;
+select * from t1;
+
+drop table t1;
+
+#case4: repalce -> delete-> insert ,conn1 commit and conn2 commit
+create table t1(pk int primary key, c1 int);
+connection conn1;
+begin;
+send insert into t1 values(2,20) when row_count(delete from t1 where pk=2 when row_count(replace into t1 values(1,1),(2,2))=2)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+send insert into t1 values(1,20) when row_count(delete from t1 where pk=1 when row_count(replace into t1 values(3,3),(4,4))=2)=1;
+
+connection conn1;
+reap;
+commit;
+select * from t1;
+
+connection conn2;
+reap;
+commit;
+select * from t1;
+drop table t1;
+
+#case5: when子句正确，stat语句出错
+create table t1(pk int primary key, c1 int);
+connection conn1;
+begin;
+send insert into t1 values(2,2) when row_count(replace into t1 values(1,10) when row_count(insert into t1 values(1,1))=1)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+send insert into t1 values(3,3) when row_count(replace into t1 values(3,3) when row_count(insert into t1 values(3,3))=1)=1;
+
+connection conn1;
+reap;
+commit;
+select * from t1;
+
+connection conn2;
+--error 5024
+reap;
+commit;
+select * from t1;
+drop table t1;
+
+#case6: when子句错误，stat语句正确
+create table t1(pk int primary key, c1 int);
+connection conn1;
+begin;
+send replace into t1 values(2,2) when row_count(insert into t1 values(1,10) when row_count(insert into t1 values(1,1))=1)<2;
+
+connection conn2;
+begin;
+--real_sleep 1
+send insert into t1 values(4,4) when row_count(replace into t1 values(3,3) when row_count(insert into t1 values(3,3))=1)=1;
+
+connection conn1;
+--error 5024
+reap;
+commit;
+select * from t1;
+
+connection conn2;
+reap;
+commit;
+select * from t1;
+drop table t1;

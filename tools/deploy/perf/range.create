@@ -1,0 +1,9 @@
+### table range_table
+
+create table range_table(
+id            int,
+number        int,
+primary key(id)
+);
+
+

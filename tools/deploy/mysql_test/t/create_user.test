@@ -1,0 +1,45 @@
+--disable_warnings
+drop table if exists t1,t2,t3,t4;
+--enable_warnings
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+
+create user 'u1' identified by 'pass1', 'u2' identified by 'pass2', 'u3' identified by 'pass3', 'u4' identified by 'pass4';
+GRANT SELECT, GRANT OPTION ON test.* TO 'u1';
+# wait ms to get newest privilege information
+--real_sleep 15
+connect (conn2,$OBMYSQL_MS0,u1,pass1,test,$OBMYSQL_PORT);
+
+connection conn2;
+--echo no privilege
+--error 5036
+create user 'u11' identified by 'pass1', 'u12' identified by 'pass2', 'u13' identified by 'pass3', 'u14' identified by 'pass4';
+--echo no privilege
+--error 5036
+drop user 'u3','u4';
+
+connection conn1;
+
+drop user 'u1';
+--echo drop user failed
+--error 5035
+drop user 'u1';
+--echo no privilege
+--error 5036
+drop user 'admin';
+
+
+--echo  user exists
+--error 5050
+create user 'u1' identified by 'pass1', 'u2' identified by 'pass2', 'u3' identified by 'pass3', 'u4' identified by 'pass4';
+
+create user 'create' identified by 'pass1';
+create user 'password' identified by 'pass1';
+create user 'username' identified by 'pass1';
+create user 'status' identified by 'pass1';
+
+
+--echo password must not be empty
+--error 5038
+create user 'u21' identified by '';

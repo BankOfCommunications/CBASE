@@ -1,0 +1,86 @@
+drop table if exists c,d,e,f,g,h;
+create table c (c1 int primary key, c2 varchar(8));
+create table d (d1 int primary key, d2 varchar(8));
+create table e (e1 int primary key, e2 varchar(8),e3 varchar(8));
+create table f (f1 int primary key, f2 varchar(8));
+create table g (g1 int primary key, g2 varchar(8));
+create table h (h1 int primary key, h2 varchar(8));
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create index c_index on c(c2);
+create index d_index on d(d2);
+create index e_index on e(e2);
+create index f_index on f(f2);
+create index g_index on g(g2);
+create index h_index on h(h2);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 1200
+show index on c;
+show index on d;
+show index on e;
+show index on f;
+show index on g;
+show index on h;
+begin;
+let $i=1001;
+while($i < 4001) 
+{
+    eval insert into c(c1,c2) values($i,'1');
+    inc $i;
+}
+let $i=1001;
+while($i < 4001) 
+{
+    eval insert into d(d1,d2) values($i,'1');
+    inc $i;
+}
+let $i=1001;
+while($i < 4001) 
+{
+    eval insert into e(e1,e2,e3) values($i,'1','1');
+    inc $i;
+}
+let $i=1001;
+while($i < 4001) 
+{
+    eval insert into f(f1,f2) values($i,'1');
+    inc $i;
+}
+let $i=1001;
+while($i < 4001) 
+{
+    eval insert into g(g1,g2) values($i,'1');
+    inc $i;
+}
+let $i=1001;
+while($i < 4001) 
+{
+    eval insert into h(h1,h2) values($i,'1');
+    inc $i;
+}
+insert into c values(1,1);
+insert into d values(10,2);
+insert into e values(100,3,3);	
+insert into f values(1000,4);	
+insert into g values(10000,5);	
+insert into h values(100000,6);
+select * from c where c1 = 1;
+select * from d where d1 = 10;
+select * from e where e1 = 100;
+select * from f where f1 = 1000;	
+select * from g where g1 = 10000;
+select * from h where h1 = 100000;	
+select * from c where c2 = 1;
+select * from d where d2 = 2;
+select * from e where e2 = 3;
+select * from f where f2 = 4;	
+select * from g where g2 = 5;
+select * from h where h2 = 6;	
+select * from c ;
+select * from d ;
+select * from e ;
+select * from f ;	
+select * from g ;
+select * from h ;		
+commit;

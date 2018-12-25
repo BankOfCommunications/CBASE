@@ -1,0 +1,26 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tests\chunkserver
+2
+16
+22:test_block_cache_reader_loader.cpp|1|166f775ab54|499c|918f5c19|b51b0c3268b411e8a8030002c8c1274c|0
+12:mock_root_server.h|1|166f775abf0|223c|7897685d|b7ab0c4e68b411e8a8030002c8c1274c|0
+d:test_helper.h|1|166f775ac15|1418|feb98bac|bc4b0c8668b411e8a8030002c8c1274c|0
+17:test_tablet_manager.cpp|1|166f775ac32|3991|1fc2cfff|be3b0ca268b411e8a8030002c8c1274c|0
+12:collect_schema.ini|1|166f775ac51|2ee|d6660603|c02b0cbe68b411e8a8030002c8c1274c|0
+18:test_mv_tablet_image.cpp|1|166f775ac6e|5fab|8b4c1a67|c22b0cda68b411e8a8030002c8c1274c|0
+16:test_fileinfocache.cpp|1|166f775ae21|99c|3e8fc21|c42b0cf668b411e8a8030002c8c1274c|0
+16:test_ups_blacklist.cpp|1|166f775ae3e|deb|10741408|c63b0d1268b411e8a8030002c8c1274c|0
+1b:test_read_ups_blacklist.cpp|1|166f775ae53|e02|8fb91d3c|c83b0d2e68b411e8a8030002c8c1274c|0
+6:schema|2|0|0|0|cbcb0d5668b411e8a8030002c8c1274c|0
+15:test_sql_rpc_stub.cpp|1|166f775ae6e|112a|6340b381|d68b0de668b411e8a8030002c8c1274c|0
+14:test_query_agent.cpp|1|166f775ae80|88e4|78d4008d|d8ab0e0268b411e8a8030002c8c1274c|0
+f:test_helper.cpp|1|166f775ae92|41a1|a813ab0a|dabb0e1e68b411e8a8030002c8c1274c|0
+b:Makefile.am|1|166f775ac02|a2f|eeb875fc|b9db0c6a68b411e8a8030002c8c1274c|0
+4:data|2|0|0|0|de2b0e4668b411e8a8030002c8c1274c|0
+18:test_root_server_rpc.cpp|1|166f775af76|246b|d712f456|e4ab0e9e68b411e8a8030002c8c1274c|0
+17:test_tablet_migrate.cpp|1|166f775af4c|3734|a18db78|e2ab0e8268b411e8a8030002c8c1274c|0
+15:test_disk_manager.cpp|1|166f775afba|7df|e918f91|e6bb0eba68b411e8a8030002c8c1274c|0
+12:test_disk_path.cpp|1|166f775afe4|25bc|fbdfebf4|e8db0ed668b411e8a8030002c8c1274c|0
+1c:test_tablet_merge_filter.cpp|1|166f775b00d|4263|d0c08eb7|eaeb0ef268b411e8a8030002c8c1274c|0
+18:test_root_rpc_client.cpp|1|166f775b0cd|992|31f7ffad|efcb0f2a68b411e8a8030002c8c1274c|0
+1b:test_tablet_manager_get.cpp|1|166f775b081|8af3|2307ca2b|ecfb0f0e68b411e8a8030002c8c1274c|0

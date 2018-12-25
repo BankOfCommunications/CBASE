@@ -1,0 +1,10 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\testsql\com\etao\obtest\connector
+2
+6
+13:StatementType.class|1|166f77ad3fc|5bd|292a35b6|04dcbf1e68d711e8a8030002c8c1274c|0
+a:Test.class|1|166f77ad563|44f|2a7df438|0b2cbf7268d711e8a8030002c8c1274c|0
+e:BaseTest.class|1|166f77ad52c|224b|8bf2d97e|091cbf5668d711e8a8030002c8c1274c|0
+f:Statement.class|1|166f77ad37d|51f|2e4fe40f|026cbf0268d711e8a8030002c8c1274c|0
+c:Parser.class|1|166f77ad594|ec1|8ab28f70|0d5cbf8e68d711e8a8030002c8c1274c|0
+12:SQLOperation.class|1|166f77ad4f8|17a7|d5144194|06ecbf3a68d711e8a8030002c8c1274c|0

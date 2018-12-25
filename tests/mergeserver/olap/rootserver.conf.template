@@ -1,0 +1,112 @@
+[ob_instances]
+obi_count = 1
+obi0_rs_vip = 10.232.36.33
+obi0_rs_port = 22010
+obi0_read_percentage = 100
+obi0_random_ms = 0
+#obi1_rs_vip = obiobi_1_vip
+#obi1_rs_port = 2500
+#obi1_read_percentage = 0
+#obi1_random_ms = 0
+
+[client]
+BNL_alpha = 9999
+BNL_alpha_denominator = 10000
+BNL_threshold = 4763
+BNL_threshold_denominator = 100
+
+[root_server]
+vip = 10.232.36.33
+port = 22010
+pid_file = ./rootserver.pid
+log_file = ./rootserver.log
+data_dir = ./
+log_level = info
+dev_name = bond0
+
+thread_count = 20
+read_queue_size = 200000
+write_queue_size = 50
+
+log_queue_size = 50
+network_timeout = 1000000
+
+log_dir_path = commitlog
+log_size_mb = 64
+
+state_check_period_us = 500000
+replay_wait_time_us = 5000
+log_sync_limit_kb = 51200
+log_sync_type = 1
+register_times = 10
+register_timeout_us = 2000000
+
+lease_on = 1
+lease_interval_us = 15000000
+lease_reserved_time_us = 10000000
+cs_command_interval_us = 60000000
+# tablet复本数
+tablet_replicas_num = 1
+# default 10ms
+expected_process_us = 10000
+# 启动时新建不存在的表格
+__create_table_in_init = 1
+__safe_copy_count_in_init=1
+# 负载均衡开关，默认1
+__enable_balance = 0
+# 缺失副本复制开关，默认1
+__enable_rereplication = 0
+# 负载均衡线程在上次扫描没有迁移或复制时进入空闲状态，空闲时的睡眠时间，默认30s
+# balance_worker_idle_sleep_sec = 30
+# 进程启动后，启动负载均衡和缺失复本复制前的等待时间，单位秒
+migrate_wait_seconds = 90
+
+[update_server]
+vip = 10.232.36.33
+port = 22030
+ups_inner_port = 22031
+ups_count = 1
+ups0_ip = 10.232.36.33
+ups0_port = 22030
+ups0_inner_port = 22031
+ups0_ms_read_percentage = 100
+ups0_cs_read_percentage = 100
+#ups1_ip = upsups_1_ip
+#ups1_port = 2700
+#ups1_inner_port = 2701
+#ups1_ms_read_percentage = 0
+#ups1_cs_read_percentage = 0
+
+# default 6s
+lease_us = 6000000
+# default 1s
+heartbeat_interval_us = 1000000
+# default 3s
+heartbeat_valid_duration_us = 3000000
+# default 15s
+waiting_reigster_duration_us = 15000000
+
+[schema]
+file_name = ./schema.ini 
+
+[chunk_server]
+# CS的lease有效时间，单位微秒
+lease = 10000000
+# tablet只丢失一个复本时允许延迟复制的延时时间，单位秒
+safe_lost_one_duration = 28800
+# 系统初始化时等待CS汇报完所有复本的时间，单位秒
+wait_init_duration = 60
+# 最大合并时间，超出这个时间则报警，单位秒
+max_merge_duration = 14400
+# CS注册后禁止迁移入sstable的时间，单位秒
+cs_probation_period = 60
+# 每个表的sstable在任意CS上的数目最多允许偏离均值的个数
+balance_tolerance = 10
+# 每个CS最大同时进行的迁入或迁出数。谨慎修改
+max_concurrent_migrate_per_cs = 2
+# 每次扫描迁移任务，每个CS最多保存多少个迁出任务
+max_batch_migrate_out_per_cs = 20
+# 每批次迁移允许的最长超时时间，单位秒。谨慎修改
+max_batch_migrate_timeout = 600
+# 一个tablet发生迁移后的一段时期内不再迁移，单位微秒
+tablet_migrate_disabling_period_us = 60000000

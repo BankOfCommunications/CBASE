@@ -1,0 +1,51 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+
+create table t1(pk int primary key, s varchar);
+
+prepare stmt_insert1 from insert into t1 values(?,?);
+prepare stmt_insert2 from insert into t1 values(?,?),(?,?),(?,?);
+prepare stmt_delete1 from delete from t1 where pk=?; 
+prepare stmt_update from update t1 set s=? where pk=?;
+
+eval set @a=5;
+eval set @b='test1';
+# --affect_rows 1
+execute stmt_insert1 using @a,@b;
+select * from t1;
+
+eval set @a1=7;
+eval set @a2=8;
+eval set @a3=9;
+eval set @b1='test2';
+eval set @b2='test3';
+eval set @b3='test4';
+# --affect_rows 3
+execute stmt_insert2 using @a1,@b1,@a2,@b2,@a3,@b3;
+select * from t1;
+
+eval set @a=7;
+eval set @b='testUpdate';
+# --affect_rows 1
+execute stmt_update using @b,@a;
+select * from t1;
+
+eval set @a=12;
+eval set @b='testUpdate2';
+# --affect_rows 0
+execute stmt_update using @b,@a;
+select * from t1;
+
+eval set @a1=8;
+# --affect_rows 1
+execute stmt_delete1 using @a1;
+select * from t1;
+
+eval set @a1=12;
+# --affect_rows 0
+execute stmt_delete1 using @a1;
+select * from t1;
+
+drop table t1;
+

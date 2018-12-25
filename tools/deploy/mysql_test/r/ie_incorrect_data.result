@@ -1,0 +1,19 @@
+using database test;
+drop table if exists ie_incorrect_data;
+create table ie_incorrect_data
+(
+it0 int,
+it1 int,
+it2 int,
+bg0 bigint,
+bg1 bigint,
+bg2 bigint,
+dc0 decimal(5,2),
+dc1 decimal(5,2),
+dc2 decimal(5,2),
+primary key(it0, bg0, dc0)
+);
+select * from ie_incorrect_data;
+it0	it1	it2	bg0	bg1	bg2	dc0	dc1	dc2
+0	-2147483648	2147483647	95501	-9223372036854775807	9223372036854775807	33.33	44.96	110.61
+5	10015282	2381	95513	16	1003	46.20	299.99	461.00

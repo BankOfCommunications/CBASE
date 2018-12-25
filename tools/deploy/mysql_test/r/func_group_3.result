@@ -1,0 +1,34 @@
+drop table if exists t1,t2;
+create table t1 (USR_ID int not null, MAX_REQ int not null, primary key (USR_ID)) ;
+insert into t1 values (1, 3);
+select count(*) + MAX_REQ - MAX_REQ + MAX_REQ - MAX_REQ + MAX_REQ - MAX_REQ + MAX_REQ - MAX_REQ + MAX_REQ - MAX_REQ from t1 group by MAX_REQ;
+count(*) + MAX_REQ - MAX_REQ + MAX_REQ - MAX_REQ + MAX_REQ - MAX_REQ + MAX_REQ - MAX_REQ + MAX_REQ - MAX_REQ
+1
+select Case When Count(*) < MAX_REQ Then 1 Else 0 End from t1 where t1.USR_ID = 1 group by MAX_REQ;
+Case When Count(*) < MAX_REQ Then 1 Else 0 End
+1
+drop table t1;
+create table t1 (a char(10) primary key, b char(10));
+insert into t1(a) values ('a'),('b'),('c');
+select max(a) from t1;
+max(a)
+c
+drop table t1;
+create table t1 (a int primary key, b int);
+insert into t1(a) values (1);
+select max(a) as b from t1 having b=1;
+b
+1
+select a from t1 having a=1;
+a
+1
+drop table t1;
+CREATE TABLE t1 (a int primary key, b int);
+INSERT INTO t1(a) VALUES (1),(2),(3),(4);
+SELECT MAX(a) FROM t1 WHERE a > 5;
+MAX(a)
+NULL
+SELECT MIN(a) FROM t1 WHERE a < 0;
+MIN(a)
+NULL
+DROP TABLE t1;

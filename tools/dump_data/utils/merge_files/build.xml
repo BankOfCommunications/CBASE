@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+
+<project name="obdumpmerge" default="package">
+
+	<property name="obdumpmerge.root" value="${basedir}" />
+	<property name="build.dir" value="${obdumpmerge.root}/build" />
+	<property name="dist.dir" value="${build.dir}/dist" />
+	<property name="build.classes" value="${build.dir}/classes" />
+	<property name="package.dir" value="${build.dir}/package" />
+	<property name="src" value="${obdumpmerge.root}/src" />
+	<property name="conf.dir" value="${basedir}/conf"/>
+
+	<property name="Name" value="obdumpmerge"/>
+	<property name="name" value="obdumpmerge"/>
+	<property name="version" value="3.1"/>
+	<property name="final.name" value="${name}-${version}"/>
+
+	<property name="build.encoding" value="GB18030"/>
+	<property name="javac.debug" value="on" />
+	<property name="javac.optimize" value="on" />
+	<property name="javac.deprecation" value="off" />
+	<property name="javac.version" value="1.6" />
+	<property name="javac.args" value="" />
+	<property name="javac.args.warnings" value="-Xlint:unchecked" />
+	<property name="version" value="1.0" />
+	<property name="javadoc.link.java" value="http://java.sun.com/javase/6/docs/api/" />
+
+	<path id="classpath">
+		<pathelement location="${build.classes}"/>
+		<fileset dir="lib" includes="*.jar" />
+		<fileset dir="" includes="*.jar" />
+		<pathelement location="${conf.dir}"/>
+	</path>
+
+	<target name="init">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.classes}" />
+
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.dir}/bin" />
+		<mkdir dir="${dist.dir}/conf" />
+	</target>
+
+	<target name="package" depends="jar" description="Build distribution">
+		<copy todir="${dist.dir}/bin">
+			<fileset dir="bin" />
+		</copy>
+		<copy todir="${dist.dir}/conf">
+			<fileset dir="conf" />
+		</copy>
+		<copy file="${build.dir}/${name}-${version}.jar" todir="${dist.dir}" />
+
+	</target>
+
+	<target name="compile" depends="init">
+		<javac 
+			srcdir="${src}" 
+			destdir="${build.classes}" 
+			optimize="${javac.optimize}" 
+			target="${javac.version}" 
+			source="${javac.version}"
+			encoding="${build.encoding}" 
+			debug="${javac.debug}" 
+			>
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar jarfile="${build.dir}/${name}-${version}.jar" basedir="${build.classes}">
+			<fileset dir="${basedir}/conf" includes="merge-default.xml"/>
+			<manifest>
+				<attribute name="Implementation-Title" value="${name}" />
+				<attribute name="Implementation-Version" value="${version}" />
+				<attribute name="Implementation-Vendor" value="wenjing(wenjing.dgh@taobao.com)" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+</project>

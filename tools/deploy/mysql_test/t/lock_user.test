@@ -1,0 +1,23 @@
+--disable_warnings
+drop table if exists t1,t2,t3,t4;
+--enable_warnings
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+
+create user 'u1' identified by 'pass1';
+alter user 'u1' locked;
+
+--real_sleep 15
+
+#--error 5039
+#connect (conn2,$OBMYSQL_MS0,u1,pass1,$OBMYSQL_PORT);
+create user 'u2' identified by 'pass2';
+GRANT SELECT, GRANT OPTION ON test.* TO 'u2';
+--real_sleep 15
+connect (conn3,$OBMYSQL_MS0,u2,pass2,test,$OBMYSQL_PORT);
+
+
+
+
+

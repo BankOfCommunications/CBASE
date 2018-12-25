@@ -1,0 +1,22 @@
+drop table if exists t1,t2,t3,t4,t5,t6,t7,t8;
+create table t1(pk int primary key, b int);
+insert into t1 values(1,1);
+prepare stmt from  select * from t1 where pk = ?;
+set @a=1;
+execute stmt using @a;
+pk	b
+1	1
+drop table t1;
+execute stmt using @a;
+ERROR 42S02: table 't1' does not exist
+execute stmt using @a;
+ERROR HY000: unknown internal error, errno=-1
+create table t1(pk int primary key, b int);
+insert into t1 values(1,1);
+execute stmt using @a;
+pk	b
+1	1
+prepare stmt1 from  select * from t1 where pk = ?;
+set @a=1;
+execute stmt1 using @a;
+ERROR HY000: unknown internal error, errno=-1

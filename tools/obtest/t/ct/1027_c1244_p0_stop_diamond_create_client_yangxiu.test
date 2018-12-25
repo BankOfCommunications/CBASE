@@ -1,0 +1,32 @@
+deploy ob1=OBI(cluster=1244,ct_num=1);
+deploy ob1.reboot;
+sleep 30;
+
+deploy ob1.start_diamond localhost;
+sleep 5;
+deploy ob1.create_client;
+deploy ob1.prepare;
+deploy ob1.start_check;
+
+create table t1(c1 int primary key,c2 int);
+
+#start another client
+deploy ob1.ct0.sh rm -rf ~/.obdatasource/*;
+deploy ob1.ct0.reboot;
+sleep 20;
+
+#stop client
+deploy ob1.ct0.stop;
+
+#stop diamond;
+deploy ob1.stop_diamond;
+sleep 5;
+
+#start diamond
+deploy ob1.ct0.start;
+sleep 10;
+
+deploy ob1.ct0.exist;
+
+
+deploy ob1.stop_check;

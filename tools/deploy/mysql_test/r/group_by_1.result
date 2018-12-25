@@ -1,0 +1,56 @@
+drop table if exists t1,t2,t3;
+CREATE TABLE t1 (pk int primary key, a INT, b INT, c INT DEFAULT 0);
+INSERT INTO t1 (pk,a, b) VALUES (1,3,3), (2,2,2), (3,3,3), (4,2,2), (5,3,3), (6,4,4);
+SELECT 1 FROM t1 ORDER BY COUNT(*);
+1
+1
+SELECT 1 FROM t1 ORDER BY COUNT(*) + 1;
+1
+1
+SELECT 1 FROM t1 ORDER BY COUNT(*) + a;
+1
+1
+SELECT 1 FROM t1 ORDER BY COUNT(*), 1;
+1
+1
+SELECT 1 FROM t1 ORDER BY COUNT(*), a;
+1
+1
+SELECT 1 FROM t1 ORDER BY SUM(a);
+1
+1
+SELECT 1 FROM t1 ORDER BY SUM(a + 1);
+1
+1
+SELECT 1 FROM t1 ORDER BY SUM(a) + 1;
+1
+1
+SELECT 1 FROM t1 ORDER BY SUM(a), b;
+1
+1
+SELECT a FROM t1 ORDER BY COUNT(b);
+a
+3
+DROP TABLE t1;
+CREATE TABLE t1 (
+pk int,
+int_nokey int,
+int_key int,
+varchar_key varchar(1) NOT NULL,
+varchar_nokey varchar(1) NOT NULL,
+PRIMARY KEY (pk)
+);
+INSERT INTO t1 VALUES 
+(1,5,5, 'h','h'),
+(2,1,1, '{','{'),
+(3,1,1, 'z','z'),
+(4,8,8, 'x','x'),
+(5,7,7, 'o','o'),
+(6,3,3, 'p','p'),
+(7,9,9, 'c','c'),
+(8,0,0, 'k','k'),
+(9,6,6, 't','t'),
+(10,0,0,'c','c');
+SELECT COUNT(varchar_key) AS X FROM t1 WHERE pk = 8 having 'foo'='bar';
+X
+drop table t1;

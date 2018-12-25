@@ -1,0 +1,4 @@
+-- fail, Unknown column '3' in 'order clause'
+select user_id, sum(qty) from order_list group by user_id order by 1 desc, 2 asc, 3 asc;
+Unknown column '3' in 'group clause'
+Resolve error!

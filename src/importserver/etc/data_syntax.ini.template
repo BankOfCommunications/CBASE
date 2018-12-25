@@ -1,0 +1,15 @@
+[public]
+table_name=table1
+delim=1
+null_flag=2
+raw_data_field_cnt=
+sstable_block_size=65536
+
+[table1]
+rowkey_desc=0-1,1-1
+
+column_info=16,0
+column_info=17,1
+column_info=18,2
+column_info=19,3
+

@@ -1,0 +1,1095 @@
+drop table if exists sbtest;
+alter system set merge_delay_interval='1s' server_type=chunkserver,min_major_freeze_interval='1s' server_type=updateserver;
+alter system set merge_delay_for_lsync='1s' server_type=chunkserver;
+alter system set min_drop_cache_wait_time='10s' server_type=chunkserver;
+alter system set merge_thread_per_disk=10 server_type=chunkserver;
+alter system set each_tablet_sync_meta=False server_type=chunkserver;
+CREATE TABLE sbtest (id INTEGER  NOT NULL , k integer  DEFAULT '0' NOT NULL, c char(120) DEFAULT '' NOT NULL, pad char(60) DEFAULT '' NOT NULL, PRIMARY KEY  (id) ) ;
+insert 100 rows to ups
+INSERT INTO sbtest(id, k, c, pad) VALUES(1,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(2,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(3,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(4,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(5,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(6,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(7,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(8,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(9,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(10,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(11,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(12,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(13,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(14,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(15,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(16,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(17,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(18,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(19,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(20,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(21,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(22,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(23,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(24,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(25,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(26,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(27,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(28,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(29,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(30,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(31,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(32,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(33,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(34,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(35,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(36,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(37,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(38,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(39,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(40,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(41,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(42,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(43,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(44,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(45,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(46,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(47,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(48,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(49,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(50,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(51,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(52,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(53,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(54,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(55,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(56,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(57,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(58,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(59,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(60,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(61,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(62,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(63,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(64,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(65,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(66,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(67,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(68,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(69,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(70,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(71,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(72,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(73,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(74,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(75,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(76,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(77,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(78,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(79,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(80,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(81,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(82,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(83,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(84,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(85,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(86,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(87,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(88,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(89,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(90,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(91,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(92,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(93,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(94,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(95,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(96,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(97,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(98,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(99,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(100,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+merge
+[major_freeze] err=0
+select * from sbtest where id = 1;
+id	k	c	pad
+1	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 2;
+id	k	c	pad
+2	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 3;
+id	k	c	pad
+3	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 4;
+id	k	c	pad
+4	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 5;
+id	k	c	pad
+5	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 6;
+id	k	c	pad
+6	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 7;
+id	k	c	pad
+7	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 8;
+id	k	c	pad
+8	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 9;
+id	k	c	pad
+9	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 10;
+id	k	c	pad
+10	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 11;
+id	k	c	pad
+11	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 12;
+id	k	c	pad
+12	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 13;
+id	k	c	pad
+13	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 14;
+id	k	c	pad
+14	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 15;
+id	k	c	pad
+15	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 16;
+id	k	c	pad
+16	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 17;
+id	k	c	pad
+17	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 18;
+id	k	c	pad
+18	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 19;
+id	k	c	pad
+19	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 20;
+id	k	c	pad
+20	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 21;
+id	k	c	pad
+21	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 22;
+id	k	c	pad
+22	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 23;
+id	k	c	pad
+23	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 24;
+id	k	c	pad
+24	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 25;
+id	k	c	pad
+25	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 26;
+id	k	c	pad
+26	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 27;
+id	k	c	pad
+27	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 28;
+id	k	c	pad
+28	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 29;
+id	k	c	pad
+29	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 30;
+id	k	c	pad
+30	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 31;
+id	k	c	pad
+31	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 32;
+id	k	c	pad
+32	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 33;
+id	k	c	pad
+33	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 34;
+id	k	c	pad
+34	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 35;
+id	k	c	pad
+35	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 36;
+id	k	c	pad
+36	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 37;
+id	k	c	pad
+37	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 38;
+id	k	c	pad
+38	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 39;
+id	k	c	pad
+39	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 40;
+id	k	c	pad
+40	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 41;
+id	k	c	pad
+41	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 42;
+id	k	c	pad
+42	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 43;
+id	k	c	pad
+43	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 44;
+id	k	c	pad
+44	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 45;
+id	k	c	pad
+45	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 46;
+id	k	c	pad
+46	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 47;
+id	k	c	pad
+47	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 48;
+id	k	c	pad
+48	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 49;
+id	k	c	pad
+49	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 50;
+id	k	c	pad
+50	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 51;
+id	k	c	pad
+51	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 52;
+id	k	c	pad
+52	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 53;
+id	k	c	pad
+53	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 54;
+id	k	c	pad
+54	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 55;
+id	k	c	pad
+55	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 56;
+id	k	c	pad
+56	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 57;
+id	k	c	pad
+57	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 58;
+id	k	c	pad
+58	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 59;
+id	k	c	pad
+59	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 60;
+id	k	c	pad
+60	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 61;
+id	k	c	pad
+61	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 62;
+id	k	c	pad
+62	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 63;
+id	k	c	pad
+63	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 64;
+id	k	c	pad
+64	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 65;
+id	k	c	pad
+65	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 66;
+id	k	c	pad
+66	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 67;
+id	k	c	pad
+67	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 68;
+id	k	c	pad
+68	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 69;
+id	k	c	pad
+69	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 70;
+id	k	c	pad
+70	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 71;
+id	k	c	pad
+71	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 72;
+id	k	c	pad
+72	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 73;
+id	k	c	pad
+73	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 74;
+id	k	c	pad
+74	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 75;
+id	k	c	pad
+75	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 76;
+id	k	c	pad
+76	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 77;
+id	k	c	pad
+77	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 78;
+id	k	c	pad
+78	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 79;
+id	k	c	pad
+79	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 80;
+id	k	c	pad
+80	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 81;
+id	k	c	pad
+81	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 82;
+id	k	c	pad
+82	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 83;
+id	k	c	pad
+83	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 84;
+id	k	c	pad
+84	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 85;
+id	k	c	pad
+85	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 86;
+id	k	c	pad
+86	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 87;
+id	k	c	pad
+87	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 88;
+id	k	c	pad
+88	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 89;
+id	k	c	pad
+89	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 90;
+id	k	c	pad
+90	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 91;
+id	k	c	pad
+91	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 92;
+id	k	c	pad
+92	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 93;
+id	k	c	pad
+93	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 94;
+id	k	c	pad
+94	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 95;
+id	k	c	pad
+95	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 96;
+id	k	c	pad
+96	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 97;
+id	k	c	pad
+97	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 98;
+id	k	c	pad
+98	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 99;
+id	k	c	pad
+99	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 100;
+id	k	c	pad
+100	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+insert another 100 rows to ups
+INSERT INTO sbtest(id, k, c, pad) VALUES(101,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(102,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(103,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(104,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(105,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(106,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(107,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(108,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(109,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(110,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(111,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(112,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(113,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(114,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(115,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(116,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(117,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(118,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(119,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(120,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(121,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(122,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(123,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(124,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(125,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(126,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(127,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(128,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(129,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(130,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(131,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(132,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(133,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(134,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(135,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(136,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(137,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(138,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(139,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(140,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(141,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(142,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(143,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(144,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(145,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(146,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(147,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(148,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(149,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(150,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(151,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(152,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(153,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(154,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(155,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(156,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(157,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(158,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(159,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(160,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(161,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(162,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(163,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(164,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(165,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(166,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(167,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(168,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(169,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(170,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(171,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(172,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(173,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(174,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(175,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(176,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(177,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(178,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(179,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(180,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(181,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(182,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(183,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(184,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(185,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(186,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(187,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(188,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(189,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(190,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(191,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(192,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(193,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(194,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(195,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(196,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(197,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(198,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(199,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(200,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+merge
+[major_freeze] err=0
+select * from sbtest where id = 101;
+id	k	c	pad
+101	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 102;
+id	k	c	pad
+102	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 103;
+id	k	c	pad
+103	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 104;
+id	k	c	pad
+104	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 105;
+id	k	c	pad
+105	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 106;
+id	k	c	pad
+106	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 107;
+id	k	c	pad
+107	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 108;
+id	k	c	pad
+108	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 109;
+id	k	c	pad
+109	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 110;
+id	k	c	pad
+110	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 111;
+id	k	c	pad
+111	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 112;
+id	k	c	pad
+112	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 113;
+id	k	c	pad
+113	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 114;
+id	k	c	pad
+114	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 115;
+id	k	c	pad
+115	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 116;
+id	k	c	pad
+116	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 117;
+id	k	c	pad
+117	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 118;
+id	k	c	pad
+118	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 119;
+id	k	c	pad
+119	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 120;
+id	k	c	pad
+120	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 121;
+id	k	c	pad
+121	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 122;
+id	k	c	pad
+122	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 123;
+id	k	c	pad
+123	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 124;
+id	k	c	pad
+124	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 125;
+id	k	c	pad
+125	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 126;
+id	k	c	pad
+126	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 127;
+id	k	c	pad
+127	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 128;
+id	k	c	pad
+128	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 129;
+id	k	c	pad
+129	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 130;
+id	k	c	pad
+130	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 131;
+id	k	c	pad
+131	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 132;
+id	k	c	pad
+132	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 133;
+id	k	c	pad
+133	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 134;
+id	k	c	pad
+134	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 135;
+id	k	c	pad
+135	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 136;
+id	k	c	pad
+136	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 137;
+id	k	c	pad
+137	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 138;
+id	k	c	pad
+138	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 139;
+id	k	c	pad
+139	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 140;
+id	k	c	pad
+140	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 141;
+id	k	c	pad
+141	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 142;
+id	k	c	pad
+142	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 143;
+id	k	c	pad
+143	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 144;
+id	k	c	pad
+144	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 145;
+id	k	c	pad
+145	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 146;
+id	k	c	pad
+146	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 147;
+id	k	c	pad
+147	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 148;
+id	k	c	pad
+148	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 149;
+id	k	c	pad
+149	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 150;
+id	k	c	pad
+150	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 151;
+id	k	c	pad
+151	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 152;
+id	k	c	pad
+152	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 153;
+id	k	c	pad
+153	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 154;
+id	k	c	pad
+154	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 155;
+id	k	c	pad
+155	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 156;
+id	k	c	pad
+156	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 157;
+id	k	c	pad
+157	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 158;
+id	k	c	pad
+158	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 159;
+id	k	c	pad
+159	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 160;
+id	k	c	pad
+160	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 161;
+id	k	c	pad
+161	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 162;
+id	k	c	pad
+162	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 163;
+id	k	c	pad
+163	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 164;
+id	k	c	pad
+164	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 165;
+id	k	c	pad
+165	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 166;
+id	k	c	pad
+166	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 167;
+id	k	c	pad
+167	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 168;
+id	k	c	pad
+168	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 169;
+id	k	c	pad
+169	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 170;
+id	k	c	pad
+170	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 171;
+id	k	c	pad
+171	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 172;
+id	k	c	pad
+172	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 173;
+id	k	c	pad
+173	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 174;
+id	k	c	pad
+174	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 175;
+id	k	c	pad
+175	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 176;
+id	k	c	pad
+176	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 177;
+id	k	c	pad
+177	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 178;
+id	k	c	pad
+178	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 179;
+id	k	c	pad
+179	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 180;
+id	k	c	pad
+180	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 181;
+id	k	c	pad
+181	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 182;
+id	k	c	pad
+182	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 183;
+id	k	c	pad
+183	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 184;
+id	k	c	pad
+184	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 185;
+id	k	c	pad
+185	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 186;
+id	k	c	pad
+186	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 187;
+id	k	c	pad
+187	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 188;
+id	k	c	pad
+188	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 189;
+id	k	c	pad
+189	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 190;
+id	k	c	pad
+190	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 191;
+id	k	c	pad
+191	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 192;
+id	k	c	pad
+192	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 193;
+id	k	c	pad
+193	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 194;
+id	k	c	pad
+194	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 195;
+id	k	c	pad
+195	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 196;
+id	k	c	pad
+196	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 197;
+id	k	c	pad
+197	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 198;
+id	k	c	pad
+198	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 199;
+id	k	c	pad
+199	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+select * from sbtest where id = 200;
+id	k	c	pad
+200	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt
+insert another 100 rows to ups
+INSERT INTO sbtest(id, k, c, pad) VALUES(201,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(202,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(203,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(204,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(205,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(206,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(207,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(208,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(209,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(210,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(211,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(212,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(213,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(214,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(215,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(216,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(217,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(218,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(219,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(220,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(221,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(222,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(223,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(224,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(225,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(226,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(227,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(228,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(229,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(230,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(231,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(232,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(233,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(234,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(235,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(236,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(237,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(238,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(239,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(240,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(241,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(242,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(243,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(244,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(245,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(246,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(247,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(248,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(249,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(250,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(251,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(252,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(253,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(254,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(255,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(256,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(257,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(258,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(259,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(260,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(261,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(262,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(263,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(264,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(265,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(266,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(267,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(268,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(269,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(270,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(271,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(272,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(273,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(274,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(275,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(276,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(277,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(278,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(279,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(280,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(281,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(282,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(283,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(284,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(285,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(286,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(287,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(288,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(289,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(290,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(291,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(292,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(293,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(294,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(295,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(296,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(297,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(298,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(299,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+INSERT INTO sbtest(id, k, c, pad) VALUES(300,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt');
+delete from sbtest where id = 1;
+select * from sbtest where id = 1;
+id	k	c	pad
+delete from sbtest where id = 6;
+select * from sbtest where id = 6;
+id	k	c	pad
+delete from sbtest where id = 11;
+select * from sbtest where id = 11;
+id	k	c	pad
+delete from sbtest where id = 16;
+select * from sbtest where id = 16;
+id	k	c	pad
+delete from sbtest where id = 21;
+select * from sbtest where id = 21;
+id	k	c	pad
+delete from sbtest where id = 26;
+select * from sbtest where id = 26;
+id	k	c	pad
+delete from sbtest where id = 31;
+select * from sbtest where id = 31;
+id	k	c	pad
+delete from sbtest where id = 36;
+select * from sbtest where id = 36;
+id	k	c	pad
+delete from sbtest where id = 41;
+select * from sbtest where id = 41;
+id	k	c	pad
+delete from sbtest where id = 46;
+select * from sbtest where id = 46;
+id	k	c	pad
+delete from sbtest where id = 51;
+select * from sbtest where id = 51;
+id	k	c	pad
+delete from sbtest where id = 56;
+select * from sbtest where id = 56;
+id	k	c	pad
+delete from sbtest where id = 61;
+select * from sbtest where id = 61;
+id	k	c	pad
+delete from sbtest where id = 66;
+select * from sbtest where id = 66;
+id	k	c	pad
+delete from sbtest where id = 71;
+select * from sbtest where id = 71;
+id	k	c	pad
+delete from sbtest where id = 76;
+select * from sbtest where id = 76;
+id	k	c	pad
+delete from sbtest where id = 81;
+select * from sbtest where id = 81;
+id	k	c	pad
+delete from sbtest where id = 86;
+select * from sbtest where id = 86;
+id	k	c	pad
+delete from sbtest where id = 91;
+select * from sbtest where id = 91;
+id	k	c	pad
+delete from sbtest where id = 96;
+select * from sbtest where id = 96;
+id	k	c	pad
+delete from sbtest where id = 101;
+select * from sbtest where id = 101;
+id	k	c	pad
+delete from sbtest where id = 106;
+select * from sbtest where id = 106;
+id	k	c	pad
+delete from sbtest where id = 111;
+select * from sbtest where id = 111;
+id	k	c	pad
+delete from sbtest where id = 116;
+select * from sbtest where id = 116;
+id	k	c	pad
+delete from sbtest where id = 121;
+select * from sbtest where id = 121;
+id	k	c	pad
+delete from sbtest where id = 126;
+select * from sbtest where id = 126;
+id	k	c	pad
+delete from sbtest where id = 131;
+select * from sbtest where id = 131;
+id	k	c	pad
+delete from sbtest where id = 136;
+select * from sbtest where id = 136;
+id	k	c	pad
+delete from sbtest where id = 141;
+select * from sbtest where id = 141;
+id	k	c	pad
+delete from sbtest where id = 146;
+select * from sbtest where id = 146;
+id	k	c	pad
+delete from sbtest where id = 151;
+select * from sbtest where id = 151;
+id	k	c	pad
+delete from sbtest where id = 156;
+select * from sbtest where id = 156;
+id	k	c	pad
+delete from sbtest where id = 161;
+select * from sbtest where id = 161;
+id	k	c	pad
+delete from sbtest where id = 166;
+select * from sbtest where id = 166;
+id	k	c	pad
+delete from sbtest where id = 171;
+select * from sbtest where id = 171;
+id	k	c	pad
+delete from sbtest where id = 176;
+select * from sbtest where id = 176;
+id	k	c	pad
+delete from sbtest where id = 181;
+select * from sbtest where id = 181;
+id	k	c	pad
+delete from sbtest where id = 186;
+select * from sbtest where id = 186;
+id	k	c	pad
+delete from sbtest where id = 191;
+select * from sbtest where id = 191;
+id	k	c	pad
+delete from sbtest where id = 196;
+select * from sbtest where id = 196;
+id	k	c	pad
+delete from sbtest where id = 201;
+select * from sbtest where id = 201;
+id	k	c	pad
+delete from sbtest where id = 206;
+select * from sbtest where id = 206;
+id	k	c	pad
+delete from sbtest where id = 211;
+select * from sbtest where id = 211;
+id	k	c	pad
+delete from sbtest where id = 216;
+select * from sbtest where id = 216;
+id	k	c	pad
+delete from sbtest where id = 221;
+select * from sbtest where id = 221;
+id	k	c	pad
+delete from sbtest where id = 226;
+select * from sbtest where id = 226;
+id	k	c	pad
+delete from sbtest where id = 231;
+select * from sbtest where id = 231;
+id	k	c	pad
+delete from sbtest where id = 236;
+select * from sbtest where id = 236;
+id	k	c	pad
+delete from sbtest where id = 241;
+select * from sbtest where id = 241;
+id	k	c	pad
+delete from sbtest where id = 246;
+select * from sbtest where id = 246;
+id	k	c	pad
+delete from sbtest where id = 251;
+select * from sbtest where id = 251;
+id	k	c	pad
+delete from sbtest where id = 256;
+select * from sbtest where id = 256;
+id	k	c	pad
+delete from sbtest where id = 261;
+select * from sbtest where id = 261;
+id	k	c	pad
+delete from sbtest where id = 266;
+select * from sbtest where id = 266;
+id	k	c	pad
+delete from sbtest where id = 271;
+select * from sbtest where id = 271;
+id	k	c	pad
+delete from sbtest where id = 276;
+select * from sbtest where id = 276;
+id	k	c	pad
+delete from sbtest where id = 281;
+select * from sbtest where id = 281;
+id	k	c	pad
+delete from sbtest where id = 286;
+select * from sbtest where id = 286;
+id	k	c	pad
+delete from sbtest where id = 291;
+select * from sbtest where id = 291;
+id	k	c	pad
+delete from sbtest where id = 296;
+select * from sbtest where id = 296;
+id	k	c	pad
+drop table sbtest;

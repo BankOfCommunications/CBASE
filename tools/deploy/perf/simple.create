@@ -1,0 +1,9 @@
+### table simple_table
+
+create table simple_table(
+id            int,
+number        int,
+primary key(id)
+) compress_method = 'none';
+
+

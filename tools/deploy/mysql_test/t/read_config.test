@@ -1,0 +1,23 @@
+--real_sleep 10
+select table_name,table_id,table_type,load_type,table_def_type,rowkey_column_num,column_num,max_used_column_id,create_mem_version,max_rowkey_length,compress_func_name,is_use_bloomfilter,merge_write_sstable_version,is_pure_update_table,rowkey_split,expire_condition from __first_tablet_entry;
+
+select table_id,column_name,table_name,column_id,column_group_id,rowkey_id,length_in_rowkey,order_in_rowkey,join_table_id,join_column_id,data_type,data_length,data_precision,data_scale,nullable from __all_all_column;
+
+select left_table_id,left_column_id,right_table_id,right_column_id,left_table_name,left_column_name,left_column_name,right_table_name,right_column_name from __all_join_info;
+
+select distinct svr_type from __all_server;
+
+#select * from __all_server_stat;
+
+select cluster_id,svr_type,name,section,data_type,value,value_strict,info from __all_sys_config;
+
+--replace_column 4 value
+select cluster_id,name,data_type,value from __all_sys_param;
+
+--replace_column 4 value
+select cluster_id,name,data_type,value,info from __all_sys_stat;
+
+select user_id,table_id,priv_all,priv_alter,priv_create,priv_create_user,priv_delete,priv_drop,priv_grant_option,priv_insert,priv_update,priv_select,priv_replace from __all_table_privilege;
+
+select event_type,event_param,extra from __all_trigger_event;
+select user_name,user_id,pass_word,info,priv_all,priv_alter,priv_create,priv_create_user,priv_delete,priv_drop,priv_grant_option,priv_insert,priv_update,priv_select,priv_replace,is_locked from __all_user;

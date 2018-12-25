@@ -1,0 +1,48 @@
+ob1=OBI(cluster=1244, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable)
+ob1.reboot
+ob1.source include/merge.inc
+ob1.prepare
+ob1.start_check
+create table t1 (a int primary key,b int);
+create table t2 (a varchar(10) primary key,b int);
+insert into t1 values(1,1),(-1,1),(2,2),(-2,2);
+insert into t2 values('a',1),('-1',1),('abcdefghijkl',2);
+select * from t1;
+a	b
+-2	2
+-1	1
+1	1
+2	2
+select * from t2;
+a	b
+-1	1
+a	1
+abcdefghijkl	2
+ob1.major_freeze
+replace into t1 values(3,3),(4,4);
+delete from t2 where a='-1';
+ob1.major_freeze
+update t2 set b=4 where a='abcdefghijkl';
+select * from t1;
+a	b
+-2	2
+-1	1
+1	1
+2	2
+3	3
+4	4
+ob1.major_freeze
+ob1.check_cs_version 4
+select * from t1;
+a	b
+-2	2
+-1	1
+1	1
+2	2
+3	3
+4	4
+select * from t2;
+a	b
+a	1
+abcdefghijkl	4
+ob1.stop_check

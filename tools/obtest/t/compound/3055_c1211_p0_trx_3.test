@@ -1,0 +1,322 @@
+deploy ob1=OBI(cluster=1211);
+deploy ob1.reboot;
+
+deploy ob1.mysql set global ob_read_consistency=3;
+sleep 10;
+
+let $m_ups=deploy_get_value(ob1.get_master_ups);
+let $s_ups=deploy_get_value(ob1.get_slave_ups);
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+
+let $g0=deploy_get_value(ob1.ups0.monitor get_count);
+let $g1=deploy_get_value(ob1.ups1.monitor get_count);
+
+deploy ob1.create_client;
+create table t1(pk int primary key, c1 int, c2 int);
+insert into t1 values(1,1,1),(2,2,2);
+
+##case 1:里层失败(主键冲突)+compound前更新同一行成功+commit 
+set autocommit = 0;
+update t1 set c1=3 where pk=1;
+--error 5024
+insert into t1 values (3,3,3) when row_count(insert into t1 values(1,2,2))=1;
+commit;
+--repeat 10
+select * from t1;
+
+##case 2:里层失败(主键冲突)+compound前更新同一行失败+commit
+--error 5024
+insert into t1 values(1,1,1);
+--error 5024
+insert into t1 values (3,3,3) when row_count(insert into t1 values(1,2,2))=1;
+commit;
+--repeat 10
+select * from t1;
+
+##case 3:里层失败(主键冲突)+compound前更新不同行成功+commit
+update t1 set c1=3 where pk=2;
+--error 5024
+insert into t1 values (3,3,3) when row_count(insert into t1 values(1,2,2))=1;
+commit;
+--repeat 10
+select * from t1;
+
+##case 4:里层失败(主键冲突)+compound前更新不同失败+commit
+--error 5024
+insert into t1 values(2,2,2);
+--error 5024
+insert into t1 values (3,3,3) when row_count(insert into t1 values(1,2,2))=1;
+commit;
+--repeat 10
+select * from t1;
+
+##case 5:里层失败(when条件不满足)+compound前更新同一行成功+commit
+update t1 set c1=4 where pk=1;
+--error 5064
+insert into t1 values (3,3,3) when row_count(update t1 set c1=2 where pk=1)=5;
+commit;
+--repeat 10
+select * from t1;
+
+##case 6:里层失败(when条件不满足)+compound前更新同一行失败+commit
+--error 5024
+insert into t1 values(2,2,2);
+--error 5064
+insert into t1 values (3,3,3) when row_count(update t1 set c1=2 where pk=1)=5;
+commit;
+--repeat 10
+select * from t1;
+
+##case 7:里层失败(when条件不满足)+compound前更新不同成功+commit
+update t1 set c1=4 where pk=2;
+--error 5064
+insert into t1 values (3,3,3) when row_count(update t1 set c1=2 where pk=1)=5;
+commit;
+--repeat 10
+select * from t1;
+
+##case 8:里层失败(when条件不满足)+compound前更新不行失败+commit
+--error 5024
+insert into t1 values(2,2,2);
+--error 5064
+insert into t1 values (3,3,3) when row_count(update t1 set c1=2 where pk=1)=5;
+commit;
+--repeat 10
+select * from t1;
+
+##case 9:外层失败(主键冲突)+compound前更新同一行成功+commit
+update t1 set c1=5 where pk=1;
+--error 5024
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=1;
+commit;
+--repeat 10
+select * from t1;
+
+##case 10:外层失败(主键冲突)+compound前更新同一行失败+commit
+--error 5024
+insert into t1 values(1,1,1);
+--error 5024
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=1;
+commit;
+--repeat 10
+select * from t1;
+
+##case 11:外层失败(主键冲突)+compound前更新不同行成功+commit
+update t1 set c1=5 where pk=2;
+--error 5024
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=1;
+commit;
+--repeat 10
+select * from t1;
+
+##case 12:外层失败(主键冲突)+compound前更新不同行失败+commit
+--error 5024
+insert into t1 values(2,2,2);
+--error 5024
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=1;
+commit;
+--repeat 10
+select * from t1;
+
+##case 13:外层失败(when条件不满足)+compound前更新同一行成功+commit
+update t1 set c1=6 where pk=1;
+--error 5024
+insert into t1 values (1,1,1) when row_count(insert into t1 values(3,3,3))=1;
+commit;
+--repeat 10
+select * from t1;
+
+##case 14:外层失败(when条件不满足)+compound前更新同一行失败+commit
+--error 5024
+insert into t1 values(1,1,1);
+--error 5024
+insert into t1 values (1,1,1) when row_count(insert into t1 values(3,3,3))=1;
+commit;
+--repeat 10
+select * from t1;
+
+##case 15:外层失败(when条件不满足)+compound前更新不同行成功+commit
+update t1 set c1=6 where pk=2;
+--error 5064
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=5;
+commit;
+--repeat 10
+select * from t1;
+
+##case 16:外层失败(when条件不满足)+compound前更新不同行失败+commit
+--error 5024
+insert into t1 values(2,2,2);
+--error 5064
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=5;
+commit;
+--repeat 10
+select * from t1;
+
+set autocommit = 1;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=5;
+replace into t1 values(1,1,1),(2,2,2);
+set autocommit = 0;
+
+##case 17:里层失败(主键冲突)+compound前更新同一行成功+rollback 
+set autocommit = 0;
+update t1 set c1=3 where pk=1;
+--error 5024
+insert into t1 values (3,3,3) when row_count(insert into t1 values(1,2,2))=1;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 18:里层失败(主键冲突)+compound前更新同一行失败+rollback
+--error 5024
+insert into t1 values(1,1,1);
+--error 5024
+insert into t1 values (3,3,3) when row_count(insert into t1 values(1,2,2))=1;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 19:里层失败(主键冲突)+compound前更新不同行成功+rollback
+update t1 set c1=3 where pk=2;
+--error 5024
+insert into t1 values (3,3,3) when row_count(insert into t1 values(1,2,2))=1;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 20:里层失败(主键冲突)+compound前更新不同失败+rollback
+--error 5024
+insert into t1 values(2,2,2);
+--error 5024
+insert into t1 values (3,3,3) when row_count(insert into t1 values(1,2,2))=1;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 21:里层失败(when条件不满足)+compound前更新同一行成功+rollback
+update t1 set c1=4 where pk=1;
+--error 5064
+insert into t1 values (3,3,3) when row_count(update t1 set c1=2 where pk=1)=5;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 22:里层失败(when条件不满足)+compound前更新同一行失败+rollback
+--error 5024
+insert into t1 values(2,2,2);
+--error 5064
+insert into t1 values (3,3,3) when row_count(update t1 set c1=2 where pk=1)=5;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 23:里层失败(when条件不满足)+compound前更新不同成功+rollback
+update t1 set c1=4 where pk=2;
+--error 5064
+insert into t1 values (3,3,3) when row_count(update t1 set c1=2 where pk=1)=5;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 24:里层失败(when条件不满足)+compound前更新不行失败+rollback
+--error 5024
+insert into t1 values(2,2,2);
+--error 5064
+insert into t1 values (3,3,3) when row_count(update t1 set c1=2 where pk=1)=5;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 25:外层失败(主键冲突)+compound前更新同一行成功+rollback
+update t1 set c1=5 where pk=1;
+--error 5024
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=1;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 26:外层失败(主键冲突)更新+compound前同一行失败+rollback
+--error 5024
+insert into t1 values(1,1,1);
+--error 5024
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=1;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 27:外层失败(主键冲突)+compound前更新不同行成功+rollback
+update t1 set c1=5 where pk=2;
+--error 5024
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=1;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 28:外层失败(主键冲突)+compound前更新不同行失败+rollback
+--error 5024
+insert into t1 values(2,2,2);
+--error 5024
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=1;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 29:外层失败(when条件不满足)+compound前更新同一行成功+rollback
+update t1 set c1=6 where pk=1;
+--error 5064
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=5;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 30:外层失败(when条件不满足)+compound前更新同一行失败+rollback
+--error 5024
+insert into t1 values(1,1,1);
+--error 5064
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=5;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 31:外层失败(when条件不满足)+compound前更新不同行成功+rollback
+update t1 set c1=6 where pk=2;
+--error 5064
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=5;
+rollback;
+--repeat 10
+select * from t1;
+
+##case 32:外层失败(when条件不满足)+compound前更新不同行失败+rollback
+--error 5024
+insert into t1 values(2,2,2);
+--error 5064
+insert into t1 values (1,1,1) when row_count(update t1 set c1=3 where pk=1)=5;
+rollback;
+--repeat 10
+select * from t1;
+
+##check progress
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+
+##check ups flow
+let $a=deploy_get_value(ob1.ups0.monitor scan_count);
+let $b=deploy_get_value(ob1.ups1.monitor scan_count);
+
+if($a == $g0)
+{
+   --echo it's a bug. ups0 new scan_count is 0
+}
+if($b == $g1)
+{
+   --echo it's a bug. ups1 new scan_count is 0
+}
+
+##check ups status
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+
+##check ups log
+ob1.$m_ups.nfind_log "table_mgr->check_checksum";

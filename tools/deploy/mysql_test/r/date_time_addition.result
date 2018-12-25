@@ -1,0 +1,2492 @@
+drop table if exists test_date,test_time,test_timestamp;
+select current_date();
+current_date()
+2015-12-01
+select current_time();
+current_time()
+14:30:25
+select current_timestamp();
+current_timestamp()
+2015-12-01 14:30:25.932260
+select current_date;
+current_date
+2015-12-01
+select current_time;
+ERROR 42S22: Unkown column name current_time
+select current_timestamp;
+current_timestamp
+2015-12-01 14:30:25.932260
+select current_date(1);
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near '1)' at line 1
+select current_time(1);
+ERROR HY000: Unknown function 'current_time', ret=-5055
+select current_timestamp(1);
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near '1)' at line 1
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,current_date());
+select * from test_date;
+c1	c2
+1	2015-12-01
+create table test_time(c1 int primary key,c2 time);
+insert into test_time values(1,current_time());
+select * from test_time;
+c1	c2
+1	14:30:25
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,current_timestamp());
+select * from test_timestamp;
+c1	c2
+1	2015-12-01 14:30:25.932260
+drop table if exists test_date,test_time,test_timestamp;
+create table test_date(c1 int primary key,c2 int);
+insert into test_date values(1,current_date());
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_date;
+c1	c2
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,current_date());
+select * from test_date;
+c1	c2
+1	2015-12-01
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000--error 01--error 01'),(2,date '2001--error 01--error 01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''2000--error 01--error 01'),(2,date '2001--error 01--error 01')' at line 1
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+select current_date()+c2 from test_date;
+ERROR S1004: OB-5023: Illegal type
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 time);
+insert into test_date values(1,time '09:00:00'),(2,time '08:00:00');
+select current_date()+c2 from test_date;
+ERROR S1004: Illegal type
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 timestamp);
+insert into test_date values(1,timestamp '2000--error 01--error 01 09:00:00'),(2,timestamp '2001--error 01--error 01 08:00:00');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '2000--error 01--error 01 09:00:00'),(2,timestamp '2001--error 01--err' at line 1
+insert into test_date values(1,timestamp '2000-01-01 09:00:00'),(2,timestamp '2001-01-01 08:00:00');
+select current_date()+c2 from test_date;
+ERROR S1004: OB-5023: Illegal type
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 timestamp);
+insert into test_date values(1,timestamp '2000--error 01--error 01 09:00:00'),(2,timestamp '2001--error 01--error 01 08:00:00');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '2000--error 01--error 01 09:00:00'),(2,timestamp '2001--error 01--err' at line 1
+insert into test_date values(1,timestamp '2000-01-01 09:00:00'),(2,timestamp '2001-01-01 08:00:00');
+select current_date()+c1 from test_date;
+ERROR S1004: Illegal type
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,'2000-01-01 09:00:00'),(2,'2001-01-01 08:00:00');
+select current_date()+c2 from test_date;
+ERROR S1004: Illegal type
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 date);
+insert into test_time values(1,current_time());
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_time values(2,current_date());
+insert into test_time values(3,current_timestamp());
+select * from test_time;
+c1	c2
+2	2015-12-01
+3	2015-12-01
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 date);
+insert into test_time values(1,current_time());
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_time;
+c1	c2
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 timestamp);
+insert into test_time values(1,current_timestamp());
+select * from test_time;
+c1	c2
+1	2015-12-01 14:30:25.932260
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 int);
+insert into test_time values(1,current_time());
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_time;
+c1	c2
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 varchar(20));
+insert into test_time values(1,current_time());
+select * from test_time;
+c1	c2
+1	14:30:25
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 date);
+insert into test_time values(1,date '2000-01-01'),(2,date '2001-01-01');
+select current_time()+c2 from test_time;
+ERROR S1004: Illegal type
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+insert into test_time values(1,time '09:00:00'),(2,time '08:00:00');
+select current_time()+c2 from test_time;
+ERROR S1004: OB-5023: Illegal type
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 timestamp);
+insert into test_time values(1,timestamp '2000-01-01 09:00:00'),(2,timestamp '2001-01-01 08:00:00');
+select current_time()+c2 from test_time;
+ERROR S1004: Illegal type
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 timestamp);
+insert into test_time values(1,timestamp '2000-01-01 09:00:00'),(2,timestamp '2001-01-01 08:00:00');
+select current_time()+c1 from test_time;
+ERROR S1004: Illegal type
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 varchar(20));
+insert into test_time values(1,'2000-01-01 09:00:00'),(2,'2001-01-01 08:00:00');
+select current_time()+c2 from test_time;
+ERROR S1004: Illegal type
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 date);
+insert into test_timestamp values(1,current_timestamp());
+select * from test_timestamp;
+c1	c2
+1	2015-12-01
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 date);
+insert into test_timestamp values(1,current_timestamp());
+select * from test_timestamp;
+c1	c2
+1	2015-12-01
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,current_timestamp());
+select * from test_timestamp;
+c1	c2
+1	2015-12-01 14:30:25.932260
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 int);
+insert into test_timestamp values(1,current_timestamp());
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_timestamp;
+c1	c2
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 varchar(20));
+insert into test_timestamp values(1,current_timestamp());
+select * from test_timestamp;
+c1	c2
+1	2015-12-01 14:30:25.932260
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 date);
+insert into test_timestamp values(1,date '2000-01-01'),(2,date '2001-01-01');
+select current_timestamp()+c2 from test_timestamp;
+ERROR S1004: OB-5023: Illegal type
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 time);
+insert into test_timestamp values(1,time '09:00:00'),(2,time '08:00:00');
+select current_timestamp()+c2 from test_timestamp;
+ERROR S1004: Illegal type
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,timestamp '2000-01-01 09:00:00'),(2,timestamp '2001-01-01 08:00:00');
+select current_timestamp()+c2 from test_timestamp;
+ERROR S1004: OB-5023: Illegal type
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,timestamp '2000-01-01 09:00:00'),(2,timestamp '2001-01-01 08:00:00');
+select current_timestamp()+c1 from test_timestamp;
+ERROR S1004: Illegal type
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 varchar(20));
+insert into test_timestamp values(1,'2000-01-01 09:00:00'),(2,'2001-01-01 08:00:00');
+select current_timestamp()+c2 from test_timestamp;
+ERROR S1004: Illegal type
+select year('1900-01-01');
+year('1900-01-01')
+1900
+select year('0000-01-01');
+ERROR HY000: the year func param is not corrected
+select year('2000-01-01');
+year('2000-01-01')
+2000
+select year('20000-01-01');
+ERROR HY000: the year func param is not corrected
+select year('--error 2000-01-01');
+ERROR HY000: the year func param is not corrected
+select year('a');
+ERROR HY000: the year func param is not corrected
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 varchar(20));
+insert into test_year values(1,'2000-01-01'),(2,'2001-01-01');
+select year(c2) from test_year;
+year(c2)
+2000
+2001
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 varchar(20));
+insert into test_year values(1,'a'),(2,'b');
+select year(c2) from test_year;
+ERROR HY000: the year func param is not corrected
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 varchar(20));
+insert into test_year values(1,'a'),(2,null);
+select year(c2) from test_year;
+ERROR HY000: the year func param is not corrected
+select year(date '1900-01-01');
+year(date '1900-01-01')
+1900
+select year(date '0000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'date '0000-01-01')' at line 1
+select year(date '0001-01-01');
+year(date '0001-01-01')
+1
+select year(date '2000-01-01');
+year(date '2000-01-01')
+2000
+select year(date '20000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''20000-01-01')' at line 1
+select year(date '--error 2000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 2000-01-01')' at line 1
+select year(date 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''a')' at line 1
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 date);
+insert into test_year values(1,date '2000-01-01'),(2,date '2001-01-01');
+select year(c2) from test_year;
+year(c2)
+2000
+2001
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 date);
+insert into test_year values(1,1),(2,'2');
+ERROR 0A000: OB-7: Not supported feature or function
+select year(c2) from test_year;
+year(c2)
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 date);
+insert into test_year values(1,date '2000-01-01'),(2,null);
+select year(c2) from test_year;
+year(c2)
+2000
+NULL
+select year(time '09:00:00');
+ERROR HY004: the year func param is not corrected
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 time);
+insert into test_year values(1,time '08:00:00'),(2,time '09:00:00');
+select year(c2) from test_year;
+ERROR HY004: the year func param is not corrected
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 time);
+insert into test_year values(1,1),(2,'a');
+ERROR 0A000: OB-7: Not supported feature or function
+select year(c2) from test_year;
+year(c2)
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 time);
+insert into test_year values(1,time '08:00:00'),(2,null);
+select year(c2) from test_year;
+ERROR HY004: the year func param is not corrected
+select year(timestamp '1900-01-01 00:00:00');
+year(timestamp '1900-01-01 00:00:00')
+1900
+select year(timestamp '0001-01-01 00:00:00.0');
+year(timestamp '0001-01-01 00:00:00.0')
+1
+select year(timestamp '2000-01-01 08:00:00.1');
+year(timestamp '2000-01-01 08:00:00.1')
+2000
+select year(timestamp '20000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '20000-01-01 09:00:00.1')' at line 1
+select year(timestamp '--error 2000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '--error 2000-01-01 09:00:00.1')' at line 1
+select year(timestamp 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp 'a')' at line 1
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 timestamp);
+insert into test_year values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select year(c2) from test_year;
+year(c2)
+2000
+2001
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 timestamp);
+insert into test_year values(1,1),(2,'2');
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select year(c2) from test_year;
+year(c2)
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 timestamp);
+insert into test_year values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select year(c2) from test_year;
+year(c2)
+2000
+NULL
+select year(1);
+ERROR HY004: the year func param is not corrected
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 timestamp);
+insert into test_year values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select year(c1) from test_year;
+ERROR HY004: the year func param is not corrected
+select year(1.1);
+ERROR HY004: the year func param is not corrected
+drop table if exists test_year;
+create table test_year(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_year values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+select year(c1) from test_year;
+ERROR HY004: the year func param is not corrected
+select year(null);
+year(null)
+NULL
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,year('2010-01-01'));
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_date;
+c1	c2
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+insert into test_time values(1,year('2000-01-01'));
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_time ;
+c1	c2
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,year('2000-01-01'));
+select * from test_timestamp;
+c1	c2
+1	1970-01-01 08:00:00.002000
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+insert into test_date values(1,year('2000-01-01'));
+select * from test_date;
+c1	c2
+1	2000
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,year('2000-01-01'));
+select * from test_date;
+c1	c2
+1	2000
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+select year('2000-01-01')+c2 from test_date;
+ERROR S1004: Illegal type
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 time);
+insert into test_year values(1,time '09:00:00'),(2,time '08:00:00');
+select year('2000-01-01')+c2 from test_year;
+ERROR S1004: Illegal type
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 timestamp);
+insert into test_year values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select year('2000-01-01')+c2 from test_year;
+ERROR S1004: Illegal type
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 timestamp);
+insert into test_year values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select year('2000-01-01')+c1 from test_year;
+year('2000-01-01')+c1
+2001
+2002
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 varchar(20));
+insert into test_year values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+select year('2000-01-01')+c2 from test_year;
+year('2000-01-01')+c2
+4000
+4001
+select month('1900-01-01');
+month('1900-01-01')
+1
+select month('0000-01-01');
+ERROR HY000: the month func param is not corrected
+select month('2000-01-01');
+month('2000-01-01')
+1
+select month('20000-01-01');
+ERROR HY000: the month func param is not corrected
+select month('--error 2000-01-01');
+ERROR HY000: the month func param is not corrected
+select month('a');
+ERROR HY000: the month func param is not corrected
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 varchar(20));
+insert into test_month values(1,'2000-01-01'),(2,'2001-01-01');
+select month(c2) from test_month;
+month(c2)
+1
+1
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 varchar(20));
+insert into test_month values(1,'a'),(2,'b');
+select month(c2) from test_month;
+ERROR HY000: the month func param is not corrected
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 varchar(20));
+insert into test_month values(1,'a'),(2,null);
+select month(c2) from test_month;
+ERROR HY000: the month func param is not corrected
+select month(date '1900-01-01');
+month(date '1900-01-01')
+1
+select month(date '0000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'date '0000-01-01')' at line 1
+select month(date '2000-01-01');
+month(date '2000-01-01')
+1
+select month(date '20000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''20000-01-01')' at line 1
+select month(date '--error 2000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 2000-01-01')' at line 1
+select month(date 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''a')' at line 1
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 date);
+insert into test_month values(1,date '2000-01-01'),(2,date '2001-01-01');
+select month(c2) from test_month;
+month(c2)
+1
+1
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 date);
+insert into test_month values(1,1),(2,'2');
+ERROR 0A000: OB-7: Not supported feature or function
+select month(c2) from test_month;
+month(c2)
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 date);
+insert into test_month values(1,date '2000-01-01'),(2,null);
+select month(c2) from test_month;
+month(c2)
+1
+NULL
+select month(time '09:00:00');
+ERROR HY004: the month func param is not corrected
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 time);
+insert into test_month values(1,time '08:00:00'),(2,time '09:00:00');
+select month(c2) from test_month;
+ERROR HY004: the month func param is not corrected
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 time);
+insert into test_month values(1,1),(2,'a');
+ERROR 0A000: OB-7: Not supported feature or function
+select month(c2) from test_month;
+month(c2)
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 time);
+insert into test_month values(1,time '08:00:00'),(2,null);
+select month(c2) from test_month;
+ERROR HY004: the month func param is not corrected
+select month(timestamp '1900-01-01 00:00:00');
+month(timestamp '1900-01-01 00:00:00')
+1
+select month(timestamp '0000-01-01 00:00:00.0');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '0000-01-01 00:00:00.0')' at line 1
+select month(timestamp '2000-01-01 08:00:00.1');
+month(timestamp '2000-01-01 08:00:00.1')
+1
+select month(timestamp '20000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '20000-01-01 09:00:00.1')' at line 1
+select month(timestamp '--error 2000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '--error 2000-01-01 09:00:00.1')' at line 1
+select month(timestamp 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp 'a')' at line 1
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 timestamp);
+insert into test_month values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select month(c2) from test_month;
+month(c2)
+1
+1
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 timestamp);
+insert into test_month values(1,1),(2,'2');
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select month(c2) from test_month;
+month(c2)
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 timestamp);
+insert into test_month values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select month(c2) from test_month;
+month(c2)
+1
+NULL
+select month(1);
+ERROR HY004: the month func param is not corrected
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 timestamp);
+insert into test_month values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select month(c1) from test_month;
+ERROR HY004: the month func param is not corrected
+select month(1.1);
+ERROR HY004: the month func param is not corrected
+drop table if exists test_month;
+create table test_month(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_month values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+select month(c1) from test_month;
+ERROR HY004: the month func param is not corrected
+select month(null);
+month(null)
+NULL
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,month('2010-01-01'));
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_date;
+c1	c2
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+insert into test_time values(1,month('2000-01-01'));
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_time;
+c1	c2
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,month('2000-01-01'));
+select * from test_timestamp;
+c1	c2
+1	1970-01-01 08:00:00.000001
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+insert into test_date values(1,month('2000-01-01'));
+select * from test_date;
+c1	c2
+1	1
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,month('2000-01-01'));
+select * from test_date;
+c1	c2
+1	1
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+select month('2000-01-01')+c2 from test_date;
+ERROR S1004: Illegal type
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 time);
+insert into test_month values(1,time '09:00:00'),(2,time '08:00:00');
+select month('2000-01-01')+c2 from test_month;
+ERROR S1004: Illegal type
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 timestamp);
+insert into test_month values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select month('2000-01-01')+c2 from test_month;
+ERROR S1004: Illegal type
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 timestamp);
+insert into test_month values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select month('2000-01-01')+c1 from test_month;
+month('2000-01-01')+c1
+2
+3
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 varchar(20));
+insert into test_month values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+select month('2000-01-01')+c2 from test_month;
+month('2000-01-01')+c2
+2001
+2002
+select day('1900-01-01');
+day('1900-01-01')
+1
+select day('0000-01-01');
+ERROR HY000: the day func param is not corrected
+select day('2000-01-01');
+day('2000-01-01')
+1
+select day('20000-01-01');
+ERROR HY000: the day func param is not corrected
+select day('--error 2000-01-01');
+ERROR HY000: the day func param is not corrected
+select day('a');
+ERROR HY000: the day func param is not corrected
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 varchar(20));
+insert into test_day values(1,'2000-01-01'),(2,'2001-01-01');
+select day(c2) from test_day;
+day(c2)
+1
+1
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 varchar(20));
+insert into test_day values(1,'a'),(2,'b');
+select day(c2) from test_day;
+ERROR HY000: the day func param is not corrected
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 varchar(20));
+insert into test_day values(1,'a'),(2,null);
+select day(c2) from test_day;
+ERROR HY000: the day func param is not corrected
+select day(date '1900-01-01');
+day(date '1900-01-01')
+1
+select day(date '0000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'date '0000-01-01')' at line 1
+select day(date '2000-01-01');
+day(date '2000-01-01')
+1
+select day(date '20000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''20000-01-01')' at line 1
+select day(date '--error 2000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 2000-01-01')' at line 1
+select day(date 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''a')' at line 1
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 date);
+insert into test_day values(1,date '2000-01-01'),(2,date '2001-01-01');
+select day(c2) from test_day;
+day(c2)
+1
+1
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 date);
+insert into test_day values(1,1),(2,'2');
+ERROR 0A000: OB-7: Not supported feature or function
+select day(c2) from test_day;
+day(c2)
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 date);
+insert into test_day values(1,date '2000-01-01'),(2,null);
+select day(c2) from test_day;
+day(c2)
+1
+NULL
+select day(time '09:00:00');
+ERROR HY004: the day func param is not corrected
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 time);
+insert into test_day values(1,time '08:00:00'),(2,time '09:00:00');
+select day(c2) from test_day;
+ERROR HY004: the day func param is not corrected
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 time);
+insert into test_day values(1,1),(2,'a');
+ERROR 0A000: OB-7: Not supported feature or function
+select day(c2) from test_day;
+day(c2)
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 time);
+insert into test_day values(1,time '08:00:00'),(2,null);
+select day(c2) from test_day;
+ERROR HY004: the day func param is not corrected
+select day(timestamp '1900-01-01 00:00:00');
+day(timestamp '1900-01-01 00:00:00')
+1
+select day(timestamp '0000-01-01 00:00:00.0');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '0000-01-01 00:00:00.0')' at line 1
+select day(timestamp '2000-01-01 08:00:00.1');
+day(timestamp '2000-01-01 08:00:00.1')
+1
+select day(timestamp '20000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '20000-01-01 09:00:00.1')' at line 1
+select day(timestamp '--error 2000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '--error 2000-01-01 09:00:00.1')' at line 1
+select day(timestamp 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp 'a')' at line 1
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 timestamp);
+insert into test_day values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select day(c2) from test_day;
+day(c2)
+1
+1
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 timestamp);
+insert into test_day values(1,1),(2,'2');
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select day(c2) from test_day;
+day(c2)
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 timestamp);
+insert into test_day values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select day(c2) from test_day;
+day(c2)
+1
+NULL
+select day(1);
+ERROR HY004: the day func param is not corrected
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 timestamp);
+insert into test_day values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select day(c1) from test_day;
+ERROR HY004: the day func param is not corrected
+select day(1.1);
+ERROR HY004: the day func param is not corrected
+drop table if exists test_day;
+create table test_day(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_day values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+select day(c1) from test_day;
+ERROR HY004: the day func param is not corrected
+select day(null);
+day(null)
+NULL
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,day('2010-01-01'));
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_date;
+c1	c2
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+insert into test_time values(1,day('2000-01-01'));
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_time;
+c1	c2
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,day('2000-01-01'));
+select * from test_timestamp;
+c1	c2
+1	1970-01-01 08:00:00.000001
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+insert into test_date values(1,day('2000-01-01'));
+select * from test_date;
+c1	c2
+1	1
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,day('2000-01-01'));
+select * from test_date;
+c1	c2
+1	1
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+select day('2000-01-01')+c2 from test_date;
+ERROR S1004: Illegal type
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 time);
+insert into test_day values(1,time '09:00:00'),(2,time '08:00:00');
+select day('2000-01-01')+c2 from test_day;
+ERROR S1004: Illegal type
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 timestamp);
+insert into test_day values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select day('2000-01-01')+c2 from test_day;
+ERROR S1004: Illegal type
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 timestamp);
+insert into test_day values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select day('2000-01-01')+c1 from test_day;
+day('2000-01-01')+c1
+2
+3
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 varchar(20));
+insert into test_day values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+select day('2000-01-01')+c2 from test_day;
+day('2000-01-01')+c2
+2001
+2002
+select days('0001-01-01');
+days('0001-01-01')
+1
+select days('0001-01-01');
+days('0001-01-01')
+1
+select days('1900-01-01');
+days('1900-01-01')
+693596
+select days('0000-01-01');
+ERROR HY000: the days func param is not corrected
+select days('2000-01-01');
+days('2000-01-01')
+730120
+select days('20000-01-01');
+ERROR HY000: the days func param is not corrected
+select days('--error 2000-01-01');
+ERROR HY000: the days func param is not corrected
+select days('a');
+ERROR HY000: the days func param is not corrected
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 varchar(20));
+insert into test_days values(1,'2000-01-01'),(2,'2001-01-01');
+select days(c2) from test_days;
+days(c2)
+730120
+730486
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 varchar(20));
+insert into test_days values(1,'a'),(2,'b');
+select days(c2) from test_days;
+ERROR HY000: the days func param is not corrected
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 varchar(20));
+insert into test_days values(1,'a'),(2,null);
+select days(c2) from test_days;
+ERROR HY000: the days func param is not corrected
+select days(date '1900-01-01');
+days(date '1900-01-01')
+693596
+select days(date '0000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'date '0000-01-01')' at line 1
+select days(date '2000-01-01');
+days(date '2000-01-01')
+730120
+select days(date '20000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''20000-01-01')' at line 1
+select days(date '--error 2000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 2000-01-01')' at line 1
+select days(date 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''a')' at line 1
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 date);
+insert into test_days values(1,date '2000-01-01'),(2,date '2001-01-01');
+select days(c2) from test_days;
+days(c2)
+730120
+730486
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 date);
+insert into test_days values(1,1),(2,'2');
+ERROR 0A000: OB-7: Not supported feature or function
+select days(c2) from test_days;
+days(c2)
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 date);
+insert into test_days values(1,date '2000-01-01'),(2,null);
+select days(c2) from test_days;
+days(c2)
+730120
+NULL
+select days(time '09:00:00');
+ERROR HY004: the days func param is not corrected
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 time);
+insert into test_days values(1,time '08:00:00'),(2,time '09:00:00');
+select days(c2) from test_days;
+ERROR HY004: the days func param is not corrected
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 time);
+insert into test_days values(1,1),(2,'a');
+ERROR 0A000: OB-7: Not supported feature or function
+select days(c2) from test_days;
+days(c2)
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 time);
+insert into test_days values(1,time '08:00:00'),(2,null);
+select days(c2) from test_days;
+ERROR HY004: the days func param is not corrected
+select days(timestamp '1900-01-01 00:00:00');
+days(timestamp '1900-01-01 00:00:00')
+693596
+select days(timestamp '0001-01-01 00:00:00.0');
+days(timestamp '0001-01-01 00:00:00.0')
+1
+select days(timestamp '2000-01-01 08:00:00.1');
+days(timestamp '2000-01-01 08:00:00.1')
+730120
+select days(timestamp '20000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '20000-01-01 09:00:00.1')' at line 1
+select days(timestamp '--error 2000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '--error 2000-01-01 09:00:00.1')' at line 1
+select days(timestamp 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp 'a')' at line 1
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 timestamp);
+insert into test_days values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select days(c2) from test_days;
+days(c2)
+730120
+730486
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 timestamp);
+insert into test_days values(1,1),(2,'2');
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select days(c2) from test_days;
+days(c2)
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 timestamp);
+insert into test_days values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select days(c2) from test_days;
+days(c2)
+730120
+NULL
+select days(1);
+ERROR HY004: the days func param is not corrected
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 timestamp);
+insert into test_days values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select days(c2) from test_days;
+days(c2)
+730120
+730486
+select days(1.1);
+ERROR HY004: the days func param is not corrected
+drop table if exists test_days;
+create table test_days(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_days values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+select days(c1) from test_days;
+ERROR HY004: the days func param is not corrected
+select days(null);
+days(null)
+NULL
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,days('2010-01-01'));
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_date;
+c1	c2
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+insert into test_time values(1,days('2000-01-01'));
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_time;
+c1	c2
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,days('2000-01-01'));
+select * from test_timestamp;
+c1	c2
+1	1970-01-01 08:00:00.730120
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+insert into test_date values(1,days('2000-01-01'));
+select * from test_date;
+c1	c2
+1	730120
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,days('2000-01-01'));
+select * from test_date;
+c1	c2
+1	730120
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+select days('2000-01-01')+c2 from test_date;
+ERROR S1004: Illegal type
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 time);
+insert into test_days values(1,time '09:00:00'),(2,time '08:00:00');
+select days('2000-01-01')+c2 from test_days;
+ERROR S1004: Illegal type
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 timestamp);
+insert into test_days values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select days('2000-01-01')+c2 from test_days;
+ERROR S1004: Illegal type
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 timestamp);
+insert into test_days values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select days('2000-01-01')+c1 from test_days;
+days('2000-01-01')+c1
+730121
+730122
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 varchar(20));
+insert into test_days values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+select days('2000-01-01')+c2 from test_days;
+days('2000-01-01')+c2
+732120
+732121
+select hour('1900-01-01');
+ERROR HY000: the hour func param is not corrected
+select hour('0000-01-01');
+ERROR HY000: the hour func param is not corrected
+select hour('2000-01-01');
+ERROR HY000: the hour func param is not corrected
+select hour('2000--error 011--error 01');
+ERROR HY000: the hour func param is not corrected
+select hour('--error 2000-01-01');
+ERROR HY000: the hour func param is not corrected
+select hour('a');
+ERROR HY000: the hour func param is not corrected
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 varchar(20));
+insert into test_hour values(1,'2000-01-01'),(2,'2001-01-01');
+select hour(c2) from test_hour;
+ERROR HY000: the hour func param is not corrected
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 varchar(20));
+insert into test_hour values(1,'a'),(2,'b');
+select hour(c2) from test_hour;
+ERROR HY000: the hour func param is not corrected
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 varchar(20));
+insert into test_hour values(1,'a'),(2,null);
+select hour(c2) from test_hour;
+ERROR HY000: the hour func param is not corrected
+select hour(date '1900-01-01');
+ERROR HY004: the hour func param is not corrected
+select hour(date '0000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'date '0000-01-01')' at line 1
+select hour(date '2000-01-01');
+ERROR HY004: the hour func param is not corrected
+select hour(date '2000--error 011--error 01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''2000--error 011--error 01')' at line 1
+select hour(date '--error 2000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 2000-01-01')' at line 1
+select hour(date 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''a')' at line 1
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 date);
+insert into test_hour values(1,date '2000-01-01'),(2,date '2001-01-01');
+select hour(c2) from test_hour;
+ERROR HY004: the hour func param is not corrected
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 date);
+insert into test_hour values(1,1),(2,'2');
+ERROR 0A000: OB-7: Not supported feature or function
+select hour(c2) from test_hour;
+hour(c2)
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 date);
+insert into test_hour values(1,date '2000-01-01'),(2,null);
+select hour(c2) from test_hour;
+ERROR HY004: the hour func param is not corrected
+select hour(time '09:00:00');
+hour(time '09:00:00')
+9
+select hour(time '019:00:00');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''019:00:00')' at line 1
+select hour(time '--error 19:00:00');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 19:00:00')' at line 1
+select hour(time 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''a')' at line 1
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 time);
+insert into test_hour values(1,time '08:00:00'),(2,time '09:00:00');
+select hour(c2) from test_hour;
+hour(c2)
+8
+9
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 time);
+insert into test_hour values(1,1),(2,'a');
+ERROR 0A000: OB-7: Not supported feature or function
+select hour(c2) from test_hour;
+hour(c2)
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 time);
+insert into test_hour values(1,time '08:00:00'),(2,null);
+select hour(c2) from test_hour;
+hour(c2)
+8
+NULL
+select hour(timestamp '1900-01-01 00:00:00');
+hour(timestamp '1900-01-01 00:00:00')
+0
+select hour(timestamp '0000-01-01 00:00:00.0');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '0000-01-01 00:00:00.0')' at line 1
+select hour(timestamp '2000-01-01 08:00:00.1');
+hour(timestamp '2000-01-01 08:00:00.1')
+8
+select hour(timestamp '20000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '20000-01-01 09:00:00.1')' at line 1
+select hour(timestamp '--error 2000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '--error 2000-01-01 09:00:00.1')' at line 1
+select hour(timestamp 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp 'a')' at line 1
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 timestamp);
+insert into test_hour values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select hour(c2) from test_hour;
+hour(c2)
+1
+2
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 timestamp);
+insert into test_hour values(1,1),(2,'2');
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select hour(c2) from test_hour;
+hour(c2)
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 timestamp);
+insert into test_hour values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select hour(c2) from test_hour;
+hour(c2)
+9
+NULL
+select hour(1);
+ERROR HY004: the hour func param is not corrected
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 timestamp);
+insert into test_hour values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select hour(c1) from test_hour;
+ERROR HY004: the hour func param is not corrected
+select hour(1.1);
+ERROR HY004: the hour func param is not corrected
+drop table if exists test_hour;
+create table test_hour(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_hour values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+select hour(c1) from test_hour;
+ERROR HY004: the hour func param is not corrected
+select hour(null);
+hour(null)
+NULL
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,hour('2010-01-01'));
+ERROR HY000: the hour func param is not corrected
+select * from test_date;
+c1	c2
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+insert into test_time values(1,hour('2000-01-01'));
+ERROR HY000: the hour func param is not corrected
+select * from test_time;
+c1	c2
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,hour('2000-01-01'));
+ERROR HY000: the hour func param is not corrected
+select * from test_timestamp;
+c1	c2
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+insert into test_date values(1,hour('2000-01-01'));
+ERROR HY000: the hour func param is not corrected
+select * from test_date;
+c1	c2
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,hour('2000-01-01'));
+ERROR HY000: the hour func param is not corrected
+select * from test_date;
+c1	c2
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+select hour('2000-01-01')+c2 from test_date;
+ERROR S1004: Illegal type
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 time);
+insert into test_hour values(1,time '09:00:00'),(2,time '08:00:00');
+select hour('2000-01-01')+c2 from test_hour;
+ERROR S1004: Illegal type
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 timestamp);
+insert into test_hour values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select hour('2000-01-01')+c2 from test_hour;
+ERROR S1004: Illegal type
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 timestamp);
+insert into test_hour values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select hour('2000-01-01')+c1 from test_hour;
+ERROR HY000: the hour func param is not corrected
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 varchar(20));
+insert into test_hour values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+select hour('2000-01-01')+c2 from test_hour;
+ERROR HY000: the hour func param is not corrected
+select minute('1900-01-01');
+ERROR HY000: the minute func param is not corrected
+select minute('0000-01-01');
+ERROR HY000: the minute func param is not corrected
+select minute('2000-01-01');
+ERROR HY000: the minute func param is not corrected
+select minute('2000--error 011--error 01');
+ERROR HY000: the minute func param is not corrected
+select minute('--error 2000-01-01');
+ERROR HY000: the minute func param is not corrected
+select minute('a');
+ERROR HY000: the minute func param is not corrected
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 varchar(20));
+insert into test_minute values(1,'2000-01-01'),(2,'2001-01-01');
+select minute(c2) from test_minute;
+ERROR HY000: the minute func param is not corrected
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 varchar(20));
+insert into test_minute values(1,'a'),(2,'b');
+select minute(c2) from test_minute;
+ERROR HY000: the minute func param is not corrected
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 varchar(20));
+insert into test_minute values(1,'a'),(2,null);
+select minute(c2) from test_minute;
+ERROR HY000: the minute func param is not corrected
+select minute(date '1900-01-01');
+ERROR HY004: the minute func param is not corrected
+select minute(date '0000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'date '0000-01-01')' at line 1
+select minute(date '2000-01-01');
+ERROR HY004: the minute func param is not corrected
+select minute(date '2000--error 011--error 01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''2000--error 011--error 01')' at line 1
+select minute(date '--error 2000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 2000-01-01')' at line 1
+select minute(date 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''a')' at line 1
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 date);
+insert into test_minute values(1,date '2000-01-01'),(2,date '2001-01-01');
+select minute(c2) from test_minute;
+ERROR HY004: the minute func param is not corrected
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 date);
+insert into test_minute values(1,1),(2,'2');
+ERROR 0A000: OB-7: Not supported feature or function
+select minute(c2) from test_minute;
+minute(c2)
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 date);
+insert into test_minute values(1,date '2000-01-01'),(2,null);
+select minute(c2) from test_minute;
+ERROR HY004: the minute func param is not corrected
+select minute(time '09:00:00');
+minute(time '09:00:00')
+0
+select minute(time '019:00:00');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''019:00:00')' at line 1
+select minute(time '--error 19:00:00');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 19:00:00')' at line 1
+select minute(time 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''a')' at line 1
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 time);
+insert into test_minute values(1,time '08:00:00'),(2,time '09:00:00');
+select minute(c2) from test_minute;
+minute(c2)
+0
+0
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 time);
+insert into test_minute values(1,1),(2,'a');
+ERROR 0A000: OB-7: Not supported feature or function
+select minute(c2) from test_minute;
+minute(c2)
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 time);
+insert into test_minute values(1,time '08:00:00'),(2,null);
+select minute(c2) from test_minute;
+minute(c2)
+0
+NULL
+select minute(timestamp '1900-01-01 00:00:00');
+minute(timestamp '1900-01-01 00:00:00')
+0
+select minute(timestamp '0000-01-01 00:00:00.0');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '0000-01-01 00:00:00.0')' at line 1
+select minute(timestamp '2000-01-01 08:00:00.1');
+minute(timestamp '2000-01-01 08:00:00.1')
+0
+select minute(timestamp '20000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '20000-01-01 09:00:00.1')' at line 1
+select minute(timestamp '--error 2000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '--error 2000-01-01 09:00:00.1')' at line 1
+select minute(timestamp 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp 'a')' at line 1
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 timestamp);
+insert into test_minute values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select minute(c2) from test_minute;
+minute(c2)
+0
+0
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 timestamp);
+insert into test_minute values(1,1),(2,'2');
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select minute(c2) from test_minute;
+minute(c2)
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 timestamp);
+insert into test_minute values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select minute(c2) from test_minute;
+minute(c2)
+0
+NULL
+select minute(1);
+ERROR HY004: the minute func param is not corrected
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 timestamp);
+insert into test_minute values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select minute(c1) from test_minute;
+ERROR HY004: the minute func param is not corrected
+select minute(1.1);
+ERROR HY004: the minute func param is not corrected
+drop table if exists test_minute;
+create table test_minute(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_minute values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+select minute(c1) from test_minute;
+ERROR HY004: the minute func param is not corrected
+select minute(null);
+minute(null)
+NULL
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,minute('2010-01-01'));
+ERROR HY000: the minute func param is not corrected
+select * from test_date;
+c1	c2
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+insert into test_time values(1,minute('2000-01-01'));
+ERROR HY000: the minute func param is not corrected
+select * from test_time;
+c1	c2
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,minute('2000-01-01'));
+ERROR HY000: the minute func param is not corrected
+select * from test_timestamp;
+c1	c2
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+insert into test_date values(1,minute('2000-01-01'));
+ERROR HY000: the minute func param is not corrected
+select * from test_date;
+c1	c2
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,minute('2000-01-01'));
+ERROR HY000: the minute func param is not corrected
+select * from test_date;
+c1	c2
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+select minute('2000-01-01')+c2 from test_date;
+ERROR S1004: Illegal type
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 time);
+insert into test_minute values(1,time '09:00:00'),(2,time '08:00:00');
+select minute('2000-01-01')+c2 from test_minute;
+ERROR S1004: Illegal type
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 timestamp);
+insert into test_minute values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select minute('2000-01-01')+c2 from test_minute;
+ERROR S1004: Illegal type
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 timestamp);
+insert into test_minute values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select minute('2000-01-01')+c1 from test_minute;
+ERROR HY000: the minute func param is not corrected
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 varchar(20));
+insert into test_minute values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+select minute('2000-01-01')+c2 from test_minute;
+ERROR HY000: the minute func param is not corrected
+select second('1900-01-01');
+ERROR HY000: the second func param is not corrected
+select second('0000-01-01');
+ERROR HY000: the second func param is not corrected
+select second('2000-01-01');
+ERROR HY000: the second func param is not corrected
+select second('2000--error 011--error 01');
+ERROR HY000: the second func param is not corrected
+select second('--error 2000-01-01');
+ERROR HY000: the second func param is not corrected
+select second('a');
+ERROR HY000: the second func param is not corrected
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 varchar(20));
+insert into test_second values(1,'2000-01-01'),(2,'2001-01-01');
+select second(c2) from test_second;
+ERROR HY000: the second func param is not corrected
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 varchar(20));
+insert into test_second values(1,'a'),(2,'b');
+select second(c2) from test_second;
+ERROR HY000: the second func param is not corrected
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 varchar(20));
+insert into test_second values(1,'a'),(2,null);
+select second(c2) from test_second;
+ERROR HY000: the second func param is not corrected
+select second(date '1900-01-01');
+ERROR HY004: the second func param is not corrected
+select second(date '0000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'date '0000-01-01')' at line 1
+select second(date '2000-01-01');
+ERROR HY004: the second func param is not corrected
+select second(date '2000--error 011--error 01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''2000--error 011--error 01')' at line 1
+select second(date '--error 2000-01-01');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 2000-01-01')' at line 1
+select second(date 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''a')' at line 1
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 date);
+insert into test_second values(1,date '2000-01-01'),(2,date '2001-01-01');
+select second(c2) from test_second;
+ERROR HY004: the second func param is not corrected
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 date);
+insert into test_second values(1,1),(2,'2');
+ERROR 0A000: OB-7: Not supported feature or function
+select second(c2) from test_second;
+second(c2)
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 date);
+insert into test_second values(1,date '2000-01-01'),(2,null);
+select second(c2) from test_second;
+ERROR HY004: the second func param is not corrected
+select second(time '09:00:00');
+second(time '09:00:00')
+0
+select second(time '019:00:00');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''019:00:00')' at line 1
+select second(time '--error 19:00:00');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 19:00:00')' at line 1
+select second(time 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''a')' at line 1
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 time);
+insert into test_second values(1,time '08:00:00'),(2,time '09:00:00');
+select second(c2) from test_second;
+second(c2)
+0
+0
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 time);
+insert into test_second values(1,1),(2,'a');
+ERROR 0A000: OB-7: Not supported feature or function
+select second(c2) from test_second;
+second(c2)
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 time);
+insert into test_second values(1,time '08:00:00'),(2,null);
+select second(c2) from test_second;
+second(c2)
+0
+NULL
+select second(timestamp '1900-01-01 00:00:00');
+second(timestamp '1900-01-01 00:00:00')
+0
+select second(timestamp '0000-01-01 00:00:00.0');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '0000-01-01 00:00:00.0')' at line 1
+select second(timestamp '2000-01-01 08:00:00.1');
+second(timestamp '2000-01-01 08:00:00.1')
+0
+select second(timestamp '20000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '20000-01-01 09:00:00.1')' at line 1
+select second(timestamp '--error 2000-01-01 09:00:00.1');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '--error 2000-01-01 09:00:00.1')' at line 1
+select second(timestamp 'a');
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp 'a')' at line 1
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 timestamp);
+insert into test_second values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select second(c2) from test_second;
+second(c2)
+0
+1
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 timestamp);
+insert into test_second values(1,1),(2,'2');
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select second(c2) from test_second;
+second(c2)
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 timestamp);
+insert into test_second values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select second(c2) from test_second;
+second(c2)
+0
+NULL
+select second(1);
+ERROR HY004: the second func param is not corrected
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 timestamp);
+insert into test_second values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select second(c1) from test_second;
+ERROR HY004: the second func param is not corrected
+select second(1.1);
+ERROR HY004: the second func param is not corrected
+drop table if exists test_second;
+create table test_second(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_second values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+select second(c1) from test_second;
+ERROR HY004: the second func param is not corrected
+select second(null);
+second(null)
+NULL
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,second('2010-01-01'));
+ERROR HY000: the second func param is not corrected
+select * from test_date;
+c1	c2
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+insert into test_time values(1,second('2000-01-01'));
+ERROR HY000: the second func param is not corrected
+select * from test_time;
+c1	c2
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,second('2000-01-01'));
+ERROR HY000: the second func param is not corrected
+select * from test_timestamp;
+c1	c2
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+insert into test_date values(1,second('2000-01-01'));
+ERROR HY000: the second func param is not corrected
+select * from test_date;
+c1	c2
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,second('2000-01-01'));
+ERROR HY000: the second func param is not corrected
+select * from test_date;
+c1	c2
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+select second('2000-01-01')+c2 from test_date;
+ERROR S1004: Illegal type
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 time);
+insert into test_second values(1,time '09:00:00'),(2,time '08:00:00');
+select second('2000-01-01')+c2 from test_second;
+ERROR S1004: Illegal type
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 timestamp);
+insert into test_second values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select second('2000-01-01')+c2 from test_second;
+ERROR S1004: Illegal type
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 timestamp);
+insert into test_second values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select second('2000-01-01')+c1 from test_second;
+ERROR HY000: the second func param is not corrected
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 varchar(20));
+insert into test_second values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+select second('2000-01-01')+c2 from test_second;
+ERROR HY000: the second func param is not corrected
+select '2010-01-01' + 1 years;
+ERROR HY000: Invalid type.
+select '2010' + 1 years;
+ERROR HY000: Invalid type.
+select '2010-01-01' + 1.1 years;
+ERROR HY000: Invalid type.
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age int);
+insert into test_adddate values(1,1),(2,2);
+select id + 1 years from  test_adddate;
+ERROR HY000: Invalid type.
+select 1 + 1 years;
+ERROR HY000: Invalid type.
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age decimal(5,3));
+insert into test_adddate values(1,1.1),(2,2.2);
+select age + 1 years from test_adddate;
+ERROR HY000: Invalid type.
+select 1.1 + 1 years;
+ERROR HY000: Invalid type.
+select 2.2 + 1 years;
+ERROR HY000: Invalid type.
+select null + 1 years;
+null + 1 years
+NULL
+select date '1970-01-01' + 1 years;
+date '1970-01-01' + 1 years
+1971-01-01
+select date '1970-01-01' - 1 years;
+date '1970-01-01' - 1 years
+1969-01-01
+select date '1870-01-01' + 1 years;
+date '1870-01-01' + 1 years
+1871-01-01
+select date '1870-01-01' - 1 years;
+date '1870-01-01' - 1 years
+1869-01-01
+select date '2070-01-01' + 1 years;
+date '2070-01-01' + 1 years
+2071-01-01
+select date '2070-01-01' - 1 years;
+date '2070-01-01' - 1 years
+2069-01-01
+select date '2070-01-01' + 1.1 years;
+date '2070-01-01' + 1.1 years
+2071-01-01
+select date '2070-01-01' - 2.1 years;
+date '2070-01-01' - 2.1 years
+2068-01-01
+select date '2070-01-01' + 'q' years;
+date '2070-01-01' + 'q' years
+2070-01-01
+select date '2070-01-01' - 'q' years;
+date '2070-01-01' - 'q' years
+2070-01-01
+select date '2070-01-01' + null years;
+date '2070-01-01' + null years
+NULL
+select date '2070-01-01' - null years;
+date '2070-01-01' - null years
+NULL
+select date '2070-01-01' + 1 months;
+date '2070-01-01' + 1 months
+2070-02-01
+select date '2070-01-01' - 1 months;
+date '2070-01-01' - 1 months
+2069-12-01
+select date '2070-01-01' + 1 days;
+date '2070-01-01' + 1 days
+2070-01-02
+select date '2070-01-01' - 1 days;
+date '2070-01-01' - 1 days
+2069-12-31
+select date '2070-01-01' + 1 hours;
+ERROR HY004: OB-1: Object type error
+select date '2070-01-01' - 1 hours;
+ERROR HY004: OB-1: Object type error
+select date '2070-01-01' + 1 minutes;
+ERROR HY004: OB-1: Object type error
+select date '2070-01-01' - 1 minutes;
+ERROR HY004: OB-1: Object type error
+select date '2070-01-01' + 1 seconds;
+ERROR HY004: OB-1: Object type error
+select date '2070-01-01' - 1 seconds;
+ERROR HY004: OB-1: Object type error
+;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near '' at line 1
+select date '2070-01-01' + 1 microseconds;
+ERROR HY004: OB-1: Object type error
+select date '2070-01-01' - 1 microseconds;
+ERROR HY004: OB-1: Object type error
+select date '20070-01-01' + 1 years;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''20070-01-01' + 1 years' at line 1
+select date '20070-01-01' - 1 years;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''20070-01-01' - 1 years' at line 1
+select date '--error 2070-01-01' + 1 years;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 2070-01-01' + 1 years' at line 1
+select date '--error 2070-01-01' - 1 years;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 2070-01-01' - 1 years' at line 1
+select date '2070' + 1 years;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''2070' + 1 years' at line 1
+select date '2070' - 1 years;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''2070' - 1 years' at line 1
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000');
+ERROR HY000: Format of DATE value is incorrect.
+select age + 1 years from test_adddate;
+age + 1 years
+select age - 1 years from test_adddate;
+age - 1 years
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+select age + 1 years from test_adddate;
+age + 1 years
+2001-01-01
+select age - 1 years from test_adddate;
+age - 1 years
+1999-01-01
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+select age + 1 months from test_adddate;
+age + 1 months
+2000-02-01
+select age - 1 months from test_adddate;
+age - 1 months
+1999-12-01
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+select age + 1 days from test_adddate;
+age + 1 days
+2000-01-02
+select age - 1 days from test_adddate;
+age - 1 days
+1999-12-31
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+select age + 1 hours from test_adddate;
+ERROR HY004: OB-1: Object type error
+select age - 1 hours from test_adddate;
+ERROR HY004: OB-1: Object type error
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+select age + 1 minutes from test_adddate;
+ERROR HY004: OB-1: Object type error
+select age - 1 minutes from test_adddate;
+ERROR HY004: OB-1: Object type error
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+select age + 1 seconds from test_adddate;
+ERROR HY004: OB-1: Object type error
+select age - 1 seconds from test_adddate;
+ERROR HY004: OB-1: Object type error
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+select age + 1 microseconds from test_adddate;
+ERROR HY004: OB-1: Object type error
+select age - 1 microseconds from test_adddate;
+ERROR HY004: OB-1: Object type error
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+insert into test_adddate (id) values(2);
+select age + 1 microseconds from test_adddate;
+ERROR HY004: OB-1: Object type error
+select age - 1 microseconds from test_adddate;
+ERROR HY004: OB-1: Object type error
+select time '09:00:00' + 1 hours;
+time '09:00:00' + 1 hours
+10:00:00
+select time '09:00:00' - 1 hours;
+time '09:00:00' - 1 hours
+08:00:00
+select time '09:00:00' + 1.2 hours;
+time '09:00:00' + 1.2 hours
+10:00:00
+select time '09:00:00' - 1.2 hours;
+time '09:00:00' - 1.2 hours
+08:00:00
+select time '09:00:00' + 'a' hours;
+time '09:00:00' + 'a' hours
+09:00:00
+select time '09:00:00' - 'a' hours;
+time '09:00:00' - 'a' hours
+09:00:00
+select time '09:00:00' + null hours;
+time '09:00:00' + null hours
+NULL
+select time '09:00:00' - null hours;
+time '09:00:00' - null hours
+NULL
+select time '09:00:00' + 1 years;
+ERROR HY004: OB-1: Object type error
+select time '09:00:00' - 1 years;
+ERROR HY004: OB-1: Object type error
+select time '09:00:00' + 1 months;
+ERROR HY004: OB-1: Object type error
+select time '09:00:00' - 1 months;
+ERROR HY004: OB-1: Object type error
+select time '09:00:00' + 1 days;
+ERROR HY004: OB-1: Object type error
+select time '09:00:00' - 1 days;
+ERROR HY004: OB-1: Object type error
+select time '09:00:00' + 1 hours;
+time '09:00:00' + 1 hours
+10:00:00
+select time '09:00:00' - 1 hours;
+time '09:00:00' - 1 hours
+08:00:00
+select time '09:00:00' + 1 minutes;
+time '09:00:00' + 1 minutes
+09:01:00
+select time '09:00:00' - 1 minutes;
+time '09:00:00' - 1 minutes
+08:59:00
+select time '09:00:00' + 1 seconds;
+time '09:00:00' + 1 seconds
+09:00:01
+select time '09:00:00' - 1 seconds;
+time '09:00:00' - 1 seconds
+08:59:59
+select time '09:00:00' + 1 microseconds;
+ERROR HY004: OB-1: Object type error
+select time '09:00:00' - 1 microseconds;
+ERROR HY004: OB-1: Object type error
+select time '01119:00:00' + 1 hours;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''01119:00:00' + 1 hours' at line 1
+select time '01119:00:00' - 1 hours;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''01119:00:00' - 1 hours' at line 1
+select time '--error 09:00:00' + 1 hours;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 09:00:00' + 1 hours' at line 1
+select time '--error 09:00:00' - 1 hours;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 09:00:00' - 1 hours' at line 1
+select time '--error 09' + 1 hours;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 09' + 1 hours' at line 1
+select time '--error 09' - 1 hours;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''--error 09' - 1 hours' at line 1
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+select age + 1 years from test_adddate;
+ERROR HY004: OB-1: Object type error
+select age - 1 years from test_adddate;
+ERROR HY004: OB-1: Object type error
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+select age + 1 months from test_adddate;
+ERROR HY004: OB-1: Object type error
+select age - 1 months from test_adddate;
+ERROR HY004: OB-1: Object type error
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+select age + 1 days from test_adddate;
+ERROR HY004: OB-1: Object type error
+select age - 1 days from test_adddate;
+ERROR HY004: OB-1: Object type error
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09');
+ERROR HY000: Format of TIME value is incorrect.
+select age + 1 days from test_adddate;
+age + 1 days
+select age - 1 days from test_adddate;
+age - 1 days
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+select age + 1 hours from test_adddate;
+age + 1 hours
+10:00:00
+select age - 1 hours from test_adddate;
+age - 1 hours
+08:00:00
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+select age + 1 minutes from test_adddate;
+age + 1 minutes
+09:01:00
+select age - 1 minutes from test_adddate;
+age - 1 minutes
+08:59:00
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+select age + 1 seconds from test_adddate;
+age + 1 seconds
+09:00:01
+select age - 1 seconds from test_adddate;
+age - 1 seconds
+08:59:59
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+select age + 1 microseconds from test_adddate;
+ERROR HY004: OB-1: Object type error
+select age - 1 microseconds from test_adddate;
+ERROR HY004: OB-1: Object type error
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+insert into test_adddate(id) values(2);
+select age + 1 years from test_adddate;
+ERROR HY004: OB-1: Object type error
+select age - 1 years from test_adddate;
+ERROR HY004: OB-1: Object type error
+select timestamp '1970-01-01 08:00:00.0' + 1 years from test_adddate;
+timestamp '1970-01-01 08:00:00.0' + 1 years
+1971-01-01 08:00:00
+1971-01-01 08:00:00
+select timestamp '1970-01-01 08:00:00.0' - 1 years from test_adddate;
+timestamp '1970-01-01 08:00:00.0' - 1 years
+1969-01-01 08:00:00
+1969-01-01 08:00:00
+select timestamp '1010-01-01 09:00:00.1' + 1 years from test_adddate;
+timestamp '1010-01-01 09:00:00.1' + 1 years
+1011-01-01 09:00:00.100000
+1011-01-01 09:00:00.100000
+select timestamp '1010-01-01 09:00:00.1' - 1 years from test_adddate;
+timestamp '1010-01-01 09:00:00.1' - 1 years
+1009-01-01 09:00:00.100000
+1009-01-01 09:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' + 1 years from test_adddate;
+timestamp '2010-01-01 09:00:00.1' + 1 years
+2011-01-01 09:00:00.100000
+2011-01-01 09:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' - 1 years from test_adddate;
+timestamp '2010-01-01 09:00:00.1' - 1 years
+2009-01-01 09:00:00.100000
+2009-01-01 09:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' + 1.1 years from test_adddate;
+timestamp '2010-01-01 09:00:00.1' + 1.1 years
+2011-01-01 09:00:00.100000
+2011-01-01 09:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' - 1.1 years from test_adddate;
+timestamp '2010-01-01 09:00:00.1' - 1.1 years
+2009-01-01 09:00:00.100000
+2009-01-01 09:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' + 'a' years from test_adddate;
+timestamp '2010-01-01 09:00:00.1' + 'a' years
+2010-01-01 09:00:00.100000
+2010-01-01 09:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' - 'a' years from test_adddate;
+timestamp '2010-01-01 09:00:00.1' - 'a' years
+2010-01-01 09:00:00.100000
+2010-01-01 09:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' + null years from test_adddate;
+timestamp '2010-01-01 09:00:00.1' + null years
+NULL
+NULL
+select timestamp '2010-01-01 09:00:00.1' - null years from test_adddate;
+timestamp '2010-01-01 09:00:00.1' - null years
+NULL
+NULL
+select timestamp '2010-01-01 09:00:00.1' + 1 months from test_adddate;
+timestamp '2010-01-01 09:00:00.1' + 1 months
+2010-02-01 09:00:00.100000
+2010-02-01 09:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' - 1 months from test_adddate;
+timestamp '2010-01-01 09:00:00.1' - 1 months
+2009-12-01 09:00:00.100000
+2009-12-01 09:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' + 1 days from test_adddate;
+timestamp '2010-01-01 09:00:00.1' + 1 days
+2010-01-02 09:00:00.100000
+2010-01-02 09:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' - 1 days from test_adddate;
+timestamp '2010-01-01 09:00:00.1' - 1 days
+2009-12-31 09:00:00.100000
+2009-12-31 09:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' + 1 hours from test_adddate;
+timestamp '2010-01-01 09:00:00.1' + 1 hours
+2010-01-01 10:00:00.100000
+2010-01-01 10:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' - 1 hours from test_adddate;
+timestamp '2010-01-01 09:00:00.1' - 1 hours
+2010-01-01 08:00:00.100000
+2010-01-01 08:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' + 1 minutes from test_adddate;
+timestamp '2010-01-01 09:00:00.1' + 1 minutes
+2010-01-01 09:01:00.100000
+2010-01-01 09:01:00.100000
+select timestamp '2010-01-01 09:00:00.1' - 1 minutes from test_adddate;
+timestamp '2010-01-01 09:00:00.1' - 1 minutes
+2010-01-01 08:59:00.100000
+2010-01-01 08:59:00.100000
+select timestamp '2010-01-01 09:00:00.1' + 1 seconds from test_adddate;
+timestamp '2010-01-01 09:00:00.1' + 1 seconds
+2010-01-01 09:00:01.100000
+2010-01-01 09:00:01.100000
+select timestamp '2010-01-01 09:00:00.1' - 1 seconds from test_adddate;
+timestamp '2010-01-01 09:00:00.1' - 1 seconds
+2010-01-01 08:59:59.100000
+2010-01-01 08:59:59.100000
+select timestamp '2010-01-01 09:00:00.1' + 1 microseconds from test_adddate;
+timestamp '2010-01-01 09:00:00.1' + 1 microseconds
+2010-01-01 09:00:00.100001
+2010-01-01 09:00:00.100001
+select timestamp '2010-01-01 09:00:00.1' - 1 microseconds from test_adddate;
+timestamp '2010-01-01 09:00:00.1' - 1 microseconds
+2010-01-01 09:00:00.099999
+2010-01-01 09:00:00.099999
+select timestamp '12010-01-01 09:00:00.1' + 1 years from test_adddate;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '12010-01-01 09:00:00.1' + 1 years from test_adddate' at line 1
+select timestamp '12010-01-01 09:00:00.1' - 1 years from test_adddate;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '12010-01-01 09:00:00.1' - 1 years from test_adddate' at line 1
+select timestamp '--error 2010-01-01 09:00:00.1' + 1 years from test_adddate;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '--error 2010-01-01 09:00:00.1' + 1 years from test_adddate' at line 1
+select timestamp '--error 2010-01-01 09:00:00.1' - 1 years from test_adddate;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '--error 2010-01-01 09:00:00.1' - 1 years from test_adddate' at line 1
+select timestamp '010-01-01 09:00:00.1' + 1 years from test_adddate;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '010-01-01 09:00:00.1' + 1 years from test_adddate' at line 1
+select timestamp '010-01-01 09:00:00.1' - 1 years from test_adddate;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'timestamp '010-01-01 09:00:00.1' - 1 years from test_adddate' at line 1
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'09:00:00');
+select age + 1 years from test_adddate;
+age + 1 years
+1971-01-01 09:00:00
+select age - 1 years from test_adddate;
+age - 1 years
+1969-01-01 09:00:00
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select age + 1 years from test_adddate;
+age + 1 years
+2011-01-01 09:00:00.222000
+select age - 1 years from test_adddate;
+age - 1 years
+2009-01-01 09:00:00.222000
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select age + 1 months from test_adddate;
+age + 1 months
+2010-02-01 09:00:00.222000
+select age - 1 months from test_adddate;
+age - 1 months
+2009-12-01 09:00:00.222000
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select age + 1 days from test_adddate;
+age + 1 days
+2010-01-02 09:00:00.222000
+select age - 1 days from test_adddate;
+age - 1 days
+2009-12-31 09:00:00.222000
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select age + 1 hours from test_adddate;
+age + 1 hours
+2010-01-01 10:00:00.222000
+select age - 1 hours from test_adddate;
+age - 1 hours
+2010-01-01 08:00:00.222000
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select age + 1 minutes from test_adddate;
+age + 1 minutes
+2010-01-01 09:01:00.222000
+select age - 1 minutes from test_adddate;
+age - 1 minutes
+2010-01-01 08:59:00.222000
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select age + 1 seconds from test_adddate;
+age + 1 seconds
+2010-01-01 09:00:01.222000
+select age - 1 seconds from test_adddate;
+age - 1 seconds
+2010-01-01 08:59:59.222000
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select age + 1 microseconds from test_adddate;
+age + 1 microseconds
+2010-01-01 09:00:00.222001
+select age - 1 microseconds from test_adddate;
+age - 1 microseconds
+2010-01-01 09:00:00.221999
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+insert into test_adddate(id) values(2);
+select age + 1 microseconds from test_adddate;
+age + 1 microseconds
+2010-01-01 09:00:00.222001
+NULL
+select age - 1 microseconds from test_adddate;
+age - 1 microseconds
+2010-01-01 09:00:00.221999
+NULL
+select age + null microseconds from test_adddate;
+age + null microseconds
+NULL
+NULL
+select age - null microseconds from test_adddate;
+age - null microseconds
+NULL
+NULL
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,date '2001-01-01' + 1 years);
+insert into test_adddate values(2,date '2001-01-01' + 1 years);
+insert into test_adddate values(3,date '2001-01-01' - 1 years);
+insert into test_adddate values(4,date '2001-01-01' - 1 years);
+insert into test_adddate values(5,time '09:00:00' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(7,time '09:00:00' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(9,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+insert into test_adddate values(10,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+insert into test_adddate values(11,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+insert into test_adddate values(12,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+select * from test_adddate;
+id	age
+1	2002-01-01
+2	2002-01-01
+3	2000-01-01
+4	2000-01-01
+9	2001-01-01
+10	2001-01-01
+11	2001-01-01
+12	2001-01-01
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,date '2001-01-01' + 1 years);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(2,date '2001-01-01' + 1 years);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(3,date '2001-01-01' + 1 years);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(4,date '2001-01-01' - 1 years);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(5,time '09:00:00' - 1 hours);
+insert into test_adddate values(6,time '09:00:00' - 1 hours);
+insert into test_adddate values(7,time '09:00:00' - 1 hours);
+insert into test_adddate values(8,time '09:00:00' - 1 hours);
+insert into test_adddate values(9,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+insert into test_adddate values(10,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+insert into test_adddate values(11,timestamp '2001-01-01 09:00:00.22' - 1 hours);
+insert into test_adddate values(12,timestamp '2001-01-01 09:00:00.22' - 1 hours);
+select * from test_adddate;
+id	age
+5	08:00:00
+6	08:00:00
+7	08:00:00
+8	08:00:00
+9	10:00:00
+10	10:00:00
+11	08:00:00
+12	08:00:00
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,date '2001-01-01' + 1 years);
+insert into test_adddate values(2,date '2001-01-01' + 1 years);
+insert into test_adddate values(3,date '2001-01-01' - 1 years);
+insert into test_adddate values(4,date '2001-01-01' - 1 years);
+insert into test_adddate values(5,time '09:00:00' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(6,time '09:00:00' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(7,time '09:00:00' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(8,time '09:00:00' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(9,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+insert into test_adddate values(10,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+insert into test_adddate values(11,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+insert into test_adddate values(12,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+select * from test_adddate;
+id	age
+1	2002-01-01 00:00:00
+2	2002-01-01 00:00:00
+3	2000-01-01 00:00:00
+4	2000-01-01 00:00:00
+9	2001-01-01 10:00:00.220000
+10	2001-01-01 10:00:00.220000
+11	2001-01-01 10:00:00.220000
+12	2001-01-01 10:00:00.220000
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age int);
+insert into test_adddate values(1,date '2001-01-01' + 1 years);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(2,date '2001-01-01' + 1 years);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(3,date '2001-01-01' - 1 years);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(4,date '2001-01-01' - 1 years);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(5,time '09:00:00' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(6,time '09:00:00' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(7,time '09:00:00' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(8,time '09:00:00' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(9,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(10,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(11,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+insert into test_adddate values(12,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_adddate;
+id	age
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age varchar(20));
+insert into test_adddate values(1,date '2001-01-01' + 1 years);
+insert into test_adddate values(2,date '2001-01-01' + 1 years);
+insert into test_adddate values(3,date '2001-01-01' - 1 years);
+insert into test_adddate values(4,date '2001-01-01' - 1 years);
+insert into test_adddate values(5,time '09:00:00' + 1 hours);
+insert into test_adddate values(6,time '09:00:00' + 1 hours);
+insert into test_adddate values(7,time '09:00:00' + 1 hours);
+insert into test_adddate values(8,time '09:00:00' + 1 hours);
+insert into test_adddate values(9,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+insert into test_adddate values(10,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+insert into test_adddate values(11,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+insert into test_adddate values(12,timestamp '2001-01-01 09:00:00.22' + 1 hours);
+select * from test_adddate;
+id	age
+1	2002-01-01
+2	2002-01-01
+3	2000-01-01
+4	2000-01-01
+5	10:00:00
+6	10:00:00
+7	10:00:00
+8	10:00:00
+9	2001-01-01 10:00:00.220000
+10	2001-01-01 10:00:00.220000
+11	2001-01-01 10:00:00.220000
+12	2001-01-01 10:00:00.220000
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,date '2001-01-01');
+select date '2001-01-01' +  1 years + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select time '09:00:00' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' + 1 hours + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select date '2001-01-01' - 1 years + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select time '09:00:00' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' - 1 hours + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select date '2001-01-01' + 1 years + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select time '09:00:00' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' + 1 hours + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select date '2001-01-01' - 1 years + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select time '09:00:00' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' - 1 hours + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,time '09:00:00');
+select date '2001-01-01' + 1 years + age from test_adddate;
+ERROR S1004: Illegal type
+select time '09:00:00' + 1 hours + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select timestamp '2001-01-01 09:00:00.22' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select date '2001-01-01' - 1 years + age from test_adddate;
+ERROR S1004: Illegal type
+select time '09:00:00' - 1 hours + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select timestamp '2001-01-01 09:00:00.22' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select date '2001-01-01' + 1 years + age from test_adddate;
+ERROR S1004: Illegal type
+select time '09:00:00' + 1 hours + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select timestamp '2001-01-01 09:00:00.22' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select date '2001-01-01' - 1 years + age from test_adddate;
+ERROR S1004: Illegal type
+select time '09:00:00' - 1 hours + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select timestamp '2001-01-01 09:00:00.22' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,timestamp '2001-01-01 09:00:00.22');
+select date '2001-01-01' + 1 years + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select time '09:00:00' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' + 1 hours + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select date '2001-01-01' - 1 years + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select time '09:00:00' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' - 1 hours + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select date '2001-01-01' + 1 years + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select time '09:00:00' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' + 1 hours + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select date '2001-01-01' - 1 years + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+select time '09:00:00' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' - 1 hours + age from test_adddate;
+ERROR S1004: OB-5023: Illegal type
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age int);
+insert into test_adddate values(1,1);
+select date '2001-01-01' + 1 years + age from test_adddate;
+ERROR S1004: Illegal type
+select time '09:00:00' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select date '2001-01-01' - 1 years + age from test_adddate;
+ERROR S1004: Illegal type
+select time '09:00:00' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select date '2001-01-01' + 1 years + age from test_adddate;
+ERROR S1004: Illegal type
+select time '09:00:00' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select date '2001-01-01' - 1 years + age from test_adddate;
+ERROR S1004: Illegal type
+select time '09:00:00' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age varchar(20));
+insert into test_adddate values(1,'a');
+select date '2001-01-01' + 1 years + age from test_adddate;
+ERROR S1004: Illegal type
+select time '09:00:00' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select date '2001-01-01' - 1 years + age from test_adddate;
+ERROR S1004: Illegal type
+select time '09:00:00' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select date '2001-01-01' + 1 years + age from test_adddate;
+ERROR S1004: Illegal type
+select time '09:00:00' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' + 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select date '2001-01-01' - 1 years + age from test_adddate;
+ERROR S1004: Illegal type
+select time '09:00:00' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select timestamp '2001-01-01 09:00:00.22' - 1 hours + age from test_adddate;
+ERROR S1004: Illegal type
+select date '2010-01-01' , date '2000-01-01';
+date '2010-01-01'	date '2000-01-01'
+2010-01-01	2000-01-01
+select date '2010-01-01' , time '09:00:00';
+date '2010-01-01'	time '09:00:00'
+2010-01-01	09:00:00
+select date '2010-01-01' , timestamp '2010-01-01 09:00:00.1';
+date '2010-01-01'	timestamp '2010-01-01 09:00:00.1'
+2010-01-01	2010-01-01 09:00:00.100000
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,date '2001-01-01');
+select age,  date '2000-01-01' from test_adddate;
+age	date '2000-01-01'
+2001-01-01	2000-01-01
+select age,  time '09:00:00' from test_adddate;
+age	time '09:00:00'
+2001-01-01	09:00:00
+select age,  timestamp '2010-01-01 09:00:00.1' from test_adddate;
+age	timestamp '2010-01-01 09:00:00.1'
+2001-01-01	2010-01-01 09:00:00.100000
+select time '09:00:00', date '2000-01-01';
+time '09:00:00'	date '2000-01-01'
+09:00:00	2000-01-01
+select time '09:00:00',  time '09:00:00';
+time '09:00:00'	time '09:00:00'
+09:00:00	09:00:00
+select time '09:00:00' , timestamp '2010-01-01 09:00:00.1';
+time '09:00:00'	timestamp '2010-01-01 09:00:00.1'
+09:00:00	2010-01-01 09:00:00.100000
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,time '09:00:00');
+select age,  date '2000-01-01' from test_adddate;
+age	date '2000-01-01'
+09:00:00	2000-01-01
+select age,  time '09:00:00' from test_adddate;
+age	time '09:00:00'
+09:00:00	09:00:00
+select age , timestamp '2010-01-01 09:00:00.1' from test_adddate;
+age	timestamp '2010-01-01 09:00:00.1'
+09:00:00	2010-01-01 09:00:00.100000
+select timestamp '2010-01-01 09:00:00.1' , date '2000-01-01';
+timestamp '2010-01-01 09:00:00.1'	date '2000-01-01'
+2010-01-01 09:00:00.100000	2000-01-01
+select timestamp '2010-01-01 09:00:00.1' , time '09:00:00';
+timestamp '2010-01-01 09:00:00.1'	time '09:00:00'
+2010-01-01 09:00:00.100000	09:00:00
+select timestamp '2010-01-01 09:00:00.1' , timestamp '2010-01-01 09:00:00.1';
+timestamp '2010-01-01 09:00:00.1'	timestamp '2010-01-01 09:00:00.1'
+2010-01-01 09:00:00.100000	2010-01-01 09:00:00.100000
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,timestamp '2010-01-01 09:00:00.1');
+select age,  date '2000-01-01' from test_adddate;
+age	date '2000-01-01'
+2010-01-01 09:00:00.100000	2000-01-01
+select age,  time '09:00:00' from test_adddate;
+age	time '09:00:00'
+2010-01-01 09:00:00.100000	09:00:00
+select age,  timestamp '2010-01-01 09:00:00.1' from test_adddate;
+age	timestamp '2010-01-01 09:00:00.1'
+2010-01-01 09:00:00.100000	2010-01-01 09:00:00.100000
+select (date '2010-01-01' + 1 years) + (date '2010-01-01' - 1 years);
+ERROR S1004: OB-5023: Illegal type
+select date '2010-01-01' + 1 years , current_date();
+date '2010-01-01' + 1 years	current_date()
+2011-01-01	2015-12-01
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,timestamp '2010-01-01 09:00:00.1');
+select * from test_adddate where age < timestamp '2015-01-01 09:00:00' - 1 months;
+id	age
+1	2010-01-01 09:00:00.100000
+select * from test_adddate where age > date '2000-01-01' + 1 years;
+id	age
+1	2010-01-01 09:00:00.100000
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,time '09:00:00');
+select * from test_adddate where age < time '19:00:00' - 1 hours;
+id	age
+1	09:00:00
+select * from test_adddate where age > date '2000-01-01' - 1 years;
+ERROR S1004: OB-5023: Illegal type
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,date '2010-01-01');
+select * from test_adddate where age < time '19:00:00' - 1 hours;
+ERROR S1004: OB-5023: Illegal type
+select * from test_adddate where age > date '2000-01-01' + 1 years;
+id	age
+1	2010-01-01
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,timestamp '2010-01-01 09:00:00.1');
+update test_adddate set age = timestamp '2015-01-01 09:00:00' - 1 months where id=1;
+update test_adddate set age = date '2000-01-01' + 1 years where id=1;
+select * from test_adddate;
+id	age
+1	2001-01-01 00:00:00
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,time '09:00:00');
+update test_adddate set age = time '19:00:00' - 1 hours where id=1;
+update test_adddate set age = date '2000-01-01' + 1 years where id=1;
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_adddate;
+id	age
+1	18:00:00
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,date '2010-01-01');
+update test_adddate set age = time '19:00:00' - 1 hours where id=1;
+ERROR 0A000: OB-7: Not supported feature or function
+update test_adddate set age = date '2000-01-01' + 1 years where id=1;
+select * from test_adddate;
+id	age
+1	2001-01-01
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,timestamp '2010-01-01 09:00:00.1');
+delete from test_adddate where id=1 and age = timestamp '2015-01-01 09:00:00' -  1 months;
+delete from test_adddate where id=1 and age = date '2000-01-01' + 1 years;
+select * from test_adddate;
+id	age
+1	2010-01-01 09:00:00.100000
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,time '09:00:00');
+delete from test_adddate where id=1 and age = time '19:00:00' - 1 hours;
+delete from test_adddate where id=1 and age = date '2000-01-01' + 1 years;
+ERROR S1004: OB-5023: Illegal type
+select * from test_adddate;
+id	age
+1	09:00:00
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,date '2010-01-01');
+delete from test_adddate where id=1 and age = time '19:00:00' - 1 hours;
+ERROR S1004: OB-5023: Illegal type
+delete from test_adddate where id=1 and age = date '2000-01-01' + 1 years;
+select * from test_adddate;
+id	age
+1	2010-01-01
+prepare stmt1 from select current_time(),current_date(),current_timestamp();
+execute stmt1;
+current_time()	current_date()	current_timestamp()
+14:30:25	2015-12-01	2015-12-01 14:30:25.238934
+deallocate prepare stmt1;
+prepare stmt1 from select date '2010-01-01' + 1 years,timestamp '2010-01-01 09:00:01' - 1 years,time '09:00:00' - 1 hours;
+execute stmt1;
+date '2010-01-01' + 1 years	timestamp '2010-01-01 09:00:01' - 1 years	time '09:00:00' - 1 hours
+2011-01-01	2009-01-01 09:00:01	08:00:00
+deallocate prepare stmt1;

@@ -1,0 +1,17 @@
+using database test;
+drop table if exists ie_varchar_not_null;
+create table ie_varchar_not_null
+(
+it0 int,
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256) not null,
+primary key(it0, vc0)
+);
+select * from ie_varchar_not_null;
+it0	vc0	vc1	vc2
+0	a		
+1	b	NULL	sun
+2	c	hello"the"world	huafda
+3	e		1111
+4	f	hello'the'world	abcde

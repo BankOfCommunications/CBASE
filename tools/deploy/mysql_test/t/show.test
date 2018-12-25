@@ -1,0 +1,7 @@
+--real_sleep 5
+SHOW TABLES like '\\_\\_%';
+SHOW VARIABLES like '%increment%';
+SHOW GLOBAL VARIABLES like '%increment%';
+show grants;
+show columns from __all_sys_stat;
+show warnings;

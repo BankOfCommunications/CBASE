@@ -1,0 +1,48 @@
+--echo case 1: continue insert
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+drop table if exists t1;
+create table t1(pk int primary key, c1 int);
+prepare stmt from insert into t1 values(?,?);
+set autocommit=0;
+set @a=1;
+set @b=1;
+execute stmt using @a,@b;
+set @a=2;
+set @b=2;
+execute stmt using @a,@b;
+set @a=3;
+set @b=3;
+execute stmt using @a,@b;
+set @a=4;
+set @b=4;
+execute stmt using @a,@b;
+commit;
+set autocommit=1;
+select * from t1;
+disconnect conn1;
+
+--echo case 2:
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+drop table if exists t2;
+create table t2(pk int primary key, c1 int);
+prepare stmt from insert into t2 values(?,?),(?,?);
+set autocommit=0;
+set @a=1;
+set @b=1;
+set @c=2;
+set @d=2;
+execute stmt using @a,@b,@c,@d;
+set @a=3;
+set @b=3;
+set @c=1;
+set @d=1;
+--error 5024
+execute stmt using @a,@b,@c,@d;
+rollback;
+set autocommit=1;
+select * from t2;
+disconnect conn1;
+
+

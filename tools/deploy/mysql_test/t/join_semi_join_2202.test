@@ -1,0 +1,48 @@
+
+sleep 5;
+--disable_warnings
+drop table if exists persons,orders,t2;
+--enable_warnings
+
+create table persons (id_p int primary key, lastname varchar(20), firstname varchar(20), address varchar(20), city varchar(20));
+
+insert into persons values(1,'a','a1','a2', 'a3');
+insert into persons values(2,'b','b1','b2', 'b3');
+insert into persons values(3,'c','c1','c2', 'c3');
+
+
+create table orders(id_o int primary key, orderno int, id_p int);
+insert into orders values(1,1111,3);
+insert into orders values(2,2222,3);
+insert into orders values(3,3333,1);
+insert into orders values(4,4444,1);
+insert into orders values(5,5555,65);
+
+create table t2 (
+  id int,
+  category int,
+  county int,
+  state int,
+  phones int,
+  nophones int,
+  primary key (id)
+);
+insert into t2 values (3,2,11,12,5400,7800);
+insert into t2 values (4,2,25,12,6500,11200);
+insert into t2 values (5,1,37,6,10000,12000);
+
+
+select /*+ join(merge_join)*/ * from persons,orders where  persons.id_p=orders.id_p;
+select /*+ join(merge_join)*/ * from persons,orders,t2 where  persons.id_p=orders.id_p and persons.id_p=t2.id;
+select /*+ join(merge_join)*/ * from persons left join orders on persons.id_p=orders.id_p where persons.id_p=orders.id_o;
+select /*+ join(merge_join,merge_join)*/ * from persons left join orders on persons.id_p=orders.id_p right join t2 on t2.id=persons.id_p where persons.id_p=t2.id;
+select /*+ join(merge_join,merge_join)*/ * from persons full join orders on persons.id_p=orders.id_p left join t2 on t2.id=persons.id_p where persons.id_p=t2.id;
+
+select /*+ join(si)*/ * from persons,orders where  persons.id_p=orders.id_p;
+select /*+ join(si)*/ * from persons,orders,t2 where  persons.id_p=orders.id_p and persons.id_p=t2.id;
+select /*+ join(si)*/ * from persons left join orders on persons.id_p=orders.id_p where persons.id_p=orders.id_o;
+--error 5205
+select /*+ join(si,si)*/ * from persons left join orders on persons.id_p=orders.id_p right join t2 on t2.id=persons.id_p where persons.id_p=t2.id;
+select /*+ join(si,si)*/ * from persons full join orders on persons.id_p=orders.id_p left join t2 on t2.id=persons.id_p where persons.id_p=t2.id;
+
+drop table persons,orders,t2;

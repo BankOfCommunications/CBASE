@@ -1,0 +1,29 @@
+drop table if exists t1, t2;
+create table t1 (pk int primary key, v varchar(30), c char(3), e char(20), t varchar(256));
+insert into t1 values (1,'abc', 'de', 'ghi', 'jkl');
+insert into t1 values (2,'abc ', 'de ', 'ghi', 'jkl ');
+insert into t1 values (3,'abc    ', 'd  ', 'ghi', 'jkl    ');
+select length(v),length(c),length(e),length(t) from t1;
+length(v)	length(c)	length(e)	length(t)
+3	2	3	3
+4	3	3	4
+7	3	3	7
+drop table t1;
+create table t1 (pk int primary key, v varchar(20));
+insert into t1 values(1, 'a ');
+select v='a' from t1;
+v='a'
+1
+select v='a ' from t1;
+v='a '
+1
+drop table t1;
+create table t1 (a int primary key, b varchar(12));
+insert into t1 values (1, 'A'), (22, NULL);
+create table t2 (pk int primary key, a int);
+insert into t2 values (1,22), (2,22);
+select t1.a, t1.b, min(t1.b) from t1 inner join t2 ON t2.a = t1.a 
+group by t1.b, t1.a;
+a	b	min(t1.b)
+22	NULL	NULL
+drop table t1, t2;

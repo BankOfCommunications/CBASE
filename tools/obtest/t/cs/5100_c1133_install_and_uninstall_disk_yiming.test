@@ -1,0 +1,76 @@
+deploy ob1=OBI(cluster=1133);
+deploy ob1.reboot;
+
+deploy ob1.prepare;
+deploy ob1.start_check;
+
+deploy ob1.cs0.cs_admin uninstall_disk   1;
+deploy ob1.cs0.cs_admin uninstall_disk   2;
+deploy ob1.cs0.cs_admin uninstall_disk   3;
+deploy ob1.cs0.cs_admin uninstall_disk   4;
+deploy ob1.cs0.cs_admin uninstall_disk   5;
+deploy ob1.cs0.cs_admin uninstall_disk   6;
+deploy ob1.cs0.cs_admin uninstall_disk   7;
+deploy ob1.cs0.cs_admin uninstall_disk   8;
+deploy ob1.cs0.cs_admin uninstall_disk   9;
+deploy ob1.cs0.cs_admin uninstall_disk  10;
+
+deploy ob1.cs1.cs_admin uninstall_disk   1;
+deploy ob1.cs1.cs_admin uninstall_disk   2;
+deploy ob1.cs1.cs_admin uninstall_disk   3;
+deploy ob1.cs1.cs_admin uninstall_disk   4;
+deploy ob1.cs1.cs_admin uninstall_disk   5;
+deploy ob1.cs1.cs_admin uninstall_disk   6;
+deploy ob1.cs1.cs_admin uninstall_disk   7;
+deploy ob1.cs1.cs_admin uninstall_disk   8;
+deploy ob1.cs1.cs_admin uninstall_disk   9;
+deploy ob1.cs1.cs_admin uninstall_disk  10;
+
+sleep 20;
+
+deploy ob1.cs0.rm_sstable 1;
+deploy ob1.cs0.rm_sstable 2;
+deploy ob1.cs0.rm_sstable 3;
+deploy ob1.cs0.rm_sstable 4;
+deploy ob1.cs0.rm_sstable 5;
+deploy ob1.cs0.rm_sstable 6;
+deploy ob1.cs0.rm_sstable 7;
+deploy ob1.cs0.rm_sstable 8;
+deploy ob1.cs0.rm_sstable 9;
+deploy ob1.cs0.rm_sstable 10;
+deploy ob1.cs1.rm_sstable 1;
+deploy ob1.cs1.rm_sstable 2;
+deploy ob1.cs1.rm_sstable 3;
+deploy ob1.cs1.rm_sstable 4;
+deploy ob1.cs1.rm_sstable 5;
+deploy ob1.cs1.rm_sstable 6;
+deploy ob1.cs1.rm_sstable 7;
+deploy ob1.cs1.rm_sstable 8;
+deploy ob1.cs1.rm_sstable 9;
+deploy ob1.cs1.rm_sstable 10;
+
+let $user=deploy_get_value(ob1.sh_p whoami);
+deploy ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/1;
+deploy ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/2;
+deploy ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/3;
+deploy ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/4;
+deploy ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/5;
+deploy ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/6;
+deploy ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/7;
+deploy ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/8;
+deploy ob1.cs0.cs_admin install_disk   /home/$user/obtest_data/9;
+deploy ob1.cs0.cs_admin install_disk  /home/$user/obtest_data/10;
+
+deploy ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/1;
+deploy ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/2;
+deploy ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/3;
+deploy ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/4;
+deploy ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/5;
+deploy ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/6;
+deploy ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/7;
+deploy ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/8;
+deploy ob1.cs1.cs_admin install_disk   /home/$user/obtest_data/9;
+deploy ob1.cs1.cs_admin install_disk  /home/$user/obtest_data/10;
+
+sleep 60;
+deploy ob1.stop_check;

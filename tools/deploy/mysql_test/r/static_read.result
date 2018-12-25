@@ -1,0 +1,80 @@
+drop table if exists t1;
+alter system set merge_delay_interval='1s' server_type=chunkserver,min_major_freeze_interval='1s' server_type=updateserver;
+alter system set merge_delay_for_lsync='1s' server_type=chunkserver;
+alter system set min_drop_cache_wait_time='10s' server_type=chunkserver;
+alter system set merge_thread_per_disk=10 server_type=chunkserver;
+alter system set each_tablet_sync_meta=False server_type=chunkserver;
+case 1: all data in memory
+create table t1(c1 int primary key, c2 int, c3 int) consistent_mode=static;
+prepare stmt_c1  from select * from t1 where c1=?;
+prepare stmt from select * from t1;
+insert into t1 values(1,1,1),(2,2,2),(3,3,3);
+select * from t1;
+c1	c2	c3
+select * from t1 where c1=1;
+c1	c2	c3
+select * from t1 where c2=1;
+c1	c2	c3
+select * from t1 where c2=1 and c1=1;
+c1	c2	c3
+set @a=1;
+execute stmt_c1 using @a;
+c1	c2	c3
+execute stmt;
+c1	c2	c3
+drop happens
+[drop] err=0
+select * from t1;
+c1	c2	c3
+select * from t1 where c1=1;
+c1	c2	c3
+select * from t1 where c2=1;
+c1	c2	c3
+select * from t1 where c2=1 and c1=1;
+c1	c2	c3
+set @a=1;
+execute stmt_c1 using @a;
+c1	c2	c3
+execute stmt;
+c1	c2	c3
+minor_freeze happens
+[minor_freeze] err=0
+select * from t1;
+c1	c2	c3
+select * from t1 where c1=1;
+c1	c2	c3
+select * from t1 where c2=1;
+c1	c2	c3
+select * from t1 where c2=1 and c1=1;
+c1	c2	c3
+set @a=1;
+execute stmt_c1 using @a;
+c1	c2	c3
+execute stmt;
+c1	c2	c3
+major_freeze happens
+[major_freeze] err=0
+select * from t1;
+c1	c2	c3
+1	1	1
+2	2	2
+3	3	3
+select * from t1 where c1=1;
+c1	c2	c3
+1	1	1
+select * from t1 where c2=1;
+c1	c2	c3
+1	1	1
+select * from t1 where c2=1 and c1=1;
+c1	c2	c3
+1	1	1
+set @a=1;
+execute stmt_c1 using @a;
+c1	c2	c3
+1	1	1
+execute stmt;
+c1	c2	c3
+1	1	1
+2	2	2
+3	3	3
+drop table t1;

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE dbmonster-schema PUBLIC "-//kernelpanic.pl//DBMonster Database Schema DTD 1.1//EN" "http://dbmonster.kernelpanic.pl/dtd/dbmonster-schema-1.1.dtd">
+<dbmonster-test>
+	<name>app1</name>
+	<query num="1" name="delete">
+		<sql>delete from sbtest where id = ?</sql>
+		<param name="id" type="int">
+			<generator type="com.etao.monster.generator.NumberGenerator">
+				<property name="maxValue" value="${total_rows}" />
+				<property name="minValue" value="0" />
+				<property name="nulls" value="0" />
+				<property name="returnedType" value="long" />
+				<property name="scale" value="0" />
+			</generator>
+		</param>
+	</query>
+</dbmonster-test>

@@ -1,0 +1,415 @@
+ob1=OBI(cluster=1211);
+ob1.reboot;
+
+ob1.mysql set global ob_read_consistency=3;
+sleep 10;
+ob1.mysql_p show variables like 'ob_read_consistency';
+
+ob1.mysql_p select name,value from __all_sys_config_stat where name = 'read_master_master_ups_percent' or name = 'read_slave_master_ups_percent';
+
+let $m_ups=deploy_get_value(ob1.get_master_ups);
+let $s_ups=deploy_get_value(ob1.get_slave_ups);
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+
+ob1.mysql drop table if exists t1;
+ob1.mysql create table t1(c1 int primary key, c2 int);
+
+ob1.connect conn1;
+ob1.connect conn2;
+
+--echo case1 repeat read
+connection conn1;
+set autocommit=0;
+insert into t1 values(1,1);
+--repeat 10
+select * from t1;
+--repeat 10
+select * from t1 where c1=1;
+--repeat 10
+select * from t1 where c1=2;
+
+connection conn2;
+insert into t1 values(2,2);
+insert into t1 values(3,3);
+replace into t1 values(4,4);
+delete from t1 where c1=3;
+update t1 set c2=0 where c1=4;
+
+connection conn1;
+--repeat 10
+select * from t1;
+--repeat 10
+select * from t1 where c1=1;
+--repeat 10
+select * from t1 where c1=2;
+--repeat 10
+select * from t1 where c1=3;
+--repeat 10
+select * from t1 where c1=4;
+commit;
+
+connection conn2;
+commit;
+
+connection conn1;
+--repeat 10
+select * from t1;
+--repeat 10
+select * from t1 where c1=1;
+--repeat 10
+select * from t1 where c1=2;
+--repeat 10
+select * from t1 where c1=3;
+--repeat 10
+select * from t1 where c1=4;
+commit;
+
+
+--echo case 2 trx autom
+
+connection conn1;
+set autocommit=0;
+select * from t1 where c1=1;
+update t1 set c2=0    where c1=1;
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+
+connection conn2;
+set autocommit=1;
+select * from t1 where c1=1;
+select * from t1 where c1=1;
+select * from t1 where c1=1;
+
+connection conn1;
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+
+connection conn2;
+select * from t1 where c1=1;
+select * from t1 where c1=1;
+select * from t1 where c1=1;
+
+connection conn1;
+commit;
+
+sleep 3;
+connection conn2;
+select * from t1 where c1=1;
+select * from t1 where c1=1;
+select * from t1 where c1=1;
+
+
+--echo case 3 trx rollback
+
+connection conn1;
+set autocommit=0;
+update t1 set c2=c2-1 where c1=1;
+update t1 set c2=c2-1 where c1=1;
+update t1 set c2=c2-1 where c1=1;
+
+connection conn2;
+set autocommit=1;
+--error 5049
+update t1 set c2=0 where c1=1;
+sleep 3;
+select * from t1 where c1=1;
+select * from t1 where c1=1;
+select * from t1 where c1=1;
+
+connection conn1;
+update t1 set c2=c2-1 where c1=1;
+update t1 set c2=c2-1 where c1=1;
+update t1 set c2=c2-1 where c1=1;
+rollback;
+
+connection conn2;
+sleep 3;
+select * from t1 where c1=1;
+update t1 set c2=0 where c1=1;
+sleep 5;
+select * from t1 where c1=1;
+select * from t1 where c1=1;
+
+
+--echo case 4  some query in trx
+
+connection conn1;
+replace into t1 values(1,1);
+update t1 set c2=-1 where c1=1;
+--error 5024
+insert into t1 values(1,1);
+--error 5024
+insert into t1 values(10,10),(10,10);
+update t1 set c2=c2-1 where c1=1;
+commit;
+connection conn2;
+sleep 3;
+select * from t1 where c1=1;
+
+
+connection conn1;
+replace into t1 values(2,2);
+update t1 set c2=-1 where c1=2;
+delete from t1 where c1=20;
+update t1 set c2=0 where c1=20;
+update t1 set c2=c2-1 where c1=2;
+commit;
+connection conn2;
+sleep 3;
+select * from t1 where c1=2;
+select * from t1 where c1=20;
+
+
+connection conn2;
+set autocommit=0;
+replace into t1 values(4,4);
+
+connection conn1;
+replace into t1 values(3,3);
+update t1 set c2=-1 where c1=3;
+--error 5048
+replace into t1 values(4,4);
+--error 5049
+insert into t1 values(4,4);
+update t1 set c2=c2-1 where c1=3;
+commit;
+
+connection conn2;
+commit;
+set autocommit=1;
+sleep 3;
+select * from t1;
+select * from t1 where c1=4;
+select * from t1 where c1=3;
+
+
+--echo case 5 trx idle timeout
+connection conn1;
+set session ob_tx_timeout=10000000;
+insert into t1 values(5,5);
+sleep 11;
+--error 119
+insert into t1 values(6,6);
+commit;
+
+insert into t1 values(5,5);
+sleep 11;
+--error 119
+commit;
+
+insert into t1 values(5,5);
+sleep 11;
+rollback;
+
+connection conn2;
+sleep 3;
+select * from t1 where c1=5;
+select * from t1 where c1=6;
+
+
+--echo case 6 read uncommit
+connection conn1;
+insert into t1 values(7,7);
+select * from t1 ;
+select * from t1 where c1=7;
+
+delete from t1 where c1=7;
+select * from t1 ;
+select * from t1 where c1=7;
+
+insert into t1 values(7,6);
+select * from t1 ;
+select * from t1 where c1=7;
+
+--error 5024
+insert into t1 values(7,1);
+select * from t1 ;
+select * from t1 where c1=7;
+
+replace into t1 values(7,0);
+select * from t1 ;
+select * from t1 where c1=7;
+replace into t1 values(7,2);
+select * from t1 where c1=7;
+select * from t1 ;
+update t1 set c2=-1 where c1=7;
+select * from t1 ;
+select * from t1 where c1=7;
+update t1 set c2=c2*2 where c1=7;
+select * from t1 ;
+select * from t1 where c1=7;
+
+commit;
+
+--echo case 7 switch ups 
+
+connection conn1;
+set session ob_tx_timeout=100000000;
+insert into t1 values(8,8);
+update t1 set c2=0 where c1=8;
+delete from t1 where c1=1;
+ob1.switch_ups;
+sleep 10;
+--error 119
+insert into t1 values(9,9);
+commit;
+
+sleep 20;
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+
+connection conn2;
+select * from t1;
+select * from t1 where c1=8;
+select * from t1 where c1=9;
+select * from t1 where c1=1;
+
+connection conn1;
+insert into t1 values(8,8);
+update t1 set c2=0 where c1=8;
+delete from t1 where c1=1;
+ob1.switch_ups;
+sleep 10;
+--error 119
+commit;
+
+sleep 20;
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+
+connection conn2;
+select * from t1;
+select * from t1 where c1=8;
+select * from t1 where c1=9;
+select * from t1 where c1=1;
+
+connection conn1;
+insert into t1 values(8,8);
+update t1 set c2=0 where c1=8;
+delete from t1 where c1=1;
+ob1.switch_ups;
+sleep 10;
+rollback;
+
+connection conn2;
+sleep 3;
+select * from t1;
+select * from t1 where c1=8;
+select * from t1 where c1=9;
+select * from t1 where c1=1;
+
+
+--echo case 8 select in trx must send to master ups
+connection conn1;
+insert into t1 values(8,8);
+update t1 set c2=0 where c1=8;
+delete from t1 where c1=1;
+
+let $a=deploy_get_value(ob1.$s_ups.monitor get_count);
+let $b=deploy_get_value(ob1.$s_ups.monitor scan_count);
+
+sleep 3;
+--repeat 100
+select * from t1;
+--repeat 100
+select * from t1 where c1=1;
+rollback;
+
+let $c=deploy_get_value(ob1.$s_ups.monitor get_count);
+let $d=deploy_get_value(ob1.$s_ups.monitor scan_count);
+
+if($c > $a) 
+{
+    --echo bug!!! slave ups should not have received get request
+}
+if($d > $b) 
+{
+    --echo bug!!! slave ups should not have received scan request
+}
+
+
+--echo case 9 omit.
+
+--echo case 10 first query failed in trx
+
+connection conn1;
+--error 5024
+insert into t1 values(1,1);
+update t1 set c2=100 where c1=1;
+delete from t1 where c1=8;
+update t1 set c2=100 where c1=2;
+commit;
+
+connection conn2;
+sleep 3;
+select * from t1;
+select * from t1 where c1=1;
+select * from t1 where c1=2;
+select * from t1 where c1=8;
+
+connection conn1;
+update t1 set c2=100 where c1=70;
+update t1 set c2=1000 where c1=1;
+commit;
+
+connection conn2;
+sleep 3;
+select * from t1;
+select * from t1 where c1=1;
+select * from t1 where c1=70;
+
+connection conn1;
+delete from t1 where c1=80;
+update t1 set c2=1000 where c1=1;
+commit;
+
+connection conn2;
+sleep 3;
+select * from t1;
+select * from t1 where c1=1;
+select * from t1 where c1=80;
+
+connection conn1;
+--error 5024
+insert into t1 values(10,9),(10,9);
+update t1 set c2=10000 where c1=1;
+commit;
+
+connection conn2;
+sleep 3;
+select * from t1;
+select * from t1 where c1=10;
+select * from t1 where c1=1;
+
+
+connection conn2;
+set autocommit=0;
+insert into t1 values(10,10);
+insert into t1 values(20,20);
+
+connection conn1;
+--error 5049
+insert into t1 values(10,10);
+insert into t1  values(11,11);
+commit;
+--error 5048
+replace into t1 values(20,20);
+insert into t1  values(21,21);
+
+
+connection conn2;
+rollback;
+set autocommit=1;
+sleep 3;
+select * from t1;
+select * from t1 where c1=11;
+select * from t1 where c1=10;
+select * from t1 where c1=20;
+select * from t1 where c1=21;
+
+
+ob1.$m_ups.status;
+ob1.$s_ups.status;

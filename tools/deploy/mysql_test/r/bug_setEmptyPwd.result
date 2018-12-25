@@ -1,0 +1,7 @@
+drop table if exists t1,t2,t3,t4;
+set password for  = 'pass11';
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near '= 'pass11'' at line 1
+set password '' for  = 'pass11';
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''' for  = 'pass11'' at line 1
+set password for  '' = 'pass11';
+ERROR HY000: User not exist

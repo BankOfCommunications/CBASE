@@ -1,0 +1,24 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+
+create table t1 (c1 int, c2 varchar(30), primary key(c1), c3 int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4),(4,'a',2);
+
+prepare stmt1 from delete from  t1 where c1=?;
+set @a=1;
+execute stmt1 using @a;
+execute stmt1 using @a;
+deallocate prepare stmt1;
+
+prepare stmt2 from replace into t1 values (4, ?, 5);
+set @a='xxxx';
+execute stmt2 using @a;
+execute stmt2 using @a;
+execute stmt2 using @a;
+deallocate prepare stmt2;
+
+select S.statement,S.id,S.prepare_count,S.execute_count,S.slow_count from (select * from __all_statement) as S;
+
+# tear down
+drop table t1;

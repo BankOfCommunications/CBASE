@@ -1,0 +1,202 @@
+#!/bin/bash
+help()
+{
+    cat <<EOF
+Usages:
+  # syncfile and run command againest each host defined in '\$hosts'
+  alias sr='./scprun' # for convenient
+  sr check       # check ssh connection
+  sr getthrough  # make ssh without passwd
+  sr cmd...      # with timeout=1s
+  sr lrun cmd... # in cmd, use \$h to ref to hostname, with timeout=1s
+  sr bg cmd...   # log will be output to \$term
+  sr view # view log in \$term
+Environment Variables:
+  initfile="scprun.rc", hosts='', syncfiles="None", term="scprun-output", passwd=''
+More Examples:
+  sr hostname
+  sr lrun 'echo \$h'
+  sr lrun 'scp ~/.inputrc \$h:'
+EOF
+}
+
+getthrough()
+{
+    [ -z "$hosts" ] && echo 'ERROR: no $hosts defined.' && return 1
+    if [ -n "$passwd" -a -x $bin_dir/sshpass ]; then
+        echo "passwd is set And bin_dir/sshpass is excutable"
+        sshpass_cmd="$bin_dir/sshpass -p $passwd"
+    else
+        echo "# passwd is not set or bin_dir/sshpass is not excutable, You may need to enter passwd when exec 'rsync'"
+        sshpass_cmd=""
+    fi
+    echo "INFO: Generate '.ssh/id_rsa'."
+    mkdir -p ~/.ssh
+    grep "StrictHostKeyChecking no" ~/.ssh/config >/dev/null || echo -e "Host *\nStrictHostKeyChecking no" >> ~/.ssh/config
+    [ -e ~/.ssh/id_rsa ] || ssh-keygen -N "" -f ~/.ssh/id_rsa
+    echo "INFO: Add id_rsa.pub to .ssh/authoried_keys"
+    grep "`cat ~/.ssh/id_rsa.pub`" ~/.ssh/authorized_keys >/dev/null || cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+    for h in $hosts; do
+        echo "rsync -a ~/.ssh $h:"
+        #$sshpass_cmd rsync -a ~/.ssh $h: &
+        #waitone $!
+        $sshpass_cmd rsync -a ~/.ssh $h:
+    done
+}
+
+scprun()
+{
+    host=$1
+    workdir=$2
+    syncfiles=$3
+    [ -z "$host" -o -z "$workdir" -o -z "$syncfiles" ] && echo 'ERROR: no $host and $workdir and $syncfiles given' && return -1
+    shift 3
+    echo "# $USER@$h $workdir[$syncfiles]$ $@"
+    [ -z "$syncfiles" -o "$syncfiles" = "None" ] || tar czf - $syncfiles |ssh $h "mkdir -p $workdir; tar xzf - -C $workdir" &
+    waitone $!
+    ssh -T -q $h . .bashrc \; mkdir -p $workdir \; cd "$workdir" \; "$@" &
+    waitone $!
+}
+
+view()
+{
+    [ -z "$term" ] && echo 'ERROR: No $term defined.'  && return -1
+    for h in $term/*; do
+	echo "==================== $h ===================="
+        cat $h
+    done
+}
+
+waitall()
+{
+    local pids=""
+    local remain_pids="$@"
+    local timeout=1000000
+    local wait_delay=100000
+    local errors=0
+    echo "INFO: wait for $remain_pids"
+    failed_job=''
+    ((t = timeout))
+    while ((t > 0)); do
+        pids="$remain_pids"
+        remain_pids=""
+        for pid in $pids; do
+            if kill -0 "${pid##*:}" 2>/dev/null; then
+                #echo "$pid is still alive."
+                remain_pids="$remain_pids $pid"
+            elif wait "${pid##*:}"; then
+                echo "${pid%%:*}=>SUCCESS"
+            else
+                echo "${pid%%:*}=>FAIL[$?]"
+                failed_job="$failed_job ${pid%%:*}"
+                ((++errors))
+            fi
+        done
+        [ -z "$remain_pids" ] && break
+        usleep $wait_delay
+        ((t -= wait_delay))
+    done
+    for pid in $remain_pids; do
+        echo "${pid%%:*}=>TIMEOUT"
+        failed_job="$failed_job ${pid%%:*}"
+        ((++errors))
+    done
+    return $errors
+}
+
+waitone()
+{
+    local pid=$1
+    local timeout=1000000
+    local wait_delay=100000
+    #echo "INFO: wait for $pid"
+    ((t = timeout))
+    while ((t > 0)); do
+        if ! kill -0 $pid 2>/dev/null; then
+            wait $pid
+            return $?
+        else
+            usleep $wait_delay
+            ((t -= wait_delay))
+        fi
+    done
+    ((t = timeout))
+    while ((t > 0)); do
+        if ! kill -0 $pid 2>/dev/null; then
+            wait $pid
+            return $?
+        else
+            echo "$pid not exit before timeout, kill it"
+            kill $pid 2>/dev/null
+            usleep $wait_delay
+            ((t -= wait_delay))
+        fi
+    done
+    if kill -0 $pid 2>/dev/null; then
+        kill -SIGKILL $pid 2>/dev/null
+        return -1
+    fi
+}
+
+check()
+{
+    workdir=`pwd`
+    [ -z "$hosts" ] && echo 'ERROR: No $hosts defined' && return -1
+    pids=""
+    for h in $hosts; do
+        ssh $h true &
+        pids="$pids $h:$!"
+    done
+    if waitall "$pids"; then
+        echo "INFO: hosts[$hosts] ssh check success"
+    else
+        echo "ERROR: hosts[$hosts] ssh check fail[fail_count=$?, fail_hosts=$failed_job]"
+    fi
+}
+
+lrun()
+{
+    workdir=`pwd`
+    [ -z "$hosts" ] && echo 'ERROR: No $hosts defined' && return -1
+    for h in $hosts; do
+        eval "echo \# $USER@localhost $workdir$ $@"
+        eval "$* & waitone \$!"
+    done
+}
+
+run()
+{
+    [ -z "$hosts" -o -z "$syncfiles" ] && echo 'ERROR: No $hosts and $syncfiles defined' && return -1
+    for h in $hosts; do
+        scprun $h $workdir "$syncfiles" "$@"
+    done
+}
+
+bg()
+{
+    [ -z "$hosts" -o -z "$syncfiles" -o -z "$term" ] && echo 'ERROR: No $hosts and $syncfiles and $term defined' && return -1
+    ! mkdir -p $term && echo "ERROR: mkdir -p \$term[$term] failed" && return -2
+    for h in $hosts; do
+        scprun $h $workdir "$syncfiles" "$@" >$term/$h &
+    done
+}
+
+bin_dir=$(dirname $(readlink -f $0))
+method=${1:-help}
+case $method in
+    help|getthrough|check|lrun|run|bg|view)
+        shift
+        ;;
+    *)
+        method=run
+        ;;
+esac
+
+if [ -z "$workdir" ]; then
+    workdir=`pwd`;
+fi
+echo "sysinit=${sysinit:=$bin_dir/scprun.rc} initfile=${initfile:=./scprun.rc} workdir=${workdir} syncfiles=${syncfiles:=None} term=${term:=scprun-output}"
+[ -f "$sysinit" ] && . $sysinit
+[ -f "$initfile" ] && . $initfile
+echo "INFO: method='$method' args='$*' bin_dir='$bin_dir' hosts='$hosts'"
+$method $*

@@ -1,0 +1,112 @@
+#--real_sleep 30
+--disable_warnings
+drop table if exists build_in_func_test_table;
+--enable_warnings
+
+
+# test substr()
+create table build_in_func_test_table (varchar_c varchar(255) primary key, date_c datetime,v varchar(255));
+insert into build_in_func_test_table values ('hello', '2012-11-01 19:14:32',null);
+##full param
+select substr(varchar_c, 1, 1) from build_in_func_test_table;
+select substr(varchar_c, 0, 1) from build_in_func_test_table;
+select substr(varchar_c, -1, 1) from build_in_func_test_table;
+select substr(varchar_c, -5, 1) from build_in_func_test_table;
+select substr(varchar_c, -6, 1) from build_in_func_test_table;
+select substr(varchar_c, -100, 1) from build_in_func_test_table;
+select substr(varchar_c, 3, 1) from build_in_func_test_table;   
+select substr(varchar_c, 5, 1) from build_in_func_test_table;
+select substr(varchar_c, 6, 1) from build_in_func_test_table;
+select substr(varchar_c, 6, -1) from build_in_func_test_table;
+select substr(varchar_c, 5, -1) from build_in_func_test_table;
+select substr(varchar_c, 4, -1) from build_in_func_test_table;
+select substr(varchar_c, -1, -1) from build_in_func_test_table;
+select substr(varchar_c, 0, 5) from build_in_func_test_table;   
+select substr(varchar_c, 0, 6) from build_in_func_test_table;
+select substr(varchar_c, 0, 100) from build_in_func_test_table;
+select substr(varchar_c, -6, 10) from build_in_func_test_table; 
+select substr(varchar_c, -5, 10) from build_in_func_test_table;
+select substr(varchar_c, -5, 3) from build_in_func_test_table;
+select substr(v,5,10) from build_in_func_test_table;
+select substr(varchar_c,null,10) from build_in_func_test_table;
+select substr(varchar_c,2,null) from build_in_func_test_table;
+##default length
+select substr(varchar_c, -6) from build_in_func_test_table;
+select substr(varchar_c, -5) from build_in_func_test_table;
+select substr(varchar_c, -4) from build_in_func_test_table;
+select substr(varchar_c, -0) from build_in_func_test_table;
+select substr(varchar_c, 1) from build_in_func_test_table;
+select substr(varchar_c, 2) from build_in_func_test_table;
+select substr(varchar_c, 5) from build_in_func_test_table;
+select substr(varchar_c, 6) from build_in_func_test_table;
+select substr(varchar_c,null) from build_in_func_test_table;
+select substr(v,1) from build_in_func_test_table;
+##cast test
+select substr(date_c, 0) from build_in_func_test_table;
+select substr(date_c, 10) from build_in_func_test_table;
+select substr(1024, 1, 2) from build_in_func_test_table;
+
+
+# coalesce test
+select coalesce(cast(null as int), null) from build_in_func_test_table;
+--error 153
+select coalesce(null, 'monkey59', 123) from build_in_func_test_table;
+--error 154
+select coalesce(date_c,null, 'monkey59', 123) from build_in_func_test_table;
+
+--error 153
+select coalesce('jasimin', null, 'a,a', 123) from build_in_func_test_table;
+select coalesce(cast(null as int), null, 32.23) from build_in_func_test_table;
+
+# to lower/upper case
+select lower('ABC&*03_+abc') from build_in_func_test_table;
+select lower(varchar_c) from build_in_func_test_table;
+select lower(null) from build_in_func_test_table;
+select upper('ABC&*03_+abc') from build_in_func_test_table;
+select upper(varchar_c) from build_in_func_test_table;
+select upper(null) from build_in_func_test_table;
+
+# cast to test
+select cast(12 as  datetime) from build_in_func_test_table;    
+--error 5102
+select cast('12' as  datetime) from build_in_func_test_table;
+--error 7
+select cast(cast('1970-01-01 08:00:12' as  datetime) as int) from build_in_func_test_table;
+select cast('1970-01-01 08:00:12' as int) from build_in_func_test_table;
+# --error 5001
+select cast(cast('12' as decimal) as  datetime) from build_in_func_test_table;    
+# --error 5001
+select cast(cast('12' as decimal) as datetime) from build_in_func_test_table;    
+# --error 5001
+select cast(cast('12' as decimal) as datetime) from build_in_func_test_table;    
+select cast(v as int) from build_in_func_test_table;
+
+# trim function
+select trim('aba' from 'ababa') from build_in_func_test_table; 
+select length(trim('aba' from 'aba')) from build_in_func_test_table;
+select trim('aba' from 'aba') from build_in_func_test_table;
+select trim('  hello  ') from build_in_func_test_table;
+select trim('h' from 'hhhhello!')  from build_in_func_test_table;
+select trim('o!' from 'hhhhello!')  from build_in_func_test_table;
+select trim('h' from 'hhhhaaaahhhh')  from build_in_func_test_table;
+select trim(LEADING 'h' from 'hhhhaaaahhhh') from build_in_func_test_table;
+select trim(TRAILING 'h' from 'hhhhaaaahhhh')  from build_in_func_test_table;
+select trim(BOTH 'h' from 'hhhhaaaahhhh')  from build_in_func_test_table;
+select trim(BOTH  from '  hhhhaaaa  ')  from build_in_func_test_table;
+select trim(123 from 123542) from build_in_func_test_table;     
+select trim(2 from cast(12312312 as datetime)) from build_in_func_test_table;  
+select length(trim('     hi' || 'dir ')) from build_in_func_test_table;
+select trim(1) from build_in_func_test_table;
+select trim(cast(111 as varchar)) from build_in_func_test_table;
+select trim(LEADING 1 from cast(111 as varchar)) from build_in_func_test_table;
+select trim(TRAILING 1 from cast(111 as varchar)) from build_in_func_test_table;
+select trim(v) from build_in_func_test_table;
+select trim(leading v from 'v'),trim(leading varchar_c from 'he') from build_in_func_test_table;
+
+
+#all in all test
+select coalesce(lower(null), length(lower(upper('yssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxddsd'))), 'dir') from build_in_func_test_table;
+
+select 'NAME:'||varchar_c,'ADDR:'||v from build_in_func_test_table;
+
+drop table build_in_func_test_table;

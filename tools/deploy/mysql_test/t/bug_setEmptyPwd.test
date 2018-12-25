@@ -1,0 +1,19 @@
+--disable_warnings
+drop table if exists t1,t2,t3,t4;
+--enable_warnings
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+--error 5001
+set password for  = 'pass11';
+--error 5001
+set password '' for  = 'pass11';
+
+--real_sleep 5
+
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+--error 42
+set password for  '' = 'pass11';
+
+--real_sleep 5
+connect (conn3,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);

@@ -1,0 +1,79 @@
+--disable_warnings
+drop table if exists t1,t2,t3;
+--enable_warnings
+
+# select const
+
+select 1;
+select 1+2;
+select 1+2+3;
+
+select 1-1;
+select 1-1-1;
+select 2-1-0;
+
+--error 78
+select 1/0;
+select 1/2;
+select 2/1;
+select 4/2/2;
+
+select 1*0;
+select 1*2*3;
+
+select (1+2.5)*3/5-10*0.1*8/0.2-2 limit 10;
+
+select 0.1;
+select 0.1+0.2;
+select 0.1+1;
+select 0.2/0.1;
+
+select 1 limit 1;
+select 1+1 limit 2;
+
+#create table t1(foo varchar primary key);
+#insert into t1 values('alex'),('car');
+#select foo from t1 union select 'bar' as foo from dual;
+#drop table t1;
+
+#SELECT 0 AS a FROM dual UNION SELECT 1 AS a FROM dual ORDER BY a ASC  LIMIT 1;
+
+create table t1(pk int primary key,extra int);
+select 1 from (select pk from t1) as t;
+insert into t1(pk) values(1),(2);
+select 1 from (select * from t1) as t;
+select 1 from (select 1 ) as t;
+drop table t1;
+
+select 'a';
+select 'a' + 'b';
+select 'a'-'b';
+select '1' + '2';
+select '1' / '2';
+select '1' * '2';
+select '1.5';
+select '1.5' + '2.0';
+select (1+'2.5')*3/5-'10'*0.1*8/'0.2'-2 limit 10;
+
+# select const from dual
+
+select 1 from dual;
+select '1' from dual where 1 limit 20;
+select '1' from dual where 0 limit 20;
+
+--error 5001
+select 1 union select 1 from dual;
+--error 5001
+select 1 union select 1;
+
+# create a table named dual
+--error 5001
+create table dual(name varchar primary key,a int);
+--error 5001
+insert into dual values(1);
+
+# select * without table specified
+--error 5002
+select *;
+--error 5002
+select * from dual;

@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\deploy\simple_client
+2
+4
+9:stress.sh|1|166f778d833|4c1|dd8d5f0f|cfcc1ac668c911e8a8030002c8c1274c|0
+8:Makefile|1|166f778d7e4|10e|a88952c8|cd6c1aaa68c911e8a8030002c8c1274c|0
+14:simple_client.schema|1|166f778d87f|50a|ef38acbd|d1dc1ae268c911e8a8030002c8c1274c|0
+10:simple_client.py|1|166f778d8bd|375|766835ae|d3ec1afe68c911e8a8030002c8c1274c|0

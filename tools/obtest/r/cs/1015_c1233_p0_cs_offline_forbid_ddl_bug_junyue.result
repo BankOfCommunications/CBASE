@@ -1,0 +1,8 @@
+ob1=OBI(cluster=1244)
+ob1.reboot
+ob1.source include/merge.inc
+ob1.prepare
+ob1.major_freeze
+ob1.check_cs_version 2
+ob1.cs0.force_stop
+ob1.mysql create table tt(c1 int primary key, c2 int)

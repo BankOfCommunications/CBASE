@@ -1,0 +1,115 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+create table t1 (c1 int primary key ,c2 varchar(8),c3 bool,c4 datetime ,c5  decimal(4,3));
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create index il on t1(c2) storing (c3);
+create index il1 on t1 (c3) storing (c4);
+create index il2 on t1 (c4) storing (c5);
+create index il3 on t1 (c5) storing (c2);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 700
+insert into t1 values(1,'maosi',0,'2015-01-01 12:00:00',3.142),(2,'zhand',1,'1258-04-09 12:24:00',3.438);
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+--let $table_head =__
+--let $table_end =__idx__il
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+--let $table_end =__idx__il1
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+--let $table_end =__idx__il2
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+--let $table_end =__idx__il3
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+
+drop table t1;
+
+
+
+create table t1 (c1 int primary key ,c2 varchar(8),c3 bool,c4 datetime ,c5  decimal(4,3));
+create index il on t1(c2,c3) storing (c4);
+create index il1 on t1 (c3,c4) storing (c5);
+create index il2 on t1 (c4,c5) storing (c2);
+create index il3 on t1 (c5,c2) storing (c3);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 500
+insert into t1 values(1,'maosi',0,'2015-01-01 12:00:00',3.142),(2,'zhand',1,'1258-04-09 12:24:00',3.438);
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+--let $table_head =__
+--let $table_end =__idx__il
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+--let $table_end =__idx__il1
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+--let $table_end =__idx__il2
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+--let $table_end =__idx__il3
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+drop table t1;
+
+
+
+create table t1 (c1 int primary key ,c2 varchar(8),c3 bool,c4 datetime ,c5  decimal(4,3));
+create index il on t1(c2,c3) storing (c4);
+create index il1 on t1 (c3,c4) storing (c5);
+create index il2 on t1 (c4,c5) storing (c2);
+create index il3 on t1 (c5,c2) storing (c3);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 500
+insert into t1 values(1,'maosi',0,'2015-01-01 12:00:00',3.142),(2,'zhand',1,'1258-04-09 12:24:00',3.438),(3,'tain',0,'4013-09-09 13:34:34',3.438),(4,'shil',1,'1258-04-09 12:24:00',3.142);
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+--let $table_head =__
+--let $table_end =__idx__il
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+--let $table_end =__idx__il1
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+--let $table_end =__idx__il2
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+--let $table_end =__idx__il3
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+drop table t1;
+
+create table t1 (c1 timestamp primary key ,c2 createtime ,c3 datetime ,c4 int,c5 modifytime);
+create index il on t1(c1,c3) storing (c4);
+create index il1 on t1 (c3,c4) storing (c2);
+create index il2 on t1 (c4,c1) storing (c2);
+--error 2
+create index il3 on t1 (c4,c2) storing (c3);
+--error 2
+create index il3 on t1 (c5,c1) storing (c3);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 500
+insert into t1(c1,c3,c4) values('2015-06-24 11:29:34.798924','2015-07-22 13:38:34.598924',1);
+insert into t1(c1,c3,c4) values('2015-06-25 12:29:34.805737','2015-07-23 14:37:34.198924',1);
+insert into t1(c1,c3,c4) values('2015-06-26 13:49:34.505737','2015-07-24 15:36:34.298924',1);
+insert into t1(c1,c3,c4) values('2015-06-27 14:49:34.405737','2015-07-25 16:35:34.398924',1);
+insert into t1(c1,c3,c4) values('2015-06-28 15:39:34.305737','2015-07-26 17:34:34.498924',1);
+select c1,c3,c4 from t1;
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+--let $table_head =__
+--let $table_end =__idx__il
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+--let $table_end =__idx__il1
+--let $table_name=$table_head$n$table_end
+eval select c1,c3,c4 from  $table_name;
+--let $table_end =__idx__il2
+--let $table_name=$table_head$n$table_end
+eval select c1,c4 from  $table_name;
+
+

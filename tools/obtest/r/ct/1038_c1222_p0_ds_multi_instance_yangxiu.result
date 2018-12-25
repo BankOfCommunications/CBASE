@@ -1,0 +1,415 @@
+ob1=OBI(cluster=1222);
+ob2=OBI(cluster=1222);
+ob1.reboot;
+ob2.reboot;
+ob1.create_datasource test$cnt;
+ob2.create_datasource test$cnt;
+ob1.create_datasource test$cnt;
+ob2.create_datasource test$cnt;
+ob1.create_datasource test$cnt;
+ob2.create_datasource test$cnt;
+ob1.create_datasource test$cnt;
+ob2.create_datasource test$cnt;
+ob1.create_datasource test$cnt;
+ob2.create_datasource test$cnt;
+ob1.use_datasource test$cnt;
+create table t10 (a int primary key,b int);
+insert into t10 values(10,10);
+ob2.use_datasource test$cnt;
+create table t9(a int primary key,b int);
+insert into t9 values(9,9);
+ob1.use_datasource test$cnt;
+create table t8 (a int primary key,b int);
+insert into t8 values(8,8);
+ob2.use_datasource test$cnt;
+create table t7(a int primary key,b int);
+insert into t7 values(7,7);
+ob1.use_datasource test$cnt;
+create table t6 (a int primary key,b int);
+insert into t6 values(6,6);
+ob2.use_datasource test$cnt;
+create table t5(a int primary key,b int);
+insert into t5 values(5,5);
+ob1.use_datasource test$cnt;
+create table t4 (a int primary key,b int);
+insert into t4 values(4,4);
+ob2.use_datasource test$cnt;
+create table t3(a int primary key,b int);
+insert into t3 values(3,3);
+ob1.use_datasource test$cnt;
+create table t2 (a int primary key,b int);
+insert into t2 values(2,2);
+ob2.use_datasource test$cnt;
+create table t1(a int primary key,b int);
+insert into t1 values(1,1);
+ob1.use_datasource test2;
+select table_name from __first_tablet_entry where table_id > 3000;
+table_name
+t10
+t2
+t4
+t6
+t8
+ob2.use_datasource test9;
+select table_name from __first_tablet_entry where table_id > 3000;
+table_name
+t1
+t3
+t5
+t7
+t9
+ob1.use_datasource test4;
+select * from t4;
+a	b
+4	4
+ob2.use_datasource test5;
+select * from t5;
+a	b
+5	5
+ob1.ms0.stop;
+ob2.ms1.stop;
+ob1.use_datasource test$cnt;
+replace into t10 values(5,5);
+select * from t10;
+a	b
+5	5
+10	10
+replace into t10 values(4,4);
+select * from t10;
+a	b
+4	4
+5	5
+10	10
+replace into t10 values(3,3);
+select * from t10;
+a	b
+3	3
+4	4
+5	5
+10	10
+replace into t10 values(2,2);
+select * from t10;
+a	b
+2	2
+3	3
+4	4
+5	5
+10	10
+replace into t10 values(1,1);
+select * from t10;
+a	b
+1	1
+2	2
+3	3
+4	4
+5	5
+10	10
+ob2.use_datasource test$cnt;
+replace into t9 values(5,5);
+select * from t9;
+a	b
+5	5
+9	9
+replace into t9 values(4,4);
+select * from t9;
+a	b
+4	4
+5	5
+9	9
+replace into t9 values(3,3);
+select * from t9;
+a	b
+3	3
+4	4
+5	5
+9	9
+replace into t9 values(2,2);
+select * from t9;
+a	b
+2	2
+3	3
+4	4
+5	5
+9	9
+replace into t9 values(1,1);
+select * from t9;
+a	b
+1	1
+2	2
+3	3
+4	4
+5	5
+9	9
+ob1.use_datasource test$cnt;
+replace into t8 values(5,5);
+select * from t8;
+a	b
+5	5
+8	8
+replace into t8 values(4,4);
+select * from t8;
+a	b
+4	4
+5	5
+8	8
+replace into t8 values(3,3);
+select * from t8;
+a	b
+3	3
+4	4
+5	5
+8	8
+replace into t8 values(2,2);
+select * from t8;
+a	b
+2	2
+3	3
+4	4
+5	5
+8	8
+replace into t8 values(1,1);
+select * from t8;
+a	b
+1	1
+2	2
+3	3
+4	4
+5	5
+8	8
+ob2.use_datasource test$cnt;
+replace into t7 values(5,5);
+select * from t7;
+a	b
+5	5
+7	7
+replace into t7 values(4,4);
+select * from t7;
+a	b
+4	4
+5	5
+7	7
+replace into t7 values(3,3);
+select * from t7;
+a	b
+3	3
+4	4
+5	5
+7	7
+replace into t7 values(2,2);
+select * from t7;
+a	b
+2	2
+3	3
+4	4
+5	5
+7	7
+replace into t7 values(1,1);
+select * from t7;
+a	b
+1	1
+2	2
+3	3
+4	4
+5	5
+7	7
+ob1.use_datasource test$cnt;
+replace into t6 values(5,5);
+select * from t6;
+a	b
+5	5
+6	6
+replace into t6 values(4,4);
+select * from t6;
+a	b
+4	4
+5	5
+6	6
+replace into t6 values(3,3);
+select * from t6;
+a	b
+3	3
+4	4
+5	5
+6	6
+replace into t6 values(2,2);
+select * from t6;
+a	b
+2	2
+3	3
+4	4
+5	5
+6	6
+replace into t6 values(1,1);
+select * from t6;
+a	b
+1	1
+2	2
+3	3
+4	4
+5	5
+6	6
+ob2.use_datasource test$cnt;
+replace into t5 values(5,5);
+select * from t5;
+a	b
+5	5
+replace into t5 values(4,4);
+select * from t5;
+a	b
+4	4
+5	5
+replace into t5 values(3,3);
+select * from t5;
+a	b
+3	3
+4	4
+5	5
+replace into t5 values(2,2);
+select * from t5;
+a	b
+2	2
+3	3
+4	4
+5	5
+replace into t5 values(1,1);
+select * from t5;
+a	b
+1	1
+2	2
+3	3
+4	4
+5	5
+ob1.use_datasource test$cnt;
+replace into t4 values(5,5);
+select * from t4;
+a	b
+4	4
+5	5
+replace into t4 values(4,4);
+select * from t4;
+a	b
+4	4
+5	5
+replace into t4 values(3,3);
+select * from t4;
+a	b
+3	3
+4	4
+5	5
+replace into t4 values(2,2);
+select * from t4;
+a	b
+2	2
+3	3
+4	4
+5	5
+replace into t4 values(1,1);
+select * from t4;
+a	b
+1	1
+2	2
+3	3
+4	4
+5	5
+ob2.use_datasource test$cnt;
+replace into t3 values(5,5);
+select * from t3;
+a	b
+3	3
+5	5
+replace into t3 values(4,4);
+select * from t3;
+a	b
+3	3
+4	4
+5	5
+replace into t3 values(3,3);
+select * from t3;
+a	b
+3	3
+4	4
+5	5
+replace into t3 values(2,2);
+select * from t3;
+a	b
+2	2
+3	3
+4	4
+5	5
+replace into t3 values(1,1);
+select * from t3;
+a	b
+1	1
+2	2
+3	3
+4	4
+5	5
+ob1.use_datasource test$cnt;
+replace into t2 values(5,5);
+select * from t2;
+a	b
+2	2
+5	5
+replace into t2 values(4,4);
+select * from t2;
+a	b
+2	2
+4	4
+5	5
+replace into t2 values(3,3);
+select * from t2;
+a	b
+2	2
+3	3
+4	4
+5	5
+replace into t2 values(2,2);
+select * from t2;
+a	b
+2	2
+3	3
+4	4
+5	5
+replace into t2 values(1,1);
+select * from t2;
+a	b
+1	1
+2	2
+3	3
+4	4
+5	5
+ob2.use_datasource test$cnt;
+replace into t1 values(5,5);
+select * from t1;
+a	b
+1	1
+5	5
+replace into t1 values(4,4);
+select * from t1;
+a	b
+1	1
+4	4
+5	5
+replace into t1 values(3,3);
+select * from t1;
+a	b
+1	1
+3	3
+4	4
+5	5
+replace into t1 values(2,2);
+select * from t1;
+a	b
+1	1
+2	2
+3	3
+4	4
+5	5
+replace into t1 values(1,1);
+select * from t1;
+a	b
+1	1
+2	2
+3	3
+4	4
+5	5

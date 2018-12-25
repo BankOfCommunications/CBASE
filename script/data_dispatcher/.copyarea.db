@@ -1,0 +1,7 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\script\data_dispatcher
+2
+3
+b:dispatch.sh|1|166f77aeda9|d42a|c0862dd9|974cc66a68d711e8a8030002c8c1274c|0
+3:etc|2|0|0|0|9a2cc69268d711e8a8030002c8c1274c|0
+f:copy_sstable.py|1|166f77aee30|1e52|f0e04e5f|b45cc7ea68d711e8a8030002c8c1274c|0

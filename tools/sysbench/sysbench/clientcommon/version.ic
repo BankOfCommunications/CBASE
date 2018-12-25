@@ -1,0 +1,1 @@
+static const string SIMON_CLIENT_VERSION = "Simon Client Library Version @SIMON_VERSION@, Thu Jan 10 18:11:54 CST 2013";

@@ -1,0 +1,57 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+
+# speed up merge
+deploy ob1.mysql alter system set merge_delay_interval='1s' server_type=chunkserver;
+deploy ob1.mysql alter system set merge_delay_for_lsync='1s' server_type=chunkserver;
+deploy ob1.mysql alter system set min_drop_cache_wait_time='1s' server_type=chunkserver;
+sleep 10;
+
+deploy ob1.prepare s;
+
+# new data
+deploy ob1.create_client;
+create table t1(c1 int primary key,c2 int);
+
+# wait slave cluster cs create tablet
+sleep 60;
+insert into t1 values(1,1),(2,2),(3,3),(4,4);
+
+# scan ups
+select * from t1;
+
+# merge
+deploy ob1.major_freeze;
+
+# master cluster cs restart
+deploy ob1.cs0.restart;
+deploy ob1.cs1.restart;
+deploy ob1.cs2.restart;
+deploy ob1.cs3.restart;
+
+sleep 20;
+
+#sql
+insert into t1 values(5,1),(6,2),(7,3),(8,4);
+select * from t1;
+
+#cluster switch
+deploy ob1.switch_cluster ob2
+
+#sql
+update t1 set c2=10 where c1=8;
+select * from t1;
+
+#check merge done
+deploy ob1.check_cs_version 2;
+deploy ob2.check_cs_version 2;
+
+select * from t1;
+
+
+

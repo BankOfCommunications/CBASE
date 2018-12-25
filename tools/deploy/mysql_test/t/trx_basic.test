@@ -1,0 +1,108 @@
+--disable_warnings
+drop table if exists t1,t2,t3,t4;
+--enable_warnings
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn3,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+##
+# CASE1: 
+##
+
+
+connection conn1;
+create table t1(pk int primary key, a int);
+insert into t1 values(1,1);
+
+begin;
+--echo use conn1, update t1
+update t1 set a=2 where pk=1;
+--echo use conn1, select before conn1 commit, expect: (1,1)
+select * from t1;
+
+--echo use conn2, select before conn1 commit, expect: (1,1)
+connection conn2;
+select * from t1;
+
+connection conn1;
+commit;
+
+
+--echo use conn2, select after conn1 commit, expect: (1,2)
+connection conn2;
+select * from t1;
+
+drop table t1;
+
+##
+# CASE2:
+##
+connection conn1;
+create table t1(pk int primary key, a int);
+insert into t1 values(1,1);
+
+--echo conn2 begin
+connection conn2;
+begin;
+
+--echo conn3 begin
+connection conn3;
+begin;
+
+--echo conn2 set a to 2
+connection conn2;
+select * from t1;
+update t1 set a=2 where pk=1;
+
+--echo conn3 set a to 3, have to rollback
+connection conn3;
+select * from t1;
+--error 5049
+update t1 set a=3 where pk=1;
+ROLLBACK;
+
+--echo conn2 select
+connection conn2;
+select * from t1;
+
+--echo conn3 select
+connection conn3;
+select * from t1;
+
+--echo conn2 commit and select
+connection conn2;
+commit;
+select * from t1;
+
+
+--echo conn2 select
+connection conn2;
+select * from t1;
+--echo conn3 select
+connection conn3;
+select * from t1;
+
+drop table t1;
+
+
+##
+# CASE3
+##
+connection conn1;
+create table t1(pk int primary key, a int);
+insert into t1 values(1,1);
+
+--echo conn2 changes: 1->2->3
+connection conn2;
+begin;
+update t1 set a=a+1 where pk=1;
+update t1 set a=a+1 where pk=1;
+select * from t1;
+commit;
+--echo conn2 select after commit
+select * from t1;
+
+--echo conn3 select after commit
+connection conn3;
+select * from t1;

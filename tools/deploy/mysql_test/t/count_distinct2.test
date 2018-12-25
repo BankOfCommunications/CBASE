@@ -1,0 +1,87 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+#
+create table t1(pk int primary key, n1 int, n2 int, s char(20), vs varchar(20), t varchar(256));
+insert into t1 values (1,1,11, 'one','eleven', 'eleven'),
+ (2,1,11, 'one','eleven', 'eleven'),
+ (3,2,11, 'two','eleven', 'eleven'),
+ (4,2,12, 'two','twevle', 'twelve'),
+ (5,2,13, 'two','thirteen', 'foo'),
+ (6,2,13, 'two','thirteen', 'foo'),
+ (7,2,13, 'two','thirteen', 'bar'),
+ (8,NULL,13, 'two','thirteen', 'bar'),
+ (9,2,NULL, 'two','thirteen', 'bar'),
+ (10,2,13, NULL,'thirteen', 'bar'),
+ (11,2,13, 'two',NULL, 'bar'),
+ (12,2,13, 'two','thirteen', NULL);
+#
+select distinct n1 from t1;
+select count(distinct n1) from t1;
+#
+select distinct n2 from t1;
+select count(distinct n2) from t1;
+#
+select distinct s from t1;
+select count(distinct s) from t1;
+#
+select distinct vs from t1;
+select count(distinct vs) from t1;
+#
+select distinct t from t1;
+select count(distinct t) from t1;
+#
+select distinct n1,n2 from t1;
+--error 5001
+select count(distinct n1,n2) from t1;
+#
+select distinct n1,s from t1;
+--error 5001
+select count(distinct n1,s) from t1;
+#
+select distinct s,n1,vs from t1;
+--error 5001
+select count(distinct s,n1,vs) from t1;
+#
+select distinct s,t from t1;
+#select count(distinct s,t) from t1;
+#
+select count(distinct n1), count(distinct n2) from t1;
+#
+select count(distinct n2), n1 from t1 group by n1;
+#drop table t1;
+#
+## test the conversion from tree to MyISAM
+## junyue: ob does not support single field
+#create table t1 (n int default NULL);
+#let $1=5000;
+#disable_query_log;
+#while ($1)
+#{
+# eval insert into t1 values($1);
+# dec $1;
+#}
+#enable_query_log;
+#
+#flush status;
+#select count(distinct n) from t1;
+#show status like 'Created_tmp_disk_tables';
+#drop table t1;
+#
+## Test use of MyISAM tmp tables
+## junyue: ob does not support single field
+#create table t1 (s text);
+#let $1=5000;
+#disable_query_log;
+#while ($1)
+#{
+# eval insert into t1 values('$1');
+# dec $1;
+#}
+#enable_query_log;
+#flush status;
+#select count(distinct s) from t1;
+#show status like 'Created_tmp_disk_tables';
+#drop table t1;
+#
+## End of 4.1 tests

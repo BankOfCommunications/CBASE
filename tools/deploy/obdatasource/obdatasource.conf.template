@@ -1,0 +1,19 @@
+ob_user=${ob_user}
+ob_password=${ob_password}
+
+${{
+master_ups = call_(find_attr(locals(), 'obi'), 'get_master_ups').split(":")[0]
+}}
+ups_ip=${master_ups}
+ups_port=${ups0.port}
+
+${{
+ms_list = get_match_child(find_attr(locals(), 'obi'), "mergeserver")
+ms_list_count = len(ms_list)
+ms_list_str = ','.join('${%s.ip}'%(k) for k in ms_list.keys())
+}}
+merge_server_mysql_port=${mysql_port}
+merge_server_count=$ms_list_count
+merge_server_str=$ms_list_str
+
+case=${case}/transaction.xml.${ip}

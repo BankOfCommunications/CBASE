@@ -1,0 +1,44 @@
+--disable_warnings
+drop table if exists t1,t_table_have_many_columns_so_what;
+--enable_warnings
+
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+# let $count=10;
+#while($count)
+#{
+
+create table t_table_have_many_columns_so_what(c1 double ,c2 int ,c3 decimal(4,3),c4 varchar(10),c5 int ,c6 datetime,c7 bool ,c8 int ,c9 bool ,c10 double ,c11 real ,c12 decimal(2,1),c13 int ,c14 datetime ,c15 varchar(100),c16 int ,c17 int ,c18 bool ,primary key (c1,c2,c3,c4,c5,c6,c7,c8,c9,c11,c12,c10,c13,c14,c15,c16));
+
+desc t_table_have_many_columns_so_what;
+
+insert into t_table_have_many_columns_so_what values(1.09,2,1.234,'23232',2,'2012-12-31 12:00:00',1,2,1,22.02,21.3232323232,1.1,1 ,'2012-12-21 12:00:00','let the rain clean the drity of the world',1,1,1);
+
+alter table t_table_have_many_columns_so_what add c_long_name decimal(19,10), drop c18, rename c1 to c_first,rename c2 to c_second, rename c3 to c_third ,rename c4 to c_fourth,rename c5 to c_fifth ,rename c6 to c_six ,rename c7 to c_senventh;
+ 
+#--echo "merge"
+#exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+#--real_sleep 300
+
+--disable_result_log
+exec $LOCAL_DIR/tools/rs_admin -r $RS0_IP -p $RS0_PORT refresh_schema;
+--enable_result_log
+
+--let $op_id = query_get_value(select operation_type from __all_ddl_operation where gm_modify in (select max(gm_modify) from __all_ddl_operation); ,operation_type,1)
+if($op_id==4)
+{
+echo "refersh schema ,operation_type=$op_id";
+}
+
+#rename table  t_table_have_many_columns_so_what to t1;
+alter table t_table_have_many_columns_so_what add c20 int;
+drop table t_table_have_many_columns_so_what;
+--let $op_id = query_get_value(select operation_type from __all_ddl_operation where gm_modify in (select max(gm_modify) from __all_ddl_operation); ,operation_type,1)
+if($op_id==2)
+{
+echo "drop table right ,operation_type=$op_id";
+}
+--error 5019
+rename table t_table_have_many_columns_so_what to t1;
+#}
+

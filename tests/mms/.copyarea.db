@@ -1,0 +1,12 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tests\mms
+2
+8
+15:mock_monitor_server.h|1|166f775b9a8|95f|5f03ae4e|613b14e268b511e8a8030002c8c1274c|0
+14:mock_node_server.cpp|1|166f775ba22|132a|5658b30b|63bb14fe68b511e8a8030002c8c1274c|0
+b:Makefile.am|1|166f775b995|310|a90703e3|5f1b14c668b511e8a8030002c8c1274c|0
+c:test_mms.cpp|1|166f775ba3b|2f10|8eaba758|65bb151a68b511e8a8030002c8c1274c|0
+12:mock_node_server.h|1|166f775ba80|bb9|45ff239e|6a1b155268b511e8a8030002c8c1274c|0
+d:mock_server.h|1|166f775ba5d|864|90ef6991|67eb153668b511e8a8030002c8c1274c|0
+f:mock_server.cpp|1|166f775baa8|1a|7d7c08b6|6c4b156e68b511e8a8030002c8c1274c|0
+17:mock_monitor_server.cpp|1|166f775bae4|10d4|eee0b22b|6ebb158a68b511e8a8030002c8c1274c|0

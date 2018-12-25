@@ -1,0 +1,33 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob1.reboot;
+sleep 30;
+
+deploy ob1.start_diamond localhost;
+sleep 5;
+deploy ob1.create_client;
+deploy ob1.prepare;
+deploy ob1.start_check;
+
+#sql
+create table t1(a int primary key,b int);
+insert into t1 values(-1,-1),(-2,-2),(0,0),(1,1);
+select * from t1;
+
+#get version
+let $a = deploy_get_value(ob1.get_diamond coreJarVersion);
+
+#delete local jar
+deploy ob1.sh rm -rf ~/.obdatasource/$a;
+
+sleep 60;
+
+#check download jar again
+#deploy ob1.sh ls ~/.obdatasource/$a;
+
+#sql
+update t1 set b=2 where a=1;
+delete from t1 where a=0;
+select * from t1;
+drop table t1;
+
+deploy ob1.stop_check;

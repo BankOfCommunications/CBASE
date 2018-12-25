@@ -1,0 +1,51 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.cs3.set status=disable
+ob1.ms3.set status=disable
+ob1.reboot
+ob2.reboot
+ob1.source include/merge.inc
+ob1.source include/migrate.inc
+ob1.create_client
+create table t1(a int primary key,b int);
+insert into t1 values(1,1),(-1,-1),(0,1);
+select * from t1;
+a	b
+-1	-1
+0	1
+1	1
+alter table t1 add c varchar(20);
+ob1.major_freeze
+ob1.check_cs_version 2,3
+select * from t1;
+a	b	c
+-1	-1	NULL
+0	1	NULL
+1	1	NULL
+alter table t1 drop column  b;
+ob1.major_freeze
+ob1.check_cs_version 3,3
+ob1.cs0.stop
+select * from t1;
+a	c
+-1	NULL
+0	NULL
+1	NULL
+ob1.cs3.set status=enable
+ob1.ms3.set status=enable
+ob1.ms3.start
+ob1.cs3.start
+create table t2 (a int primary key,b int);
+ob1.switch_cluster ob2
+drop table t1;
+create table t3(a int primary key,b int);
+insert into t3 values(1,1),(-1,-1);
+ob1.stop
+ob1.nstart
+select * from t2;
+a	b
+select * from t3;
+a	b
+-1	-1
+1	1

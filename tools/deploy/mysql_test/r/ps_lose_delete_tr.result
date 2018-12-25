@@ -1,0 +1,82 @@
+drop table if exists t1, t2;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4),(4,'a',2);
+prepare stmt1 from delete from  t1 where a=?;
+set @a=1;
+execute stmt1 using @a;
+alter table t1 add d int;
+set autocommit=0;
+execute stmt1 using @a;
+commit;
+set autocommit=1;
+select * from t1;
+a	b	c	d
+2	b	3	NULL
+3	c	4	NULL
+4	a	2	NULL
+deallocate prepare stmt1;
+prepare stmt2 from delete from  t1 where a=?;
+set @a=2;
+execute stmt2 using @a;
+alter table t1 drop d;
+set autocommit=0;
+execute stmt2 using @a;
+commit;
+set autocommit=1;
+select * from t1;
+a	b	c
+3	c	4
+4	a	2
+deallocate prepare stmt2;
+prepare stmt3 from delete from  t1 where a=?;
+set @a=3;
+execute stmt3 using @a;
+alter table t1 drop a;
+ERROR HY000: Primary key column can not be dropped, column name = 'a'
+set autocommit=0;
+execute stmt3 using @a;
+commit;
+set autocommit=1;
+select * from t1;
+a	b	c
+4	a	2
+deallocate prepare stmt3;
+prepare stmt4 from delete from  t1 where a=?;
+set @a=4;
+execute stmt4 using @a;
+drop table t1;
+set autocommit=0;
+execute stmt4 using @a;
+ERROR 42S02: table 't1' does not exist
+commit;
+set autocommit=1;
+deallocate prepare stmt4;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4),(4,'a',2);
+prepare stmt5 from delete from  t1 where a=?;
+set @a=4;
+execute stmt5 using @a;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4),(4,'a',2);
+set autocommit=0;
+execute stmt5 using @a;
+commit;
+set autocommit=1;
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt5;
+prepare stmt6 from delete from  t1 where a=?;
+set @a=4;
+execute stmt6 using @a;
+drop table t1;
+create table t2( a int primary key,b varchar(255));
+set autocommit=0;
+execute stmt6 using @a;
+ERROR 42S02: table 't1' does not exist
+commit;
+set autocommit=1;
+deallocate prepare stmt6;

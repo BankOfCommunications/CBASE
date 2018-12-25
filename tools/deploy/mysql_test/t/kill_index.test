@@ -1,0 +1,91 @@
+--disable_warnings
+drop table if exists t1,t2;
+--enable_warnings
+
+--echo use default connection
+--replace_column 1 id 3 client 6 time 9 ms 10 idx
+show processlist;
+
+--error 5001
+show processlist 100;
+
+--error 5001
+show processlist abc;
+
+--error 5001
+show process list;
+
+--error 5001
+kill abc;
+--error 5067
+kill 123;
+
+
+--error 5001
+kill query abc;
+--error 5067
+kill query 123;
+
+let $a=query_get_value(show processlist,Index,1);
+
+--echo a new connection named by conn1
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+--replace_column 1 id 3 client 6 time  9 ms 10 idx
+show processlist;
+--echo a new connection named by conn2
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+let $b=query_get_value(show processlist,Index,2);
+let $c=query_get_value(show processlist,Index,3);
+--replace_column 1 id 3 client 6 time  9 ms 10 idx
+show processlist;
+
+--echo kill the default connection
+--disable_query_log
+eval kill $a;
+--enable_query_log
+--replace_column 1 id 3 client 6 time  9 ms 10 idx
+show processlist;
+
+
+--echo use conn1
+connection conn1;
+--replace_column 1 id 3 client 6 time  9 ms 10 idx
+show processlist;
+
+--echo kill conn2
+--disable_query_log
+eval kill  $c;
+--enable_query_log
+--replace_column 1 id 3 client 6 time  9 ms 10 idx
+show processlist;
+
+--echo try to kill conn2, which has been killed
+--disable_query_log
+--error 5067
+eval kill  $c;
+--enable_query_log
+--replace_column 1 id 3 client 6 time  9 ms 10 idx
+show processlist;
+
+--echo try to use conn2, which has been killed
+connection conn2;
+--error 2006
+show processlist;
+
+--echo use conn1, check conn2 disapear
+connection conn1;
+--replace_column 1 id 3 client 6 time  9 ms 10 idx
+show processlist;
+
+--echo kill self,conn1
+--disable_query_log
+eval kill  $b;
+--enable_query_log
+
+#这里本来应该返回2006 server gone才对，但是由于服务端关连接比较慢，导致下一个请求还是发出去了(服务端保证这个请求是不会被处理的)，报错变成2013
+--real_sleep 5
+--error 2006
+show processlist;
+
+

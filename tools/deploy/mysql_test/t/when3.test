@@ -1,0 +1,125 @@
+#insert repalce nested test
+drop table if exists t1;
+create table t1(pk int primary key, c1 int);
+insert into t1 values(1,1);
+insert into t1 values(2,2);
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+#case1: delete -> insert -> replace rollback and commit
+begin;
+replace into t1 values(1,100) when row_count(insert into t1 values(1,10) when row_count(delete from t1 where pk=1)=1)=1;
+rollback;
+select * from t1;
+
+begin;
+replace into t1 values(1,100) when row_count(insert into t1 values(1,10) when row_count(delete from t1 where pk=1)=1)=1;
+select * from t1;
+commit;
+select * from t1;
+
+#case2: replace -> delete -> insert rollback and commit
+begin;
+insert into t1 values(2,200) when row_count(delete from t1 where pk=2 when row_count(replace into t1 values(2,20))>0)<2;
+rollback;
+select * from t1;
+
+begin;
+insert into t1 values(2,200) when row_count(delete from t1 where pk=2 when row_count(replace into t1 values(2,20))>0)<2;
+commit;
+select * from t1;
+
+#case3: insert -> repalce -> replace rollback and commit
+begin;
+replace into t1 values(3,300) when row_count(replace into t1 values(3,30) when row_count(insert into t1 values(3,3))=1)>0;
+rollback;
+select * from t1;
+
+begin;
+replace into t1 values(3,300) when row_count(replace into t1 values(3,30) when row_count(insert into t1 values(3,3))=1)>0;
+commit;
+select * from t1;
+
+#case4: when子句正确，stat语句出错
+--error 5024
+insert into t1 values(4,400) when row_count(replace into t1 values(4,40) when row_count(insert into t1 values(4,4))>0)=1;
+select * from t1;
+
+#case5: when子句错误，stat语句正确
+--error 5024
+replace into t1 values(5,500) when row_count(insert into t1 values(5,10) when row_count(replace into t1 values(5,5))=1)<2;
+select * from t1;
+
+--error 5024
+insert into t1 values(5,10000) when row_count(replace into t1 values(5,1000) when row_count(insert into t1 values(1,1))<2)=1;
+select * from t1;
+
+#case6: when子句条件不满足
+--error 5064
+replace into t1 values(5,500) when row_count(replace into t1 values(5,50) when row_count(insert into t1 values(5,5))=1)>1;
+select * from t1;
+
+#case: when子句and嵌套
+begin;
+insert into t1 values(6,6) when 
+    row_count(delete from t1 where pk=6 when row_count(replace into t1 values(6,6))>0)=1
+    and  
+    row_count(delete from t1 where pk=6 when row_count(insert into t1 values(6,6))=1)>0;
+commit;
+select * from t1;
+
+begin;
+insert into t1 values(7,7) when
+    row_count(delete from t1 where pk=7 when row_count(replace into t1 values(7,7))=1)<2
+    and  
+    row_count(delete from t1 where pk=7 when row_count(insert into t1 values(7,7))<2)=1;
+rollback;
+select * from t1;
+
+begin;
+replace into t1 values(7,700) when
+    row_count(replace into t1 values(7,70) when row_count(insert into t1 values(7,7))=1)=1
+    and
+    row_count(replace into t1 values(7,1) when row_count(replace into t1 values(7,0))<2)>0;
+commit;
+select * from t1;
+
+#case: when子句and嵌套，when子句正确 ，stat语句出错
+--error 5024
+insert into t1 values(8,8) when
+    row_count(insert into t1 values(8,8))<2
+    and  
+    row_count(insert into t1 values(9,9))>0;
+select * from t1;
+
+#case: when子句and嵌套，stat语句正确，when子句错误
+--error 5024
+replace into t1 values(9,90) when
+    row_count(insert into t1 values(1,1))=1
+    and
+    row_count(insert into t1 values(9,9))>0;
+select * from t1;
+
+--error 5024
+insert into t1 values(10,100) when
+    row_count(insert into t1 values(10,10))<2
+    and
+    row_count(insert into t1 values(1,1))>0;
+select * from t1;
+
+#case: when子句and嵌套， when条件不满足
+--error 5064
+replace into t1 values(11,11) when
+    row_count(delete from t1 where pk=11 when row_count(replace into t1 values(11,11))=1)>2
+    and
+    row_count(delete from t1 where pk=11 when row_count(replace into t1 values(11,11))=1)=1;
+select * from t1;
+
+--error 5064
+replace into t1 values(12,12) when
+    row_count(delete from t1 where pk=11 when row_count(replace into t1 values(11,11))=1)=1
+    and
+    row_count(delete from t1 where pk=11 when row_count(replace into t1 values(11,11))=1)<0;
+select * from t1;
+
+drop table t1;

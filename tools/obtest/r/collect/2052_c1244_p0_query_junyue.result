@@ -1,0 +1,30 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.prepare collect
+ob1.major_freeze
+ob1.check_cs_version 2
+ob1.create_client
+select  * from collect_info limit 1;
+gm_create	gm_modified	user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	collect_count	total_money	collect_time_precise	user_id	item_type	item_id
+2013-07-15 19:25:25.73056	2013-07-15 19:25:25.73056	nick_0	0	note_0	2013-07-15 16:00:00.0	0	tag_0	0	title-0	picurl-0	0	nick-0	0	2013-07-15 17:00:00.0	xml-0	0	0	0	0	NULL	0	0	0
+select  * from collect_info where user_id=0 and item_type=0 and item_id=0;
+gm_create	gm_modified	user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	collect_count	total_money	collect_time_precise	user_id	item_type	item_id
+2013-07-15 19:25:25.73056	2013-07-15 19:25:25.73056	nick_0	0	note_0	2013-07-15 16:00:00.0	0	tag_0	0	title-0	picurl-0	0	nick-0	0	2013-07-15 17:00:00.0	xml-0	0	0	0	0	NULL	0	0	0
+select  * from collect_info where user_id=1 and item_type=1 and item_id=199;
+gm_create	gm_modified	user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	collect_count	total_money	collect_time_precise	user_id	item_type	item_id
+2013-07-15 19:25:26.76677	2013-07-15 19:25:26.76677	nick_1	199	note_199	2013-07-15 16:00:00.0	199	tag_199	1	title-199	picurl-199	0	nick-199	199	2013-07-15 17:00:00.0	xml-199	199	199	199	199	NULL	1	1	199
+select  * from collect_info where (user_id,item_type,item_id) in ((0,0,0),(1,1,199));
+gm_create	gm_modified	user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	collect_count	total_money	collect_time_precise	user_id	item_type	item_id
+2013-07-15 19:25:25.73056	2013-07-15 19:25:25.73056	nick_0	0	note_0	2013-07-15 16:00:00.0	0	tag_0	0	title-0	picurl-0	0	nick-0	0	2013-07-15 17:00:00.0	xml-0	0	0	0	0	NULL	0	0	0
+2013-07-15 19:25:26.76677	2013-07-15 19:25:26.76677	nick_1	199	note_199	2013-07-15 16:00:00.0	199	tag_199	1	title-199	picurl-199	0	nick-199	199	2013-07-15 17:00:00.0	xml-199	199	199	199	199	NULL	1	1	199
+replace into item_info(title,picurl,owner_id,owner_nick,price,ends,proper_xml,comment_count,collector_count,collect_count,money,item_id,item_type) values('title-200','picurl-200', 'owner-200', 'nick-200', 200, timestamp'2013-07-15 17:00:00', 'xml-200',200,200,200,200,200,2);
+replace into collect_info(user_nick,is_shared,note,collect_time,stat,tag,category,user_id,item_type,item_id) values('nick_10', 200, 'note_200', timestamp'2013-07-15 16:00:00',200, 'tag_200', 10, 200,2,200);
+select * from collect_info where user_id=10 and item_type=2 and item_id=200;
+gm_create	gm_modified	user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	collect_count	total_money	collect_time_precise	user_id	item_type	item_id
+update item_info set title='title-0-update' where item_id=0 and item_type=0;
+select  * from collect_info where user_id=0 and item_type=0 and item_id=0;
+gm_create	gm_modified	user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	collect_count	total_money	collect_time_precise	user_id	item_type	item_id
+2013-07-15 19:25:25.73056	2013-07-15 19:25:25.73056	nick_0	0	note_0	2013-07-15 16:00:00.0	0	tag_0	0	title-0-update	picurl-0	0	nick-0	0	2013-07-15 17:00:00.0	xml-0	0	0	0	0	NULL	0	0	0

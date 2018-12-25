@@ -1,0 +1,10 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob1.reboot;
+sleep 10;
+deploy ob1.create_client;
+create table t1(c1 int , c2 int, primary key(c1));
+let $a=deploy_get_value(ob1.get_master_ups);
+deploy ob1.$a.force_stop;
+sleep 20;
+select * from t1;
+

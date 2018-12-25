@@ -1,0 +1,60 @@
+--disable_warnings
+# get from cs 
+select user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id=3472328296227682613 and item_type=53 and item_id=3472328296228010293;
+select user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id=3472328296227682614 and item_type=53 and item_id=3472328296228010294;
+select user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id=3472328296227682615 and item_type=53 and item_id=3472328296228010295;
+select user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id=3472328296227682616 and item_type=53 and item_id=3472328296228010296;
+select user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id=3472328296227682617 and item_type=53 and item_id=3472328296228010297;
+
+select title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, money,  item_id, item_type from item_info where item_type = 53 and item_id = 3472328296228009777;
+select title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, money,  item_id, item_type from item_info where item_type = 53 and item_id = 3472328296228009778;
+select title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, money,  item_id, item_type from item_info where item_type = 53 and item_id = 3472328296228009779;
+select title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, money,  item_id, item_type from item_info where item_type = 53 and item_id = 3472328296228009780;
+
+# get from ups
+
+# insert a new row and verify(1,1,54)
+insert into collect_info(category,collect_time_precise,item_id,tag,user_id,user_nick,is_shared,stat,note,item_type,collect_time) values(85740,'1289914654000000',1,'00000001600000601-39',1,'00000001600000601-32',85733,85736,'00000001600000601-34',54,'1289914671');
+
+insert into item_info(title, picurl, owner_id, price, ends, proper_xml, comment_count, collector_count, collect_count, money, item_id, item_type) values('junyue', '', '', 11, 11,' ', ' ',10,10,100,1,54);
+
+select user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id=1 and item_type=54 and item_id=1;
+
+# 
+# insert an old row and verify
+--error 5024
+insert into collect_info(category,collect_time_precise,item_id,tag,user_id,user_nick,is_shared,stat,note,item_type,collect_time) values(85740,'1289914654000000',3472328296228010293,'00000001600000601-39',3472328296227682613,'00000001600000601-32',85733,85736,'00000001600000601-34',53,'1289914671');
+
+--error 5024
+insert into collect_info(category,collect_time_precise,item_id,tag,user_id,user_nick,is_shared,stat,note,item_type,collect_time) values(85740,'1289914654000000',1,'00000001600000601-39',1,'00000001600000601-32',85733,85736,'00000001600000601-34',54,'1289914671');
+
+# update cs row and verify
+update collect_info set  category = 808, collect_time_precise = '820', tag = '807', user_nick = '800', is_shared = 801, stat = 804, note = '802', collect_time = '803' where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+
+
+select user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id = 3472328296227681076 and item_type = 55 and item_id = 3472328296228139828;
+
+update item_info set  comment_count = 806, title = '799', ends = '804', price = 803, proper_xml = '805', owner_nick = '802', money = 809, owner_id = 801, picurl = '800', collector_count = 807, collect_count = 808 where item_type = 55 and item_id = 3472328296228140599;
+
+select title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, money,  item_id, item_type from item_info where  item_type = 55 and item_id = 3472328296228140599;
+
+# update ups row and verify
+update collect_info set  category = 808, collect_time_precise = '820', tag = '807', user_nick = '800', is_shared = 801, stat = 804, note = '802', collect_time = '803' where user_id=1 and item_type=54 and item_id=1;
+select user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id=1 and item_type=54 and item_id=1;
+
+
+# delete cs row
+
+delete from collect_info where user_id=3472328296227682617 and item_type=53 and item_id=3472328296228010297;
+select user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where  user_id=3472328296227682617 and item_type=53 and item_id=3472328296228010297;
+# delete ups row
+
+delete from collect_info where user_id=1 and item_type=54 and item_id=1;
+select user_nick, is_shared, note, collect_time, stat,  tag, category, title, picurl, owner_id, owner_nick, price, ends, proper_xml, comment_count, collector_count, collect_count, total_money, collect_time_precise, user_id, item_type, item_id from collect_info where user_id=3472328296227680305 and item_type=54 and item_id=3472328296228073521;
+
+
+# test drop
+
+drop table collect_info;
+drop table item_info;
+--enable_warnings

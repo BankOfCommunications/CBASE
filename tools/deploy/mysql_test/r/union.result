@@ -1,0 +1,321 @@
+drop table if exists t1,t2,t3,t4,t5,t6;
+CREATE TABLE t1 (pk int primary key, a int not null, b char (10) not null);
+insert into t1 values(1,1,'a'),(2,2,'b'),(3,3,'c'),(4,3,'c');
+CREATE TABLE t2 (pk int primary key, a int not null, b char (10) not null);
+insert into t2 values (1,3,'c'),(2,4,'d'),(3,5,'f'),(4,6,'e');
+select a,b from t1 union distinct select a,b from t2;
+a	b
+1	a
+2	b
+3	c
+4	d
+5	f
+6	e
+select a,b from t1 union all select a,b from t2;
+a	b
+1	a
+2	b
+3	c
+3	c
+3	c
+4	d
+5	f
+6	e
+select a,b from t1 union all select a,b from t2 order by b;
+a	b
+1	a
+2	b
+3	c
+3	c
+3	c
+4	d
+6	e
+5	f
+select a,b from t1 union select a,b from t1;
+a	b
+1	a
+2	b
+3	c
+select a,b from t1 where a = 3 union select a,b from t1 where a=3;
+a	b
+3	c
+select b,count(*) from t1 group by b UNION select b,count(*) from t2 group by b;
+b	count(*)
+a	1
+b	1
+c	1
+c	2
+d	1
+e	1
+f	1
+(select a,b from t1 limit 2)  union all (select a,b from t2 order by a) limit 4;
+a	b
+1	a
+2	b
+3	c
+4	d
+(select a,b from t1 limit 2)  union all (select a,b from t2 order by a limit 1);
+a	b
+1	a
+2	b
+3	c
+(select a,b from t1 limit 2)  union all (select a,b from t2 order by a limit 1) order by b desc;
+a	b
+3	c
+2	b
+1	a
+(select a,b from t1 limit 2)  union all (select a,b from t2 order by a limit 1) order by t1.b;
+ERROR 42S02: Unknown table t1
+select a,b from t1 into outfile 'skr' union select a,b from t2;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'into outfile 'skr' union select a,b from t2' at line 1
+select a,b from t1 order by a union select a,b from t2;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'union select a,b from t2' at line 1
+select a,b from t1 union select a from t2;
+ERROR HY000: The used SELECT statements have a different number of columns
+select * from t1 union select a from t2;
+ERROR HY000: The used SELECT statements have a different number of columns
+select a from t1 union select * from t2;
+ERROR HY000: The used SELECT statements have a different number of columns
+drop table t1,t2;
+CREATE TABLE t1 (
+pseudo char(35) NOT NULL default '',
+pseudo1 char(35) NOT NULL,
+same int NOT NULL ,
+PRIMARY KEY  (pseudo1)
+);
+INSERT INTO t1 (pseudo,pseudo1,same) VALUES ('joce', 'testtt', 1),('joce', 'tsestset', 1),('dekad', 'joce', 1);
+select pseudo1 FROM t1 UNION SELECT pseudo1 FROM t1;
+pseudo1
+joce
+testtt
+tsestset
+SELECT pseudo FROM t1 WHERE pseudo1='joce' UNION SELECT pseudo FROM t1 WHERE pseudo='joce';
+pseudo
+dekad
+joce
+SELECT pseudo1 FROM t1 WHERE pseudo1='joce' UNION SELECT pseudo1 FROM t1 WHERE pseudo='joce';
+pseudo1
+joce
+testtt
+tsestset
+SELECT * FROM t1 WHERE pseudo1='joce' UNION SELECT * FROM t1 WHERE pseudo='joce' order by pseudo desc,pseudo1 desc;
+pseudo	pseudo1	same
+joce	tsestset	1
+joce	testtt	1
+dekad	joce	1
+SELECT pseudo1 FROM t1 WHERE pseudo='joce' UNION SELECT pseudo FROM t1 WHERE pseudo1='joce';
+pseudo1
+dekad
+testtt
+tsestset
+SELECT pseudo1 FROM t1 WHERE pseudo='joce' UNION ALL SELECT pseudo FROM t1 WHERE pseudo1='joce';
+pseudo1
+testtt
+tsestset
+dekad
+SELECT pseudo1 FROM t1 WHERE pseudo='joce';
+pseudo1
+testtt
+tsestset
+drop table t1;
+create table t1 (a int primary key,b int);
+create table t2 (a int primary key,b int);
+insert into t1(a) values (1),(2),(3),(4),(5);
+insert into t2(a) values (11),(12),(13),(14),(15);
+(select * from t1 limit 2) union (select * from t2 limit 3) limit 4;
+a	b
+1	NULL
+2	NULL
+11	NULL
+12	NULL
+(select * from t1 limit 2) union (select * from t2 limit 3);
+a	b
+1	NULL
+2	NULL
+11	NULL
+12	NULL
+13	NULL
+(select * from t1 limit 2) union (select * from t2 limit 20);
+a	b
+1	NULL
+2	NULL
+11	NULL
+12	NULL
+13	NULL
+14	NULL
+15	NULL
+drop table t1,t2;
+create table t1 (a int not null primary key , b int);
+create table t2 (a int not null primary key , b int);
+insert into t1  values (1,1),(2,2),(3,2),(4,3);
+insert into t2  values (1,10),(2,11),(3,12),(4,13);
+(select * from t1 where a=5) union (select * from t2 where a=1);
+a	b
+1	10
+(select * from t1 where a=5 and a=6) union (select * from t2 where a=1);
+a	b
+1	10
+(select t1.a,t1.b from t1,t2 where t1.a=t2.a) union (select * from t2 where a=1);
+a	b
+1	1
+1	10
+2	2
+3	2
+4	3
+(select * from t1 where a=1) union (select t1.a,t2.a from t1,t2 where t1.a=t2.a);
+a	b
+1	1
+2	2
+3	3
+4	4
+drop table t1,t2;
+create table t1 (   id int not null , primary key (id)   ,user_name varchar(256) );
+create table t2 (    id int not null, primary key (id)   ,group_name varchar(256));
+create table t3 (    id int not null, primary key (id)   ,user_id int   ,group_id int);
+insert into t1 (id,user_name) values (1,'Tester');
+insert into t2 (id,group_name) values (1,'Group A');
+insert into t2 (id,group_name) values (2,'Group B');
+insert into t3 (id,user_id, group_id) values (1,1,1);
+select  a.user_name, c.group_name, b.id from t1 a, t3 b, t2 c where a.id = b.user_id and b.group_id = c.id UNION select  a.user_name, c.group_name, b.id from t1 a, t3 b, t2 c where a.id = b.user_id and b.group_id = c.id;
+user_name	group_name	id
+Tester	Group A	1
+drop table t1, t2, t3;
+create table t1 (mat_id INT  NOT NULL  PRIMARY KEY, matintnum CHAR(6) NOT NULL, test INT );
+create table t2 (mat_id INT  NOT NULL, pla_id INT NOT NULL, primary key(mat_id, pla_id), extra int);
+insert into t1 values (1, 'a', 1), (2, 'b', 2), (3, 'c', 3), (4, 'd', 4), (5, 'e', 5), (6, 'f', 6), (7, 'g', 7), (8, 'h', 8), (9, 'i', 9);
+insert into t2(mat_id,pla_id) values (1, 100), (1, 101), (1, 102), (2, 100), (2, 103), (2, 104), (3, 101), (3, 102), (3, 105);
+SELECT mp.pla_id, MIN(m1.matintnum) AS matintnum FROM t2 mp INNER JOIN t1 m1 ON mp.mat_id=m1.mat_id GROUP BY mp.pla_id union SELECT 0, 0 from t1;
+ERROR HY000: Invalid character found in a character string argument or A numeric value 'Decimal' is too long
+drop table t1, t2;
+create table t1 (a int primary key,  b int);
+insert into t1 values (1,1),(2,2),(3,3),(4,4),(5,5);
+insert into t1 values (6,6),(7,7),(8,8),(9,9),(10,10);
+insert into t1 values (11,11),(12,12),(13,13),(14,14),(15,15);
+select count(*) from t1 where b=13 union select count(*) from t1 where a=7;
+count(*)
+1
+select count(*) from t1 where a=7 union select count(*) from t1 where b=13;
+count(*)
+1
+select a from t1 where b not in (1,2,3) union select a from t1 where b not in (4,5,6);
+a
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+select a from t1 where b in (1,2,3) union select a from t1 where b in (4,5,6);
+a
+1
+2
+3
+4
+5
+6
+drop table t1;
+create table t1 (i int primary key,j int);
+insert into t1(i) values (1);
+select * from t1 UNION select * from t1;
+i	j
+1	NULL
+select * from t1 UNION ALL select * from t1;
+i	j
+1	NULL
+1	NULL
+select * from t1 UNION select * from t1 UNION ALL select * from t1;
+i	j
+1	NULL
+1	NULL
+drop table t1;
+create table t1 (a int primary key,b int);
+insert into t1(a) values (100), (1);
+create table t2 (a int primary key,b int);
+insert into t2(a) values (100);
+select a from t1 union select a from t2 order by a;
+a
+1
+100
+drop table t1, t2;
+CREATE TABLE t1 ( ID1 int NOT NULL DEFAULT '0' , ID2 datetime NOT NULL DEFAULT '0000-00-00 00:00:00' , DATA1 varchar(10) , DATA2 double , DATA3 datetime , PRIMARY KEY (ID1,ID2));
+CREATE TABLE t2 ( ID int NOT NULL DEFAULT '0' , DATA1 timestamp DEFAULT '0000-00-00 00:00:00' , PRIMARY KEY (ID));
+(SELECT * FROM t1 AS PARTITIONED, t2 AS
+PARTITIONED_B WHERE PARTITIONED_B.ID=PARTITIONED.ID1) UNION
+(SELECT * FROM t1 AS PARTITIONED, t2 AS
+PARTITIONED_B WHERE PARTITIONED_B.ID=PARTITIONED.ID1) UNION
+(SELECT * FROM t1 AS PARTITIONED, t2 AS
+PARTITIONED_B WHERE PARTITIONED_B.ID=PARTITIONED.ID1) UNION
+(SELECT * FROM t1 AS PARTITIONED, t2 AS
+PARTITIONED_B WHERE PARTITIONED_B.ID=PARTITIONED.ID1) UNION
+(SELECT * FROM t1 AS PARTITIONED, t2 AS
+PARTITIONED_B WHERE PARTITIONED_B.ID=PARTITIONED.ID1) UNION
+(SELECT * FROM t1 AS PARTITIONED, t2 AS
+PARTITIONED_B WHERE PARTITIONED_B.ID=PARTITIONED.ID1) UNION
+(SELECT * FROM t1 AS PARTITIONED, t2 AS
+PARTITIONED_B WHERE PARTITIONED_B.ID=PARTITIONED.ID1) UNION
+(SELECT * FROM t1 AS PARTITIONED, t2 AS
+PARTITIONED_B WHERE PARTITIONED_B.ID=PARTITIONED.ID1) UNION
+(SELECT * FROM t1 AS PARTITIONED, t2 AS
+PARTITIONED_B WHERE PARTITIONED_B.ID=PARTITIONED.ID1) UNION
+(SELECT * FROM t1 AS PARTITIONED, t2 AS
+PARTITIONED_B WHERE PARTITIONED_B.ID=PARTITIONED.ID1) UNION
+(SELECT * FROM t1 AS PARTITIONED, t2 AS
+PARTITIONED_B WHERE PARTITIONED_B.ID=PARTITIONED.ID1) UNION
+(SELECT * FROM t1 AS PARTITIONED, t2 AS
+PARTITIONED_B WHERE PARTITIONED_B.ID=PARTITIONED.ID1);
+id1	id2	data1	data2	data3	id	data1
+drop table t1,t2;
+create table t1 (pk int primary key, a int not null, b char (10) not null);
+insert into t1 values(1, 1,'a'),(2, 2,'b'),(3, 3,'c'),(4, 3,'c');
+select * from ((select * from t1 limit 1)) a;
+pk	a	b
+1	1	a
+select * from ((select * from t1 limit 1) union (select * from t1 limit 1)) a;
+pk	a	b
+1	1	a
+select * from ((select * from t1 limit 1) union (select * from t1 limit 1) union (select * from t1 limit 1)) a;
+pk	a	b
+1	1	a
+select * from ((((select * from t1))) union (select * from t1) union (select * from t1)) a;
+pk	a	b
+1	1	a
+2	2	b
+3	3	c
+4	3	c
+select * from ((select * from t1) union (((select * from t1))) union (select * from t1)) a;
+pk	a	b
+1	1	a
+2	2	b
+3	3	c
+4	3	c
+drop table t1;
+create table t1 (f1 double primary key, f2 double);
+insert into t1 values (0.0,0.0);
+select f1 from t1 union all select f2 from t1;
+f1
+0
+0
+select 'XXXXXXXXXXXXXXXXXXXX' as description, f1 from t1
+union all
+select 'YYYYYYYYYYYYYYYYYYYY' as description, f2 from t1;
+description	f1
+XXXXXXXXXXXXXXXXXXXX	0
+YYYYYYYYYYYYYYYYYYYY	0
+drop table t1;
+CREATE TABLE t1 (a int primary key,b int);
+INSERT INTO t1(a) VALUES (3),(1),(2),(4);
+SELECT a FROM (SELECT a FROM t1 UNION SELECT a FROM t1 ORDER BY a) AS test;
+a
+1
+2
+3
+4

@@ -1,0 +1,5 @@
+[app_name]
+name=collect
+max_table_id=1500
+
+# see ../ob_new_sql_test.schema for other pre-installed tables

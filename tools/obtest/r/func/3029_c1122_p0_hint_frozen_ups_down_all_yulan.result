@@ -1,0 +1,211 @@
+ob1=OBI(cluster=1122)
+ob1.reboot
+ob1.source include/merge.inc
+ob1.create_client
+create table t1(i1 int primary key, v1 varchar(20));
+create table t2(i1 int primary key, v1 varchar(20));
+replace into t1 values(100, 't1_version2');
+replace into t1 values(99, 't1_version2');
+replace into t1 values(98, 't1_version2');
+replace into t1 values(97, 't1_version2');
+replace into t1 values(96, 't1_version2');
+replace into t1 values(95, 't1_version2');
+replace into t1 values(94, 't1_version2');
+replace into t1 values(93, 't1_version2');
+replace into t1 values(92, 't1_version2');
+replace into t1 values(91, 't1_version2');
+replace into t1 values(90, 't1_version2');
+replace into t1 values(89, 't1_version2');
+replace into t1 values(88, 't1_version2');
+replace into t1 values(87, 't1_version2');
+replace into t1 values(86, 't1_version2');
+replace into t1 values(85, 't1_version2');
+replace into t1 values(84, 't1_version2');
+replace into t1 values(83, 't1_version2');
+replace into t1 values(82, 't1_version2');
+replace into t1 values(81, 't1_version2');
+replace into t1 values(80, 't1_version2');
+replace into t1 values(79, 't1_version2');
+replace into t1 values(78, 't1_version2');
+replace into t1 values(77, 't1_version2');
+replace into t1 values(76, 't1_version2');
+replace into t1 values(75, 't1_version2');
+replace into t1 values(74, 't1_version2');
+replace into t1 values(73, 't1_version2');
+replace into t1 values(72, 't1_version2');
+replace into t1 values(71, 't1_version2');
+replace into t1 values(70, 't1_version2');
+replace into t1 values(69, 't1_version2');
+replace into t1 values(68, 't1_version2');
+replace into t1 values(67, 't1_version2');
+replace into t1 values(66, 't1_version2');
+replace into t1 values(65, 't1_version2');
+replace into t1 values(64, 't1_version2');
+replace into t1 values(63, 't1_version2');
+replace into t1 values(62, 't1_version2');
+replace into t1 values(61, 't1_version2');
+replace into t1 values(60, 't1_version2');
+replace into t1 values(59, 't1_version2');
+replace into t1 values(58, 't1_version2');
+replace into t1 values(57, 't1_version2');
+replace into t1 values(56, 't1_version2');
+replace into t1 values(55, 't1_version2');
+replace into t1 values(54, 't1_version2');
+replace into t1 values(53, 't1_version2');
+replace into t1 values(52, 't1_version2');
+replace into t1 values(51, 't1_version2');
+replace into t1 values(50, 't1_version2');
+replace into t1 values(49, 't1_version2');
+replace into t1 values(48, 't1_version2');
+replace into t1 values(47, 't1_version2');
+replace into t1 values(46, 't1_version2');
+replace into t1 values(45, 't1_version2');
+replace into t1 values(44, 't1_version2');
+replace into t1 values(43, 't1_version2');
+replace into t1 values(42, 't1_version2');
+replace into t1 values(41, 't1_version2');
+replace into t1 values(40, 't1_version2');
+replace into t1 values(39, 't1_version2');
+replace into t1 values(38, 't1_version2');
+replace into t1 values(37, 't1_version2');
+replace into t1 values(36, 't1_version2');
+replace into t1 values(35, 't1_version2');
+replace into t1 values(34, 't1_version2');
+replace into t1 values(33, 't1_version2');
+replace into t1 values(32, 't1_version2');
+replace into t1 values(31, 't1_version2');
+replace into t1 values(30, 't1_version2');
+replace into t1 values(29, 't1_version2');
+replace into t1 values(28, 't1_version2');
+replace into t1 values(27, 't1_version2');
+replace into t1 values(26, 't1_version2');
+replace into t1 values(25, 't1_version2');
+replace into t1 values(24, 't1_version2');
+replace into t1 values(23, 't1_version2');
+replace into t1 values(22, 't1_version2');
+replace into t1 values(21, 't1_version2');
+replace into t1 values(20, 't1_version2');
+replace into t1 values(19, 't1_version2');
+replace into t1 values(18, 't1_version2');
+replace into t1 values(17, 't1_version2');
+replace into t1 values(16, 't1_version2');
+replace into t1 values(15, 't1_version2');
+replace into t1 values(14, 't1_version2');
+replace into t1 values(13, 't1_version2');
+replace into t1 values(12, 't1_version2');
+replace into t1 values(11, 't1_version2');
+replace into t1 values(10, 't1_version2');
+replace into t1 values(9, 't1_version2');
+replace into t1 values(8, 't1_version2');
+replace into t1 values(7, 't1_version2');
+replace into t1 values(6, 't1_version2');
+replace into t1 values(5, 't1_version2');
+replace into t1 values(4, 't1_version2');
+replace into t1 values(3, 't1_version2');
+replace into t1 values(2, 't1_version2');
+replace into t1 values(1, 't1_version2');
+ob1.major_freeze
+ob1.check_cs_version 2
+ob1.ups0.force_stop
+select /*+read_consistency(frozen)*/* from t1;
+i1	v1
+1	t1_version2
+2	t1_version2
+3	t1_version2
+4	t1_version2
+5	t1_version2
+6	t1_version2
+7	t1_version2
+8	t1_version2
+9	t1_version2
+10	t1_version2
+11	t1_version2
+12	t1_version2
+13	t1_version2
+14	t1_version2
+15	t1_version2
+16	t1_version2
+17	t1_version2
+18	t1_version2
+19	t1_version2
+20	t1_version2
+21	t1_version2
+22	t1_version2
+23	t1_version2
+24	t1_version2
+25	t1_version2
+26	t1_version2
+27	t1_version2
+28	t1_version2
+29	t1_version2
+30	t1_version2
+31	t1_version2
+32	t1_version2
+33	t1_version2
+34	t1_version2
+35	t1_version2
+36	t1_version2
+37	t1_version2
+38	t1_version2
+39	t1_version2
+40	t1_version2
+41	t1_version2
+42	t1_version2
+43	t1_version2
+44	t1_version2
+45	t1_version2
+46	t1_version2
+47	t1_version2
+48	t1_version2
+49	t1_version2
+50	t1_version2
+51	t1_version2
+52	t1_version2
+53	t1_version2
+54	t1_version2
+55	t1_version2
+56	t1_version2
+57	t1_version2
+58	t1_version2
+59	t1_version2
+60	t1_version2
+61	t1_version2
+62	t1_version2
+63	t1_version2
+64	t1_version2
+65	t1_version2
+66	t1_version2
+67	t1_version2
+68	t1_version2
+69	t1_version2
+70	t1_version2
+71	t1_version2
+72	t1_version2
+73	t1_version2
+74	t1_version2
+75	t1_version2
+76	t1_version2
+77	t1_version2
+78	t1_version2
+79	t1_version2
+80	t1_version2
+81	t1_version2
+82	t1_version2
+83	t1_version2
+84	t1_version2
+85	t1_version2
+86	t1_version2
+87	t1_version2
+88	t1_version2
+89	t1_version2
+90	t1_version2
+91	t1_version2
+92	t1_version2
+93	t1_version2
+94	t1_version2
+95	t1_version2
+96	t1_version2
+97	t1_version2
+98	t1_version2
+99	t1_version2
+100	t1_version2

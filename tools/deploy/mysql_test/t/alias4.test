@@ -1,0 +1,60 @@
+# test alias with join or other 
+
+drop table if exists student,score;
+
+
+create table student(id varchar(20) primary key, name varchar(50), gender varchar(2));
+create table score(id varchar(20) primary key, score int);
+
+insert into student values('2002001', 'lilei', 'm'), ('2002002', 'hanmeimei', 'f'), ('2002003', 'jim', 'm'),('2002004', 'lucy','f'),('2002005', 'linfeng','m');
+
+insert into score values ('2002001',90),('2002002',95),('2002003',80);
+
+
+
+# table name
+select st_boys.name, score.score from (select * from student as st where st.gender='m') as st_boys, score sc where st_boys.id = score.id;
+
+select st.name,sc.score from student as st, score as sc where st.gender = 'm' and st.id = sc.id;
+
+(select * from student as ST1 where gender = 'f') union (select ST1.id, ST1.name ,ST1.gender  from (select * from student where gender = 'm') as ST1, score where ST1.id = score.id );
+
+--error 5020
+select st1.id from student as st1, student as st2 where student.id = st2.id;
+select st1.id from student as st1, student as st2 where st1.id = st2.id;
+
+--error 5020
+select student.id from student, student as st2 where student.id = st2.id; 
+
+select score.name,score.id,score.gender,sc.score from student as score, score as sc where score.id=sc.id;
+--error S42S01
+select score.name,score.id,score.gender,score.score from student as score, score  where student.id=score.id;
+
+
+# column name
+
+
+select student.name as Name, score.score as Score from student,score where student.id = score.id;
+
+select avg(score.score) as boy_avg_score  from score,student where student.id=score.id and student.gender = 'm';
+select avg(score.score) as girl_avg_score  from score,student where student.id=score.id and student.gender = 'f';
+select avg(score_boy.score) as boy_avg_score from (select score.score from score,student where student.id = score.id and student.gender = 'm') as score_boy;
+
+select student.name as top_boy  from score,student where student.id=score.id and student.gender = 'm' order by score.score desc limit 1;
+select student.name as top_stu  from score,student where student.id=score.id  order by score.score desc limit 1;
+
+select st_boys.n, score.score from (select id as i, name as n, gender as g from student as st where st.gender='m') as st_boys, score sc where st_boys.i = score.id;
+
+select st.name as Name ,st.score as Score from student as st, score as sc where st.gender = 'm' and st.id = sc.id;
+
+select st_boys.n, score.score from (select id as i, name as i, gender as g from student where st.gender='m') as st_boys, score sc where st_boys.i = score.id;
+
+
+select st.g from (select id,name, gender as g from student) as st where st.gender in ('m','f');
+select st.g from (select id,name, gender as g from student) as st where st.g in ('m','f');
+
+select id as abc from student union select id  from student; 
+
+drop student,score;
+
+

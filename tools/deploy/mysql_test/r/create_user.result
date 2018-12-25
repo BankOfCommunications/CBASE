@@ -1,0 +1,26 @@
+drop table if exists t1,t2,t3,t4;
+create user 'u1' identified by 'pass1', 'u2' identified by 'pass2', 'u3' identified by 'pass3', 'u4' identified by 'pass4';
+GRANT SELECT, GRANT OPTION ON test.* TO 'u1';
+no privilege
+create user 'u11' identified by 'pass1', 'u12' identified by 'pass2', 'u13' identified by 'pass3', 'u14' identified by 'pass4';
+ERROR HY000: no privilege
+no privilege
+drop user 'u3','u4';
+ERROR HY000: no privilege
+drop user 'u1';
+drop user failed
+drop user 'u1';
+ERROR 01007: delete user failed
+no privilege
+drop user 'admin';
+ERROR HY000: no privilege
+user exists
+create user 'u1' identified by 'pass1', 'u2' identified by 'pass2', 'u3' identified by 'pass3', 'u4' identified by 'pass4';
+ERROR HY000: Duplicate entry ' <6.16>=varchar:u2' for key 'PRIMARY'
+create user 'create' identified by 'pass1';
+create user 'password' identified by 'pass1';
+create user 'username' identified by 'pass1';
+create user 'status' identified by 'pass1';
+password must not be empty
+create user 'u21' identified by '';
+ERROR 01007: password must not be empty

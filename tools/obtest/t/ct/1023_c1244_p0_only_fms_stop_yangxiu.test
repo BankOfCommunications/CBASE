@@ -1,0 +1,27 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob1.reboot;
+sleep 30;
+
+deploy ob1.prepare;
+deploy ob1.start_check;
+create table t1(c1 int primary key,c2 int);
+insert into t1 values(1,1),(2,2),(3,3),(4,4);
+select * from t1;
+
+#stop fms
+deploy ob1.fs0.stop;
+sleep 100;
+
+deploy ob1.stop_check;
+
+#start fms
+deploy ob1.fs0.nstart;
+deploy ob1.ms0.stop;
+sleep 100;
+
+deploy ob1.start_check;
+
+insert into t1 values(5,1),(6,2),(7,3),(8,4);
+select * from t1;
+
+deploy ob1.stop_check;

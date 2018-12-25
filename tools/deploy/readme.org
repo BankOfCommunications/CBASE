@@ -1,0 +1,369 @@
+#+Title: OB部署和测试工具
+#+OPTIONS:  H:2 num:t toc:t author:nil timestamp:nil creator:nil
+
+OB部署和测试工具现在已经可用，目标是给开发人员验证正确性或做压力测试使用。工具命名为 =deploy= 。
+代码在: http://svn.app.taobao.net/repos/oceanbase/branches/dev/oceanbase/tools/deploy
+
+* 基本功能
+  1. 部署OB集群：分发二进制文件和库，生成配置文件，起停server，查看状态。
+  2. 部署测试用客户端: 目前集成了 =mixed_test,syschecker,bigquery,sqltest=
+  3. 在集群和测试用客户端起来之后，根据需要可以对集群做一些操作: 切换主UPS, major freeze，kill server, 引入磁盘和网络超时, 在这个过程中查看server和客户端是否出错。
+* checkout代码
+#+begin_src sh
+svn co http://svn.app.taobao.net/repos/oceanbase/branches/dev/oceanbase/ ob.dev
+#+end_src
+*接下来假设所有的shell命令都在 ob.dev/tools/deploy 目录进行*
+#+begin_src sh
+cd ob.dev/tools/deploy
+#+end_src
+目录下会有deploy.py, 这是我们将要使用的部署和控制用脚本, 直接运行它，会打印帮助信息。
+如果无法运行，一般是因为python版本不对，如果在10.232.35.40上，可以尝试：
+#+begin_src sh
+export PATH=$PATH:/home/yuanqi.xhf/work/python2.7/bin/
+#+end_src
+接下来按照帮助中给出的步骤进行即可。
+
+* deploy命令和配置文件
+  这个小节的内容是希望说明deploy的基本原理，和OB部署没有任何关系。
+
+  deploy工具主体是一个python文件: deploy.py， 我们在命令行上指定一个命令，deploy.py会先读取一个配置文件，
+  然后再执行命令行上指定的命令。deploy.py的缺省配置文件是./config.py, 但是如果./config2.py存在的话，就把./config2.py当作配置文件。
+  实际上deploy.py会从 =config[0-9]*.py= 中选择最大的一个作为缺省配置文件。 接下来，我们使用config2.py作为配置文件。
+  
+  为了先理解deploy.py的功能，我们先看一个例子。
+  编辑配置文件，使得它的内容如下:
+  #+begin_example
+  def say_hello(name='someone', **kw): return 'hello %s' %(name)
+  a, b = 1, 2
+  #+end_example
+  如果我们执行 =./deploy.py a= ，那么deploy.py会最终找到a，并判断a是一个整数，最后把它的值打印出来。
+  #+begin_example
+  yuanqi.xhf@tfs035040 deploy$ ./deploy.py a
+  2012-09-26 17:54:10 INFO: a()
+  ('a', 1)
+  #+end_example
+
+  如果执行 =./deploy.py say_hello yuanqi.xhf= ，deploy.py会找到 =say_hello= 这个函数，并最终执行它:
+  #+begin_example
+  yuanqi.xhf@tfs035040 deploy$ ./deploy.py say_hello yuanqi.xhf
+  ('say_hello', 'hello yuanqi.xhf')
+  #+end_example
+  也可以用 =./deploy.py say_hello name=yuanqi.xhf= 来指定参数。
+
+  更一般地，在命令行上给deploy.py指定一个'a.b.c'形式的定位符，deploy.py根据这个定位符找到对应的对象(把这个过程叫寻址)，然后根据对象的类型执行对应的操作(把这个过程叫执行)。
+  1. '寻址'的逻辑: deploy.py把所有的对象看作是嵌套的字典，'a.b.c'的意义是在全局作用域中找到a, a必须是一个字典，
+     然后在a中寻找b，b必须也是一个字典，最后在b中寻找c。
+     deploy.py看到的变量形成层次结构，内层的值会覆盖外层的值。所以如果配置文件是:
+     #+begin_example
+     a, c = 1, 2
+     b = {'a':3}
+     #+end_example
+     '=./deploy.py a=' 会输出 =1= ， '=./deploy.py b.a=' 会输出 =3= ,  '=./deploy.py b.c=' 会输出 =2= 。
+  2. '执行'的逻辑: deploy.py根据对象类型执行不同的动作：如果是一个函数，就执行它；如果是一个数字或字符串，就打印它；
+     
+     deploy.py会特殊处理字符串：首先，所有的字符串都会被预处理，预处理的过程是把字符串中的 =${a.b.c}= 形式的变量进行替换。
+     其次，有特殊的前缀的字符串会被特殊处理，最重要的两个特殊前缀是:
+     1. 如果字符串以'sh:'开始，把它作为shell命令执行；
+     2. 如果以'popen:'开始，就执行命令，并返回命令的标准输出；
+     比如配置文件中有如下的片段:
+     #+begin_example
+     usr = os.getenv('USER')
+     your_home = '/home/$usr'
+     say_hello = 'sh: echo hello from $usr'
+     #+end_example
+     '=deploy.py say_hello=' 会输出 'hello from xxx'.
+
+* 准备配置文件
+  当前目录已经有一个config.py文件，这是一个共享的模板，不要改动它，把config.py拷贝为config2.py, deploy会优先使用config2.py.
+  config2.py是一个合法的python文件，就像前面说明的一样，这个文件里可以执行任意的python代码，但是我们主要在里面定义OBI(OB Instance).
+   
+  一个OBI包含至少一个rs,ups,ms,cs, 一个最简单的OBI定义如下:
+  #+begin_example
+  ob1 = OBI()
+  #+end_example
+  它定义了一个OBI，名字叫ob1，ob1有一个rs,一个ms，一个ups, 一个cs，如果启动ob1,四个server都会运行在本地。
+  server运行产生的数据将会放在 =~/data= 目录。各个server的配置项都使用缺省值。
+   
+  实际上一般会使用如下的配置文件：
+  #+begin_example
+  load_file('monitor.py')
+  data_dir = '/data/'         # $data_dir/{1..10} should exist
+  ObCfg.default_hosts = '10.232.36.31 10.232.36.32 10.232.36.33'.split()
+  ob1 = OBI()
+  #+end_example
+  1. =data_dir= 就是保存 commitlog, sstable等数据的目录。
+  2. =ObCfg.default_hosts= 就是我们希望把server和client部署上去的hosts。
+  缺省情况下，远程机器上二进制文件和库文件所在的目录是 =~/ob1,~/ob2...= , 
+  commitlog和sstable目录是 =/data/{1..10}/ob1.$USER,/data/{1..10}/ob2.$USER...=,
+  每个用户使用的端口号从 =50 * (uid%1000)= 开始, 由deploy.py自动分配。所以如果没有特殊需求，不用特别去指明这些配置项。
+
+  要继续进行，我们需要：
+  1. 在本地准备好server和client的二进制文件和依赖的库
+     如果直接使用checkout下来的svn代码编译:
+     #+begin_src sh
+     cd ../../ && ./build.sh init && ./configure && make -j -C src && make -j -C src/client/cpp/ && make ups_admin -j -C tools
+     cd - && ./copy.sh ../.. && make
+     #+end_src
+  2. 打通使用的hosts之间的ssh信任关系, 在这个最简单的例子，你需要确保自己能从本机无密码ssh登录本机。
+     #+begin_example
+     ssh `hostname` echo OK.
+     #+end_example
+  3. 确认自己有目标机器的 =data_dir= 的写权限，在这个最简单的例子里，你应该具有 =~/data= 目录的写权限。
+
+  实际上deploy工具可以帮你做这些检查, 所以如果你不确定自己需要准备哪些文件或是需要打通哪些机器的ssh信任关系，你可以直接:
+  #+begin_src sh
+  ./deploy ob1.reboot
+  #+end_src
+
+  可能会有以下几种错误信息:
+  1. 检查本地二进制文件失败
+     #+begin_example
+     INFO: ob1.check_local_bin()
+     ls: bin/updateserver: No such file or directory
+     sh()=>512: ls  bin/{rootserver,updateserver,mergeserver,chunkserver} lib/{libsnappy_1.0.so,libobapi.so.1} tools/{rs_admin,ups_admin,iof} >/dev/null
+     local bin file check failed. make sure "bin" "lib" "tools" dir and files exists!
+     #+end_example
+     从这个错误信息中，可以很清楚的看到本地需要有哪些文件。必须存在的文件是和配置相关的。
+
+  2. ssh检查失败
+     #+begin_example
+     INFO: ob1.check_ssh()
+     check ssh fail, make sure you can ssh to these machine without passwd: ['10.232.33.29:Fail']
+     #+end_example
+     这里不光要求ssh能无密码互通，还要求ssh命令能在1秒只能返回结果。
+
+  3. 检查 =data_dir= 目录的权限失败
+     #+begin_example
+     INFO: ob1.check_dir()
+     check data dir fail, make sure you have write permission on configured data_dir and have enough space on home dir(>10000000M):
+     ['10.232.36.29:/dataX/:Fail']
+     #+end_example
+     这里不光检查了 =/dataX/{1..10}= 的写权限，还要求 =$HOME= 目录至少要有10G的剩余空间。
+
+  4. =config2.py= 语法错
+     =config2.py= 是一个合法的Python文件，所以需要注意符合Python语法
+     #+begin_example
+     ...
+     load file: config2.py failed!
+     #+end_example
+
+  如果出现其余种类的错误，那就是deploy.py的bug了。
+
+* 部署集群
+  一个包含所有步骤的命令:
+  #+begin_src sh
+  ./deploy.py ob1.reboot
+  #+end_src
+  =reboot= 做的事情包括: 
+  #+begin_example
+  check_local_bin check_ssh check_dir ct_check_local_file force_stop cleanup conf rsync mkdir ct_rsync ct_prepare start
+  #+end_example
+  检查本地二进制文件，检查ssh，检查远程目录权限，检查集群配套的客户端的二进制文件和配置文件，停掉所有的server，清理环境，生成配置文件，
+  将本地二进制文件和配置文件同步到远程，建立目录，将客户端二进制文件和配置文件同步到远程，准备静态数据，启动server。
+  不要被上面一串的工作吓到了，虽然做的事比较多，但是整个过程耗时大概30s左右, 一般情况下还是推荐使用这个命令。
+  顺便说明一下，上面列出的所有步骤都可以单独执行, 比如要在远程建立目录:
+  #+begin_src sh
+  ./deploy.py ob1.mkdir
+  #+end_src
+  
+  但是如果你不想删除数据，可以:
+  #+begin_src sh
+  ./deploy.py ob1.restart
+  #+end_src
+  restart会重新生成配置文件，重新同步二进制文件和配置文件。
+  
+  如果你只是想重启，不想更新二进制文件和配置文件:
+  #+begin_src sh
+  ./deploy.py ob1.[force_stop,start]
+  #+end_src
+  
+  如果启动成功, 你可以查看所有server的id和pid:
+  #+begin_src sh
+  ./deploy.py ob1.[id,pid]
+  #+end_src
+  或者查看某个server的日志:
+  #+begin_src sh
+  ./deploy.py ob1.rs0.less
+  #+end_src
+  
+  或者查看server的配置文件:
+  #+begin_example
+  ./deploy.py ob1.ups0.vi
+  #+end_example
+
+  或者打开debug日志:
+  #+begin_src sh
+  ./deploy.py ob1.cs0.kill -41
+  #+end_src
+  
+  或者查看目标机器上进程占用的内存和CPU:
+  #+begin_src sh
+  ./deploy.py ob1.cs0.ssh ps ux
+  #+end_src
+  
+  或者用gdb attach到某个server上:
+  #+begin_src sh
+  ./deploy.py ob1.ups0.gdb
+  #+end_src
+  
+  或者用 =ups_admin= 查看最大日志号:
+  #+begin_src sh
+  ./deploy.py ob1.ups0.ups_admin get_clog_cursor
+  #+end_src
+  
+  因为新增一个命令是很简单的，完整的命令列表只能查看 =deploy.py= 的代码才能确定。
+
+* 启动客户端测试
+  以 =simple_client= 为例。
+  首先，你需要修改config2.py，指定一个集群的客户端为 =simple_client= 。
+  #+begin_example
+  load_file('monitor.py', 'fault_test.py')
+  ...
+  ob1 = OBI('OBI_MASTER', ct=CT('simple_client'))
+  #+end_example
+  这时执行:
+  #+begin_src sh
+  ./deploy.py ob1[,.ct].reboot
+  #+end_src
+  可能会在检查本地客户端二进制文件和配置文件时出错。
+  #+begin_example
+  INFO: ct.check_local_file()
+  ls: simple_client/client: No such file or directory
+  ...
+  #+end_example
+  
+  如果是这样，执行以下命令准备客户端文件:
+  #+begin_src sh
+  make -j -C simple_client
+  #+end_src
+
+  如果一切正常，server和客户端应该已经起来了，通过如下的命令可以验证:
+  #+begin_src sh
+  ./deploy.py ob1.random_test check
+  #+end_src
+  这会用一个循环检查server和客户端是否活着，客户端是否出错(现在的判断方法就是是否打印了错误日志)。
+  
+  如果检查失败，可以尝试再次重启 =simple_client= 客户端:
+  #+begin_src sh
+  ./deploy.py ob1.ct.reboot
+  #+end_src
+  
+  如果想测试随机restart server的情况，可以:
+  #+begin_src sh
+  ./deploy.py ob1.random_test restart_server 1000 wait_time=1
+  #+end_src
+  循环1000次，每两次之间最多等待1s。
+  缺省是restart ups, 也可以指定server类型, 比如kill chunkserver:
+  #+begin_src sh
+  ./deploy.py ob1.random_test restart_server pat=chunkserver
+  #+end_src
+  
+  =restart_server= 可以替换为下面列表中的任何一个, 或者是它们的组合:
+  #+begin_example
+  check,restart_server,set_master,disk_timeout,net_timeout,major_freeze
+  #+end_example
+  
+  比如, 下面的命令指定随机 =restart_server= 和 =major_freeze= :
+  #+begin_src sh
+  ./deploy.py ob1.random_test restart_server,major_freeze
+  #+end_src
+
+* Tips
+  1. 如果要使用自定义的schema和各个server的配置文件模板，可以:
+     #+begin_src sh
+     ./deploy.py tpl.gensvrcfg
+     #+end_src
+     这会在本地创建一个目录tpl, 包含如下的文件:
+     #+begin_example
+     deploy$ ls tpl/
+     chunkserver.template    mergeserver.template    rootserver.template     simple.config.template
+     lsyncserver.template    proxyserver.template    schema.template         updateserver.template
+     #+end_example
+     根据需要修改即可。但要确保config2.py中有如下的一行:
+     #+begin_example
+     tpl = load_dir_vars('tpl')
+     #+end_example
+     但要注意的是，因为 =syschecker/mixed_test= 等客户端需要特殊的schema，当配置了客户端时，以客户端指定的schema为准。
+
+  2. 如何同时测试多个版本的OB。缺省所有的OBI都使用'bin'目录下的updateserver/rootserver/chunkserver/mergeserver, 但是如果这样配置:
+     #+begin_example
+     ob1 = OBI(ver='.base')
+     ob2 = OBI(ver='.modify')
+     #+end_example
+     指定 =ver= 后，ob1会使用'bin.base'中的二进制文件, ob2会使用'bin.modify'中的二进制文件。
+
+  3. 如何更具体地指定UPS/RS/MS/CS/Client部署在哪些机器上:
+     #+begin_example
+     ob1 = OBI(hosts=multiple_expand('10.232.36.[171,175]')) # 每台机器上都部署UPS/RS/CS/MS
+     ob2 = OBI(masters=..., slaves=...) # 分别指定masters(UPS/RS)和slaves(CS/MS)部署在哪些机器上。
+     ob3 = OBI(CT=('simple_client', hosts=...)) # 指定client部署在哪些机器上
+     ob4 = OBI(rs0 = RootServer(rs0_ip), ups0 = UpdateServer(ups0_ip),
+               cs0 = ChunkServer(cs0_ip), ms0 = MergeServer(ms0_ip)) # 分别指定每个server的部署在哪些机器上。
+     #+end_example
+  
+  4. 如何定义主备集群:
+     #+begin_example
+     obis = dict(inst1='ob3', inst2='ob4')
+     ob3 = OBI('OBI_SLAVE', **obis)
+     ob4 = OBI('OBI_MASTER', **obis)
+     #+end_example
+
+  5. 如何定义主备集群，并用lsync同步:
+     #+begin_example
+     ObCfg.default_host = ...
+     lsync_ip = ObCfg.default_hosts[0]
+     obis = dict(inst1='ob3', inst2='ob4', need_lsync=True)
+     ob3 = OBI('OBI_SLAVE', lsync0=dict(ip=lsync_ip, convert_switch_log=1, port=3045),
+		ups0=dict(lsync_ip=lsync_ip, lsync_port=3046), **obis)
+     ob4 = OBI('OBI_MASTER', lsync0=dict(ip=lsync_ip, convert_switch_log=1, port=3046),
+		ups0=dict(lsync_ip=lsync_ip, lsync_port=3045), **obis)
+     #+end_example
+
+  6. 如果端口号被占用, 可以用如下的命令杀掉进程:
+     #+begin_example
+     ./deploy.py ob1.all_server_do kill_by_port
+     #+end_example
+     
+  7. 可以指定server的二进制文件来源:
+     #+begin_example
+     def rpm_url(v):
+         return 'http://upload.yum.corp.taobao.com/taobao/5/x86_64/test/oceanbase/oceanbase-%s.el5.x86_64.rpm' %(v)
+     def svn_url(v):
+         return 'http://svn.app.taobao.net/repos/oceanbase/branches/%s/oceanbase'%(v)
+     ob1 = OBI(src='~/ob.dev') # 指定~/ob.dev为源代码目录
+     ob2 = OBI(src=rpm_url('0.3.1-763')) # 指定来源为rpm包
+     #+end_example
+     指定 =src= 后，可以通过如下的命令更新本地的二进制文件。下次reboot时会把这些文件同步到远程机器。
+     #+begin_example
+     ./deploy.py ob1.update_local_bin
+     #+end_example
+  
+  8. 如何打通ssh, 编辑'scprun.rc', 内容如下:
+     #+begin_example
+     hosts='10.232.36.171 10.232.36.175'
+     passwd='yourpassword'
+     #+end_example
+     然后执行:
+     #+begin_example
+     b/scprun getthrough
+     #+end_example
+     
+  9. 显式指定使用哪个配置文件:
+     #+begin_example
+     ./deploy.py your-config.py:ob1.reboot
+     #+end_example
+
+  10. 不同的集群使用不同的配置文件模板:
+      #+begin_example
+      ob1 = OBI(tpl=load_dir_vars('old-version-tpl'))
+      ob2 = OBI(tpl=load_dir_vars('new-version-tpl'))
+      #+end_example
+
+  11. 如果要调整一个参数，可以用如下的命令直接修改配置文件。
+      #+begin_example
+      ./deploy.py ob1.ups0.vi
+      #+end_example
+      改完之后可以用如下的命令 =reload_conf=
+      #+begin_example
+      ./deploy.py ob1.ups0.ups_admin reload_conf
+      #+end_example

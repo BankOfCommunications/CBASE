@@ -1,0 +1,12 @@
+select column1, column2, column3, column4 from sqltest_table where /*+rowkey, prefix:8, suffix:8*/ prefix=KEY0
+select column1, column2, column3, column4 from sqltest_table where /*+rowkey, prefix:8, suffix:8*/ prefix=KEY0 and suffix=KEY1
+select column1, column2, column3, column4 from sqltest_table where /*+rowkey, prefix:8, suffix:8*/ prefix=KEY0 order by column1, timestamp
+select column1, count(column3) as c3 from sqltest_table where /*+rowkey, prefix:8, suffix:8*/ prefix=KEY0 group by column1
+select column1, count(column3) as c3, sum(column3) as s3 from sqltest_table where /*+rowkey, prefix:8, suffix:8*/ prefix=KEY0 group by column1
+select column1, count(column2), count(column3) as c3, sum(column3) as s3 from sqltest_table where /*+rowkey, prefix:8, suffix:8*/ prefix=KEY0 group by column1
+select column1, count(column2), count(column3) as c3, sum(column3) as s3 from sqltest_table where /*+rowkey, prefix:8, suffix:8*/ prefix=KEY0 group by column1 order by column1
+select column1, count(column2), count(column3) as c3, sum(column3) as s3, max(timestamp) as max_timestamp from sqltest_table where /*+rowkey, prefix:8, suffix:8*/ prefix=KEY0 group by column1 order by sum(column3), max(timestamp)
+select column1, count(column2), count(column3) as c3, sum(column3) as s3, max(timestamp) as max_timestamp, (sum(column3) + count(column3)) * max(column3) from sqltest_table where /*+rowkey, prefix:8, suffix:8*/ prefix=KEY0 group by column1 order by sum(column3), max(timestamp)
+select column1, count(column2), count(column3) as c3, sum(column3) as s3, max(timestamp) as max_timestamp, (sum(column3) + count(column3)) * max(column3) from sqltest_table where /*+rowkey, prefix:8,suffix:8*/ prefix=KEY0 group by column1 having sum(column3) >= 50 order by sum(column3), max(timestamp)
+select column1, count(column2), count(column3) as c3, sum(column3) as s3, max(timestamp) as max_timestamp, (sum(column3) + count(column3)) * max(column3) from sqltest_table where /*+rowkey,prefix:8,suffix:8*/ prefix=KEY0 group by column1 having sum(column3) >= 50 or sum(column3) <= 10 order by sum(column3), max(timestamp)
+#select column1, sum(column3) as s3, max(timestamp) as max_timestamp, 1.0 * sum(column3) / count(column3) as s4 from sqltest_table where /*+rowkey,prefix:8,suffix:8*/ prefix=KEY0 group by column1 having sum(column3) >= 50 order by sum(column3), max(timestamp)

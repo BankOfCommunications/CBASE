@@ -1,0 +1,41 @@
+ob1=OBI(cluster=1233)
+ob2=OBI(cluster=1233)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.source include/merge.inc
+ob1.create_client
+ob1.prepare
+ob1.start_check
+create table t1 (a int primary key,b int);
+create table t2 (a int primary key,b int);
+insert into t1 values(1,1),(-1,-1),(0,0);
+select * from t1;
+a	b
+-1	-1
+0	0
+1	1
+drop table t2;
+ob1.major_freeze
+ob1.check_cs_version 2
+ob1.check_cs_version 2
+ob1.ms0.stop
+ob1.ms0.nstart
+ob1.cs0.stop
+ob1.cs0.nstart
+ob1.stop_check
+ob1.change_ups_master $a
+ob1.switch_cluster ob2
+update t1 set b=10 where a=1;
+select * from t1;
+a	b
+-1	-1
+0	0
+1	10
+ob2.$a.stop
+delete from t1 where a=0;
+select * from t1;
+a	b
+-1	-1
+1	10
+drop table t1;

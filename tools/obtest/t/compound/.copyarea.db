@@ -1,0 +1,21 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\obtest\t\compound
+2
+11
+18:3058_c1211_p0_trx_6.test|1|166f7789768|1aa9|12bfd59f|d94c010268c711e8a8030002c8c1274c|0
+33:2068_c1211_ups_parallel_trx_3L_deadlock_junyue.test|1|166f77897e6|18b4|f4a45ac1|dddc013a68c711e8a8030002c8c1274c|0
+46:2063_c1211_ups_parallel_trx_2L_compd_double_first_conflict_junyue.test|1|166f77896d8|163a|fab06540|d52c00ca68c711e8a8030002c8c1274c|0
+35:2066_c1211_ups_parallel_trx_3L_compd_only_junyue.test|1|166f77898f0|11ef|f9f07d7|e1ec017268c711e8a8030002c8c1274c|0
+18:3055_c1211_p0_trx_3.test|1|166f778998a|217a|260e8a93|e67c01aa68c711e8a8030002c8c1274c|0
+35:2060_c1211_ups_parallel_trx_2L_compd_only_junyue.test|1|166f7789a58|be3|69c004a1|e87c01c668c711e8a8030002c8c1274c|0
+30:2070_c1211_ups_parallel_trx_3L_async_junyue.test|1|166f7789aed|e3f|f4a0cbb0|ec9c01fe68c711e8a8030002c8c1274c|0
+37:2069_c1211_ups_parallel_trx_3L_compd_double_junyue.test|1|166f77897a9|15ea|49ab51e8|db9c011e68c711e8a8030002c8c1274c|0
+18:3054_c1211_p0_trx_2.test|1|166f7789aaa|21a3|33109eb3|ea8c01e268c711e8a8030002c8c1274c|0
+37:2062_c1211_ups_parallel_trx_2L_compd_double_junyue.test|1|166f7789b93|deb|a630aec9|f11c023668c711e8a8030002c8c1274c|0
+33:2065_c1211_ups_parallel_trx_2L_deadlock_junyue.test|1|166f7789942|1557|97a43fbc|e46c018e68c711e8a8030002c8c1274c|0
+34:2061_c1211_ups_parallel_trx_2L_compd_mix_junyue.test|1|166f778971c|cc1|81ce48e2|d73c00e668c711e8a8030002c8c1274c|0
+34:2067_c1211_ups_parallel_trx_3L_compd_mix_junyue.test|1|166f7789b53|106c|9f277c0a|eebc021a68c711e8a8030002c8c1274c|0
+18:3057_c1211_p0_trx_5.test|1|166f7789bc8|1788|a50bbc0b|f32c025268c711e8a8030002c8c1274c|0
+18:3053_c1211_p0_trx_1.test|1|166f7789bf8|ec9|d08c4379|f57c026e68c711e8a8030002c8c1274c|0
+18:3056_c1211_p0_trx_4.test|1|166f7789c2d|2230|6b76f56e|f7cc028a68c711e8a8030002c8c1274c|0
+30:2064_c1211_ups_parallel_trx_2L_async_junyue.test|1|166f7789834|c8d|563f3a7f|dfdc015668c711e8a8030002c8c1274c|0

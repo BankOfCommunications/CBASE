@@ -1,0 +1,7 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\obtest\conf
+2
+3
+14:supervisord.template|1|166f7789d85|1a68|4650c8f0|124c03f268c811e8a8030002c8c1274c|0
+d:configure.ini|1|166f7789dc6|3e3|36a10d69|149c040e68c811e8a8030002c8c1274c|0
+10:log4j.properties|1|166f7789e07|2db|2030f3a2|168c042a68c811e8a8030002c8c1274c|0

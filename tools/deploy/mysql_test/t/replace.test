@@ -1,0 +1,70 @@
+drop table if exists t1;
+create table t1 (c1 int, c2 varchar, c3 int, primary key (c1, c2));
+
+--echo basic case
+replace into t1 values (1, 'a', 1), (2, 'b', NULL);
+select * from t1;
+replace into t1 values (1, 'a', 2);
+select * from t1;
+replace into t1 values (1, 'a', 3), (1, 'a', 4);
+select * from t1;
+
+--echo only rowkey
+replace into t1(c1,c2) values (3, 'c');
+select * from t1;
+
+--echo type conversion
+replace into t1 values ('4', 4, '4'), (5, 'd', '5');
+select * from t1;
+
+--echo cons rowkey
+replace into t1 (c3, c2, c1) values (9, 'a', 8), (7, 'b', 6);
+select * from t1;
+
+--echo null rowkey
+#-- affect_rows 3
+replace into t1 values (NULL, 1, NULL), (NULL, NULL, 2), (NULL, NULL, 3);
+select * from t1;
+
+--echo ps
+prepare stmt1 from replace into t1 values (?, ?, ?), (?, ?, ?);
+set @v1 = 11;
+set @v2 = 'a';
+set @v3 = NULL;
+set @v4 = 12;
+set @v5 = 'b';
+execute stmt1 using @v1, @v2, @v3, @v4, @v5, @v4;
+select * from t1;
+
+--echo transaction
+start transaction;
+replace into t1 values (31, 'x', 13);
+select * from t1 where c1 = 31 and c2 = 'x' for update;
+rollback;
+select * from t1;
+
+start transaction;
+replace into t1 values (31, 'x', 13);
+select * from t1 where c1 = 31 and c2 = 'x' for update;
+commit;
+select * from t1;
+
+set autocommit = 0;
+replace into t1 values (32, 'y', 23);
+replace into t1 values (32, 'y', 32);
+commit;
+select * from t1;
+set autocommit = 1;
+
+--echo NOP
+--echo +1 support
+--echo CreateTime/ModifyTime columns
+drop table if exists t2;
+create table t2 (c1 int primary key, ct createtime, mt modifytime);
+--error 5056
+replace into t2 values (1, '2013-05-29 10:10:10', '2013-05-29 10:10:10');
+replace into t2 (c1) values (2);
+select c1 from t2;
+
+--echo clean up
+drop table t1, t2;

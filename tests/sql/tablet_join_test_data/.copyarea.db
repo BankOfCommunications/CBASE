@@ -1,0 +1,9 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tests\sql\tablet_join_test_data
+2
+5
+18:fetch_ups_row_result.ini|1|166f77596d8|77|7d9d18f6|90eafd6268b311e8a8030002c8c1274c|0
+19:fetch_ups_row_ups_row.ini|1|166f77596c4|75|1e731795|8eaafd4668b311e8a8030002c8c1274c|0
+13:fetch_fused_row.ini|1|166f77596e1|0|0|938afd7e68b311e8a8030002c8c1274c|0
+c:none_ups.ini|1|166f7759710|1b|38f603de|959afd9a68b311e8a8030002c8c1274c|0
+1b:fetch_ups_row_fused_row.ini|1|166f7759727|77|7a6118e4|983afdb668b311e8a8030002c8c1274c|0

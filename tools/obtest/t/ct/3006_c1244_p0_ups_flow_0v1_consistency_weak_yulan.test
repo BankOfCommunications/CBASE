@@ -1,0 +1,114 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+
+deploy ob1.mysql set global ob_read_consistency=3;
+sleep 10;
+
+let $c=deploy_get_value(ob1.mysql_p select cluster_id,cluster_role,cluster_flow_percent from __all_cluster);
+--echo $c
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=50 where cluster_id=1;
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=50 where cluster_id=2;
+
+deploy ob1.mysql  alter system set read_master_master_ups_percent=0 server_type=rootserver;
+deploy ob1.mysql  alter system set read_slave_master_ups_percent=0 server_type=rootserver;
+sleep 10;
+
+#delete obdatasouce log
+deploy ob1.sh rm -f ~/logs/obdatasource/obdatasource.log*;
+deploy ob1.sh rm -f ~/logs/obdatasource/obdatasource-lb-monitor.log*;
+
+deploy ob1.create_client;
+create table t1(c1 int primary key, c2 varchar(20));
+sleep 60;
+
+let $master_master_ups=deploy_get_value(ob1.get_master_ups);
+let $master_slave_ups=deploy_get_value(ob1.get_slave_ups);
+let $slave_master_ups=deploy_get_value(ob2.get_master_ups);
+let $slave_slave_ups=deploy_get_value(ob2.get_slave_ups);
+
+let $l_mmups_get=deploy_get_value(ob1.$master_master_ups.monitor get_count);
+let $l_msups_get=deploy_get_value(ob1.$master_slave_ups.monitor get_count);
+let $l_mmups_scan=deploy_get_value(ob1.$master_master_ups.monitor scan_count);
+let $l_msups_scan=deploy_get_value(ob1.$master_slave_ups.monitor scan_count);
+
+let $l_smups_get=deploy_get_value(ob2.$slave_master_ups.monitor get_count);
+let $l_ssups_get=deploy_get_value(ob2.$slave_slave_ups.monitor get_count);
+let $l_smups_scan=deploy_get_value(ob2.$slave_master_ups.monitor scan_count);
+let $l_ssups_scan=deploy_get_value(ob2.$slave_slave_ups.monitor scan_count);
+
+let $cnt=0;
+let $l_m_sum=0;
+while($cnt < 4)
+{
+  let $temp=deploy_get_value(ob1.ms$cnt.monitor sql_select_count);
+  let $l_m_sum=math($l_m_sum+$temp);
+  inc $cnt;
+}
+
+let $cnt=0;
+let $l_s_sum=0;
+while($cnt < 4)
+{
+  let $temp=deploy_get_value(ob2.ms$cnt.monitor sql_select_count);
+  let $l_s_sum=math($l_s_sum+$temp);
+  inc $cnt;
+}
+
+--disable_result_log
+--disable_query_log
+let $cnt=500;
+while($cnt)
+{
+   eval replace into t1 values($cnt,'aa');
+   eval select * from t1 where c1 = $cnt;       
+   eval select * from t1;       
+   dec $cnt;
+}
+
+--echo master cluster
+
+let $cnt=0;
+let $m_sum=0;
+while($cnt < 4)
+{
+  let $temp=deploy_get_value(ob1.ms$cnt.monitor sql_select_count);
+  let $m_sum=math($m_sum+$temp);
+  inc $cnt;
+}
+let $msups_get=deploy_get_value(ob1.$master_slave_ups.monitor get_count);
+let $msups_scan=deploy_get_value(ob1.$master_slave_ups.monitor scan_count);
+
+let $diff=math(math.abs(($m_sum-$l_m_sum)-($msups_get-$l_msups_get)-($msups_scan-$l_msups_scan)));
+if($diff<=15)
+{
+    --echo success
+}
+
+--echo slave cluster
+let $cnt=0;
+let $s_sum=0;
+while($cnt < 4)
+{
+  let $temp=deploy_get_value(ob2.ms$cnt.monitor sql_select_count);
+  let $s_sum=math($s_sum+$temp);
+  inc $cnt;
+}
+let $ssups_get=deploy_get_value(ob2.$slave_slave_ups.monitor get_count);
+let $ssups_scan=deploy_get_value(ob2.$slave_slave_ups.monitor scan_count);
+
+let $diff=math(math.abs(($s_sum-$l_s_sum)-($ssups_get-$l_ssups_get)-($ssups_scan-$l_ssups_scan)));
+if($diff<=15)
+{
+    --echo success
+}
+
+--echo check obdatasouce log
+let $a = deploy_get_value(ob1.sh_p if grep ERROR ~/logs/obdatasource/obdatasource-lb-monitor.log*; then echo false; else echo true;fi);
+--echo $a
+let $a = deploy_get_value(ob1.sh_p if grep ERROR ~/logs/obdatasource/obdatasource.log*; then echo false; else echo true; fi);
+--echo $a

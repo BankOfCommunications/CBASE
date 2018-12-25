@@ -1,0 +1,52 @@
+deploy ob1=OBI(cluster=1222,use_fms=0);
+
+deploy ob1.reboot;
+
+sleep 10;
+
+deploy ob1.update_cluster;
+
+deploy ob1.create_client;
+
+
+create table t1(c1 int primary key, c2 int);
+
+insert into t1 values(1,1);
+insert into t1 values(2,1);
+
+let $cnt =100;
+while($cnt) 
+{
+select * from t1 where c1=1;
+select * from t1 where c1=2;
+dec $cnt;
+}
+
+deploy ob1.cs0.stop;
+
+let $cnt =1000;
+while($cnt) 
+{
+select * from t1 where c1=1;
+select * from t1 where c1=2;
+dec $cnt;
+}
+
+let $a=deploy_get_value(ob1.ms0.monitor sql_select_count);
+let $b=deploy_get_value(ob1.ms0.monitor get_event_count);
+let $c=deploy_get_value(ob1.ms1.monitor sql_select_count);
+let $d=deploy_get_value(ob1.ms1.monitor get_event_count);
+
+
+let $f=math(($b-$a)*100/$a);
+if($f < 10)
+{
+  --echo success
+}
+let $g=math(($d-$c)*100/$c);
+if($g < 10)
+{
+  --echo success
+}
+
+

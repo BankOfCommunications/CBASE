@@ -1,0 +1,709 @@
+ob1=OBI(cluster=1122)
+ob1.reboot
+ob1.source include/merge.inc
+ob1.create_client
+create table t1(i1 int primary key, v1 varchar(20));
+replace into t1 values(200,'version2');
+replace into t1 values(199,'version2');
+replace into t1 values(198,'version2');
+replace into t1 values(197,'version2');
+replace into t1 values(196,'version2');
+replace into t1 values(195,'version2');
+replace into t1 values(194,'version2');
+replace into t1 values(193,'version2');
+replace into t1 values(192,'version2');
+replace into t1 values(191,'version2');
+replace into t1 values(190,'version2');
+replace into t1 values(189,'version2');
+replace into t1 values(188,'version2');
+replace into t1 values(187,'version2');
+replace into t1 values(186,'version2');
+replace into t1 values(185,'version2');
+replace into t1 values(184,'version2');
+replace into t1 values(183,'version2');
+replace into t1 values(182,'version2');
+replace into t1 values(181,'version2');
+replace into t1 values(180,'version2');
+replace into t1 values(179,'version2');
+replace into t1 values(178,'version2');
+replace into t1 values(177,'version2');
+replace into t1 values(176,'version2');
+replace into t1 values(175,'version2');
+replace into t1 values(174,'version2');
+replace into t1 values(173,'version2');
+replace into t1 values(172,'version2');
+replace into t1 values(171,'version2');
+replace into t1 values(170,'version2');
+replace into t1 values(169,'version2');
+replace into t1 values(168,'version2');
+replace into t1 values(167,'version2');
+replace into t1 values(166,'version2');
+replace into t1 values(165,'version2');
+replace into t1 values(164,'version2');
+replace into t1 values(163,'version2');
+replace into t1 values(162,'version2');
+replace into t1 values(161,'version2');
+replace into t1 values(160,'version2');
+replace into t1 values(159,'version2');
+replace into t1 values(158,'version2');
+replace into t1 values(157,'version2');
+replace into t1 values(156,'version2');
+replace into t1 values(155,'version2');
+replace into t1 values(154,'version2');
+replace into t1 values(153,'version2');
+replace into t1 values(152,'version2');
+replace into t1 values(151,'version2');
+replace into t1 values(150,'version2');
+replace into t1 values(149,'version2');
+replace into t1 values(148,'version2');
+replace into t1 values(147,'version2');
+replace into t1 values(146,'version2');
+replace into t1 values(145,'version2');
+replace into t1 values(144,'version2');
+replace into t1 values(143,'version2');
+replace into t1 values(142,'version2');
+replace into t1 values(141,'version2');
+replace into t1 values(140,'version2');
+replace into t1 values(139,'version2');
+replace into t1 values(138,'version2');
+replace into t1 values(137,'version2');
+replace into t1 values(136,'version2');
+replace into t1 values(135,'version2');
+replace into t1 values(134,'version2');
+replace into t1 values(133,'version2');
+replace into t1 values(132,'version2');
+replace into t1 values(131,'version2');
+replace into t1 values(130,'version2');
+replace into t1 values(129,'version2');
+replace into t1 values(128,'version2');
+replace into t1 values(127,'version2');
+replace into t1 values(126,'version2');
+replace into t1 values(125,'version2');
+replace into t1 values(124,'version2');
+replace into t1 values(123,'version2');
+replace into t1 values(122,'version2');
+replace into t1 values(121,'version2');
+replace into t1 values(120,'version2');
+replace into t1 values(119,'version2');
+replace into t1 values(118,'version2');
+replace into t1 values(117,'version2');
+replace into t1 values(116,'version2');
+replace into t1 values(115,'version2');
+replace into t1 values(114,'version2');
+replace into t1 values(113,'version2');
+replace into t1 values(112,'version2');
+replace into t1 values(111,'version2');
+replace into t1 values(110,'version2');
+replace into t1 values(109,'version2');
+replace into t1 values(108,'version2');
+replace into t1 values(107,'version2');
+replace into t1 values(106,'version2');
+replace into t1 values(105,'version2');
+replace into t1 values(104,'version2');
+replace into t1 values(103,'version2');
+replace into t1 values(102,'version2');
+replace into t1 values(101,'version2');
+replace into t1 values(100,'version2');
+replace into t1 values(99,'version2');
+replace into t1 values(98,'version2');
+replace into t1 values(97,'version2');
+replace into t1 values(96,'version2');
+replace into t1 values(95,'version2');
+replace into t1 values(94,'version2');
+replace into t1 values(93,'version2');
+replace into t1 values(92,'version2');
+replace into t1 values(91,'version2');
+replace into t1 values(90,'version2');
+replace into t1 values(89,'version2');
+replace into t1 values(88,'version2');
+replace into t1 values(87,'version2');
+replace into t1 values(86,'version2');
+replace into t1 values(85,'version2');
+replace into t1 values(84,'version2');
+replace into t1 values(83,'version2');
+replace into t1 values(82,'version2');
+replace into t1 values(81,'version2');
+replace into t1 values(80,'version2');
+replace into t1 values(79,'version2');
+replace into t1 values(78,'version2');
+replace into t1 values(77,'version2');
+replace into t1 values(76,'version2');
+replace into t1 values(75,'version2');
+replace into t1 values(74,'version2');
+replace into t1 values(73,'version2');
+replace into t1 values(72,'version2');
+replace into t1 values(71,'version2');
+replace into t1 values(70,'version2');
+replace into t1 values(69,'version2');
+replace into t1 values(68,'version2');
+replace into t1 values(67,'version2');
+replace into t1 values(66,'version2');
+replace into t1 values(65,'version2');
+replace into t1 values(64,'version2');
+replace into t1 values(63,'version2');
+replace into t1 values(62,'version2');
+replace into t1 values(61,'version2');
+replace into t1 values(60,'version2');
+replace into t1 values(59,'version2');
+replace into t1 values(58,'version2');
+replace into t1 values(57,'version2');
+replace into t1 values(56,'version2');
+replace into t1 values(55,'version2');
+replace into t1 values(54,'version2');
+replace into t1 values(53,'version2');
+replace into t1 values(52,'version2');
+replace into t1 values(51,'version2');
+replace into t1 values(50,'version2');
+replace into t1 values(49,'version2');
+replace into t1 values(48,'version2');
+replace into t1 values(47,'version2');
+replace into t1 values(46,'version2');
+replace into t1 values(45,'version2');
+replace into t1 values(44,'version2');
+replace into t1 values(43,'version2');
+replace into t1 values(42,'version2');
+replace into t1 values(41,'version2');
+replace into t1 values(40,'version2');
+replace into t1 values(39,'version2');
+replace into t1 values(38,'version2');
+replace into t1 values(37,'version2');
+replace into t1 values(36,'version2');
+replace into t1 values(35,'version2');
+replace into t1 values(34,'version2');
+replace into t1 values(33,'version2');
+replace into t1 values(32,'version2');
+replace into t1 values(31,'version2');
+replace into t1 values(30,'version2');
+replace into t1 values(29,'version2');
+replace into t1 values(28,'version2');
+replace into t1 values(27,'version2');
+replace into t1 values(26,'version2');
+replace into t1 values(25,'version2');
+replace into t1 values(24,'version2');
+replace into t1 values(23,'version2');
+replace into t1 values(22,'version2');
+replace into t1 values(21,'version2');
+replace into t1 values(20,'version2');
+replace into t1 values(19,'version2');
+replace into t1 values(18,'version2');
+replace into t1 values(17,'version2');
+replace into t1 values(16,'version2');
+replace into t1 values(15,'version2');
+replace into t1 values(14,'version2');
+replace into t1 values(13,'version2');
+replace into t1 values(12,'version2');
+replace into t1 values(11,'version2');
+replace into t1 values(10,'version2');
+replace into t1 values(9,'version2');
+replace into t1 values(8,'version2');
+replace into t1 values(7,'version2');
+replace into t1 values(6,'version2');
+replace into t1 values(5,'version2');
+replace into t1 values(4,'version2');
+replace into t1 values(3,'version2');
+replace into t1 values(2,'version2');
+replace into t1 values(1,'version2');
+ob1.major_freeze
+ob1.check_cs_version 2
+replace into t1 values(300,'version3');
+replace into t1 values(299,'version3');
+replace into t1 values(298,'version3');
+replace into t1 values(297,'version3');
+replace into t1 values(296,'version3');
+replace into t1 values(295,'version3');
+replace into t1 values(294,'version3');
+replace into t1 values(293,'version3');
+replace into t1 values(292,'version3');
+replace into t1 values(291,'version3');
+replace into t1 values(290,'version3');
+replace into t1 values(289,'version3');
+replace into t1 values(288,'version3');
+replace into t1 values(287,'version3');
+replace into t1 values(286,'version3');
+replace into t1 values(285,'version3');
+replace into t1 values(284,'version3');
+replace into t1 values(283,'version3');
+replace into t1 values(282,'version3');
+replace into t1 values(281,'version3');
+replace into t1 values(280,'version3');
+replace into t1 values(279,'version3');
+replace into t1 values(278,'version3');
+replace into t1 values(277,'version3');
+replace into t1 values(276,'version3');
+replace into t1 values(275,'version3');
+replace into t1 values(274,'version3');
+replace into t1 values(273,'version3');
+replace into t1 values(272,'version3');
+replace into t1 values(271,'version3');
+replace into t1 values(270,'version3');
+replace into t1 values(269,'version3');
+replace into t1 values(268,'version3');
+replace into t1 values(267,'version3');
+replace into t1 values(266,'version3');
+replace into t1 values(265,'version3');
+replace into t1 values(264,'version3');
+replace into t1 values(263,'version3');
+replace into t1 values(262,'version3');
+replace into t1 values(261,'version3');
+replace into t1 values(260,'version3');
+replace into t1 values(259,'version3');
+replace into t1 values(258,'version3');
+replace into t1 values(257,'version3');
+replace into t1 values(256,'version3');
+replace into t1 values(255,'version3');
+replace into t1 values(254,'version3');
+replace into t1 values(253,'version3');
+replace into t1 values(252,'version3');
+replace into t1 values(251,'version3');
+replace into t1 values(250,'version3');
+replace into t1 values(249,'version3');
+replace into t1 values(248,'version3');
+replace into t1 values(247,'version3');
+replace into t1 values(246,'version3');
+replace into t1 values(245,'version3');
+replace into t1 values(244,'version3');
+replace into t1 values(243,'version3');
+replace into t1 values(242,'version3');
+replace into t1 values(241,'version3');
+replace into t1 values(240,'version3');
+replace into t1 values(239,'version3');
+replace into t1 values(238,'version3');
+replace into t1 values(237,'version3');
+replace into t1 values(236,'version3');
+replace into t1 values(235,'version3');
+replace into t1 values(234,'version3');
+replace into t1 values(233,'version3');
+replace into t1 values(232,'version3');
+replace into t1 values(231,'version3');
+replace into t1 values(230,'version3');
+replace into t1 values(229,'version3');
+replace into t1 values(228,'version3');
+replace into t1 values(227,'version3');
+replace into t1 values(226,'version3');
+replace into t1 values(225,'version3');
+replace into t1 values(224,'version3');
+replace into t1 values(223,'version3');
+replace into t1 values(222,'version3');
+replace into t1 values(221,'version3');
+replace into t1 values(220,'version3');
+replace into t1 values(219,'version3');
+replace into t1 values(218,'version3');
+replace into t1 values(217,'version3');
+replace into t1 values(216,'version3');
+replace into t1 values(215,'version3');
+replace into t1 values(214,'version3');
+replace into t1 values(213,'version3');
+replace into t1 values(212,'version3');
+replace into t1 values(211,'version3');
+replace into t1 values(210,'version3');
+replace into t1 values(209,'version3');
+replace into t1 values(208,'version3');
+replace into t1 values(207,'version3');
+replace into t1 values(206,'version3');
+replace into t1 values(205,'version3');
+replace into t1 values(204,'version3');
+replace into t1 values(203,'version3');
+replace into t1 values(202,'version3');
+replace into t1 values(201,'version3');
+replace into t1 values(200,'version3');
+replace into t1 values(199,'version3');
+replace into t1 values(198,'version3');
+replace into t1 values(197,'version3');
+replace into t1 values(196,'version3');
+replace into t1 values(195,'version3');
+replace into t1 values(194,'version3');
+replace into t1 values(193,'version3');
+replace into t1 values(192,'version3');
+replace into t1 values(191,'version3');
+replace into t1 values(190,'version3');
+replace into t1 values(189,'version3');
+replace into t1 values(188,'version3');
+replace into t1 values(187,'version3');
+replace into t1 values(186,'version3');
+replace into t1 values(185,'version3');
+replace into t1 values(184,'version3');
+replace into t1 values(183,'version3');
+replace into t1 values(182,'version3');
+replace into t1 values(181,'version3');
+replace into t1 values(180,'version3');
+replace into t1 values(179,'version3');
+replace into t1 values(178,'version3');
+replace into t1 values(177,'version3');
+replace into t1 values(176,'version3');
+replace into t1 values(175,'version3');
+replace into t1 values(174,'version3');
+replace into t1 values(173,'version3');
+replace into t1 values(172,'version3');
+replace into t1 values(171,'version3');
+replace into t1 values(170,'version3');
+replace into t1 values(169,'version3');
+replace into t1 values(168,'version3');
+replace into t1 values(167,'version3');
+replace into t1 values(166,'version3');
+replace into t1 values(165,'version3');
+replace into t1 values(164,'version3');
+replace into t1 values(163,'version3');
+replace into t1 values(162,'version3');
+replace into t1 values(161,'version3');
+replace into t1 values(160,'version3');
+replace into t1 values(159,'version3');
+replace into t1 values(158,'version3');
+replace into t1 values(157,'version3');
+replace into t1 values(156,'version3');
+replace into t1 values(155,'version3');
+replace into t1 values(154,'version3');
+replace into t1 values(153,'version3');
+replace into t1 values(152,'version3');
+replace into t1 values(151,'version3');
+replace into t1 values(150,'version3');
+replace into t1 values(149,'version3');
+replace into t1 values(148,'version3');
+replace into t1 values(147,'version3');
+replace into t1 values(146,'version3');
+replace into t1 values(145,'version3');
+replace into t1 values(144,'version3');
+replace into t1 values(143,'version3');
+replace into t1 values(142,'version3');
+replace into t1 values(141,'version3');
+replace into t1 values(140,'version3');
+replace into t1 values(139,'version3');
+replace into t1 values(138,'version3');
+replace into t1 values(137,'version3');
+replace into t1 values(136,'version3');
+replace into t1 values(135,'version3');
+replace into t1 values(134,'version3');
+replace into t1 values(133,'version3');
+replace into t1 values(132,'version3');
+replace into t1 values(131,'version3');
+replace into t1 values(130,'version3');
+replace into t1 values(129,'version3');
+replace into t1 values(128,'version3');
+replace into t1 values(127,'version3');
+replace into t1 values(126,'version3');
+replace into t1 values(125,'version3');
+replace into t1 values(124,'version3');
+replace into t1 values(123,'version3');
+replace into t1 values(122,'version3');
+replace into t1 values(121,'version3');
+replace into t1 values(120,'version3');
+replace into t1 values(119,'version3');
+replace into t1 values(118,'version3');
+replace into t1 values(117,'version3');
+replace into t1 values(116,'version3');
+replace into t1 values(115,'version3');
+replace into t1 values(114,'version3');
+replace into t1 values(113,'version3');
+replace into t1 values(112,'version3');
+replace into t1 values(111,'version3');
+replace into t1 values(110,'version3');
+replace into t1 values(109,'version3');
+replace into t1 values(108,'version3');
+replace into t1 values(107,'version3');
+replace into t1 values(106,'version3');
+replace into t1 values(105,'version3');
+replace into t1 values(104,'version3');
+replace into t1 values(103,'version3');
+replace into t1 values(102,'version3');
+replace into t1 values(101,'version3');
+replace into t1 values(100,'version3');
+replace into t1 values(99,'version3');
+replace into t1 values(98,'version3');
+replace into t1 values(97,'version3');
+replace into t1 values(96,'version3');
+replace into t1 values(95,'version3');
+replace into t1 values(94,'version3');
+replace into t1 values(93,'version3');
+replace into t1 values(92,'version3');
+replace into t1 values(91,'version3');
+replace into t1 values(90,'version3');
+replace into t1 values(89,'version3');
+replace into t1 values(88,'version3');
+replace into t1 values(87,'version3');
+replace into t1 values(86,'version3');
+replace into t1 values(85,'version3');
+replace into t1 values(84,'version3');
+replace into t1 values(83,'version3');
+replace into t1 values(82,'version3');
+replace into t1 values(81,'version3');
+replace into t1 values(80,'version3');
+replace into t1 values(79,'version3');
+replace into t1 values(78,'version3');
+replace into t1 values(77,'version3');
+replace into t1 values(76,'version3');
+replace into t1 values(75,'version3');
+replace into t1 values(74,'version3');
+replace into t1 values(73,'version3');
+replace into t1 values(72,'version3');
+replace into t1 values(71,'version3');
+replace into t1 values(70,'version3');
+replace into t1 values(69,'version3');
+replace into t1 values(68,'version3');
+replace into t1 values(67,'version3');
+replace into t1 values(66,'version3');
+replace into t1 values(65,'version3');
+replace into t1 values(64,'version3');
+replace into t1 values(63,'version3');
+replace into t1 values(62,'version3');
+replace into t1 values(61,'version3');
+replace into t1 values(60,'version3');
+replace into t1 values(59,'version3');
+replace into t1 values(58,'version3');
+replace into t1 values(57,'version3');
+replace into t1 values(56,'version3');
+replace into t1 values(55,'version3');
+replace into t1 values(54,'version3');
+replace into t1 values(53,'version3');
+replace into t1 values(52,'version3');
+replace into t1 values(51,'version3');
+replace into t1 values(50,'version3');
+replace into t1 values(49,'version3');
+replace into t1 values(48,'version3');
+replace into t1 values(47,'version3');
+replace into t1 values(46,'version3');
+replace into t1 values(45,'version3');
+replace into t1 values(44,'version3');
+replace into t1 values(43,'version3');
+replace into t1 values(42,'version3');
+replace into t1 values(41,'version3');
+replace into t1 values(40,'version3');
+replace into t1 values(39,'version3');
+replace into t1 values(38,'version3');
+replace into t1 values(37,'version3');
+replace into t1 values(36,'version3');
+replace into t1 values(35,'version3');
+replace into t1 values(34,'version3');
+replace into t1 values(33,'version3');
+replace into t1 values(32,'version3');
+replace into t1 values(31,'version3');
+replace into t1 values(30,'version3');
+replace into t1 values(29,'version3');
+replace into t1 values(28,'version3');
+replace into t1 values(27,'version3');
+replace into t1 values(26,'version3');
+replace into t1 values(25,'version3');
+replace into t1 values(24,'version3');
+replace into t1 values(23,'version3');
+replace into t1 values(22,'version3');
+replace into t1 values(21,'version3');
+replace into t1 values(20,'version3');
+replace into t1 values(19,'version3');
+replace into t1 values(18,'version3');
+replace into t1 values(17,'version3');
+replace into t1 values(16,'version3');
+replace into t1 values(15,'version3');
+replace into t1 values(14,'version3');
+replace into t1 values(13,'version3');
+replace into t1 values(12,'version3');
+replace into t1 values(11,'version3');
+replace into t1 values(10,'version3');
+replace into t1 values(9,'version3');
+replace into t1 values(8,'version3');
+replace into t1 values(7,'version3');
+replace into t1 values(6,'version3');
+replace into t1 values(5,'version3');
+replace into t1 values(4,'version3');
+replace into t1 values(3,'version3');
+replace into t1 values(2,'version3');
+replace into t1 values(1,'version3');
+select /*+read_consistency(frozen)*/* from t1;
+i1	v1
+1	version2
+2	version2
+3	version2
+4	version2
+5	version2
+6	version2
+7	version2
+8	version2
+9	version2
+10	version2
+11	version2
+12	version2
+13	version2
+14	version2
+15	version2
+16	version2
+17	version2
+18	version2
+19	version2
+20	version2
+21	version2
+22	version2
+23	version2
+24	version2
+25	version2
+26	version2
+27	version2
+28	version2
+29	version2
+30	version2
+31	version2
+32	version2
+33	version2
+34	version2
+35	version2
+36	version2
+37	version2
+38	version2
+39	version2
+40	version2
+41	version2
+42	version2
+43	version2
+44	version2
+45	version2
+46	version2
+47	version2
+48	version2
+49	version2
+50	version2
+51	version2
+52	version2
+53	version2
+54	version2
+55	version2
+56	version2
+57	version2
+58	version2
+59	version2
+60	version2
+61	version2
+62	version2
+63	version2
+64	version2
+65	version2
+66	version2
+67	version2
+68	version2
+69	version2
+70	version2
+71	version2
+72	version2
+73	version2
+74	version2
+75	version2
+76	version2
+77	version2
+78	version2
+79	version2
+80	version2
+81	version2
+82	version2
+83	version2
+84	version2
+85	version2
+86	version2
+87	version2
+88	version2
+89	version2
+90	version2
+91	version2
+92	version2
+93	version2
+94	version2
+95	version2
+96	version2
+97	version2
+98	version2
+99	version2
+100	version2
+101	version2
+102	version2
+103	version2
+104	version2
+105	version2
+106	version2
+107	version2
+108	version2
+109	version2
+110	version2
+111	version2
+112	version2
+113	version2
+114	version2
+115	version2
+116	version2
+117	version2
+118	version2
+119	version2
+120	version2
+121	version2
+122	version2
+123	version2
+124	version2
+125	version2
+126	version2
+127	version2
+128	version2
+129	version2
+130	version2
+131	version2
+132	version2
+133	version2
+134	version2
+135	version2
+136	version2
+137	version2
+138	version2
+139	version2
+140	version2
+141	version2
+142	version2
+143	version2
+144	version2
+145	version2
+146	version2
+147	version2
+148	version2
+149	version2
+150	version2
+151	version2
+152	version2
+153	version2
+154	version2
+155	version2
+156	version2
+157	version2
+158	version2
+159	version2
+160	version2
+161	version2
+162	version2
+163	version2
+164	version2
+165	version2
+166	version2
+167	version2
+168	version2
+169	version2
+170	version2
+171	version2
+172	version2
+173	version2
+174	version2
+175	version2
+176	version2
+177	version2
+178	version2
+179	version2
+180	version2
+181	version2
+182	version2
+183	version2
+184	version2
+185	version2
+186	version2
+187	version2
+188	version2
+189	version2
+190	version2
+191	version2
+192	version2
+193	version2
+194	version2
+195	version2
+196	version2
+197	version2
+198	version2
+199	version2
+200	version2

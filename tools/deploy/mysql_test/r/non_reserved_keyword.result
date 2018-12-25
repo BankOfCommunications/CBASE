@@ -1,0 +1,18 @@
+alter system set balance_worker_idle_sleep_seconds=33 COMMENT 'new all balance_worker_idle_sleep_seconds' SERVer_TYPE = ROOTSERVER cluster = 0;
+alter system set balance_worker_idle_sleep_seconds=39 COMMENT 'new1 root balance_worker_idle_sleep_seconds' SERVer_TYPE = ROOTSERVER server_ip = '10.235.162.3' server_port = 47051;
+create table t_status(id int primary key, chunkserver char(90), mergesrver char(90), rootserver char(90), updateserver char(90), tablet_max_size int, status int);
+insert into t_status(id, chunkserver, tablet_max_size, status) values(1, 'chunkserver', 1024, 0);
+select id, chunkserver, status from t_status;
+id	chunkserver	status
+1	chunkserver	0
+select id, chunkserver, status as verbose from t_status;
+id	chunkserver	verbose
+1	chunkserver	0
+select id, chunkserver, grants.status as verbose from t_status grants;
+id	chunkserver	verbose
+1	chunkserver	0
+select use_bloom_filter() from dual;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near '() from dual' at line 1
+select use_bloom() from dual;
+ERROR HY000: Unknown function 'use_bloom', ret=-5055
+drop table t_status;

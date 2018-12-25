@@ -1,0 +1,10 @@
+ob1=OBI(cluster=1244)
+ob1.reboot
+ob1.ups0.kill -41
+ob1.ups1.kill -41
+ob1.mysql  set global ob_read_consistency=3
+ob1.mysql  alter system set read_master_master_ups_percent=0 server_type=rootserver
+ob1.create_client
+create table t1(c1 int primary key, c2 varchar(20));
+ob1.$slave_ups.stop
+success

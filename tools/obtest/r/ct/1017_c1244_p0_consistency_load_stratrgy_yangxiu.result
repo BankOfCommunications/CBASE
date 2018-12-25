@@ -1,0 +1,9 @@
+ob1=OBI(cluster=1244)
+ob1.reboot
+ob1.create_client
+create table t1(a int primary key,b int);
+insert into t1 values(1,1),(2,2),(3,3),(-1,-1);
+ob1.mysql update __all_cluster set read_strategy=1 where cluster_id=1
+count(*)=1
+1
+ob1.$stopms.stop

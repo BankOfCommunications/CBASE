@@ -1,0 +1,60 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+
+create table t1(i int primary key, c1 char(1), c256 char(256), dt datetime, d  datetime);
+
+#--disable_query_log
+#--disable_result_log
+
+#insert
+begin;
+let $i=0;
+while($i < 3000) 
+{
+    eval insert into t1(i,c1,c256,dt,d) values($i,'1','$i','2012-10-10 12:00:00','2012-10-10');
+    inc $i;
+}
+commit;
+
+#replace
+begin;
+let $i=0;
+while($i < 3000)
+{
+    eval replace into t1(i,c1,c256,dt,d) values($i,'1','$i','2012-10-10 12:00:00','2012-10-10');
+    inc $i;
+}
+commit;
+
+#update
+begin;
+let $i=0;
+while($i < 3000)
+{
+    eval update t1 set c1='update_$i' where i=$i;
+    inc $i;
+}
+commit;
+
+#select for update
+begin;
+let $i=0;
+while($i < 3000)
+{
+    eval select * from t1 where i=$i for update;
+    inc $i;
+}
+commit;
+
+#delete
+begin;
+let $i=0;
+while($i < 3000)
+{
+    eval delete from t1 where i=$i;
+    inc $i;
+}
+commit;
+
+drop table t1;

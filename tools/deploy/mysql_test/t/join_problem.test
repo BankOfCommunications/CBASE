@@ -1,0 +1,53 @@
+--disable_warnings
+drop table if exists t1,t2;
+--enable_warnings
+#
+##
+## problem with join
+##
+
+CREATE TABLE t1 (
+  id int,
+  token varchar(100) ,
+  count int,
+  qty int,
+  phone char(1) ,
+  timestamp1 datetime,
+  PRIMARY KEY (id)
+);
+
+INSERT INTO t1 VALUES (21,'e45703b64de71482360de8fec94c3ade',3,7800,'n','1999-12-23 17:22:21');
+INSERT INTO t1 VALUES (22,'e45703b64de71482360de8fec94c3ade',4,5000,'y','1999-12-23 17:22:21');
+INSERT INTO t1 VALUES (18,'346d1cb63c89285b2351f0ca4de40eda',3,13200,'b','1999-12-23 11:58:04');
+INSERT INTO t1 VALUES (17,'ca6ddeb689e1b48a04146b1b5b6f936a',4,15000,'b','1999-12-23 11:36:53');
+INSERT INTO t1 VALUES (16,'ca6ddeb689e1b48a04146b1b5b6f936a',3,13200,'b','1999-12-23 11:36:53');
+INSERT INTO t1 VALUES (26,'a71250b7ed780f6ef3185bfffe027983',5,1500,'b','1999-12-27 09:44:24');
+INSERT INTO t1 VALUES (24,'4d75906f3c37ecff478a1eb56637aa09',3,5400,'y','1999-12-23 17:29:12');
+INSERT INTO t1 VALUES (25,'4d75906f3c37ecff478a1eb56637aa09',4,6500,'y','1999-12-23 17:29:12');
+INSERT INTO t1 VALUES (27,'a71250b7ed780f6ef3185bfffe027983',3,6200,'b','1999-12-27 09:44:24');
+INSERT INTO t1 VALUES (28,'a71250b7ed780f6ef3185bfffe027983',3,5400,'y','1999-12-27 09:44:36');
+INSERT INTO t1 VALUES (29,'a71250b7ed780f6ef3185bfffe027983',4,17700,'b','1999-12-27 09:45:05');
+
+CREATE TABLE t2 (
+  id int,
+  category int,
+  county int,
+  state int,
+  phones int,
+  nophones int,
+  PRIMARY KEY (id)
+);
+INSERT INTO t2 VALUES (3,2,11,12,5400,7800);
+INSERT INTO t2 VALUES (4,2,25,12,6500,11200);
+INSERT INTO t2 VALUES (5,1,37,6,10000,12000);
+#select a.id, b.category as catid, b.state as stateid, b.county as countyid from t1 a, t2 b ignore index (primary) where (a.token ='a71250b7ed780f6ef3185bfffe027983') and (a.count = b.id);
+# here is a bug 199437
+select a.id, b.category as catid, b.state as stateid, b.county as countyid from t1 a, t2 b where (a.token ='a71250b7ed780f6ef3185bfffe027983') and (a.count = b.id);
+select a.id, b.category as catid, b.state as stateid, b.county as
+countyid from t1 a, t2 b where (a.token =
+'a71250b7ed780f6ef3185bfffe027983') and (a.count = b.id) order by a.id;
+SELECT t1.id,t1.count,t2.id,state FROM t1,t2 WHERE t1.count=t2.id AND (t1.count=3 OR t1.count=4) AND state>=10 AND state<=13;
+#
+#drop table t1, t2;
+#
+#

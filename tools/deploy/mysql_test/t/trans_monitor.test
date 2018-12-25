@@ -1,0 +1,30 @@
+# setup
+drop table if exists t1;
+create table t1 (c1 int primary key, c2 int);
+
+select name, value from (select * from __all_server_stat) T where T.name in ('multi_stmt_trans_count', 'multi_stmt_trans_stmt_count');
+
+set autocommit = 0;
+insert into t1 values (1, 2);
+insert into t1 values (2, 3);
+set autocommit = 1;
+select name, value from (select * from __all_server_stat) T where T.name in ('multi_stmt_trans_count', 'multi_stmt_trans_stmt_count');
+
+insert into t1 values (3, 4);
+select name, value from (select * from __all_server_stat) T where T.name in ('multi_stmt_trans_count', 'multi_stmt_trans_stmt_count');
+
+
+set autocommit = 0;
+insert into t1 values (5, 2);
+insert into t1 values (6, 3);
+rollback;
+select name, value from (select * from __all_server_stat) T where T.name in ('multi_stmt_trans_count', 'multi_stmt_trans_stmt_count');
+
+set autocommit = 0;
+insert into t1 values (5, 2);
+insert into t1 values (6, 3);
+commit;
+select name, value from (select * from __all_server_stat) T where T.name in ('multi_stmt_trans_count', 'multi_stmt_trans_stmt_count');
+
+# tear down
+drop table t1;

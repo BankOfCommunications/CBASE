@@ -1,0 +1,33 @@
+--disable_warnings
+drop table if exists t1,t2;
+--enable_warnings
+
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1 (c1 int primary key ,c2 int ,c3 int,c4 int);
+#1401
+update  __first_tablet_entry set expire_condition = '$SYS_DATE>c2+60' where table_name = 't1' and db_name='test';
+exec $LOCAL_DIR/tools/rs_admin -p $RS0_PORT refresh_schema;
+
+create index il on t1(c1) storing(c3);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 600
+show index on t1;
+drop table t1;
+#1402
+create table t1 (c1 int primary key ,c2 int ,c3 int,c4 int);
+create index il on t1(c1) storing(c3);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 300
+--error 65535 
+update  __first_tablet_entry set expire_condition = '$SYS_DATE>c2+60' where table_name = 't1' and db_name='test';
+
+
+#alter add a column and set expire_condition
+
+alter table t1 add c5 int ;
+--error 65535
+update  __first_tablet_entry set expire_condition = '$SYS_DATE>c5+60' where table_name = 't1' and db_name='test';
+

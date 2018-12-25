@@ -1,0 +1,87 @@
+-- ok
+select u.user_id+1000 as standard_uid, user_name, sum(qty) from user as u join order_list o on u.user_id =o.user_id, item as i where o.item_id=i.item_id group by standard_uid having standard_uid > 500;
+[2012-08-13 18:05:48] DEBUG ob_schema.cpp:2311 [139840185405568] order_listoX,10:user_name,9 not fould [16]
+[2012-08-13 18:05:48] DEBUG ob_schema.cpp:2311 [139840185405568] itemiX,4:user_name,9 not fould [16]
+[2012-08-13 18:05:48] DEBUG ob_schema.cpp:2311 [139840185405568] useruorder_listoX,4:qty,3 not fould [16]
+[2012-08-13 18:05:48] DEBUG ob_schema.cpp:2311 [139840185405568] itemiX,4:qty,3 not fould [16]
+[2012-08-13 18:05:48] DEBUG ob_schema.cpp:2311 [139840185405568] useruorder_listoX,4:standard_uid,12 not fould [16]
+[2012-08-13 18:05:48] DEBUG ob_schema.cpp:2311 [139840185405568] order_listoX,10:standard_uid,12 not fould [16]
+[2012-08-13 18:05:48] DEBUG ob_schema.cpp:2311 [139840185405568] itemiX,4:standard_uid,12 not fould [16]
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:18446744073709551613, TableName:user, AliasName:u, Type:ALIAS_TABLE, RefId: 1002}
+            {Num 1, TableId:18446744073709551612, TableName:order_list, AliasName:o, Type:ALIAS_TABLE, RefId: 1003}
+            {Num 2, TableId:18446744073709551611, TableName:item, AliasName:i, Type:ALIAS_TABLE, RefId: 1001}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:2, ColumnName:user_id, TableRef:18446744073709551613}
+            {Num 1, ColumnId:3, ColumnName:user_id, TableRef:18446744073709551612}
+            {Num 2, ColumnId:3, ColumnName:user_name, TableRef:18446744073709551613}
+            {Num 3, ColumnId:5, ColumnName:qty, TableRef:18446744073709551612}
+            {Num 4, ColumnId:4, ColumnName:item_id, TableRef:18446744073709551612}
+            {Num 5, ColumnId:2, ColumnName:item_id, TableRef:18446744073709551611}
+        <ColumnItemList End>
+        WHERE ::= <6>
+        SELECT ::= <2, standard_uid>, <3, user_name>, <4>
+        FROM ::= <18446744073709551613> INNER JOIN <18446744073709551612> ON <1>, <18446744073709551611>
+        GROUP BY ::= <7>
+        HAVING ::= <8>
+        ObSelectStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_OP_EQ
+            T_REF_COLUMN : [table_id, column_id] = [18446744073709551613, 2]
+            T_REF_COLUMN : [table_id, column_id] = [18446744073709551612, 3]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (NULL : 18446744073709551612)
+        T_OP_ADD
+            T_REF_COLUMN : [table_id, column_id] = [18446744073709551613, 2]
+            T_INT : 1000
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (18446744073709551613 : 3)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551613, 3]
+        ObSqlRawExpr 2 End
+        ObSqlRawExpr 3 Begin
+        expr_id = 4
+        (table_id : column_id) = (NULL : 18446744073709551611)
+        T_REF_COLUMN : [table_id, column_id] = [NULL, 18446744073709551611]
+        ObSqlRawExpr 3 End
+        ObSqlRawExpr 4 Begin
+        expr_id = 5
+        (table_id : column_id) = (NULL : 18446744073709551611)
+        T_FUN_SUM
+            T_REF_COLUMN : [table_id, column_id] = [18446744073709551612, 5]
+        ObSqlRawExpr 4 End
+        ObSqlRawExpr 5 Begin
+        expr_id = 6
+        (table_id : column_id) = (NULL : 18446744073709551610)
+        T_OP_EQ
+            T_REF_COLUMN : [table_id, column_id] = [18446744073709551612, 4]
+            T_REF_COLUMN : [table_id, column_id] = [18446744073709551611, 2]
+        ObSqlRawExpr 5 End
+        ObSqlRawExpr 6 Begin
+        expr_id = 7
+        (table_id : column_id) = (NULL : 18446744073709551612)
+        T_REF_COLUMN : [table_id, column_id] = [NULL, 18446744073709551612]
+        ObSqlRawExpr 6 End
+        ObSqlRawExpr 7 Begin
+        expr_id = 8
+        (table_id : column_id) = (NULL : 18446744073709551609)
+        T_OP_GT
+            T_REF_COLUMN : [table_id, column_id] = [NULL, 18446744073709551612]
+            T_INT : 500
+        ObSqlRawExpr 7 End
+    <ExprList End>
+<logical_plan End>
+
+
+

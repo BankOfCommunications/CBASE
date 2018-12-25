@@ -1,0 +1,10 @@
+drop table if exists c;
+create table c (c1 int primary key, c2 varchar(8));
+set autocommit= 0 ;						
+insert into c values(1,1);
+select * from c where c1 = 1;
+select * from c;
+rollback;
+select * from c where c1 = 1;
+select * from c;
+commit;

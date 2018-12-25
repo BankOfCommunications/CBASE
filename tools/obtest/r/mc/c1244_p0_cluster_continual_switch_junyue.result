@@ -1,0 +1,48 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.mysql alter system set merge_delay_interval='1s' server_type=chunkserver
+ob1.mysql alter system set merge_delay_for_lsync='1s' server_type=chunkserver
+ob1.mysql alter system set min_drop_cache_wait_time='1s' server_type=chunkserver
+ob1.prepare s
+ob1.major_freeze
+select * from test where (i1,s1,f1,d1) in ((1, '1_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 1, 1), (200002, '200002_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 200002, 200002), (400004, '400004_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 400004, 400004), (500005, '500005_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 500005, 500005));
+i1	s1	f1	d1	i2	s2	f2	d2
+1	1_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	1.0	1970-01-01 08:00:00.1	1	1_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	1.0	1970-01-01 08:00:00.1
+200002	200002_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	200002.0	1970-01-01 08:00:00.200002	200002	200002_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	200002.0	1970-01-01 08:00:00.200002
+400004	400004_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	400004.0	1970-01-01 08:00:00.400004	400004	400004_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	400004.0	1970-01-01 08:00:00.400004
+ob1.mget 1 200002 400004 500005
+ob1.check_cs_version 2
+ob1.prepare s 100000
+ob1.major_freeze
+select * from test where (i1,s1,f1,d1) in ((1, '1_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 1, 1), (200002, '200002_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 200002, 200002), (400004, '400004_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 400004, 400004), (500005, '500005_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 500005, 500005));
+i1	s1	f1	d1	i2	s2	f2	d2
+1	1_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	1.0	1970-01-01 08:00:00.1	1	1_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	1.0	1970-01-01 08:00:00.1
+200002	200002_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	200002.0	1970-01-01 08:00:00.200002	200002	200002_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	200002.0	1970-01-01 08:00:00.200002
+400004	400004_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	400004.0	1970-01-01 08:00:00.400004	400004	400004_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	400004.0	1970-01-01 08:00:00.400004
+500005	500005_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	500005.0	1970-01-01 08:00:00.500005	500005	500005_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	500005.0	1970-01-01 08:00:00.500005
+ob1.mget 1 200002 400004 500005
+ob1.check_cs_version 3
+ob1.switch_cluster ob2
+ob2.prepare s 200000
+select * from test where (i1,s1,f1,d1) in ((1, '1_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 1, 1), (200002, '200002_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 200002, 200002), (400004, '400004_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 400004, 400004), (500005, '500005_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 500005, 500005), (600006, '600006_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 600006, 600006));
+i1	s1	f1	d1	i2	s2	f2	d2
+1	1_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	1.0	1970-01-01 08:00:00.1	1	1_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	1.0	1970-01-01 08:00:00.1
+200002	200002_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	200002.0	1970-01-01 08:00:00.200002	200002	200002_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	200002.0	1970-01-01 08:00:00.200002
+400004	400004_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	400004.0	1970-01-01 08:00:00.400004	400004	400004_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	400004.0	1970-01-01 08:00:00.400004
+500005	500005_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	500005.0	1970-01-01 08:00:00.500005	500005	500005_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	500005.0	1970-01-01 08:00:00.500005
+600006	600006_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	600006.0	1970-01-01 08:00:00.600006	600006	600006_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	600006.0	1970-01-01 08:00:00.600006
+ob1.mget 1 200002 400004 500005 600006
+ob2.switch_cluster ob1
+ob1.prepare s 300000
+select * from test where (i1,s1,f1,d1) in ((1, '1_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 1, 1), (200002, '200002_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 200002, 200002), (400004, '400004_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 400004, 400004), (500005, '500005_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 500005, 500005), (600006, '600006_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 600006, 600006), (700007, '700007_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq', 700007, 700007));
+i1	s1	f1	d1	i2	s2	f2	d2
+1	1_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	1.0	1970-01-01 08:00:00.1	1	1_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	1.0	1970-01-01 08:00:00.1
+200002	200002_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	200002.0	1970-01-01 08:00:00.200002	200002	200002_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	200002.0	1970-01-01 08:00:00.200002
+400004	400004_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	400004.0	1970-01-01 08:00:00.400004	400004	400004_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	400004.0	1970-01-01 08:00:00.400004
+500005	500005_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	500005.0	1970-01-01 08:00:00.500005	500005	500005_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	500005.0	1970-01-01 08:00:00.500005
+600006	600006_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	600006.0	1970-01-01 08:00:00.600006	600006	600006_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	600006.0	1970-01-01 08:00:00.600006
+700007	700007_s1_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	700007.0	1970-01-01 08:00:00.700007	700007	700007_s2_mmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnoooooooooopppppppppppqqqqqq	700007.0	1970-01-01 08:00:00.700007
+ob1.mget 1 200002 400004 500005 600006 700007

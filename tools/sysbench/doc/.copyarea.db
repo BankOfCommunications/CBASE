@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\sysbench\doc
+2
+4
+b:Makefile.am|1|166f776027a|2a0|1a5ad2bc|445b2d3a68b711e8a8030002c8c1274c|0
+a:manual.xml|1|166f776029a|958f|b6cab21a|46ab2d5668b711e8a8030002c8c1274c|0
+3:xsl|2|0|0|0|4c2b2d9a68b711e8a8030002c8c1274c|0
+b:Makefile.in|1|166f77604e3|427d|ae5b5968|48bb2d7268b711e8a8030002c8c1274c|0

@@ -1,0 +1,60 @@
+--source $LOCAL_DIR/mysql_test/import-export/include.inc 
+
+--let $TABLE=ie_ins_rep_del
+--let $DB=test
+--let $TEST_NAME=ie_ins_rep_del
+--let $IM_FILE_INS=$IM_DEL/ie_ins.del
+--let $IM_FILE_REP=$IM_DEL/ie_rep.del
+--let $IM_FILE_DEL=$IM_DEL/ie_del.del
+
+eval using database $DB;
+# --disable_warnings
+eval drop table if exists $TABLE;
+# --enable_warnings
+
+eval create table $TABLE
+(
+i0 int,
+dc0 decimal(20, 4),
+vc0 varchar(256),
+primary key(i0)
+);
+
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE_INS
+--ins
+&> /dev/null;
+
+eval select * from $TABLE;
+
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE_REP
+--rep
+&> /dev/null;
+
+eval select * from $TABLE;
+
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE_DEL
+--del
+&> /dev/null;
+
+eval select * from $TABLE;

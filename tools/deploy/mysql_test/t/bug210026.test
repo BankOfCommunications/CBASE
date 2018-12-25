@@ -1,0 +1,6 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+
+--error 5024
+create table t1(a int primary key, b int primary key);

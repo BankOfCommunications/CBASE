@@ -1,0 +1,11 @@
+-- fail, Unknown column '3' in 'order clause'
+<<Part 1 : SQL STRING>>
+select distinct user_id + item_id, qty from order_list order by 3;
+[2012-07-17 15:19:16] ERROR resolve_order_clause (build_plan.cpp:1756) [47123780730880] Unknown column '3' in 'order clause'
+
+<<Part 2 : PARSE TREE>>
+Resolve error!
+
+
+
+

@@ -1,0 +1,56 @@
+-- ok
+select user_id, user_name from user union all select item_id, item_name from item;
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        LEFTQUERY ::= <2>
+        <UNION ALL>
+        RIGHTQUERY ::= <3>
+        ObSelectStmt 0 End
+        ObSelectStmt 1 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1002, TableName:user, AliasName:NULL, Type:BASE_TABLE, RefId: 1002}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:2, ColumnName:user_id, TableRef:1002}
+            {Num 1, ColumnId:3, ColumnName:user_name, TableRef:1002}
+        <ColumnItemList End>
+        SELECT ::= <1, user_id>, <2, user_name>
+        FROM ::= <1002>
+        ObSelectStmt 1 End
+        ObSelectStmt 2 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1001, TableName:item, AliasName:NULL, Type:BASE_TABLE, RefId: 1001}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:2, ColumnName:item_id, TableRef:1001}
+            {Num 1, ColumnId:3, ColumnName:item_name, TableRef:1001}
+        <ColumnItemList End>
+        SELECT ::= <3, item_id>, <4, item_name>
+        FROM ::= <1001>
+        ObSelectStmt 2 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (1002 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [1002, 2]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (1002 : 3)
+        T_REF_COLUMN : [table_id, column_id] = [1002, 3]
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (1001 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [1001, 2]
+        ObSqlRawExpr 2 End
+        ObSqlRawExpr 3 Begin
+        expr_id = 4
+        (table_id : column_id) = (1001 : 3)
+        T_REF_COLUMN : [table_id, column_id] = [1001, 3]
+        ObSqlRawExpr 3 End
+    <ExprList End>
+<logical_plan End>
+

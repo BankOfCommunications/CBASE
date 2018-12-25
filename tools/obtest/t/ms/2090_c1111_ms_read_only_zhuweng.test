@@ -1,0 +1,86 @@
+ob1=OBI(cluster=1111);
+ob2=OBI(cluster=1111);
+
+ob2.rs0.set master=ob1.rs0;
+
+ob1.reboot;
+ob2.reboot;
+
+sleep 60;
+ob1.ms0.kill -41;
+ob2.ms0.kill -41;
+
+let $master_ms0=deploy_get_value(ob1.ms0.ip); 
+let $master_port=deploy_get_value(ob1.ms0.mysql_port); 
+
+let $slave_ms0=deploy_get_value(ob2.ms0.ip); 
+let $slave_port=deploy_get_value(ob2.ms0.mysql_port); 
+let $rpc_port=deploy_get_value(ob2.ms0.port); 
+
+connect (master_conn1,$master_ms0,admin,admin,test,$master_port);
+connect (slave_conn1,$slave_ms0,admin,admin,test,$slave_port);
+
+connection master_conn1;
+--disable_warnings
+DROP TABLE IF EXISTS t1;
+--enable_warnings
+
+connection slave_conn1;
+
+# set up
+select name, value from __all_sys_config_stat where name like 'read_only';
+
+# prepare tables
+connection master_conn1;
+create table t1 (c1 int primary key, c2 int);
+sleep 60;
+connection slave_conn1;
+insert into t1 values (1, 2);
+
+# turn on
+#alter system set read_only = true server_type=mergeserver server_ip='10.232.23.29' server_port=1222;
+--disable_query_log
+eval alter system set read_only = true server_type=mergeserver server_ip='$slave_ms0' server_port=$rpc_port;
+--enable_query_log
+sleep 15;
+select name, value from __all_sys_config_stat where name like 'read_only';
+--error 5081
+insert into t1 values (2, 2);
+--error 5081
+select * from t1 where c1 = 1 for update;
+--error 5081
+replace into t1 values (2, 3);
+--error 5081
+update t1 set c2 = 3 where c1 = 1;
+--error 5081
+delete from t1 where c1 = 1;
+select * from t1;
+
+# the servers of master cluster are not read_only
+connection master_conn1;
+select name, value from __all_sys_config_stat where name like 'read_only';
+insert into t1 values (2, 2);
+select * from t1 where c1 = 1 for update;
+replace into t1 values (2, 3);
+update t1 set c2 = 3 where c1 = 1;
+delete from t1 where c1 = 1;
+select * from t1;
+
+# turn off read_only
+connection slave_conn1;
+--disable_query_log
+eval alter system set read_only = false server_type=mergeserver server_ip='$slave_ms0' server_port=$rpc_port;
+--enable_query_log
+sleep 15;
+select name, value from __all_sys_config_stat where name like 'read_only';
+insert into t1 values (3, 3);
+select * from t1 where c1 = 3 for update;
+replace into t1 values (4, 4);
+update t1 set c2 = 3 where c1 = 3;
+delete from t1 where c1 = 3;
+select * from t1;
+
+# tear down
+connection master_conn1;
+drop table t1;
+

@@ -1,0 +1,145 @@
+drop table if exists t1,t2,t3,t4;
+create table t1 (
+id int not null auto_increment,
+code varchar(20) not null default '',
+company_name varchar(250) ,
+setup_mode int default null,
+start_date createtime default null,
+primary key  (id)
+);
+create table t2 (
+id int,
+email varchar(250),
+name varchar(250),
+t1_id int,
+pwd varchar(250),
+primary_contact int,
+email_opt_in int,
+primary key  (id)
+);
+insert into t1(id,code,company_name,setup_mode) values
+(1, 'demo', 'demo s', 0 ),
+(2, 'code2', 'name 2', 0),
+(3, 'code3', 'name 3', 0);
+insert into t2 values
+(2, 'email1', 'name1', 3, 'password1', 0, 0),
+(3, 'email2', 'name1', 1, 'password2', 1, 0),
+(5, 'email3', 'name3', 2, 'password3', 0, 0);
+prepare stmt from select t2.id from t2, t1 where (t1.id=? and t2.t1_id=t1.id);
+set @a=1;
+execute stmt using @a;
+id
+3
+select t2.id from t2, t1 where (t1.id=1 and t2.t1_id=t1.id);
+id
+3
+drop table t1, t2;
+create table t1 (
+word_id int not null default '0' primary key,
+formatted varchar(20) not null default ''
+);
+insert into t1 values
+(80,'pendant'), (475,'pretendants'), (989,'tendances'),
+(1019,'cependant'),(1022,'abondance'),(1205,'independants'),
+(13,'lessiver'),(25,'lambiner'),(46,'situer'),(71,'terminer'),
+(82,'decrocher');
+select count(*) from t1 where formatted like '%ndan%';
+count(*)
+6
+select count(*) from t1 where formatted like '%er';
+count(*)
+5
+prepare stmt from select count(*) from t1 where formatted like ?;
+set @alike='%ndan%';
+execute stmt using @alike;
+count(*)
+6
+set @alike='%er';
+execute stmt using @alike;
+count(*)
+5
+set @alike='%ndan%';
+execute stmt using @alike;
+count(*)
+6
+set @alike='%er';
+execute stmt using @alike;
+count(*)
+5
+drop table t1;
+create table t1 (col1 integer primary key, col2 integer);
+insert into t1 values(100,100),(101,101),(102,102),(103,103);
+prepare stmt from select col1, col2 from t1 where (col1, col2) in ((?,?));
+set @a=100;
+set @b=100;
+execute stmt using @a,@b;
+col1	col2
+100	100
+set @a=101;
+set @b=101;
+execute stmt using @a,@b;
+col1	col2
+101	101
+set @a=102;
+set @b=102;
+execute stmt using @a,@b;
+col1	col2
+102	102
+set @a=102;
+set @b=103;
+execute stmt using @a,@b;
+col1	col2
+drop table t1;
+DROP TABLE IF EXISTS t1;
+CREATE TABLE t1 (i int primary key, j int);
+INSERT INTO t1 VALUES (1,1);
+PREPARE stmt FROM SELECT (COUNT(i) = 1), COUNT(i) FROM t1 WHERE i = ?;
+SET @a = 0;
+EXECUTE stmt USING @a;
+(COUNT(i) = 1)	COUNT(i)
+0	0
+SET @a = 1;
+EXECUTE stmt USING @a;
+(COUNT(i) = 1)	COUNT(i)
+1	1
+SET @a = 0;
+EXECUTE stmt USING @a;
+(COUNT(i) = 1)	COUNT(i)
+0	0
+PREPARE stmt FROM SELECT (AVG(i) = 1), AVG(i) FROM t1 WHERE i = ?;
+SET @a = 0;
+EXECUTE stmt USING @a;
+(AVG(i) = 1)	AVG(i)
+NULL	NULL
+SET @a = 1;
+EXECUTE stmt USING @a;
+(AVG(i) = 1)	AVG(i)
+1	1
+SET @a = 0;
+EXECUTE stmt USING @a;
+(AVG(i) = 1)	AVG(i)
+NULL	NULL
+DROP TABLE t1;
+DEALLOCATE PREPARE stmt;
+CREATE TABLE t1(a int primary key, b int);
+INSERT INTO t1 VALUES (2,1), (3,1), (1,1);
+PREPARE st1 FROM
+(SELECT a FROM t1) UNION (SELECT a+10 FROM t1) ORDER BY 0+a;
+EXECUTE st1;
+a
+1
+2
+3
+11
+12
+13
+EXECUTE st1;
+a
+1
+2
+3
+11
+12
+13
+DEALLOCATE PREPARE st1;
+DROP TABLE t1;

@@ -1,0 +1,30 @@
+#
+let $rs1port = query_get_value(show parameters where server_type='rootserver' and name='port', server_port,1);
+let $up1sport = query_get_value(show parameters where server_type='updateserver' and name='port', server_port,1);
+let $cs1port = query_get_value(show parameters where server_type='chunkserver' and name='port', server_port,1);
+let $ms1port = query_get_value(show parameters where server_type='mergeserver' and name='port', server_port,1);
+
+let $rs2port = query_get_value(select svr_port from (select * from __all_server) tt where tt.svr_type='rootserver', svr_port, 1);
+let $ups2port = query_get_value(select svr_port from (select * from __all_server) tt where tt.svr_type='updateserver', svr_port, 1);
+let $cs2port = query_get_value(select svr_port from (select * from __all_server) tt where tt.svr_type='chunkserver', svr_port, 1);
+let $ms2port = query_get_value(select svr_port from (select * from __all_server) tt where tt.svr_type='mergeserver', svr_port, 1);
+
+if($rs1port == $rs2port)
+{
+    --echo rsports are identical
+}
+
+if($up1sport == $ups2port)
+{
+    --echo upsports are identical
+}
+
+if($cs1port == $cs2port)
+{
+    --echo csports are identical
+}
+
+if($ms1port != $ms2port)
+{
+    --echo msports are unidentical
+}

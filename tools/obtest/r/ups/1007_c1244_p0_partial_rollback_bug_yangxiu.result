@@ -1,0 +1,28 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master = ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.connect conn1 fs0 admin admin test
+ob1.connect conn2 fs0 admin admin test
+create table t1(pk int primary key, a int);
+insert into t1 values(1,1);
+set autocommit=0;
+begin;
+update t1 set a=2 where pk=1;
+begin;
+replace into t1 values (2,2),(3,3),(4,4);
+replace into t1 values (5,5),(3,3),(6,6);
+ERROR HY000: Exclusive lock conflict 'int:3' for key 'PRIMARY'
+commit;
+commit;
+set autocommit=1;
+ob1.switch_cluster ob2
+ob1.connect conn3 fs0 admin admin test
+select * from t1;
+pk	a
+1	2
+2	2
+3	3
+4	4
+drop table t1;

@@ -1,0 +1,68 @@
+<resources>
+  <group id="rootserver-group">
+    <primitive class="ocf" provider="heartbeat" type="IPaddr2" id="ip-alias-rs">
+      <instance_attributes id="ip-alias-rs-instance_attributes">
+        <nvpair name="ip" id="ip-alias-rs-instance_attributes-ip" value="10.232.36.179"/>
+        <nvpair id="ip-alias-rs-instance_attributes-nic" name="nic" value="eth0:0"/>
+      </instance_attributes>
+      <operations>
+        <op id="ip-alias-rs-monitor-2s" interval="2s" name="monitor"/>
+      </operations>
+      <meta_attributes id="ip-alias-rs-meta_attributes">
+        <nvpair id="ip-alias-rs-meta_attributes-target-role" name="target-role" value="Started"/>
+      </meta_attributes>
+    </primitive>
+    <primitive class="ocf" id="ob-rootserver" provider="heartbeat" type="RootServer">
+      <instance_attributes id="ob-rootserver-instance_attributes">
+        <nvpair id="ob-rootserver-instance_attributes-basedir" name="basedir" value="/home/admin/oceanbase/servers/root/"/>
+        <nvpair id="ob-rootserver-instance_attributes-pidfile" name="pidfile" value="/home/admin/oceanbase/servers/root/log/root.pid"/>
+        <nvpair id="ob-rootserver-instance_attributes-rsip" name="rsip" value="localhost"/>
+        <nvpair id="ob-rootserver-instance_attributes-rsport" name="rsport" value="2600"/>
+        <nvpair id="ob-rootserver-instance_attributes-user" name="user" value="admin"/>
+      </instance_attributes>
+      <operations>
+        <op id="ob-rootserver-monitor-2s" interval="2s" name="monitor"/>
+        <op id="ob-rootserver-start" interval="0s" name="start" timeout="600s"/>
+        <op id="ob-rootserver-stop" interval="0s" name="stop" timeout="30s"/>
+      </operations>
+      <meta_attributes id="ob-rootserver-meta_attributes">
+        <nvpair id="ob-rootserver-meta_attributes-target-role" name="target-role" value="Started"/>
+        <nvpair id="ob-rootserver-meta_attributes-resource-stickiness" name="resource-stickiness" value="INFINITY"/>
+        <nvpair id="ob-rootserver-meta_attributes-resource-failure-stickiness" name="resource-failure-stickiness" value="-INFINITY"/>
+      </meta_attributes>
+    </primitive>
+  </group>
+  <group id="updateserver-group">
+    <primitive class="ocf" provider="heartbeat" type="IPaddr2" id="ip-alias-ups">
+      <instance_attributes id="ip-alias-ups-instance_attributes">
+        <nvpair id="ip-alias-ups-instance_attributes-ip" name="ip" value="10.232.36.178"/>
+        <nvpair id="ip-alias-ups-instance_attributes-nic" name="nic" value="eth0:1"/>
+      </instance_attributes>
+      <operations>
+        <op id="ip-alias-ups-monitor-2s" interval="2s" name="monitor"/>
+      </operations>
+      <meta_attributes id="ip-alias-ups-meta_attributes">
+        <nvpair id="ip-alias-ups-meta_attributes-target-role" name="target-role" value="Started"/>
+      </meta_attributes>
+    </primitive>
+    <primitive class="ocf" id="ob-updateserver" provider="heartbeat" type="UpdateServer">
+      <instance_attributes id="ob-updateserver-instance_attributes">
+        <nvpair id="ob-updateserver-instance_attributes-basedir" name="basedir" value="/home/admin/oceanbase/servers/update"/>
+	<nvpair id="ob-updateserver-instance_attributes-pidfile" name="pidfile" value="/home/admin/oceanbase/servers/update/log/update.pid"/>
+        <nvpair id="ob-updateserver-instance_attributes-nsip" name="upsip" value="localhost"/>
+        <nvpair id="ob-updateserver-instance_attributes-nsport" name="upsport" value="2700"/>
+        <nvpair id="ob-updateserver-instance_attributes-user" name="user" value="admin"/>
+      </instance_attributes>
+      <operations>
+        <op id="ob-updateserver-monitor-2s" interval="2s" name="monitor"/>
+        <op id="ob-updateserver-start" interval="0s" name="start" timeout="600s"/>
+        <op id="ob-updateserver-stop" interval="0s" name="stop" timeout="30s"/>
+      </operations>
+      <meta_attributes id="ob-updateserver-meta_attributes">
+        <nvpair id="ob-updateserver-meta_attributes-target-role" name="target-role" value="Started"/>
+        <nvpair id="ob-updateserver-meta_attributes-resource-stickiness" name="resource-stickiness" value="INFINITY"/>
+        <nvpair id="ob-updateserver-meta_attributes-resource-failure-stickiness" name="resource-failure-stickiness" value="-INFINITY"/>
+      </meta_attributes>
+    </primitive>
+  </group>
+</resources>

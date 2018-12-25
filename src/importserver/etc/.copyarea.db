@@ -1,0 +1,9 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\importserver\etc
+2
+5
+1a:importserver.conf.template|1|166f774dc85|520|c9ccc0ef|eb9ab45a68ad11e8a8030002c8c1274c|0
+8:app_name|2|0|0|0|ee4ab48268ad11e8a8030002c8c1274c|0
+18:data_syntax.ini.template|1|166f774dcc7|c0|4dfd40ad|f24ab4be68ad11e8a8030002c8c1274c|0
+17:importcli.conf.template|1|166f774dce8|3d4|7fe95565|f44ab4da68ad11e8a8030002c8c1274c|0
+1a:configuration.xml.template|1|166f774dd07|f84|e6832a6e|f63ab4f668ad11e8a8030002c8c1274c|0

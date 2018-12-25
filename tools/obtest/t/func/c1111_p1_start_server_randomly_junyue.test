@@ -1,0 +1,7 @@
+deploy ob1=OBI(cluster=1111);
+
+deploy ob1.reboot;
+
+sleep 10;
+
+deploy ob1.random_start 5;

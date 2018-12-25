@@ -1,0 +1,16 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\testsql\t
+2
+c
+28:insert_delete_select_bind_timestamp.test|1|166f77accfb|1cd|a0ef8371|c2dcbbba68d611e8a8030002c8c1274c|0
+24:insert_bind_int_select_bind_int.test|1|166f77ace2e|108|ee0e4fd3|c4ecbbd668d611e8a8030002c8c1274c|0
+2f:insert_delete_select_bind_int_varchar_date.test|1|166f77ace95|307|e01fd1f9|c73cbbf268d611e8a8030002c8c1274c|0
+2a:insert_notbind_int_select_notbind_int.test|1|166f77acecb|96|45853191|c9bcbc0e68d611e8a8030002c8c1274c|0
+22:insert_delete_select_bind_int.test|1|166f77acf10|179|b08970d5|cbccbc2a68d611e8a8030002c8c1274c|0
+26:insert_delete_select_bind_varchar.test|1|166f77acf56|191|cbdc79ab|ce4cbc4668d611e8a8030002c8c1274c|0
+29:insert_notbind_date_select_bind_date.test|1|166f77acf9d|eb|fcaf478f|d05cbc6268d611e8a8030002c8c1274c|0
+2c:insert_bind_varchar_select_bind_varchar.test|1|166f77acfe2|118|a8f655ef|d26cbc7e68d611e8a8030002c8c1274c|0
+26:insert_bind_date_select_bind_date.test|1|166f77ad025|122|ff645690|d46cbc9a68d611e8a8030002c8c1274c|0
+29:insert_bind_date_select_notbind_date.test|1|166f77ad0f4|e7|51dc4755|db4cbcee68d611e8a8030002c8c1274c|0
+27:insert_notbind_int_select_bind_int.test|1|166f77ad060|cf|e8c640af|d67cbcb668d611e8a8030002c8c1274c|0
+27:insert_bind_int_select_notbind_int.test|1|166f77ad0b2|cd|6a2f409c|d88cbcd268d611e8a8030002c8c1274c|0

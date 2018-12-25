@@ -1,0 +1,83 @@
+ob1=OBI(cluster=1222,sub_dir_list={1..2});
+
+deploy ob1.cs0.set extra_config=task_thread_count=1;
+
+#use iof
+ob1.cs0.set use_iof=1;
+ob1.cs1.set use_iof=1;
+
+ob1.reboot;
+
+ob1.source include/merge.inc;
+ob1.source include/migrate.inc;
+sleep 10;
+
+ob1.create_client;
+create table t1 (a int primary key,b varchar);
+
+--disable_query_log
+--disable_result_log
+let $cnt=10;
+while($cnt>0)
+{
+	eval replace into t1 values($cnt,'test$cnt');
+	dec $cnt;
+}
+
+ob1.major_freeze;
+ob1.check_cs_version 2;
+
+ob1.cs1.stop;
+sleep 10;
+
+let $a = deploy_get_value(ob1.cs0.dumpsst 3001,1,idx_2_1);
+let $b = deploy_get_value(ob1.cs0.dumpsst 3001,2,idx_2_2);
+let $c = $a$b;
+let $diskno=1;
+let $e =1$a;
+if($e == 1)
+{
+	let $diskno=2;
+}
+
+ob1.cs0.iof ETIMEDOUT $diskno $c 1;
+
+#let $a = deploy_get_value(ob1.cs1.dumpsst 3001,1,idx_2_1);
+#let $b = deploy_get_value(ob1.cs1.dumpsst 3001,2,idx_2_2);
+#let $c = $a$b;
+#let $diskno=1$a;
+#if($diskno == 1)
+#{
+#    let $diskno=2;
+#}
+
+#ob1.cs1.iof ETIMEDOUT $diskno $c 1;
+
+#同一个线程判断上一次结果在25s后还未返回，会踢盘
+--error 12
+select * from t1;
+sleep 30;
+--error 9
+select * from t1;
+
+ob1.cs1.nstart;
+sleep 30;
+
+#install the disk
+ob1.cs0.rm_sstable $diskno;
+
+let $user = deploy_get_value(ob1.sh_p whoami);
+ob1.cs0.cs_admin install_disk /home/$user/obtest_data/$diskno;
+sleep 60;
+
+let $cnt =10;
+while($cnt>0)
+{
+	select * from t1;
+	dec $cnt;
+}
+
+
+
+
+

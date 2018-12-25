@@ -1,0 +1,211 @@
+##
+## Test of like
+##
+#
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+##
+#--real_sleep 10
+create table t1 (a varchar(10) primary key, b int default 0);
+#--real_sleep 10
+insert into t1 (a) values ('a'),('abc'),('abcd'),('hello'),('test');
+#explain extended select * from t1 where a like 'abc%';
+#explain extended select * from t1 where a like concat('abc','%');
+select * from t1 where a like 'abc%';
+#select * from t1 where a like concat('abc','%');
+select * from t1 where a like 'ABC%';
+select * from t1 where a like 'test%';
+select * from t1 where a like 'te_t';
+#
+##
+## The following will test the Turbo Boyer-Moore code
+##
+select * from t1 where a like '%a%';
+select * from t1 where a like '%abcd%';
+select * from t1 where a like '%abc\d%';
+#
+drop table t1;
+
+#--real_sleep 10
+create table t1 (a varchar(10) primary key, b int default 0);
+#--real_sleep 10
+#
+##
+## Bug #2231
+##
+insert into t1 (a) values ('a'), ('a\\b');
+select * from t1 where a like 'a\\%';
+#select * from t1 where a like 'a\\%' escape '#';
+#select * from t1 where a like 'a\\%' escape '#' and a like 'a\\\\b';
+#
+##
+## Bug #4200: Prepared statement parameter as argument to ESCAPE
+##
+#prepare stmt1 from 'select * from t1 where a like \'a\\%\' escape ?';
+#set @esc='#';
+#execute stmt1 using @esc;  
+#deallocate prepare stmt1;
+#
+drop table t1;
+#
+##
+## Bug #2885: like and datetime
+##
+#
+#--real_sleep 10
+#create table t1 (a datetime primary key);
+#--real_sleep 10
+#insert into t1 values ('2004-03-11 12:00:21');
+#select * from t1 where a like '2004-03-11 12:00:21';
+#drop table t1;
+#
+##
+## Test like with non-default character set
+##
+#
+#SET NAMES koi8r;
+#
+#CREATE TABLE t1 (a VARCHAR(10) CHARACTER SET koi8r);
+#
+#INSERT INTO t1 VALUES ('ÆÙ×Á'),('æÙ×Á'),('Æù×Á'),('ÆÙ÷Á'),('ÆÙ×á'),('æù÷á');
+#INSERT INTO t1 VALUES ('ÆÙ×ÁÐÒÏÌÄÖ'),('æÙ×ÁÐÒÏÌÄÖ'),('Æù×ÁÐÒÏÌÄÖ'),('ÆÙ÷ÁÐÒÏÌÄÖ');
+#INSERT INTO t1 VALUES ('ÆÙ×áÐÒÏÌÄÖ'),('ÆÙ×ÁðÒÏÌÄÖ'),('ÆÙ×ÁÐòÏÌÄÖ'),('ÆÙ×ÁÐÒïÌÄÖ');
+#INSERT INTO t1 VALUES ('ÆÙ×ÁÐÒÏìÄÖ'),('ÆÙ×ÁÐÒÏÌäÖ'),('ÆÙ×ÁÐÒÏÌÄö'),('æù÷áðòïìäö');
+#
+#SELECT * FROM t1 WHERE a LIKE '%Æù×Á%';
+#SELECT * FROM t1 WHERE a LIKE '%Æù×%';
+#SELECT * FROM t1 WHERE a LIKE 'Æù×Á%';
+#
+#DROP TABLE t1;
+#
+## Bug #2547 Strange 'like' behaviour in tables with default charset=cp1250
+## Test like with non-default character set using TurboBM
+##
+#SET NAMES cp1250;
+#CREATE TABLE t1 (a varchar(250) NOT NULL) DEFAULT CHARACTER SET=cp1250;
+#INSERT INTO t1 VALUES
+#('Techni Tapes Sp. z o.o.'),
+#('Pojazdy Szynowe PESA Bydgoszcz SA Holding'),
+#('AKAPESTER 1 P.P.H.U.'),
+#('Pojazdy Szynowe PESA Bydgoszcz S A Holding'),
+#('PPUH PESKA-I Maria Struniarska');
+#
+#select * from t1 where a like '%PESA%';
+#select * from t1 where a like '%PESA %';
+#select * from t1 where a like '%PES%';
+#select * from t1 where a like '%PESKA%';
+#select * from t1 where a like '%ESKA%';
+#DROP TABLE t1;
+#
+##
+## LIKE crashed for binary collations in some cases
+##
+#select _cp866'aaaaaaaaa' like _cp866'%aaaa%' collate cp866_bin;
+#
+##
+## Check 8bit escape character
+##
+#set names koi8r;
+#select 'andre%' like 'andreÊ%' escape 'Ê';
+#
+## Check 8bit escape character with charset conversion:
+## For 'a LIKE b ESCAPE c' expressions,
+## escape character is converted into the operation character set,
+## which is result of aggregation  of character sets of 'a' and 'b'.
+## 'c' itself doesn't take part in aggregation, because its collation
+## doesn't matter, escape character is always compared binary.
+## In the example below, escape character is converted from koi8r into cp1251:
+##
+#select _cp1251'andre%' like convert('andreÊ%' using cp1251)  escape 'Ê';
+#
+#
+#--echo End of 4.1 tests
+#
+#
+#--echo #
+#--echo # Bug #54575: crash when joining tables with unique set column
+#--echo #
+#CREATE TABLE t1(a SET('a') NOT NULL, UNIQUE KEY(a));
+#CREATE TABLE t2(b INT PRIMARY KEY);
+#INSERT INTO t1 VALUES ();
+#INSERT INTO t2 VALUES (1), (2), (3);
+#SELECT 1 FROM t2 JOIN t1 ON 1 LIKE a GROUP BY a;
+#DROP TABLE t1, t2;
+#
+#--echo #
+#--echo # Bug#59149 valgrind warnings with 'like .. escape ..' function
+#--echo #
+#--error ER_WRONG_ARGUMENTS
+#SELECT '' LIKE '1' ESCAPE COUNT(1);
+#
+#--echo End of 5.1 tests
+#
+#
+#
+# A case 
+drop table if exists t1;
+create table t1(id int primary key, name varchar(20));
+insert into t1 values(1, 'hello');
+insert into t1 values(2, 'hell');
+insert into t1 values(3, 'hel');
+insert into t1 values(4, 'hello1');
+insert into t1 values(5, 'hell1');
+insert into t1 values(6, 'hel1');
+select * from t1 where name like '%h%';
+select * from t1 where name like '%hel%';
+select * from t1 where name like '%hell%';
+select * from t1 where name like '%hello%';
+select * from t1 where name like '%h%';
+select * from t1 where name like '%h%e%l%';
+select * from t1 where name like '%h%e%l%l%';
+select * from t1 where name like '%h%e%l%l%o%';
+select * from t1 where name like '%%h%%';
+select * from t1 where name like '%%h%%e%%l%%';
+select * from t1 where name like '%%h%%e%%l%%l%%';
+select * from t1 where name like '%%h%%e%l%%l%%o%%';
+select * from t1 where name like '%%he%%llo%%';
+select * from t1 where name like '1%h%';
+select * from t1 where name like '1%hel%';
+select * from t1 where name like '1%hell%';
+select * from t1 where name like '1%h%';
+select * from t1 where name like '%hel%1';
+select * from t1 where name like '%hell%1';
+select * from t1 where name like '%hello%1';
+select * from t1 where name like '1%hel%1';
+select * from t1 where name like '%hell%1';
+select * from t1 where name like '%hello%1';
+select * from t1 where name like '%hel%1';
+select * from t1 where name like '1%hell%1';
+select * from t1 where name like '1%hello%1';
+
+
+select * from t1 where name like '_h_';
+select * from t1 where name like '_hel_';
+select * from t1 where name like '_hell_';
+select * from t1 where name like '_hello_';
+select * from t1 where name like '_h_';
+select * from t1 where name like '_h_e_l_';
+select * from t1 where name like '_h_e_l_l_';
+select * from t1 where name like '_h_e_l_l_o_';
+select * from t1 where name like '__h__';
+select * from t1 where name like '__h__e__l__';
+select * from t1 where name like '__h__e__l__l__';
+select * from t1 where name like '__h__e_l__l__o__';
+select * from t1 where name like '__he__llo__';
+select * from t1 where name like '1_h_';
+select * from t1 where name like '1_hel_';
+select * from t1 where name like '1_hell_';
+select * from t1 where name like '1_h_';
+select * from t1 where name like '_hel_1';
+select * from t1 where name like '_hell_1';
+select * from t1 where name like '_hello_1';
+select * from t1 where name like '1_hel_1';
+select * from t1 where name like '_hell_1';
+select * from t1 where name like '_hello_1';
+select * from t1 where name like '_hel_1';
+select * from t1 where name like '1_hell_1';
+select * from t1 where name like '1_hello_1';
+
+
+

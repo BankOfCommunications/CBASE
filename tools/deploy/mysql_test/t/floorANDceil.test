@@ -1,0 +1,133 @@
+#floor and ceil test case
+create database floor_ceil;
+using database floor_ceil;
+sleep 5;
+--disable_warnings
+drop table if exists t_float,t_double,t_int,t_int64,t_varchar,t_decimal,table1,table2;
+--enable_warnings
+
+--echo creat table
+create table t_float(i1 int primary key,f float );
+create table t_double(i1 int primary key,d double );
+create table t_int(i1 int primary key,i2 int );
+create table t_int64(i1 int primary key,i2 bigint);
+create table t_varchar(i1 int primary key, var varchar(20));
+create table t_decimal (i1 int primary key,dd decimal(38,5));
+create table table1(i1 int primary key,i2 bigint,f float,d double,var varchar(30),dd decimal(38,5));
+create table table2(i1 int primary key,i2 bigint,f float,d double,var varchar(30),dd decimal(38,5));
+create table t_date (i1 int primary key,dat date);
+
+--echo insert data
+insert into table1 values(1,20,1.23,12.345678900123456,'-12.456','15.888');
+insert into table1 values(2147483647,9223372036854775807,3.4e38,1.7e308,'1234.5678','987654321001234567890123456789012.12345');
+insert into table1 values(-2147483648,-9223372036854775808,-3.4e38,-1.7e308,'1234.45565','-987654321001234567890123456789012.12345');
+insert into table1 values(123,3456,0.123456,0.7894561230123456,'-456789','1258746');
+insert into table1 values(68,656,1.33,7.8945613456,'+6789','+1258746.89878');
+insert into table1 values(2,33,34.0,7.0,'-67.1','746.0');
+insert into table1 values(5,23,4.125,8.5,'55.5','46.66');
+insert into table2 values(1,2,4.15,8.5,'55.5','46.66');
+insert into table2 values(2,3,5.13,4.5555555,'-5.489','123.478');
+insert into table2 values(3,44,133.45,0.456876845,'4.89','37831');
+insert into t_DOUBLE values(1,123.456789);
+insert into t_DOUBLE values(2,0.123456789);
+insert into t_DOUBLE values(3,0.1234567890123456789123456);
+insert into t_DOUBLE values(4,0);
+insert into t_DOUBLE values(5,2.3e-308);
+insert into t_DOUBLE values(6,1.7e308);
+insert into t_DOUBLE values(7,-1.7e308);
+insert into t_double values(8,-2.3e-308);
+insert into t_float values(1,0);
+insert into t_float values(2,1.2e-38);
+insert into t_float values(3,3.4e38);
+insert into t_float values(4,-1.2e-38);
+insert into t_float values(5,-3.4e38);
+insert into t_float values(6,1.23456);
+insert into t_float values(7,123456);
+insert into t_float values(8,123456.0);
+insert into t_int values(1,0);
+insert into t_int values(2,2147483647);
+insert into t_int values(3,-2147483648);
+insert into t_int values(4,-112);
+insert into t_int values(5,112);
+insert into t_int64 values(1,0);
+insert into t_int64 values(2,9223372036854775807);
+insert into t_int64 values(3,-9223372036854775807);
+insert into t_int64 values(4,2233);
+insert into t_int64 values(5,-2233);
+insert into t_decimal values(1,0);
+insert into t_decimal values(2,'987654321001234567890123456789012');
+insert into t_decimal values(3,'-987654321001234567890123456789012');
+insert into t_decimal values(4,'-987654321001234567890123456789012.12345');
+insert into t_decimal values(5,'987654321001234567890123456789012.12345');
+insert into t_decimal values(6,12.33);
+insert into t_decimal values(7,-12.33);
+insert into t_varchar values(1,'123');
+insert into t_varchar values(2,'-123');
+insert into t_varchar values(3,'-123.0');
+insert into t_varchar values(4,'123.0');
+insert into t_varchar values(5,'123.123');
+insert into t_varchar values(6,'-123.123');
+insert into t_date values(1,'2015-12-12');
+
+--echo start floor
+select floor(i2) from t_int;
+select floor(i2) from t_int64;
+select floor(f) from t_float;
+select floor(d) from t_double;
+select floor(var) from t_varchar;
+select floor(dd) from t_decimal;
+select floor(i1 + i2) from table1;
+select floor(i1 + f) from table1;
+select floor(i1 + d) from table1;
+select floor(i1 + var) from table1;
+select floor(i1 + dd) from table1;
+select floor(i2 + f) from table1;
+select floor(i2 + d) from table1;
+select floor(i2 + var) from table1;
+select floor(i2 + dd) from table1;
+select floor(f+d) from table1;
+select floor(f + var) from table2;
+select floor(f+dd) from table1;
+select floor(d + var) from table2;
+select floor(d + dd) from table1;
+select floor(var + dd) from table1;
+select floor(i1+i2*f + d +var+dd/2.3) from table2;
+select floor(i1 +(i2*f + d) * var+dd/2.3) from table2;
+--error 153
+select floor('-1.2a');
+--error 2
+select floor(dat) from t_date;
+select floor(NULL);
+
+--echo start ceil
+select ceil(i2) from t_int;
+select ceil(i2) from t_int64;
+select ceil(f) from t_float;
+select ceil(d) from t_double;
+select ceil(var) from t_varchar;
+select ceil(dd) from t_decimal;
+select ceil(i1 + i2) from table1;
+select ceil(i1 + f) from table1;
+select ceil(i1 + d) from table1;
+select ceil(i1 + var) from table1;
+select ceil(i1 + dd) from table1;
+select ceil(i2 + f) from table1;
+select ceil(i2 + d) from table1;
+select ceil(i2 + var) from table1;
+select ceil(i2 + dd) from table1;
+select ceil(f+d) from table1;
+select ceil(f+var) from table2;
+select ceil(f+dd) from table1;
+select ceil(d+var) from table2;
+select ceil(d+dd) from table1;
+select ceil(var+dd) from table1;
+select ceil(i1+i2*f + d +var+dd/2.3) from table2;
+select ceil(i1 +(i2*f + d) * var+dd/2.3) from table2;
+--error 153
+select ceil('-1.2a');
+--error 2
+select ceil(dat) from t_date;
+select ceil(NULL);
+
+
+drop table t_float,t_double,t_int,t_int64,t_varchar,t_decimal,table1,table2;

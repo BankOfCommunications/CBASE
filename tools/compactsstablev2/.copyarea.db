@@ -1,0 +1,10 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\compactsstablev2
+2
+6
+15:ob_fileinfo_cache.cpp|1|166f77a44bc|15b0|6dd4f8e4|53dc90ba68d311e8a8030002c8c1274c|0
+b:Makefile.am|1|166f77a446e|477|5b407095|51ac909e68d311e8a8030002c8c1274c|0
+e:dumpsst_v2.cpp|1|166f77a44fd|9081|1c067a60|560c90d668d311e8a8030002c8c1274c|0
+12:test_disk_path.cpp|1|166f77a4542|d4c|8b66bfc5|584c90f268d311e8a8030002c8c1274c|0
+c:dumpsst_v2.h|1|166f77a4579|b1f|cb9d5c80|5a7c910e68d311e8a8030002c8c1274c|0
+13:ob_fileinfo_cache.h|1|166f77a45a8|cca|769d107|5cac912a68d311e8a8030002c8c1274c|0

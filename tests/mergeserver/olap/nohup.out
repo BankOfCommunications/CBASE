@@ -1,0 +1,4 @@
+program has been exist: pid=31305
+program has been exist: pid=31380
+fail to start updateserver [cmd:ssh wushi.ly@10.232.36.33 "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/home/wushi.ly/deploy//tools/libs;cd /home/wushi.ly/deploy//updateserver && ./updateserver"]
+fail to start service

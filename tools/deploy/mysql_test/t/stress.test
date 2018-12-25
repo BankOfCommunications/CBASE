@@ -1,0 +1,72 @@
+--disable_warnings
+drop table if exists t1,t2;
+--enable_warnings
+
+create table t1(i int primary key, c1 char(1), c256 char(256), dt datetime, d  datetime, ct createtime, mt modifytime);
+create table t2(i int primary key, c1 char(1), c256 char(256), dt datetime, d  datetime, ct createtime, mt modifytime);
+#
+#
+## update 
+##
+#
+let $i=0;
+--disable_query_log
+--disable_result_log
+--echo insert the same row repeatedly
+while($i < 10000) 
+{
+    #eval insert into t1(i,c1,c256,dt,d) values(0,'1','$i','2012-10-10 12:00:00','2012-10-10');
+    eval replace into t1(i,c1,c256,dt,d) values(0,'1','$i','2012-10-10 12:00:00','2012-10-10');
+    inc $i;
+}
+
+let $n = 10000;
+let $i=0;
+--echo insert different rows to t1
+while($i < $n) 
+{
+    eval replace into t1(i,c1,c256,dt,d) values($i,'1','$i','2012-10-10 12:00:00','2012-10-10');
+    inc $i;
+}
+
+--echo select t1
+let $i=0;
+while($i < 100) 
+{
+    select * from t1;
+    inc $i;
+}
+--echo test join
+let $i=0;
+--echo insert different rows to t2
+while($i < $n) 
+{
+    eval insert into t2(i,c1,c256,dt,d) values($i,'1','$i','2012-10-10 12:00:00','2012-10-10');
+    inc $i;
+}
+--echo select t1,t2 with join
+let $i=0;
+while($i < 100) 
+{
+    select t1.i,t1.c1,t1.c256,t1.dt,t1.d,t1.mt,t1.ct,t2.i,t2.c1,t2.c256,t2.dt,t2.d,t2.mt,t2.ct from t1,t2 where t1.i=t2.i;
+    inc $i;
+}
+
+--enable_query_log
+--enable_result_log
+
+--echo test select count
+let $i=0;
+while($i < 100) 
+{
+    select count(*) from t1;
+    inc $i;
+}
+--echo test join count
+let $i=0;
+while($i < 100) 
+{
+    select count(t1.i) from t1,t2 where t1.i=t2.i;
+    inc $i;
+}
+drop table t1;

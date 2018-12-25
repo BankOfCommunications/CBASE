@@ -1,0 +1,78 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+deploy ob2.rs0.set master=ob1.rs0;
+	   
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=0 where cluster_id=1;
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=100 where cluster_id=2;
+deploy ob1.mysql  set global ob_read_consistency=4;
+deploy ob1.mysql  alter system set read_master_master_ups_percent=50 server_type=rootserver;
+deploy ob1.mysql  alter system set read_slave_master_ups_percent=50 server_type=rootserver;
+sleep 10;
+deploy ob1.create_client;
+create table t1(c1 int primary key, c2 varchar(20));
+sleep 60;
+--disable_query_log
+--disable_result_log
+let $cnt=1000;
+while($cnt > 500)
+{
+  eval replace into t1 values($cnt,$cnt);
+  dec $cnt;
+}
+while($cnt)
+{
+  eval insert into t1 values($cnt,$cnt);
+  dec $cnt;
+}
+
+let $cnt=1000;
+while($cnt > 500)
+{
+  eval update t1 set c2=1 where c1=$cnt;
+  dec $cnt;
+}
+while($cnt)
+{
+  eval delete from t1 where c1=$cnt;
+  dec $cnt;
+}
+
+
+# wait for slave ob create tablet
+#sleep 60;
+let $cnt=1000;
+while($cnt)
+{
+  eval select * from t1 where c1=$cnt;
+  dec $cnt;
+}
+--echo master cluster
+let $x=0;
+let $sum=0;
+while($x<4)
+{
+	let $temp=0;
+#	let $a=deploy_get_value(ob1.ms$x.monitor sql_succ_query_count);
+	let $b=deploy_get_value(ob1.ms$x.monitor sql_replace_count);
+	let $c=deploy_get_value(ob1.ms$x.monitor sql_insert_count);
+	let $d=deploy_get_value(ob1.ms$x.monitor sql_update_count);
+	let $e=deploy_get_value(ob1.ms$x.monitor sql_select_count);
+	let $f=deploy_get_value(ob1.ms$x.monitor sql_delete_count);
+#	let $temp=math($temp+$a);
+	let $temp=math($temp+$b);
+	let $temp=math($temp+$c);
+	let $temp=math($temp+$d);
+	let $temp=math($temp+$e);
+	let $temp=math($temp+$f);
+	let $sum=math($sum+$temp);
+
+	inc $x;
+}
+if($sum>=3000)
+{
+--echo SUCCESS
+
+}

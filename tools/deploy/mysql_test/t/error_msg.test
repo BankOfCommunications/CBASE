@@ -1,0 +1,91 @@
+--disable_abort_on_error
+#
+## error code test
+#
+
+
+# connect failed
+
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+--echo test connction close
+--echo #########################
+connection conn1;
+disconnect conn1;
+create table t1(a int primary key,b int);
+select * from t1;
+drop table t1;
+--echo #########################
+
+
+# table is exist
+--echo test table exists
+--echo #########################
+connection conn2;
+create table t1(a int primary key, b int);
+create table t1(a int primary key, b int);
+drop table t1;
+--echo #########################
+
+
+# table is not exist
+--echo test table does not exist
+--echo #########################
+select * from t1;
+drop table t1;
+--echo #########################
+
+# use keyword 
+
+--echo test use keyword
+--echo #########################
+
+create table t1(int int);
+--echo #########################
+
+
+
+# no primary key
+--echo test no primary key
+--echo #########################
+
+create table t1(a int);
+--echo #########################
+
+
+
+# null rowkey
+--echo test primary key null
+--echo #########################
+
+create table t1(a int primary key,b int);
+insert into t1(b) values(1);  
+drop table t1;
+
+create table t1(a int primary key,b int);
+insert into t1(a) values(NULL);  
+drop table t1;
+
+create table t1(a int, b int, primary key(a,b), c int);
+insert into t1(a,b) values(NULL,1);
+insert into t1(a,b) values(1,NULL);
+drop table t1;
+--echo #########################
+
+
+# syntax err
+--echo test syntax err
+--echo #########################
+
+create ;
+--echo #########################
+
+
+
+#  
+ 

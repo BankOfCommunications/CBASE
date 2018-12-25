@@ -1,0 +1,56 @@
+ob_user=${ob_user}
+ob_password=${ob_password}
+
+simon_host=${simon_host}
+simon_port=${simon_port}
+simon_cluster=${simon_cluster}
+
+pid_file=./log/histest.$ip.pid
+log_file=./log/histest.$ip.log
+log_level=$log_level
+
+${{
+master_ups = call_(find_attr(locals(), 'obi'), 'get_master_ups').split(":")[0]
+}}
+ups_ip=${master_ups}
+ups_port=${ups0.port}
+
+${{
+ms_list = get_match_child(find_attr(locals(), 'obi'), "mergeserver")
+ms_list_count = len(ms_list)
+ms_list_str = ','.join('${%s.ip}'%(k) for k in ms_list.keys())
+}}
+merge_server_mysql_port=${mysql_port}
+merge_server_count=$ms_list_count
+merge_server_str=$ms_list_str
+
+cs_rows=${cs_rows}
+
+ups_rows=${ups_rows}
+
+test_threads=${test_threads}
+
+max_seconds=${max_seconds}
+
+max_requests=${max_requests}
+
+test_mode=${test_mode}
+
+point_query=${point_query}
+range_query=${range_query}
+range_sum_query=${range_sum_query}
+range_order_query=${range_order_query}
+range_distinct_query=${range_distinct_query}
+
+point_join_query=${point_join_query}
+range_join_query=${range_join_query}
+range_sum_join_query=${range_sum_join_query}
+range_order_join_query=${range_order_join_query}
+range_distinct_join_query=${range_distinct_join_query}
+
+range_size=${range_size}
+
+ps_mode=${ps_mode}
+
+freeze_repeat=${freeze_repeat}
+freeze_seconds=${freeze_seconds}

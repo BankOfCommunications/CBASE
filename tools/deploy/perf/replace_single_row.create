@@ -1,0 +1,8 @@
+### table single_row_table
+
+create table single_row_table(
+id            int,
+number        int,
+primary key(id)
+);
+

@@ -1,0 +1,21 @@
+deploy ob1=OBI(cluster=1233, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable);
+#deploy ob2=OBI(cluster=1233, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable);
+
+#deploy ob2.rs0.set master=ob1.rs0;
+deploy ob1.reboot;
+sleep 10;
+#deploy ob1.mysql set ob_query_timeout=10000000;
+
+deploy ob1.create_client;
+
+let $i=3000;
+while($i >= 0) 
+{
+    deploy ob1.smart_query select  * from collect_info where user_id=$i and item_type=0 and item_id=0;
+    deploy ob1.smart_query select  * from collect_info where user_id=$i and item_type=31 and item_id=3150;
+    deploy ob1.smart_query select  * from collect_info where user_id=$i and item_type=61 and item_id=6199;
+    dec $i;
+}
+
+show create table collect_info;
+show create table item_info;

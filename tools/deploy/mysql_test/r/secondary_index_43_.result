@@ -1,0 +1,60 @@
+drop table if exists t1;
+create table t1 (c1 int primary key ,c2 int,c3 int );
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+insert into t1 values(1,1,1),(2,2,2),(3,3,3);
+set autocommit=1;
+create index il0 on t1(c2) storing (c3);
+delete from t1 where c1=1;
+commit;
+set autocommit =0;
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+__3001__idx__il0	1
+select * from __3001__idx__il0;
+c1	c2	c3
+2	2	2
+3	3	3
+set autocommit=1;
+delete from t1 where c1=2;
+create index il1 on t1(c2) storing (c3);
+commit;
+set autocommit =0;
+show index on t1;
+index_name	status
+__3001__idx__il0	1
+__3001__idx__il1	4
+"merge"
+[major_freeze] err=0
+select * from __3001__idx__il1;
+c1	c2	c3
+3	3	3
+create index il2 on t1(c2) storing (c3);
+"merge"
+[major_freeze] err=0
+explain delete from  t1   where c1=3;
+Query Plan
+Explain()
+ObIudLoopControl(
+)
+UpsExecutor(ups_plan=PhysicalPlan(operators_num=10 query_num=3 trans_id=TransID(sd=0,ups=0.0.0.0,start=0) start_trans=N trans_req=TransReq(type=1,isolation=2,start_time=0,timeout=100000000,idletime=100000000))
+====MainQuery====
+ObUpsModifyWithDmlType(dml_type=delete)
+ObDeleteIndex(main_table_id_=3001, index_num_=3)
+Project(rowkey_count=0, columns=[expr<3001,16>=[COL<3001,16>|],expr<3001,17>=[COL<3001,17>|],expr<3001,65520>=[int:8|]])
+MuitipleGetMerge(children_num=2)
+Child0:
+MemSSTableScan(static_data_subquery=5, row_desc=rowkey_cell_count[0],, row_store=data_size=0 block_count=0, from_deserialize=N)
+Child1:
+IncScan(scan_type=MGET[1], hotspot=false, lock=1, subquery=10, get_param=NULL scan_param=NULL)
+====SubQuery1====
+Values(row_store=data_size=0 block_count=0)
+TableRpcScan(read_method=GET, is use index for storing=0,index tid=-1; is use index without storing=0,index tid=-1,rpc_scan=<RpcScan(Hint=<max_parallel_count=20, is_get_skip_empty_row_=false, read_method_=2, read_consistency=FROZEN>, tid=18446744073709551615 Filter(filters=[expr<NULL,65519>=[COL<3001,16>|int:3|EQ<2>|],])Project(rowkey_count=0, columns=[expr<3001,16>=[COL<3001,16>|],expr<3001,17>=[COL<3001,17>|],expr<3001,18>=[COL<3001,18>|]])[Get RowNum:0]:
+)TransID(sd=0,ups=0.0.0.0,start=0>)
+====SubQuery2====
+ExprValues(values_num=3, values=<0:expr<3001,16>=[int:3|]> <1:expr<3001,17>=[null:|]> <2:expr<3001,18>=[null:|]> , row_desc=rowkey_cell_count[1],<3001,16>,<3001,17>,<3001,18>,)
+)
+
+drop table t1;

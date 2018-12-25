@@ -1,0 +1,7 @@
+ob1=OBI(cluster=1244)
+ob1.reboot
+ob1.create_client
+create table t1(c1 int , c2 int, primary key(c1));
+ob1.$a.force_stop
+select * from t1;
+c1	c2

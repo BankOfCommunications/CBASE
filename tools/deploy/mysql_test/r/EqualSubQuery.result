@@ -1,0 +1,92 @@
+create database EqualSubQuery;
+using database EqualSubQuery;
+drop table if exists t1,t2,t3,t4,t5,t6,t7,t8,t9;
+creat table
+create table t1(i1 int primary key,i2 int);
+create table t2(i1 int primary key,i2 int);
+create table t3(i1 int primary key,v1 varchar(10));
+create table t4(i1 int primary key,v1 varchar(10));
+create table t5(i1 int primary key,v1 varchar(10),v2 varchar(10));
+create table t6(v3 int primary key,v1 varchar(10),v2 varchar(10));
+create table t7(i1 int primary key , i2 int);
+create table t8(i1 int primary key ,i2 int);
+create table t9(i int primary key ,d decimal(10,5),c char );
+insert into t1 values(1,11),(2,22),(3,33),(4,2);
+insert into t2 values(11,111),(22,222),(33,333);
+insert into t3 values (1,'zhujun'),(2,'xionghui'),(3,'熊熊'),(4,'abcdefg');
+insert into t4 values (1,'熊%'),(3,'zhuju_'),(4,'zhujun');
+insert into t5 values (2,'wanglei','qianzm'),(1,'wanglei','xionghui');
+insert into t6 values (1,'wanglei','li'),(2,'qianzm','xiaoming'),(3,'name','test');
+insert into t7 values(1,1),(2,1),(3,1),(4,1);
+insert into t8 values(1,11),(2,22);
+alter table t8 add v1 varchar(10);
+insert into t9 values(1,2.222222,'abcdefg'),(2,2,'test'),(6,2,'t1');
+select * from t1 where t1.i2 = (select t2.i1 from t2  where t2.i2 = 222);
+i1	i2
+2	22
+select * from t3 where t3.v1 like (select t4.v1 from t4 where t4.i1 = 3);
+i1	v1
+1	zhujun
+select * from t3 where t3.v1 like (select t4.v1 from t4 where t4.i1 = 1);
+i1	v1
+3	熊熊
+select * from t1 where t1.i2 = (select t7.i1 from t7  where t7.i2 = 1);
+ERROR HY000: sub-query more than one row ret=-5601
+select * from t1 where t1.i2 like (select t7.i1 from t7  where t7.i2 = 1);
+ERROR HY000: sub-query more than one row ret=-5601
+select * from t1 where t1.i2 like (select * from t7  where t7.i2 = 1);
+ERROR HY000: Operand should contain 1 column(s)
+select * from t1 where t1.i2 = (select * from t7  where t7.i2 = 1);
+ERROR HY000: Operand should contain 1 column(s)
+select * from t1 where t1.i2 = (select i1  from t7  where t7.i2 = 2);
+ERROR HY000: Empty set
+select * from t1 where t1.i2 like (select i1  from t7  where t7.i2 = 2);
+ERROR HY000: Empty set
+select * from t1 where t1.i2 = (10+1);
+i1	i2
+1	11
+select * from t1 where t1.i1 = (select t3.i1 from t3 where t3.v1 = ( select t4.v1 from t4 where t4.i1 = 4));
+i1	i2
+1	11
+select * from t1  where i1 = ( select i1 from t3  where v1 = 'zhujun')  and (t1.i2 = (select i1 from t2 where i2 = 111));
+i1	i2
+1	11
+select * from t1  where i1 = ( select i1 from t3  where v1 = 'zhujun')  or (t1.i2 = (select i1 from t2 where i2 = 111));
+i1	i2
+1	11
+select * from t1  where i1 like ( select i1 from t3  where v1 = 'zhujun');
+ERROR HY000: OB-2: Invalid argument
+select * from t3 where t3.v1 not like (select t4.v1 from t4 where t4.i1 = 3);
+i1	v1
+2	xionghui
+3	熊熊
+4	abcdefg
+select * from t3 where t3.v1 not like (select t4.v1 from t4 where t4.i1 = 7);
+ERROR HY000: Empty set
+select * from t3 where t3.v1 = (select v1  from t8 where i1 = 1);
+i1	v1
+select * from t3 where t3.v1 like (select v1  from t8 where i1 = 1);
+i1	v1
+select * from t9 where c = (select v1 from t3 where i1 = 4);
+i	d	c
+1	2.22222	abcdefg
+select * from t9 where c like (select v1 from t3 where i1 = 4);
+i	d	c
+1	2.22222	abcdefg
+select * from t9 where d = (select i2 from t1 where i1 = 4);
+i	d	c
+2	2.00000	test
+6	2.00000	t1
+select * from t9 where c = (select v1 as bbb from t3 where i1 = 4);
+i	d	c
+1	2.22222	abcdefg
+select * from (select i1 as a,i2 as b from t2 where i2 = 222) as temp;
+a	b
+22	222
+select * from t1 left join t2 on t1.i2 = t2.i1 where t1.i1 = (select i1 from t1 where i1 = 1);
+i1	i2	i1	i2
+1	11	11	111
+select * from t1 where t1.i1 = (select i1 from t1 where i1 = 1) and t1.i2 in (select i2 from t1 );
+i1	i2
+1	11
+drop table t1,t2,t3,t4,t5,t6,t7,t8,t9;

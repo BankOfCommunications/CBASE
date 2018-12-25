@@ -1,0 +1,18 @@
+[public]
+pid_file = ./log/sqltest.$ip.pid
+log_file = ./log/sqltest.$ip.log
+log_level = $log_level
+
+[sqltest]
+ob_ip = ${proxyserver0.ip}
+ob_port = ${proxyserver0.port}
+mysql_ip = ${mysql.ip}
+mysql_port = ${mysql.port}
+mysql_db = ${mysql.db}
+mysql_user = ${mysql.user}
+mysql_pass = ${mysql.pass}
+pattern_file = sqlpattern.txt
+schema_file = sqltest.schema
+
+read_thread_count = ${read_thread_count}
+write_thread_count = ${write_thread_count}

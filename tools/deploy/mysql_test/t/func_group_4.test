@@ -1,0 +1,149 @@
+##
+## simple test of all group functions
+##
+#
+--disable_warnings
+drop table if exists t1,t2,t3;
+--enable_warnings
+#
+##
+## Bug #5555 GROUP BY enum_field' returns incorrect results
+##
+# 
+CREATE TABLE t1 (
+  id int,
+  val char(10),
+  PRIMARY KEY  (id)
+) ;
+#) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+# 
+INSERT INTO t1 VALUES
+(1,'one'),(2,'two'),(3,'three'),(4,'one'),(5,'two');
+# 
+select val, count(*) from t1 group by val;
+drop table t1;
+#
+##
+## Bug #5615: type of aggregate function column wrong when using group by
+##
+#
+create table t1(a int primary key, b createtime);
+insert into t1(a) values (1), (2);
+--replace_column 1 max
+select MAX(b) from t1 group by a;
+#show create table t2;
+drop table t1;
+#
+##
+## Bug 7833:  Wrong datatype of aggregate column is returned
+##
+#
+#create table t1(f1 datetime);
+#insert into t1 values (now());
+#create table t2 select f2 from (select max(now()) f2 from t1) a;
+#show columns from t2;
+#drop table t2;
+#create table t2 select f2 from (select now() f2 from t1) a;
+#show columns from t2;
+#drop table t2, t1;
+#
+##
+## Bug 8893: wrong result for min/max optimization with 2 indexes
+##
+#
+CREATE TABLE t1(
+  id int PRIMARY KEY,
+  a  int,
+  b  int
+);
+INSERT INTO t1 VALUES 
+  (1,1,4), (2,2,1), (3,1,3), (4,2,1), (5,1,1);
+SELECT MAX(id) FROM t1 WHERE id < 3 AND a=2 AND b=6;
+DROP TABLE t1;
+#
+## change the order of the last two index definitions
+#
+#CREATE TABLE t1(
+#  id int PRIMARY KEY,
+#  a  int,
+#  b  int,
+#  INDEX i_id(a,id),
+#  INDEX i_b_id(a,b,id)
+#);
+#INSERT INTO t1 VALUES 
+#  (1,1,4), (2,2,1), (3,1,3), (4,2,1), (5,1,1);
+#SELECT MAX(id) FROM t1 WHERE id < 3 AND a=2 AND b=6;
+#DROP TABLE t1;
+#
+#
+##
+## Bug #12882  	min/max inconsistent on empty table
+##
+## Test case moved to func_group_innodb
+##
+## Bug #18206: min/max optimization cannot be applied to partial index
+##
+#
+CREATE TABLE t1 (id int PRIMARY KEY, b char(3));
+INSERT INTO t1 VALUES (1,'xx'), (2,'aa');
+SELECT * FROM t1;
+#
+SELECT MAX(b) FROM t1 WHERE b < 'ppppp';
+#SHOW WARNINGS;
+SELECT MAX(b) FROM t1 WHERE b < 'pp';
+DROP TABLE t1;
+#
+CREATE TABLE t1 (id int PRIMARY KEY, b char(16));
+INSERT INTO t1 VALUES (1, 'xxxxbbbb'), (2, 'xxxxaaaa');
+SELECT MAX(b) FROM t1;
+#EXPLAIN SELECT MAX(b) FROM t1;
+DROP TABLE t1;
+#
+#CREATE TABLE t1 (id int , b varchar(512), INDEX(b(250))) COLLATE latin1_bin;
+#INSERT INTO t1 VALUES
+#  (1,CONCAT(REPEAT('_', 250), 'qq')), (1,CONCAT(REPEAT('_', 250), 'zz')),
+#  (1,CONCAT(REPEAT('_', 250), 'aa')), (1,CONCAT(REPEAT('_', 250), 'ff'));
+#
+#SELECT MAX(b) FROM t1;
+#EXPLAIN SELECT MAX(b) FROM t1;
+#DROP TABLE t1;
+##
+## Bug #16792  query with subselect, join, and group not returning proper values
+##
+#CREATE TABLE t1 (a INT, b INT);
+#INSERT INTO t1 VALUES (1,1),(1,2),(2,3);
+#
+#SELECT (SELECT COUNT(DISTINCT t1.b)) FROM t1 GROUP BY t1.a;
+#SELECT (SELECT COUNT(DISTINCT 12)) FROM t1 GROUP BY t1.a;
+## an attempt to test all aggregate function with no table.
+#SELECT AVG(2), BIT_AND(2), BIT_OR(2), BIT_XOR(2), COUNT(*), COUNT(12),
+#       COUNT(DISTINCT 12), MIN(2),MAX(2),STD(2), VARIANCE(2),SUM(2),
+#       GROUP_CONCAT(2),GROUP_CONCAT(DISTINCT 2);
+#DROP TABLE t1;
+#
+## End of 4.1 tests
+#
+##
+## decimal-related tests
+##
+create table t2 (ff double primary key, i int);
+insert into t2 values (2.2,0);
+#select cast(sum(distinct ff) as decimal(5,2)) from t2;
+#select cast(sum(distinct ff) as signed) from t2;
+#select cast(variance(ff) as decimal(10,3)) from t2;
+#select cast(min(ff) as decimal(5,2)) from t2;
+#
+create table t1 (df double primary key, i int);
+insert into t1 values(1.1,0);
+insert into t1 values(2.2,0);
+#select cast(sum(distinct df) as signed) from t1;
+#select cast(min(df) as signed) from t1;
+select 1e8 * sum(distinct df) from t1;
+select 1e8 * min(df) from t1;
+#
+create table t3 (ifl int primary key, i int);
+insert into t3 values(1,0), (2,0);
+#select cast(min(ifl) as decimal(5,2)) from t3;
+#
+drop table t1, t2, t3;
+#

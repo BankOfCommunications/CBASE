@@ -1,0 +1,60 @@
+[public]
+pid_file = ./chunkserver.pid
+log_file = ./chunkserver.log
+log_level = info
+
+[chunk_server]
+dev_name = bond0
+port = 22040
+task_queue_size = 1000  
+task_thread_count = 10
+max_migrate_task_count=1
+max_sstable_size = 33554432
+
+datadir_path = /data
+application_name = wushi_olap
+network_timeout= 100000000
+
+lease_check_interval=5000000
+retry_times=3
+migrate_band_limit_kbps=51200
+
+merge_mem_limit=67108864
+#merge_thread_per_disk=1
+reserve_sstable_copy=2
+max_merge_thread_num=4
+intermediate_buffer_size_mbyte=256
+
+#__safe_copy_count_in_init=1
+#__safe_copy_count_in_merge=1
+#__create_table_in_init=1
+min_drop_cache_wait_second = 300
+merge_pause_row_count = 2000
+merge_pause_sleep_time_us = 0
+merge_high_load_sleep_time_us = 2000000
+
+merge_mem_size_mbyte = 8
+max_merge_mem_size_mbyte = 16
+groupby_mem_size_mbyte = 8
+max_groupby_mem_size_mbyte = 16
+
+task_left_time_us = 300000
+slow_query_warn_time_us = 500000
+
+#0 means buffered io
+#>0 means dio
+write_sstable_io_type=1
+
+upslist_interval_us = 60000000
+blacklist_timeout_us = 60000000
+blacklist_fail_count = 100
+
+[memory_cache]
+block_cache_memsize_mb = 4096
+file_info_cache_max_cache_num = 4096
+block_index_cache_memsize_mb = 512
+join_cache_memsize_mb=5120
+
+[root_server]
+vip=10.232.36.33
+port=22010

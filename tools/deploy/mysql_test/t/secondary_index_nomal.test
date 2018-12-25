@@ -1,0 +1,76 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+# the same table name ,different from the index name 1101
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1 (c1 int primary key ,c2 int,c3 int );
+create index il0 on t1(c2) storing (c3);
+create index il1 on t1(c2) storing (c3);
+create index il2 on t1(c2);
+--error 5031
+create index il3 on t1(c1) storing (c1);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 600
+show index on t1;
+drop table t1;
+
+--disable_warnings
+drop table if exists t1,t2;
+--enable_warnings
+# the same index name different form the table name 1102
+create table t1(c1 int primary key,c2 int);
+create table t2(c1 int primary key,c2 int);
+# put the index on primary key 1103,1106
+create index il on t1(c1) storing (c2);
+create index il on t2(c1) storing (c2);
+--error 65535
+create index il1 on t1(c2) storing (c2);
+--error 65535
+create index il1 on t2(c2) storing (c2);
+
+--error 5031
+create index il2 on t1(c2) storing (c1);
+--error 5031
+create index il2 on t2(c2) storing (c1);
+# without storing 1105
+create index il3 on t1(c2) ;
+create index il3 on t2(c2) ;
+drop table t1,t2;
+create table t1(c1 int primary key,c2 int);
+create table t2(c1 int primary key,c2 int,c3 int);
+create index it1 on t1(c1) storing (c2);
+create index it2 on t2(c2) storing (c3);
+drop table t1,t2;
+# select one of the primary key as the index 1104
+create table t1(c1 int,c2 int,c3 int, primary key(c1,c2));
+create index il on t1(c2) storing (c3);
+drop table t1;
+create table t1(c1 int primary key ,c2 int ,c3 int,c4 int );
+# create index on the same column with different name 1107
+create index il1 on t1(c2) storing (c3);
+create index il2 on t1(c2) storing (c3);
+# create index on the different column with different name 1108
+create index il3 on t1(c1) storing (c2);
+
+drop table if exists t1,t2;
+
+create table t1(c1 int primary key ,c2 int ,c3 int,c4 int );
+insert into t1 values(1,1,1,1),(2,2,2,2);
+create index il on t1(c2) storing (c3);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 300
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+echo $n;
+#show index on t1;
+--let $sql_head=select * from __
+--let $sql_end=__idx__il;
+--let $sql=$sql_head$n$sql_end
+echo $sql;
+eval $sql;
+#eval select * from __$n__idx__il;
+insert into t1 values (3,3,3,3);
+eval $sql;
+

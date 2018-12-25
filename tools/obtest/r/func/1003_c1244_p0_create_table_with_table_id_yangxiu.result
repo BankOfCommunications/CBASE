@@ -1,0 +1,70 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.source include/merge.inc
+ob1.source include/migrate.inc
+ob1.mysql alter system set ddl_system_table_switch='true' server_type=rootserver
+ob1.create_client
+create table t1(a int primary key,b int);
+create table t1(a int primary key,b int) table_id=3000;
+ERROR 42S01: table 't1' already exists
+create table t2(a int primary key,b int) table_id=4000;
+ERROR HY000: User table id must not bigger than ob_max_used_table_id[3001], ret[1]
+create table t2(a int primary key,b int) table_id=3000;
+create table t4(a int primary key,b int) table_id=15;
+insert into t1 values(1,1),(-1,-1),(0,1);
+insert into t2 values(1,1),(-1,-1);
+insert into t4 values(1,1),(0,0);
+select * from t1;
+a	b
+-1	-1
+0	1
+1	1
+ob1.major_freeze
+ob1.check_cs_version 2
+ob2.check_cs_version 2
+select * from t1;
+a	b
+-1	-1
+0	1
+1	1
+drop table t2;
+ob1.major_freeze
+ob1.check_cs_version 3
+ob2.check_cs_version 3
+select * from t2;
+ERROR 42S02: table 't2' does not exist
+create table t3(a int primary key,b int) table_id=3000;
+insert into t3 values(1,1),(-1,-1);
+ob1.rs0.restart
+select * from t3;
+a	b
+-1	-1
+1	1
+select table_name,table_id from __first_tablet_entry where table_name like 't%';
+table_name	table_id
+t1	3001
+t3	3000
+t4	15
+ob1.switch_cluster ob2
+select * from t1;
+a	b
+-1	-1
+0	1
+1	1
+select * from t3;
+a	b
+-1	-1
+1	1
+create table t2(a int primary key,b int);
+insert into t2 values(1,1),(-1,-1);
+select * from t2;
+a	b
+-1	-1
+1	1
+drop table t1;
+drop table t2;
+drop table t3;
+drop table t4;

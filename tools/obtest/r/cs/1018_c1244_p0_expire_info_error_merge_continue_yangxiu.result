@@ -1,0 +1,35 @@
+ob1=OBI(cluster=1244)
+ob1.reboot
+ob1.source include/merge.inc
+ob1.create_client
+create table t1 (a int primary key,b int,c int) EXPIRE_INFO='b < 0';
+insert into t1 values(1,1,-1),(2,1,0),(5,0,2),(8,2,-1),(0,10,2);
+select * from t1;
+a	b	c
+0	10	2
+1	1	-1
+2	1	0
+5	0	2
+8	2	-1
+update t1 set b=b-2 where a=1;
+update t1 set b=b-2 where a=8;
+ob1.major_freeze
+ob1.check_cs_version 2
+select * from t1;
+a	b	c
+0	10	2
+2	1	0
+5	0	2
+8	0	-1
+alter table t1 drop column b;
+insert into t1 values(1000,-1),(20000,2);
+ob1.major_freeze
+ob1.check_cs_version 3
+select * from t1;
+a	c
+0	2
+2	0
+5	2
+8	-1
+1000	-1
+20000	2

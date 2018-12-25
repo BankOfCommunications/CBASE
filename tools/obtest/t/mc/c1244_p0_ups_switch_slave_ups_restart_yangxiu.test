@@ -1,0 +1,68 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+
+deploy ob1.prepare s;
+
+#sql 
+deploy ob1.create_client;
+create table t1(a int primary key, b varchar);
+create table t2(a int primary key, b int);
+sleep 60;
+insert into t1 values(1,'a'),(2,'b'),(3,'c');
+insert into t2 values(1,1),(2,2),(3,3);
+select * from t1;
+select * from t2;
+
+#master cluster switch ups 
+let $a=deploy_get_value(ob1.get_slave_ups);
+deploy ob1.change_ups_master $a;
+let $b=deploy_get_value(ob1.get_slave_ups);
+if($a == $b)
+{
+	--echo master cluster switch ups fail
+}
+
+
+#restart slave cluster ups
+let $a=deploy_get_value(ob2.get_master_ups);
+let $b=deploy_get_value(ob2.get_slave_ups);
+sleep 10;
+deploy ob2.$a.force_stop;
+deploy ob2.$a.start;
+deploy ob2.$b.force_stop;
+deploy ob2.$b.start;
+
+#sql
+sleep 10;
+create table t3(a int primary key,b int);
+sleep 60;
+insert into t3 values(1,1),(2,2);
+update t1 set b='d' where a='1';
+select * from t1;
+drop table t2;
+
+#slave cluster switch ups
+let $a=deploy_get_value(ob2.get_slave_ups);
+deploy ob2.change_ups_master $a;
+let $b=deploy_get_value(ob2.get_slave_ups);
+if($a == $b)
+{
+        --echo slave cluster switch ups fail
+}
+
+#check data
+select * from t1;
+select * from t3;
+
+deploy ob1.stop;
+deploy ob2.stop;
+
+
+
+
+

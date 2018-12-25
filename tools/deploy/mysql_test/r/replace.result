@@ -1,0 +1,152 @@
+drop table if exists t1;
+create table t1 (c1 int, c2 varchar, c3 int, primary key (c1, c2));
+basic case
+replace into t1 values (1, 'a', 1), (2, 'b', NULL);
+select * from t1;
+c1	c2	c3
+1	a	1
+2	b	NULL
+replace into t1 values (1, 'a', 2);
+select * from t1;
+c1	c2	c3
+1	a	2
+2	b	NULL
+replace into t1 values (1, 'a', 3), (1, 'a', 4);
+select * from t1;
+c1	c2	c3
+1	a	4
+2	b	NULL
+only rowkey
+replace into t1(c1,c2) values (3, 'c');
+select * from t1;
+c1	c2	c3
+1	a	4
+2	b	NULL
+3	c	NULL
+type conversion
+replace into t1 values ('4', 4, '4'), (5, 'd', '5');
+select * from t1;
+c1	c2	c3
+1	a	4
+2	b	NULL
+3	c	NULL
+4	4	4
+5	d	5
+cons rowkey
+replace into t1 (c3, c2, c1) values (9, 'a', 8), (7, 'b', 6);
+select * from t1;
+c1	c2	c3
+1	a	4
+2	b	NULL
+3	c	NULL
+4	4	4
+5	d	5
+6	b	7
+8	a	9
+null rowkey
+replace into t1 values (NULL, 1, NULL), (NULL, NULL, 2), (NULL, NULL, 3);
+select * from t1;
+c1	c2	c3
+1	a	4
+2	b	NULL
+3	c	NULL
+4	4	4
+5	d	5
+6	b	7
+8	a	9
+NULL	1	NULL
+NULL	NULL	3
+ps
+prepare stmt1 from replace into t1 values (?, ?, ?), (?, ?, ?);
+set @v1 = 11;
+set @v2 = 'a';
+set @v3 = NULL;
+set @v4 = 12;
+set @v5 = 'b';
+execute stmt1 using @v1, @v2, @v3, @v4, @v5, @v4;
+select * from t1;
+c1	c2	c3
+1	a	4
+2	b	NULL
+3	c	NULL
+4	4	4
+5	d	5
+6	b	7
+8	a	9
+11	a	NULL
+12	b	12
+NULL	1	NULL
+NULL	NULL	3
+transaction
+start transaction;
+replace into t1 values (31, 'x', 13);
+select * from t1 where c1 = 31 and c2 = 'x' for update;
+c1	c2	c3
+31	x	13
+rollback;
+select * from t1;
+c1	c2	c3
+1	a	4
+2	b	NULL
+3	c	NULL
+4	4	4
+5	d	5
+6	b	7
+8	a	9
+11	a	NULL
+12	b	12
+NULL	1	NULL
+NULL	NULL	3
+start transaction;
+replace into t1 values (31, 'x', 13);
+select * from t1 where c1 = 31 and c2 = 'x' for update;
+c1	c2	c3
+31	x	13
+commit;
+select * from t1;
+c1	c2	c3
+1	a	4
+2	b	NULL
+3	c	NULL
+4	4	4
+5	d	5
+6	b	7
+8	a	9
+11	a	NULL
+12	b	12
+31	x	13
+NULL	1	NULL
+NULL	NULL	3
+set autocommit = 0;
+replace into t1 values (32, 'y', 23);
+replace into t1 values (32, 'y', 32);
+commit;
+select * from t1;
+c1	c2	c3
+1	a	4
+2	b	NULL
+3	c	NULL
+4	4	4
+5	d	5
+6	b	7
+8	a	9
+11	a	NULL
+12	b	12
+31	x	13
+32	y	32
+NULL	1	NULL
+NULL	NULL	3
+set autocommit = 1;
+NOP
++1 support
+CreateTime/ModifyTime columns
+drop table if exists t2;
+create table t2 (c1 int primary key, ct createtime, mt modifytime);
+replace into t2 values (1, '2013-05-29 10:10:10', '2013-05-29 10:10:10');
+ERROR HY000: column of type ObCreateTimeType/ObModifyTimeType can not be inserted
+replace into t2 (c1) values (2);
+select c1 from t2;
+c1
+2
+clean up
+drop table t1, t2;

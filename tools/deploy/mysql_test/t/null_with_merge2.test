@@ -1,0 +1,48 @@
+--disable_warnings
+drop table if exists t1,t2,t3;
+--enable_warnings
+
+alter system set merge_delay_interval='1s' server_type=chunkserver,min_major_freeze_interval='1s' server_type=updateserver;
+alter system set merge_delay_for_lsync='1s' server_type=chunkserver;
+alter system set min_drop_cache_wait_time='10s' server_type=chunkserver;
+alter system set merge_thread_per_disk=10 server_type=chunkserver;
+alter system set each_tablet_sync_meta=False server_type=chunkserver;
+--real_sleep 10 
+
+create table t1(i1 int, s1 char, d1 datetime,i2 int, primary key(i1,s1,d1));
+
+insert into t1 values(NULL,'s1','2013-1-25',1);
+insert into t1 values(1,NULL,'2013-1-25',1);
+insert into t1 values(1,'s1',NULL,1);
+insert into t1 values(NULL,'s1',NULL,1);
+insert into t1 values(NULL,NULL,'2013-1-25',1);
+insert into t1 values(1,NULL,NULL,1);
+insert into t1 values(NULL,NULL,NULL,1);
+
+insert into t1 values(NULL,NULL,'2013-1-26',1);
+--error 5024
+insert into t1 values(NULL,NULL,NULL,NULL);
+--error 5024
+insert into t1 values(NULL,NULL,NULL,NULL);
+
+update t1 set i2=1 where i1 is NULL and s1 is NULL;
+update t1 set i2=1 where i1 is NULL and s1 is NULL and d1 is NULL;
+
+delete from t1 where i1 is NULL and s1 is NULL and d1 is NULL;
+delete from t1 where i1 is NULL and s1='s1' and d1 is NULL;
+delete from t1 where i1=1 and s1='s1' and d1 is NULL;
+insert into t1 values(NULL,NULL,NULL,NULL);
+insert into t1 values(NULL,'s1',NULL,NULL);
+select * from t1;
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+select * from t1;
+--real_sleep 120
+select * from t1;
+--error 5024
+insert into t1 values(NULL,NULL,NULL,NULL);
+--error 5024
+insert into t1 values(NULL,'s1',NULL,NULL);
+insert into t1 values(1,'s1',NULL,NULL);
+select * from t1;
+drop table t1;
+

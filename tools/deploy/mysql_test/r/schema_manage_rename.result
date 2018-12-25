@@ -1,0 +1,73 @@
+select table_id,operation_type from __all_ddl_operation ;
+table_id	operation_type
+5	1
+4	1
+11	1
+10	1
+6	1
+7	1
+8	1
+9	1
+13	1
+18	1
+17	1
+511	1
+512	1
+12	1
+513	1
+15	1
+16	1
+802	1
+801	1
+0	4
+create table t50(c1 int primary key ,c2 int ,c3 int);;
+create table t49(c1 int primary key ,c2 int ,c3 int);;
+create table t48(c1 int primary key ,c2 int ,c3 int);;
+create table t47(c1 int primary key ,c2 int ,c3 int);;
+create table t46(c1 int primary key ,c2 int ,c3 int);;
+create table t45(c1 int primary key ,c2 int ,c3 int);;
+create table t44(c1 int primary key ,c2 int ,c3 int);;
+create table t43(c1 int primary key ,c2 int ,c3 int);;
+create table t42(c1 int primary key ,c2 int ,c3 int);;
+create table t41(c1 int primary key ,c2 int ,c3 int);;
+create table t40(c1 int primary key ,c2 int ,c3 int);;
+create table t39(c1 int primary key ,c2 int ,c3 int);;
+create table t38(c1 int primary key ,c2 int ,c3 int);;
+create table t37(c1 int primary key ,c2 int ,c3 int);;
+create table t36(c1 int primary key ,c2 int ,c3 int);;
+create table t35(c1 int primary key ,c2 int ,c3 int);;
+create table t34(c1 int primary key ,c2 int ,c3 int);;
+create table t33(c1 int primary key ,c2 int ,c3 int);;
+create table t32(c1 int primary key ,c2 int ,c3 int);;
+create table t31(c1 int primary key ,c2 int ,c3 int);;
+create table t30(c1 int primary key ,c2 int ,c3 int);;
+create table t29(c1 int primary key ,c2 int ,c3 int);;
+create table t28(c1 int primary key ,c2 int ,c3 int);;
+create table t27(c1 int primary key ,c2 int ,c3 int);;
+create table t26(c1 int primary key ,c2 int ,c3 int);;
+create table t25(c1 int primary key ,c2 int ,c3 int);;
+create table t24(c1 int primary key ,c2 int ,c3 int);;
+create table t23(c1 int primary key ,c2 int ,c3 int);;
+create table t22(c1 int primary key ,c2 int ,c3 int);;
+create table t21(c1 int primary key ,c2 int ,c3 int);;
+create table t20(c1 int primary key ,c2 int ,c3 int);;
+create table t19(c1 int primary key ,c2 int ,c3 int);;
+create table t18(c1 int primary key ,c2 int ,c3 int);;
+create table t17(c1 int primary key ,c2 int ,c3 int);;
+create table t16(c1 int primary key ,c2 int ,c3 int);;
+create table t15(c1 int primary key ,c2 int ,c3 int);;
+create table t14(c1 int primary key ,c2 int ,c3 int);;
+create table t13(c1 int primary key ,c2 int ,c3 int);;
+create table t12(c1 int primary key ,c2 int ,c3 int);;
+create table t11(c1 int primary key ,c2 int ,c3 int);;
+create table t10(c1 int primary key ,c2 int ,c3 int);;
+create table t9(c1 int primary key ,c2 int ,c3 int);;
+create table t8(c1 int primary key ,c2 int ,c3 int);;
+create table t7(c1 int primary key ,c2 int ,c3 int);;
+create table t6(c1 int primary key ,c2 int ,c3 int);;
+create table t5(c1 int primary key ,c2 int ,c3 int);;
+create table t4(c1 int primary key ,c2 int ,c3 int);;
+create table t3(c1 int primary key ,c2 int ,c3 int);;
+create table t2(c1 int primary key ,c2 int ,c3 int);;
+create table t1(c1 int primary key ,c2 int ,c3 int);;
+drop table t50,t49,t48,t47,t46,t45,t44,t43,t42,t41,t40,t39,t38,t37,t36,t35,t34,t33,t32,t31,t30,t29,t28,t27,t26,t25,t24,t23,t22,t21,t20,t19,t18,t17,t16,t15,t14,t13,t12,t11,t10,t9,t8,t7,t6,t5,t4,t3,t2,t1;;

@@ -1,0 +1,102 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+create table t1(id int primary key ,c1 decimal(5,4) ,c2 int ,c3 varchar(8), c4 datetime ,c5 bool ,c6 double );
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+insert into t1 values (1,1.2345,3,'maos','2901-12-22 12:00:00',1,23.345),(2,2.3545,4,'dfdff','2301-02-13 12:00:00',0,3434),(3,1.3445,34,'fcf','1234-01-12 21:00:00',0,12.43);
+select * from t1;
+create index il0 on t1(c1,c3) storing(c5,c6);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 600
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+--let $table_head =__
+--let $table_end =__idx__il0
+--let $table_name=$table_head$n$table_end
+echo $table_name;
+eval select * from $table_name;
+
+#insert into decimal
+insert into t1(id,c1) values(4,7.3433),(6,3.4541),(7,3.9080),(8,8.3433);
+--error 58
+insert into t1 (id,c1) values (111,32.12);
+insert into t1 (id,c1) values (111,2.12);
+eval select * from $table_name;
+
+#insert into varchar
+insert into t1(id,c3) values(9,'nfndf'),(10,'fde3');
+insert into t1(id,c3) values(11,'dsfdfdsdsdsfsd');
+ eval select * from $table_name;
+#insert into datetime
+insert into t1(id,c4) values(18,'1234-2-2 12:00:00'),(12,'1234-2-2 12:00:00'),(13,'1234-2-2 12:00:00');
+--error 5102
+insert into t1(id,c4) values(14,'13224-09-12123 324:32:2343');
+ eval select * from $table_name;
+#insert into bool
+
+insert into t1(id,c5) values(15,1),(16,0);
+insert into t1(id,c5) values(17,9);
+ eval select * from $table_name;
+
+#insert into decimal and varchar 
+insert into t1(id ,c1,c3) values(20,1.2345,'mmmmmm'),(22,1.2345,'mmmmmm'),(23,1.2345,'mmmmmm'),(24,1.2345,'mmmmmm'),(25,1.2345,'mmmmmm');
+ eval select * from $table_name;
+
+#insert into decimal and datetime
+--error 5102
+insert into t1(id ,c1,c4) values(26,2.2345,'cdcdcdcdcd'),(27,2.2345,'cdcdcdcdcd'),(28,2.2345,'cdcdcdcdcd'),(29,2.2345,'cdcdcdcdcd'),(30,2.2345,'cdcdcdcdcd'),(31,2.2345,'cdcdcdcdcd');
+eval select * from $table_name;
+
+#insert into datetime and bool
+
+insert into t1(id ,c4, c5) values(32,'3024-04-24 2:00:00','frfrfrfr'),(34,'3024-04-24 2:00:00','frfrfrfr'),(35,'3024-04-24 2:00:00','frfrfrfr'),(36,'3024-04-24 2:00:00','frfrfrfr'),(37,'3024-04-24 2:00:00','frfrfrfr');
+eval select * from $table_name;
+
+drop table t1;
+
+create table t1 (id int primary key ,c1 createtime ,c2 modifytime ,c3 timestamp,c4 real);
+create index il0 on t1 (c3) storing(c1,c2,c4);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 300
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+--let $table_head =__
+--let $table_end =__idx__il0
+--let $table_name=$table_head$n$table_end
+eval select * from $table_name;
+# insert into createtime
+--error 5056
+insert into t1 (id,c1) values(1,now());
+
+eval select * from $table_name;
+#insert into modifytime
+--error 5056
+insert into t1 (id,c2) values(2,now());
+eval select * from $table_name;
+
+#insert into timestamp
+
+insert into t1 (id,c3) values(3,now());
+insert into t1 (id,c3) values(4,strict_current_timestamp());
+insert into t1 (id,c3) values(5,current_timestamp());
+insert into t1 (id,c3) values(6,current_date());
+eval select count(*) from $table_name;
+
+#insert into real 
+insert into t1 (id ,c4) values(7,1.232434333);
+insert into t1 (id ,c4) values(8,43.232434333);
+--error 1
+insert into t1 (id ,c4) values(9,1.2324343999999999999999999999999999999933);
+insert into t1 (id ,c4) values(10,1);
+insert into t1 (id ,c4) values(11,0);
+
+eval select count(*) from $table_name;
+create index il1 on t1(c3,c4) storing (c2,c1);
+insert into t1 (id,c3,c4) values(12,now(),current_date());
+insert into t1 (id,c3,c4) values(13,strict_current_timestamp(),current_timestamp());
+ eval select count(*) from $table_name;
+
+
+
+

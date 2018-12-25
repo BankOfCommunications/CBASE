@@ -1,0 +1,68 @@
+-- ok
+<<Part 1 : SQL STRING>>
+select id, qty/1000 unit from order_list where qty > 100 order by user_id;
+
+<<Part 2 : PARSE TREE>>
+[2012-07-17 15:19:16] WARN  set_expression (ob_postfix_expression.cpp:738) [47123780730880] unexpected postfix expression header element type. ObIntType expected[type:0]
+[2012-07-17 15:19:16] WARN  add_output_column (ob_rpc_scan.cpp:188) [47123780730880] must call set_table() first. or table_id not identical with expr.table_id. table_id_=1003, expr.table_id_=18446744073709551615
+[2012-07-17 15:19:16] WARN  add_output_column (ob_table_rpc_scan.cpp:136) [47123780730880] fail to add column to rpc scan operator. ret=-6
+[2012-07-17 15:19:16] DEBUG ../../src/common/hash/ob_hashutils.h:1106 [47123780730880] new succ block=0x27843220 block_size=57368 node_size=56 type=[N9oceanbase6common4list4NodeIPNS_3sql13ObPhyOperatorEEE]
+[2012-07-17 15:19:16] DEBUG ../../src/common/hash/ob_hashutils.h:1106 [47123780730880] new succ block=0x2726f020 block_size=90136 node_size=88 type=[N9oceanbase6common4list4NodeINS_3sql8ObBitSetEEE]
+
+<<Part 3 : LOGICAL PLAN>>
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1003, TableName:order_list, AliasName:NULL, Type:BASE_TABLE, RefId: 1003}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:2, ColumnName:id, TableRef:1003}
+            {Num 1, ColumnId:5, ColumnName:qty, TableRef:1003}
+            {Num 2, ColumnId:3, ColumnName:user_id, TableRef:1003}
+        <ColumnItemList End>
+        WHERE ::= <3>
+        SELECT ::= <1, id>, <2, unit>
+        FROM ::= <1003>
+        ORDER BY ::= <4, ASC>
+        ObSelectStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (1003 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 2]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (NULL : 18446744073709551614)
+        T_OP_DIV
+            T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+            T_INT : 1000
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_OP_GT
+            T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+            T_INT : 100
+        ObSqlRawExpr 2 End
+        ObSqlRawExpr 3 Begin
+        expr_id = 4
+        (table_id : column_id) = (1003 : 3)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 3]
+        ObSqlRawExpr 3 End
+    <ExprList End>
+<logical_plan End>
+
+
+<<Part 4 : PHYSICAL PLAN>>
+
+ObPhysicalPlan Begin
+Main Query:
+Project(columns=[expr<1003,2>=COL<1003,2>|,expr<18446744073709551615,18446744073709551614>=COL<18446744073709551615,18446744073709551614>|])
+Sort(columns=[<1003,3,ASC>])
+TableRpcScanObPhysicalPlan End
+
+
+

@@ -1,0 +1,34 @@
+--disable_warnings
+drop table if exists t1,t2,t3,t4;
+--enable_warnings
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+
+create user 'u1' identified by 'pass1', 'u2' identified by 'pass2', 'u3' identified by 'pass3', 'u4' identified by 'pass4';
+GRANT SELECT ON test.* TO 'u1';
+
+--error 5038
+create user 'u11' identified by '';
+
+--real_sleep 15
+set password for 'u1' = 'pass11';
+
+--error 5035
+set password for 'u_notexist' = 'pass11';
+
+--real_sleep 15
+connect (conn2,$OBMYSQL_MS0,u1,pass11,test,$OBMYSQL_PORT);
+connection conn2;
+
+set password = 'pass111';
+
+--real_sleep 15
+connect (conn3,$OBMYSQL_MS0,u1,pass111,test,$OBMYSQL_PORT);
+
+--error 65535
+set password = '';
+
+
+
+

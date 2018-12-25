@@ -1,0 +1,15 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.mysql update __all_cluster set cluster_flow_percent=0 where cluster_id=1
+ob1.mysql update __all_cluster set cluster_flow_percent=100 where cluster_id=2
+ob1.mysql  set global ob_read_consistency=4
+ob1.mysql  alter system set read_master_master_ups_percent=50 server_type=rootserver
+ob1.mysql  alter system set read_slave_master_ups_percent=50 server_type=rootserver
+ob1.create_client
+ob1.switch_cluster ob2
+create table t1(c1 int primary key, c2 varchar(20));
+master cluster
+SUCCESS

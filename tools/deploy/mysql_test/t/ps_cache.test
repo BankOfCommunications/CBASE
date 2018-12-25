@@ -1,0 +1,24 @@
+--disable_abort_on_error
+
+--disable_warnings
+drop table if exists t1,t2,t3,t4,t5,t6,t7,t8;
+--enable_warnings
+
+
+create table t1(pk int primary key, b int);
+insert into t1 values(1,1);
+prepare stmt from  select * from t1 where pk = ?;
+set @a=1;
+execute stmt using @a;
+drop table t1;
+
+execute stmt using @a;
+execute stmt using @a;
+
+
+create table t1(pk int primary key, b int);
+insert into t1 values(1,1);
+execute stmt using @a;
+prepare stmt1 from  select * from t1 where pk = ?;
+set @a=1;
+execute stmt1 using @a;

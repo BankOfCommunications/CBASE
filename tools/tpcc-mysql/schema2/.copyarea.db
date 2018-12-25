@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\tpcc-mysql\schema2
+2
+4
+d:drop_cons.sql|1|166f77634d5|2fb|4065e8e1|e69b421e68b811e8a8030002c8c1274c|0
+9:count.sql|1|166f7763513|13d|293c7361|eafb425668b811e8a8030002c8c1274c|0
+10:create_table.sql|1|166f77634ea|d9c|a8de7055|e8fb423a68b811e8a8030002c8c1274c|0
+10:add_fkey_idx.sql|1|166f776352e|5ee|88e0dff1|ed4b427268b811e8a8030002c8c1274c|0

@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\sysbench\sysbench\tests\memory
+2
+4
+b:Makefile.am|1|166f7761810|37a|572e2312|f64b361668b711e8a8030002c8c1274c|0
+b:sb_memory.c|1|166f7761851|2684|6be9a626|faab364e68b711e8a8030002c8c1274c|0
+e:CMakeLists.txt|1|166f7761830|344|c56d13d9|f89b363268b711e8a8030002c8c1274c|0
+b:Makefile.in|1|166f7761882|422c|83232c66|fd4b366a68b711e8a8030002c8c1274c|0

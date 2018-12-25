@@ -1,0 +1,49 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.prepare s
+ob1.connect conn1 fs0 admin admin test
+create table t1(a int primary key,b varchar(10));
+create table t2(a int primary key,b int);
+insert into t1 values(1,'abc');
+insert into t2 values(1,2),(3,4);
+select * from t1;
+a	b
+1	abc
+select * from t2;
+a	b
+1	2
+3	4
+set autocommit=0;
+insert into t1 values(2,'efg');
+update t1 set b='efg' where a = 1;
+commit;
+update t1 set b='1' where a=1;
+delete from t2 where a = 1;
+rollback;
+set autocommit=1;
+select * from t1;
+a	b
+1	efg
+2	efg
+select * from t2;
+a	b
+1	2
+3	4
+ob1.switch_cluster ob2
+ob1.connect conn2 fs0 admin admin test
+insert into t1 values (3,'hij');
+update t1 set b='test' where a=2;
+select * from t1;
+a	b
+1	efg
+2	test
+3	hij
+select * from t2;
+a	b
+1	2
+3	4
+drop table t1;
+drop table t2;

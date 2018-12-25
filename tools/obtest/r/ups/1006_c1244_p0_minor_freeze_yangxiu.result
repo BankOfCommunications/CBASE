@@ -1,0 +1,14 @@
+ob1=OBI(cluster=1244)
+ob1.reboot
+ob1.create_client
+ob1.source include/merge.inc
+ob1.check_cs_version 2
+ob1.mysql alter system set minor_num_limit=5 server_type=updateserver
+ob1.minor_freeze
+ob1.minor_freeze
+ob1.minor_freeze
+ob1.minor_freeze
+ob1.minor_freeze
+ob1.check_cs_version 2
+ob1.major_freeze
+ob1.check_cs_version 3

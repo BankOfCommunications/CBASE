@@ -1,0 +1,59 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+
+sleep 60;
+deploy ob1.mysql set global ob_read_consistency=3;
+sleep 10;
+let $c=deploy_get_value(ob1.mysql_p select cluster_id,cluster_role,cluster_flow_percent from __all_cluster);
+--echo $c
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=50 where cluster_id=1;
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=50 where cluster_id=2;
+sleep 10;
+
+deploy ob1.create_client;
+
+--disable_query_log
+--disable_result_log
+let $cnt=100;
+while($cnt)
+{
+    eval create table t$cnt(c1 int primary key, c2 int, c3 int);
+    dec $cnt;
+}
+let $cnt=100;
+while($cnt)
+{
+    eval alter table t$cnt drop column c3;
+    dec $cnt;
+}
+sleep 60;
+
+let $cnt=100;
+while($cnt)
+{
+    eval drop table t$cnt;
+    dec $cnt;
+}
+
+################## result ####################
+let $mlms=deploy_get_value(ob1.fs0.mysql_port);
+let $slms=deploy_get_value(ob2.fs0.mysql_port);
+
+let $a=deploy_get_value(ob1.mysql_p select value>0 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name like 'sql_create_table_count' and svr_port!=$mlms);
+let $b=deploy_get_value(ob2.mysql_p select value>0 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name like 'sql_create_table_count' and svr_port!=$slms);
+--echo master cluster create table count
+--echo $a
+--echo slave cluster create table count
+--echo $b
+
+let $a=deploy_get_value(ob1.mysql_p select value>0 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name like 'sql_drop_table_count' and svr_port!=$mlms);
+let $b=deploy_get_value(ob2.mysql_p select value>0 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name like 'sql_drop_table_count' and svr_port!=$slms);
+--echo master cluster drop table count
+--echo $a
+--echo slave cluster drop table count
+--echo $b

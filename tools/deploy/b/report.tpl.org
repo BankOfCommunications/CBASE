@@ -1,0 +1,26 @@
+#+Title: UPS Performance Report[${log_dir}]
+#+Options: toc:nil
+
+* 表定义:
+#+begin_example
+${read('init.sql').strip()}
+#+end_example
+* COMMENT 延迟和TPS(i01xi01)            
+|         | 单线程每次一行RT                | 多线程每次1行RT/RPS                       | 多线程每次20行RT/RPS                      |
+|---------+---------------------------------+-------------------------------------------+-------------------------------------------|
+| MGET    | ${c01x001_mget01_i01xi01.rt}    | ${rt_tps('c04x100_mget01_i01xi01')}       | ${rt_tps('c04x100_mget20_i01xi01')}       |
+| MUTATOR | ${c01x001_mutator01_i01xi01.rt} | ${rt_tps('c04x100_mutator01_i01xi01')}    | ${rt_tps('c04x100_mutator20_i01xi01')}    |
+| INSERT  | ${c01x001_phyplan01_i01xi01.rt} | ${rt_tps('c04x100_phyplan01_i01xi01')}    | ${rt_tps('c04x100_phyplan20_i01xi01')}    |
+* Data
+[[$plot_url][Browse(包含plot)]]
+包含若干组测试，每一组测试命名的含义用一个例子解释如下:
+#+begin_example
+c01x100_mutator01_i1xi1: 一个客户端，每个客户端100个线程，用mutator插入表，每次插1行，插入的表名为i1xi1.
+#+end_example
+指标说明如下:
+  1. rt指客户端测到的延迟, 单位us; tps是指每秒读取或更新的行数.
+  2. batch指group commit的数目，net指网络同步日志的延时，disk指写commitlog的延时，这三个指标对读(multiget)来说是没有意义的。
+  3. 第二张表中的图上的tps指的是单个客户端统计的值，rt指平均每行的延迟，所以与第一张表中的值不同。
+#+BEGIN_HTML
+${plot_all(profile_spec.split())}
+#+END_HTML

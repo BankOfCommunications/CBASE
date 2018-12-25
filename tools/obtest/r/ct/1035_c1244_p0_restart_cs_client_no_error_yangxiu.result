@@ -1,0 +1,13 @@
+ob1=OBI(cluster=1244)
+ob1.reboot
+ob1.prepare
+ob1.start_check
+ob1.mysql alter system set location_cache_timeout='5s' server_type=mergeserver
+ob1.sh rm -rf ~/logs/obdatasource/*
+ob1.create_client
+create table t1(a int primary key,b int);
+ob1.cs1.restart
+ob1.cs0.restart
+ob1.cs2.restart
+ob1.cs3.restart
+ob1.stop_check

@@ -1,0 +1,34 @@
+ob1=OBI(cluster=1244, ct=obsqlclient)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.register obsql
+ob1.mysql create table t3(c1 int primary key, c2 int)
+ob1.mysql update __all_cluster set cluster_flow_percent=0 where cluster_id=1
+ob1.mysql update __all_cluster set cluster_flow_percent=100 where cluster_id=2
+ob1.ct0.sync
+ob1.ct0.stop
+ob1.ct0.start transaction.test
+running
+ob1.ct0.stop
+ob2.sql_succ_query_count
+0
+0
+0
+0
+ob2.sql_insert_count
+0
+0
+0
+0
+ob2.sql_update_count
+0
+0
+0
+0
+ob2.sql_delete_count
+0
+0
+0
+0

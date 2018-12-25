@@ -1,0 +1,102 @@
+drop table if exists t1,t2,t3,t4,t5,t6,t7,t8;
+create table t1(pk int primary key, b int);
+insert into t1 values(1,1);
+prepare stmt1 from  select * from t1 where pk = ? and b = ?;
+prepare stmt2 from  select pk,b from t1 where pk = ? and b = ?;
+prepare stmt3 from select j1.pk  from t1 as j1, t1 as j2 where j1.pk = j2.pk and j1.pk=?;
+set @a=1;
+set @b=1;
+execute stmt1 using @a,@b;
+pk	b
+1	1
+execute stmt2 using @a,@b;
+pk	b
+1	1
+execute stmt3 using @a;
+pk
+1
+drop table t1;
+create table t2(pk int primary key, b int);
+insert into t2 values(1,0),(2,0),(3,0);
+prepare stmt1 from select * from t2 where pk=?;
+prepare stmt2 from select pk from t2 where pk=?;
+prepare stmt3 from select j1.pk  from t2 as j1, t2 as j2 where j1.pk = j2.pk and j1.pk=?;
+set @a=1;
+execute stmt1 using @a;
+pk	b
+1	0
+execute stmt2 using @a;
+pk
+1
+execute stmt3 using @a;
+pk
+1
+drop table t2;
+create table t4(pk int primary key, a int);
+prepare stmt1 from replace into t4 values(1,?);
+prepare stmt2 from replace into t4 values(1,?),(2,?);
+prepare stmt3 from replace into t4 values(1,?),(?,?);
+set @a=1;
+set @b=2;
+execute stmt1 using @a;
+execute stmt1 using @b;
+execute stmt2 using @b,@a;
+execute stmt3 using @a,@b,@b;
+select * from t4;
+pk	a
+1	1
+2	2
+drop  table t4;
+create table t5(pk int primary key, a int);
+prepare stmt1 from replace into t5 values(1,?);
+prepare stmt2 from replace into t5 values(1,?),(2,?);
+prepare stmt3 from replace into t5 values(1,?),(?,?);
+set @a=1;
+set @b=2;
+execute stmt1 using @a;
+execute stmt1 using @b;
+execute stmt2 using @b,@b;
+execute stmt3 using @b,@b,@b;
+select * from t5;
+pk	a
+1	2
+2	2
+drop  table t5;
+create table t6(pk int primary key, a int);
+insert into t6 values(1,1),(2,2);
+prepare stmt1 from update t6 set a = ? where pk=?;
+prepare stmt2 from update t6 set a = a + ? where pk=?;
+set @a=1;
+set @b=2;
+execute stmt1 using @a,@b;
+execute stmt1 using @b,@a;
+execute stmt2 using @a,@b;
+select * from t6;
+pk	a
+1	2
+2	2
+drop  table t6;
+create table t8(pk int primary key, a int);
+insert into t8 values(1,1),(2,2);
+prepare stmt1 from delete from t8 where pk=?;
+set @a=1;
+set @b=2;
+execute stmt1 using @a;
+select * from t8;
+pk	a
+2	2
+execute stmt1 using @b;
+select * from t8;
+pk	a
+insert into t8 values(1,1),(2,2);
+prepare stmt1 from delete from t8 where pk=?;
+set @a=1;
+set @b=2;
+execute stmt1 using @b;
+select * from t8;
+pk	a
+1	1
+execute stmt1 using @a;
+select * from t8;
+pk	a
+drop  table t8;

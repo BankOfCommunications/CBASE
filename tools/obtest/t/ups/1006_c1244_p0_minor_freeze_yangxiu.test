@@ -1,0 +1,58 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob1.reboot;
+
+deploy ob1.create_client;
+
+--disable_result_log
+--disable_query_log
+deploy ob1.source include/merge.inc;
+alter system set minor_num_limit=1 server_type=updateserver;
+sleep 10;
+
+create table t1(c1 int primary key, c2 varchar,c3 varchar);
+
+let $cnt=5000;
+while($cnt)
+{
+   eval replace into t1 values($cnt,'aaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbcccccccccccccccccccccccddddddddddddddddddddddddddddddddddddd','ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt');
+   dec $cnt;
+}
+
+#modify active_mem_limit
+let $ups = deploy_get_value(ob1.get_master_ups);
+let $memused=deploy_get_value(ob1.$ups.monitor memtable_used);
+let $mem=math($memused-5000000);
+let $unit=B;
+eval alter system set active_mem_limit='$mem$B' server_type=updateserver;
+
+sleep 30;
+deploy ob1.check_cs_version 2;
+
+deploy ob1.mysql alter system set minor_num_limit=5 server_type=updateserver;
+sleep 10;
+
+create table t3 (a int primary key,b int);
+let $cnt = 5;
+while ($cnt)
+{
+	let $a = 50;
+	while($a)
+	{
+		eval replace into t3 values($a,1);
+		eval delete from t3 where a=$a;
+		dec $a;
+	}
+	deploy ob1.minor_freeze;
+	dec $cnt;
+	sleep 5;
+}
+
+#not auto major freeze
+sleep 20;
+deploy ob1.check_cs_version 2;
+
+#merge
+deploy ob1.major_freeze;
+sleep 20;
+deploy ob1.check_cs_version 3;
+

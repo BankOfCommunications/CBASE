@@ -1,0 +1,7 @@
+deploy ob1=OBI(cluster=1133);
+deploy ob1.reboot;
+sleep 5;
+deploy ob1.mysql insert into __all_server (cluster_id, svr_type, svr_ip, svr_port, inner_port, svr_role, svr_version) values (1,'mergeserver','10.209.199.111',1000,1000,0,'0.4.2');
+
+deploy ob1.create_client;
+select svr_type from __all_server;

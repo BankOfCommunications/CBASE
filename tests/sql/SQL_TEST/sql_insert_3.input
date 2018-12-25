@@ -1,0 +1,66 @@
+-- ok
+insert into user (user_id, user_name, user_desc) values (100, 'da fen qi', 'a turtle'), (101, 'mi kai lang ji luo', 'another turtle'), (102, 'la fei er', 'the third turtle');
+<logical_plan Begin>
+    <StmtList Begin>
+        ObInsertStmt 0 Begin
+            <TableItemList Begin>
+                {Num 0, TableId:1002, TableName:user, AliasName:NULL, Type:BASE_TABLE, RefId: 1002}
+            <TableItemList End>
+            <ColumnItemList Begin>
+                {Num 0, ColumnId:2, ColumnName:user_id, TableRef:1002}
+                {Num 1, ColumnId:3, ColumnName:user_name, TableRef:1002}
+                {Num 2, ColumnId:5, ColumnName:user_desc, TableRef:1002}
+            <ColumnItemList End>
+            INTO ::= <1002>
+            VALUES ::= <1, 2, 3>, <4, 5, 6>, <7, 8, 9>
+        ObInsertStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_INT : 100
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (NULL : 18446744073709551612)
+        T_STRING : da fen qi
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (NULL : 18446744073709551611)
+        T_STRING : a turtle
+        ObSqlRawExpr 2 End
+        ObSqlRawExpr 3 Begin
+        expr_id = 4
+        (table_id : column_id) = (NULL : 18446744073709551610)
+        T_INT : 101
+        ObSqlRawExpr 3 End
+        ObSqlRawExpr 4 Begin
+        expr_id = 5
+        (table_id : column_id) = (NULL : 18446744073709551609)
+        T_STRING : mi kai lang ji luo
+        ObSqlRawExpr 4 End
+        ObSqlRawExpr 5 Begin
+        expr_id = 6
+        (table_id : column_id) = (NULL : 18446744073709551608)
+        T_STRING : another turtle
+        ObSqlRawExpr 5 End
+        ObSqlRawExpr 6 Begin
+        expr_id = 7
+        (table_id : column_id) = (NULL : 18446744073709551607)
+        T_INT : 102
+        ObSqlRawExpr 6 End
+        ObSqlRawExpr 7 Begin
+        expr_id = 8
+        (table_id : column_id) = (NULL : 18446744073709551606)
+        T_STRING : la fei er
+        ObSqlRawExpr 7 End
+        ObSqlRawExpr 8 Begin
+        expr_id = 9
+        (table_id : column_id) = (NULL : 18446744073709551605)
+        T_STRING : the third turtle
+        ObSqlRawExpr 8 End
+    <ExprList End>
+<logical_plan End>
+

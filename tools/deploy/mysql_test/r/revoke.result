@@ -1,0 +1,89 @@
+drop table if exists t1,t2,t3,t4;
+create table t1(a int primary key, b int);
+create table t2(a int primary key, b int);
+create user 'u1' identified by 'pass1';
+create user 'u2' identified by 'pass1';
+GRANT SELECT ON test.t1 TO 'u1';
+grant SELECT, CREATE USER on * to 'nexist_user';
+ERROR HY000: no privilege
+grant SELECT, CREATE USER on * to 'nexist_user', 'u1';
+ERROR HY000: no privilege
+grant ALL PRIVILEGES on t_nexist to 'u1';
+ERROR 42S02: Unkown table "test.t_nexist" 
+grant ALL PRIVILEGES on t1 to 'u1';
+show grants for 'u1';
+grants
+GRANT SELECT ON test.t1 TO 'u1'
+create table t3(a int primary key);
+ERROR HY000: no privilege
+drop table t2;
+ERROR HY000: no privilege
+select * from t2;
+ERROR HY000: no privilege
+insert into t2 values(1,1);
+ERROR HY000: no privilege
+update t2 set b=2 where a=1;
+ERROR HY000: no privilege
+delete from t2 where a=1;
+ERROR HY000: no privilege
+grant SELECT, CREATE USER on * to 'u2';
+ERROR HY000: no privilege
+revoke ALL PRIVILEGES, GRANT OPTION from 'u2';
+ERROR HY000: no privilege
+create user 'u1_cant' identified by 'pass1';
+ERROR HY000: no privilege
+drop user 'u2';
+ERROR HY000: no privilege
+select * from t1;
+a	b
+insert into t1 values(1,1),(2,2);
+delete from t1 where a=1;
+update t1 set b=2 where a=1;
+revoke ALL PRIVILEGES, GRANT OPTION from 'u1';
+show grants for 'u1';
+grants
+create user 'u1_cant' identified by 'pass1';
+ERROR HY000: no privilege
+drop user 'u2';
+ERROR HY000: no privilege
+select * from t1;
+ERROR HY000: no privilege
+insert into t1 values(1,1),(2,2);
+ERROR HY000: no privilege
+delete from t1 where a=1;
+ERROR HY000: no privilege
+update t2 set b=2 where a=1;
+ERROR HY000: no privilege
+grant CREATE on t1 to 'u1';
+show grants for 'u1';
+grants
+GRANT CREATE ON test.t1 TO 'u1'
+grant DROP on t1 to 'u1';
+show grants for 'u1';
+grants
+GRANT CREATE,DROP ON test.t1 TO 'u1'
+grant CREATE USER on t1 to 'u1';
+show grants for 'u1';
+grants
+GRANT CREATE,CREATE USER,DROP ON test.t1 TO 'u1'
+grant DELETE on t1 to 'u1';
+show grants for 'u1';
+grants
+GRANT CREATE,CREATE USER,DELETE,DROP ON test.t1 TO 'u1'
+grant INSERT on t1 to 'u1';
+show grants for 'u1';
+grants
+GRANT CREATE,CREATE USER,DELETE,DROP,INSERT ON test.t1 TO 'u1'
+grant SELECT on t1 to 'u1';
+show grants for 'u1';
+grants
+GRANT CREATE,CREATE USER,DELETE,DROP,INSERT,SELECT ON test.t1 TO 'u1'
+grant UPDATE on t1 to 'u1';
+show grants for 'u1';
+grants
+GRANT CREATE,CREATE USER,DELETE,DROP,INSERT,UPDATE,SELECT ON test.t1 TO 'u1'
+grant GRANT OPTION on t1 to 'u1';
+show grants for 'u1';
+grants
+GRANT CREATE,CREATE USER,DELETE,DROP,GRANT OPTION,INSERT,UPDATE,SELECT ON test.t1 TO 'u1'
+drop table t1,t2;

@@ -1,0 +1,169 @@
+--disable_warnings
+drop table if exists t1,t2,t3,t4;
+--enable_warnings
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (s1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (s2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+###
+# test without trx ,no meaning
+##
+create table t1(pk1 int , pk2 varchar, pk3 datetime, a int, b varchar, c datetime, primary key(pk1,pk2,pk3));
+insert into t1 values(1,'s1','2012-12-12 12:00:00',100, 's100','2013-12-12 12:00:00' );
+insert into t1 values(2,'s2','2012-12-12 12:00:00',200, 's200','2013-12-12 12:00:00' );
+
+update t1 set b = 's2000' where pk1 = 1 and pk2 = 's1' and pk3= '2012-12-12 12:00:00' ;
+
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3= '2012-12-12 12:00:00' for update;
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3= '2012-12-12 12:00:01' for update;
+
+--error 5047
+select * from t1 where pk1 =1 for update;
+--error 5047
+select * from t1 where a=1 for update;
+--error 5047
+select * from t1 for update;
+--error 5047
+select * from t1 where (pk1 = 1 and pk2 = 's1' and pk3= '2012-12-12 12:00:00' ) or (pk1 = 2 and pk2 = 's2' and pk3= '2012-12-12 12:00:00' ) for update;
+
+connection conn1;
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3= '2012-12-12 12:00:00' for update;
+
+connection conn2;
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3= '2012-12-12 12:00:00' for update;
+
+drop table t1;
+
+
+###
+# test trx
+##
+
+connection conn1;
+create table t1(pk1 int , pk2 varchar, pk3 datetime, a int, b varchar, c datetime, primary key(pk1,pk2,pk3));
+insert into t1 values(1,'s1','2012-12-12 12:00:00',100, 's100','2013-12-12 12:00:00' );
+insert into t1 values(2,'s2','2012-12-12 12:00:00',200, 's200','2013-12-12 12:00:00' );
+
+# case: s1 lock r1 , s2 update r1
+connection s1;
+begin;
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' for update;
+update t1 set b='abc' where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00';
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' for update;
+delete from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00';
+insert into t1 values(1,'s1','2012-12-12 12:00:00',100, 's100','2013-12-12 12:00:00' );
+connection s2;
+begin;
+select * from t1 where pk1 = 2 and pk2 = 's2' and pk3 = '2012-12-12 12:00:00' for update;
+update t1 set b='abcd' where pk1 = 2 and pk2 = 's2' and pk3 = '2012-12-12 12:00:00';
+select * from t1 where pk1 = 2 and pk2 = 's2' and pk3 = '2012-12-12 12:00:00' for update;
+delete from t1 where pk1 = 2 and pk2 = 's2' and pk3 = '2012-12-12 12:00:00';
+insert into t1 values(2,'s2','2012-12-12 12:00:00',200, 's200','2013-12-12 12:00:00' );
+--error 5049
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' for update;
+connection s1;
+commit;
+connection s2;
+rollback;
+select * from t1;
+
+# case: s1 lock r1 , s2 lock r2
+connection s1;
+begin;
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' for update;
+update t1 set b='abc' where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00';
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' for update;
+delete from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00';
+insert into t1 values(1,'s1','2012-12-12 12:00:00',100, 's100','2013-12-12 12:00:00' );
+connection s2;
+begin;
+select * from t1 where pk1 = 2 and pk2 = 's2' and pk3 = '2012-12-12 12:00:00' for update;
+update t1 set b='abcd' where pk1 = 2 and pk2 = 's2' and pk3 = '2012-12-12 12:00:00';
+select * from t1 where pk1 = 2 and pk2 = 's2' and pk3 = '2012-12-12 12:00:00' for update;
+delete from t1 where pk1 = 2 and pk2 = 's2' and pk3 = '2012-12-12 12:00:00';
+insert into t1 values(2,'s2','2012-12-12 12:00:00',200, 's200','2013-12-12 12:00:00' );
+connection s1;
+commit;
+connection s2;
+commit;
+select * from t1;
+
+# case: s1 lock r1, s2 update r2,r1
+connection s1;
+begin;
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' for update;
+connection s2;
+begin;
+update t1 set b = 's2000' where pk1 = 2 and pk2 = 's2' and pk3 = '2012-12-12 12:00:00';
+delete from t1 where pk1 = 2 and pk2 = 's2' and pk3 = '2012-12-12 12:00:00';
+insert into t1 values(2,'s2','2012-12-12 12:00:00',200, 's200','2013-12-12 12:00:00' );
+--error 5049
+update t1 set b = 's2000' where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00';
+connection s1;
+commit;
+connection s2;
+rollback;
+select * from t1;
+
+# case : s1 lock r1,r2, s2 update r1,r2
+
+connection s1;
+begin;
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' for update;
+select * from t1 where pk1 = 2 and pk2 = 's2' and pk3 = '2012-12-12 12:00:00' for update;
+connection s2;
+begin;
+--error 5049
+update t1 set b = 's2000' where pk1 = 2 and pk2 = 's2' and pk3 = '2012-12-12 12:00:00';
+--error 5049
+update t1 set b = 's2000' where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00';
+connection s1;
+commit;
+connection s2;
+rollback;
+
+# case: s1 lock r1 then unlock, s2 lock r1 then unlock
+connection s1;
+begin;
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' for update;
+commit;
+connection s2;
+begin;
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' for update;
+update t1 set b = 's2000' where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' ;
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' for update;
+commit;
+
+# case: s1 lock r1 then unlock, s2 lock r1 then unlock
+connection s1;
+begin;
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' for update;
+commit;
+connection s2;
+begin;
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' for update;
+update t1 set b = 's2000' where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' ;
+select * from t1 where pk1 = 1 and pk2 = 's1' and pk3 = '2012-12-12 12:00:00' for update;
+commit;
+
+
+connection conn1;
+drop table t1;
+
+--disable_parsing
+###
+# select for update is just for trx
+##
+create table t1(pk int primary key, a int);
+insert into t1 values(1,1);
+insert into t1 values(2,1);
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn3,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn4,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+
+--enable_parsing

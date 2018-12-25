@@ -1,0 +1,11 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tests\common\hash
+2
+7
+10:test_hashmap.cpp|1|166f775de8c|20cc|d7288645|daab1b0668b511e8a8030002c8c1274c|0
+16:test_simpleallocer.cpp|1|166f775de6e|a25|63e013b0|d86b1aea68b511e8a8030002c8c1274c|0
+b:Makefile.am|1|166f775de4b|438|73306354|d63b1ace68b511e8a8030002c8c1274c|0
+1a:test_placement_hashset.cpp|1|166f775debf|b29|220031e3|dcbb1b2268b511e8a8030002c8c1274c|0
+10:test_hashset.cpp|1|166f775ded3|32e|d3ccfb71|df1b1b3e68b511e8a8030002c8c1274c|0
+1a:test_placement_hashmap.cpp|1|166f775dee6|aaf|6ff41328|e10b1b5a68b511e8a8030002c8c1274c|0
+d:hash_benz.cpp|1|166f775def9|1f7a|c5e23ae4|e32b1b7668b511e8a8030002c8c1274c|0

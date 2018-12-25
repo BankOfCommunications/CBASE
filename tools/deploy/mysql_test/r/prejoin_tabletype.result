@@ -1,0 +1,114 @@
+alter system set merge_delay_interval='1s' server_type=chunkserver;
+alter system set merge_delay_for_lsync='1s' server_type=chunkserver;
+alter system set min_drop_cache_wait_time='10s' server_type=chunkserver;
+alter system set merge_thread_per_disk=10 server_type=chunkserver;
+alter system set each_tablet_sync_meta=False server_type=chunkserver;
+drop table if exists c,stu;
+create table stu(sid varchar(10),cid varchar(10), score int, cname varchar(200), primary key(sid)) JOIN_INFO='[cid$cid]%c:cname$cname';
+ERROR HY000: Wrong join info, please check join info
+drop table if exists c,stu;
+create table c(cid varchar(10) primary key,cname varchar(200));
+create table stu(sid varchar(10),cid varchar(10), score int, cname varchar(200), primary key(sid)) JOIN_INFO='[cid$cid]%c:cname$cname';
+drop table if exists c,stu;
+create table c(cid varchar(10),cname varchar(200) primary key);
+create table stu(sid varchar(10),cid varchar(10), score int, cname varchar(200), primary key(sid)) JOIN_INFO='[cid$cid]%c:cname$cname';
+ERROR HY000: Wrong join info, please check join info
+drop table if exists c,stu;
+create table c(cid varchar(10) primary key,cname varchar(200)) EXPIRE_INFO='cname = ''animal''';
+create table stu(sid varchar(10),cid varchar(10), score int, cname varchar(200), primary key(sid,cid)) JOIN_INFO='[cid$cid]%c:cname$cname';
+insert into c values(NULL,NULL);
+insert into c values('0000',NULL);
+insert into c values('0001','animal');
+insert into c values('0002','beatuy');
+insert into c values('0003','chinese');
+insert into c values('0004','daa');
+insert into stu(sid,cid,score) values(NULL,'0001',100);
+insert into stu(sid,cid,score) values('2002999',NULL,0);
+insert into stu(sid,cid,score) values('2002000','0001',90);
+insert into stu(sid,cid,score) values('2002001','0001',100);
+insert into stu(sid,cid,score) values('2002002','0000',50);
+insert into stu(sid,cid,score) values('2002003','0000',50);
+insert into stu(sid,cid,score) values('2002004','0002',50);
+insert into stu(sid,cid,score) values('2002005','0005',50);
+insert into stu(sid,cid,score) values('2002005','0005',50),('2002006','0006',50);
+ERROR 23000: Duplicate entry ' <3005.16>=varchar:2002005 <3005.17>=varchar:0005' for key 'PRIMARY'
+select * from stu;
+sid	cid	score	cname
+NULL	0001	100	animal
+2002000	0001	90	animal
+2002001	0001	100	animal
+2002002	0000	50	NULL
+2002003	0000	50	NULL
+2002004	0002	50	beatuy
+2002005	0005	50	NULL
+2002999	NULL	0	NULL
+select * from stu where sid is NULL and cid = '0001';
+sid	cid	score	cname
+NULL	0001	100	animal
+select * from stu where sid='2002999' and cid is NULL;
+sid	cid	score	cname
+2002999	NULL	0	NULL
+select * from stu where sid='2002000' and cid = '0001';
+sid	cid	score	cname
+2002000	0001	90	animal
+select * from stu where sid='2002001' and cid = '0001';
+sid	cid	score	cname
+2002001	0001	100	animal
+select * from stu where sid='2002002' and cid = '0000';
+sid	cid	score	cname
+2002002	0000	50	NULL
+select * from stu where sid='2002003' and cid = '0000';
+sid	cid	score	cname
+2002003	0000	50	NULL
+select * from stu where sid='2002004' and cid = '0002';
+sid	cid	score	cname
+2002004	0002	50	beatuy
+select * from stu where sid='2002005' and cid = '0005';
+sid	cid	score	cname
+2002005	0005	50	NULL
+select * from stu where sid='2002005' and cid = '0000';
+sid	cid	score	cname
+[major_freeze] err=0
+select * from c;
+cid	cname
+NULL	NULL
+0000	NULL
+0002	beatuy
+0003	chinese
+0004	daa
+select * from stu;
+sid	cid	score	cname
+NULL	0001	100	animal
+2002000	0001	90	animal
+2002001	0001	100	animal
+2002002	0000	50	NULL
+2002003	0000	50	NULL
+2002004	0002	50	beatuy
+2002005	0005	50	NULL
+2002999	NULL	0	NULL
+select * from stu where sid is NULL and cid = '0001';
+sid	cid	score	cname
+NULL	0001	100	animal
+select * from stu where sid='2002999' and cid is NULL;
+sid	cid	score	cname
+2002999	NULL	0	NULL
+select * from stu where sid='2002000' and cid = '0001';
+sid	cid	score	cname
+2002000	0001	90	animal
+select * from stu where sid='2002001' and cid = '0001';
+sid	cid	score	cname
+2002001	0001	100	animal
+select * from stu where sid='2002002' and cid = '0000';
+sid	cid	score	cname
+2002002	0000	50	NULL
+select * from stu where sid='2002003' and cid = '0000';
+sid	cid	score	cname
+2002003	0000	50	NULL
+select * from stu where sid='2002004' and cid = '0002';
+sid	cid	score	cname
+2002004	0002	50	beatuy
+select * from stu where sid='2002005' and cid = '0005';
+sid	cid	score	cname
+2002005	0005	50	NULL
+select * from stu where sid='2002005' and cid = '0000';
+sid	cid	score	cname

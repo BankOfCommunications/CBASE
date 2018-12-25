@@ -1,0 +1,909 @@
+drop table if exists seq_insert;
+create table seq_insert(id int primary key,c1 int,c2 decimal(25,0));
+create index seq_insert_index1 on seq_insert (c1) storing (c2);
+create index seq_insert_index2 on seq_insert (c2) storing (c1);
+create or replace sequence seq;
+insert into seq_insert values(nextval for seq,nextval for seq+nextval for seq,0);
+insert into seq_insert values(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq);
+"merge"
+[major_freeze] err=0
+__3001__idx__seq_insert_index1
+__3001__idx__seq_insert_index2
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+14	28	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+14	28	1
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+14	28	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+14	28	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+14	28	1
+delete from seq_insert where id = prevval for seq;
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+delete from seq_insert where id = prevval for seq1;
+ERROR HY000: the sequence::[seq1] you input is not exist,please check!
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+delete from seq_insert where id = prevval for seq +1;
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+delete from seq_insert where id >= prevval for seq;
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+12	24	1
+13	26	1
+delete from seq_insert where id >= prevval for seq-2;
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+create or replace sequence seq;
+delete from seq_insert where id = prevval for seq;
+ERROR HY000: THE PREVVAL expression of  sequence [seq] can't be used before using NEXTVAL
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+create or replace sequence seq;
+delete from seq_insert where id <= prevval for seq;
+ERROR HY000: THE PREVVAL expression of  sequence [seq] can't be used before using NEXTVAL
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+create or replace sequence seq;
+delete from seq_insert where id = prevval for seq +1;
+ERROR HY000: THE PREVVAL expression of  sequence [seq] can't be used before using NEXTVAL
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+create or replace sequence seq;
+delete from seq_insert where id <= prevval for seq +1;
+ERROR HY000: THE PREVVAL expression of  sequence [seq] can't be used before using NEXTVAL
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+create or replace sequence seq;
+delete from seq_insert where id = prevval for seq +prevval for seq;
+ERROR HY000: THE PREVVAL expression of  sequence [seq] can't be used before using NEXTVAL
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+create or replace sequence seq;
+delete from seq_insert where id <= prevval for seq +prevval for seq;
+ERROR HY000: THE PREVVAL expression of  sequence [seq] can't be used before using NEXTVAL
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+10	20	1
+11	22	1
+select nextval for seq from seq_insert;
+nextval for seq
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+delete from seq_insert where id between 10 and prevval for seq;
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+9	18	1
+select nextval for seq from seq_insert;
+nextval for seq
+12
+13
+14
+15
+16
+17
+18
+19
+20
+delete from seq_insert where id between 9 and prevval for seq+1;
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select nextval for seq from seq_insert;
+nextval for seq
+21
+22
+23
+24
+25
+26
+27
+28
+delete from seq_insert where id between 9 and prevval for seq+prevval for seq;
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select nextval for seq from seq_insert;
+nextval for seq
+29
+30
+31
+32
+33
+34
+35
+36
+delete from seq_insert where id between 9 and prevval for seq+prevval for seq1;
+ERROR HY000: the sequence::[seq1] you input is not exist,please check!
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+create or replace sequence seq as decimal(25,0) minvalue 1234567891234567891234;
+select nextval for seq;
+nextval for seq
+1234567891234567891234
+delete from seq_insert where id = prevval for seq;
+ERROR HY000: OB-5047: No rowkey column specified
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+create or replace sequence seq as decimal(25,0) minvalue 1234567891234567891234;
+select nextval for seq;
+nextval for seq
+1234567891234567891234
+delete from seq_insert where id >= prevval for seq;
+ERROR HY000: @
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+create or replace sequence seq quick;
+delete from seq_insert where id = prevval for seq;
+ERROR HY000: THE PREVVAL expression of  sequence [seq] can't be used before using NEXTVAL
+select * from seq_insert;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+1	2	0
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+create or replace sequence seq quick;
+select nextval for seq;
+nextval for seq
+1
+delete from seq_insert where id = prevval for seq;
+select * from seq_insert;
+id	c1	c2
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+create or replace sequence seq quick;
+select nextval for seq;
+nextval for seq
+1
+delete from seq_insert where id <= prevval for seq;
+select * from seq_insert;
+id	c1	c2
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index1;
+id	c1	c2
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1
+select * from __3001__idx__seq_insert_index2;
+id	c1	c2
+2	4	1
+3	6	1
+4	8	1
+5	10	1
+6	12	1
+7	14	1
+8	16	1

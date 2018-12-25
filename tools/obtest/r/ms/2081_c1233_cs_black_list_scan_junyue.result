@@ -1,0 +1,7 @@
+ob1=OBI(cluster=1222,use_fms=0)
+ob1.reboot
+ob1.update_cluster
+ob1.create_client
+ob1.cs0.stop
+ms0 success
+ms1 success

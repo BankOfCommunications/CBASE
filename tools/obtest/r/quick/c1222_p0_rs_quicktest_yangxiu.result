@@ -1,0 +1,58 @@
+ob1=OBI(cluster=1222, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable)
+ob1.cs0.set sstable_dist={1,2,3}
+ob1.cs1.set sstable_dist=0
+ob1.rs0.set extra_config=tablet_replicas_num=1,enable_balance=False
+ob1.reboot
+ob1.create_client
+ob1.prepare
+ob1.start_check
+cs0,ms0 stop
+ob1.cs0.stop
+ob1.ms0.stop
+count(*)=5
+1
+cs0,ms0 nstart
+ob1.cs0.nstart
+ob1.ms0.nstart
+count(*)=7
+1
+create table test_1 (a int primary key, b int);
+create table test_2 (a int primary key, b int);
+count(*)=18
+1
+count(*)=179
+1
+insert into test_1 values(1,1),(2,2),(3,3);
+insert into test_2 values(-1,-1),(-2,-2),(-3,-3);
+drop table test_1;
+count(*)=17
+1
+count(*)=177
+1
+ob1.stop_check
+ob1.$master.stop
+ob1.$master.nstart
+ob1.source include/migrate.inc
+ob1.mysql alter system set tablet_replicas_num=2 server_type=rootserver
+ob1.check_cs_sstable 406
+ob1.source include/merge.inc
+ob1.major_freeze
+ob1.check_cs_version 2
+ob1.rs0.restart
+ob1.set_obi_role OBI_MASTER
+create table test_1 (a int primary key,b int);
+insert into test_1 values(1,1),(-1,-1);
+update test_1 set b=0 where a=-1;
+update test_2 set b=1 where a=0;
+select * from test_1;
+a	b
+-1	0
+1	1
+select * from test_2;
+a	b
+-3	-3
+-2	-2
+-1	-1
+ob1.change_ups_master $slave
+ob1.major_freeze
+ob1.check_cs_version 3

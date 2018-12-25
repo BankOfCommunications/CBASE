@@ -1,0 +1,112 @@
+drop table if exists t1,t2,t3,t4;
+create table t1(pk int primary key,extra int);
+insert into t1(pk) values(1),(2);
+select * from t1;
+pk	extra
+1	NULL
+2	NULL
+insert into t1(pk,extra) values(3,NULL),(4,NULL);
+select * from t1;
+pk	extra
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+insert into t1(pk,extra) values(NULL,NULL);
+select * from t1;
+pk	extra
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+NULL	NULL
+select * from t1 where extra = NULL;
+pk	extra
+select * from t1 where extra != NULL;
+pk	extra
+select * from t1 where extra is NULL;
+pk	extra
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+NULL	NULL
+select * from t1 where extra is not NULL;
+pk	extra
+select * from t1 where pk is NULL;
+pk	extra
+NULL	NULL
+select * from t1 where pk = NULL;
+pk	extra
+select * from t1 where pk != NULL;
+pk	extra
+select * from t1 where pk is not  NULL;
+pk	extra
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select * from t1 where pk in (NULL);
+pk	extra
+select * from t1 where pk in (NULL,1);
+pk	extra
+1	NULL
+select * from t1 where null > null;
+pk	extra
+select * from t1 where null < null;
+pk	extra
+select * from t1 where null = null;
+pk	extra
+select * from t1 where null > 1;
+pk	extra
+select * from t1 where null < 1;
+pk	extra
+select * from t1 where null is null;
+pk	extra
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+NULL	NULL
+update t1 set extra=1 where pk = NULL;
+select * from t1;
+pk	extra
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+NULL	1
+update t1 set extra=1 where pk != NULL;
+update t1 set extra=1 where pk is NULL;
+update t1 set extra=1 where pk is not NULL;
+delete from t1 where pk = NULL;
+select * from t1;
+pk	extra
+1	1
+2	1
+3	1
+4	1
+delete from t1 where pk is NULL;
+delete from t1 where pk is not NULL;
+delete from t1 where pk != NULL;
+set autocommit=0;
+select * from t1;
+pk	extra
+insert into t1 values(5,NULL);
+insert into t1 values(null,NULL);
+select * from t1  where extra is NULL and pk=5 for update;
+ERROR HY000: Exclusive lock conflict 'int32:5' for key 'PRIMARY'
+select * from t1  where extra is NULL and pk is null for update;
+ERROR HY000: Exclusive lock conflict 'null:' for key 'PRIMARY'
+commit;
+select * from t1  where extra is NULL and pk=5 for update;
+pk	extra
+5	NULL
+select * from t1  where extra is not NULL and pk=5 for update;
+pk	extra
+select * from t1  where extra is  NULL and pk is null for update;
+pk	extra
+NULL	NULL
+select * from t1  where extra is not NULL and pk is not  null for update;
+ERROR HY000: Primary key column 16 not specified in the WHERE clause
+set autocommit=1;

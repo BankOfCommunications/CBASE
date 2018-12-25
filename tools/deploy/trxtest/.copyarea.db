@@ -1,0 +1,7 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\deploy\trxtest
+2
+3
+15:trxtest.conf.template|1|166f778aea4|4da|5ea4d58a|691c087268c811e8a8030002c8c1274c|0
+9:stress.sh|1|166f778aedb|d5b|9694cd3|6b2c088e68c811e8a8030002c8c1274c|0
+a:trxtest.py|1|166f778af12|4f2|1858a969|6d3c08aa68c811e8a8030002c8c1274c|0

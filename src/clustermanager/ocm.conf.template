@@ -1,0 +1,7 @@
+[ocm]
+pid_file=./log/ocm.pid
+log_file=./log/ocm.log
+data_dir=./
+log_level=info
+trace_log_level=info
+max_log_file_size=256

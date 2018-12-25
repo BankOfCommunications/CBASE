@@ -1,0 +1,73 @@
+--source $LOCAL_DIR/mysql_test/import-export/include.inc 
+
+--let $TABLE=ie_all_types
+--let $DB=test
+--let $TEST_NAME=ie_all_types
+--let $IM_FILE=$IM_DEL/ie_all_types.del
+--let $EX_FILE=$EX_DEL/$TEST_NAME.del
+
+eval using database $DB;
+# --disable_warnings
+eval drop table if exists $TABLE;
+# --enable_warnings
+
+eval create table ie_all_types
+(
+it0 int,
+it1 int,
+it2 int,
+
+bg0 bigint,
+bg1 bigint,
+bg2 bigint,
+
+db0 double,
+db1 double,
+db2 double,
+
+dc0 decimal(30,5),
+dc1 decimal(30,5),
+dc2 decimal(30,0),
+
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256),
+
+ts0 timestamp,
+ts1 timestamp,
+ts2 timestamp,
+
+dt0 date,
+dt1 date,
+dt2 date,
+
+tm0 time,
+tm1 time,
+tm2 time,
+
+primary key(it0, bg0, db0, dc0, vc0, ts0, dt0, tm0)
+
+);
+
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+       -l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE
+&> /dev/null;
+
+eval select * from $TABLE;
+
+exec $EX_EXE --masterpercent 100 
+-t $DB.$TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+       -l $EX_LOG/$TABLE.log 
+--badfile $EX_BAD/$TABLE.bad 
+-f $EX_FILE
+&> /dev/null;
+
+exec cat $EX_FILE;

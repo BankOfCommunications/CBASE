@@ -1,0 +1,63 @@
+deploy ob1=OBI(cluster=1221,ct_num=3);
+
+deploy ob1.reboot;
+
+deploy ob1.mysql create table t1(c1 int primary key, c2 int);
+
+deploy ob1.register;
+
+#set initialSize = 0
+deploy ob1.set_diamond initialSize:0;
+
+deploy ob1.ct0.sh rm -rf ~/.obdatasource/*;
+deploy ob1.ct0.reboot;
+sleep 5;
+let $a = deploy_get_value(ob1.ms0.monitor sql_succ_login_count);
+let $b = deploy_get_value(ob1.ms0.monitor sql_logout_count);
+let $c = deploy_get_value(ob1.ms0.monitor sql_fail_login_count);
+let $d = math($a-$b+$c);
+--echo $d
+
+let $a = deploy_get_value(ob1.ms1.monitor sql_succ_login_count);
+let $b = deploy_get_value(ob1.ms1.monitor sql_logout_count);
+let $c = deploy_get_value(ob1.ms1.monitor sql_fail_login_count);
+let $d = math($a-$b+$c);
+--echo $d
+
+#set initialSize = 5
+deploy ob1.set_diamond initialSize:5;
+
+deploy ob1.ct1.sh rm -rf ~/.obdatasource/*;
+deploy ob1.ct1.reboot;
+sleep 5;
+let $a = deploy_get_value(ob1.ms0.monitor sql_succ_login_count);
+let $b = deploy_get_value(ob1.ms0.monitor sql_logout_count);
+let $c = deploy_get_value(ob1.ms0.monitor sql_fail_login_count);
+let $d = math($a-$b+$c);
+--echo $d
+
+let $a = deploy_get_value(ob1.ms1.monitor sql_succ_login_count);
+let $b = deploy_get_value(ob1.ms1.monitor sql_logout_count);
+let $c = deploy_get_value(ob1.ms1.monitor sql_fail_login_count);
+let $d = math($a-$b+$c);
+--echo $d
+
+#set initialSize = 5
+deploy ob1.set_diamond initialSize:3;
+
+deploy ob1.ct2.sh rm -rf ~/.obdatasource/*;
+deploy ob1.ct2.reboot;
+sleep 5;
+let $a = deploy_get_value(ob1.ms0.monitor sql_succ_login_count);
+let $b = deploy_get_value(ob1.ms0.monitor sql_logout_count);
+let $c = deploy_get_value(ob1.ms0.monitor sql_fail_login_count);
+let $d = math($a-$b+$c);
+--echo $d
+
+let $a = deploy_get_value(ob1.ms1.monitor sql_succ_login_count);
+let $b = deploy_get_value(ob1.ms1.monitor sql_logout_count);
+let $c = deploy_get_value(ob1.ms1.monitor sql_fail_login_count);
+let $d = math($a-$b+$c);
+--echo $d
+
+

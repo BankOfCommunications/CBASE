@@ -1,0 +1,15 @@
+create table t1(c1 int primary key, c2 int);
+
+insert into t1 values(1,2),(3,4);
+
+select * from t1 where c1=1 when row_count(update t1 set c2=22 where c1=1)>0;
+
+select * from t1 where c1=3 when row_count(update t1 set c2=22 where c1=1 when row_count(update t1 set c2=44 where c1=3)=1)>0;
+
+select 1 when row_count(update t1 set c2=22 where c1=1)>0;
+
+--error 5047
+select * from t1 where c2>0 when row_count(update t1 set c2=22 where c1=1 when row_count(update t1 set c2=44 where c1=3)=1)>0;
+
+drop table t1;
+

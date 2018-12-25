@@ -1,0 +1,4 @@
+-- fail, num of columns and values are not match
+insert into user select * from item;
+select values are not match insert columns
+Resolve error!

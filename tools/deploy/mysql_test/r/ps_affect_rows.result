@@ -1,0 +1,58 @@
+drop table if exists t1;
+create table t1(pk int primary key, s varchar);
+prepare stmt_insert1 from insert into t1 values(?,?);
+prepare stmt_insert2 from insert into t1 values(?,?),(?,?),(?,?);
+prepare stmt_delete1 from delete from t1 where pk=?;
+prepare stmt_update from update t1 set s=? where pk=?;
+set @a=5;
+set @b='test1';
+execute stmt_insert1 using @a,@b;
+select * from t1;
+pk	s
+5	test1
+set @a1=7;
+set @a2=8;
+set @a3=9;
+set @b1='test2';
+set @b2='test3';
+set @b3='test4';
+execute stmt_insert2 using @a1,@b1,@a2,@b2,@a3,@b3;
+select * from t1;
+pk	s
+5	test1
+7	test2
+8	test3
+9	test4
+set @a=7;
+set @b='testUpdate';
+execute stmt_update using @b,@a;
+select * from t1;
+pk	s
+5	test1
+7	testUpdate
+8	test3
+9	test4
+set @a=12;
+set @b='testUpdate2';
+execute stmt_update using @b,@a;
+select * from t1;
+pk	s
+5	test1
+7	testUpdate
+8	test3
+9	test4
+set @a1=8;
+execute stmt_delete1 using @a1;
+select * from t1;
+pk	s
+5	test1
+7	testUpdate
+9	test4
+set @a1=12;
+execute stmt_delete1 using @a1;
+select * from t1;
+pk	s
+5	test1
+7	testUpdate
+9	test4
+drop table t1;

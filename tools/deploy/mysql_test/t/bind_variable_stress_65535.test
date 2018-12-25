@@ -1,0 +1,139 @@
+--disable_warnings
+drop table if exists t1;
+--disable_warnings
+
+##create table 51 columns
+--let $head = create table t1 (pk int primary key
+--let $sql = 
+--let $column_int=20
+--let $x=, i
+--let $y= int
+while($column_int)
+{
+    --let $sql=$sql$x$column_int $y
+    dec $column_int;
+}
+
+--let $column_varchar=20
+--let $x=, c
+--let $y= varchar(20)
+while($column_varchar)
+{
+    --let $sql=$sql$x$column_varchar $y
+    dec $column_varchar;
+}
+
+--let $column_timestamp=10
+--let $x=, t
+--let $y= timestamp
+while($column_timestamp)
+{
+    --let $sql=$sql$x$column_timestamp $y
+    dec $column_timestamp;
+}
+
+--let $z=)
+eval $head$sql$z;
+
+##replace bath size 1285
+--let $col = 50
+--let $part = (?
+--let $x = 
+while($col)
+{
+   --let $x=$x,?
+   dec $col;
+}
+--let $part=$part$x)
+
+--let $bath_size=1284
+--let $head = prepare stmt1 from insert into t1 values$part
+--let $sql = 
+while($bath_size)
+{
+   --let $sql=$sql,$part
+   dec $bath_size;
+}
+
+eval $head$sql;
+
+##set @var
+#
+--let $count=1284
+--let $part = @pk1285=1285
+while($count)
+{
+  --let $part = $part,@pk$count=$count
+  dec $count;
+}
+--let $count=20
+while($count)
+{
+    --let $part = $part,@i$count=$count
+    dec $count;
+}
+--let $count=20
+while($count)
+{
+    --let $part = $part,@v$count='a$count'
+    dec $count;
+}
+--let $count=10
+while($count)
+{
+    --let $part =$part,@t$count=timestamp'2013-09-23 15:29:00'
+    dec $count;
+}
+eval set $part;
+
+
+##execute
+
+--let $head = execute stmt1 using
+--let $part = 
+--let $count=20
+while($count)
+{
+  --let $part = $part,@i$count
+  dec $count;
+}
+
+--let $count=20
+while($count)
+{
+  --let $part = $part,@v$count
+  dec $count;
+}
+
+--let $count=10
+while($count)
+{
+  --let $part = $part,@t$count
+  dec $count;
+}
+
+--let $count=1285
+--let $sql = 
+while($count > 1)
+{
+   --let $sql = $sql@pk$count$part,
+   dec $count;
+}
+
+eval $head $sql@pk1$part;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

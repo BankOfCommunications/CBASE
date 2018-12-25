@@ -1,0 +1,10 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\obtest\r\ms
+2
+6
+3f:1001_c1244_lms_autorestart_exitcode_not_expected_yangxiu.result|1|166f7782ae3|23c|fc43a417|e68bdb4e68c411e8a8030002c8c1274c|0
+26:2090_c1111_ms_read_only_zhuweng.result|1|166f7782aaa|769|3c0e6bc4|e42bdb3268c411e8a8030002c8c1274c|0
+2b:2081_c1233_cs_black_list_scan_junyue.result|1|166f7782b45|75|1a2c2810|ebabdb8668c411e8a8030002c8c1274c|0
+24:2082_c1233_alter_table_junyue.result|1|166f7782b16|5a8|571ea2c3|e90bdb6a68c411e8a8030002c8c1274c|0
+3d:1002_c1244_lms_notrestart_exitcode_is_expected_yangxiu.result|1|166f7782b7d|fb|28974a35|edabdba268c411e8a8030002c8c1274c|0
+2a:2080_c1233_cs_black_list_get_junyue.result|1|166f7782bba|14ffa|6590609b|efbbdbbe68c411e8a8030002c8c1274c|0

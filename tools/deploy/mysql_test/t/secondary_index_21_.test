@@ -1,0 +1,21 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+create table t1 (c1 int primary key ,c2 int,c3 int );
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create index il0 on t1(c2) storing (c3);
+show index on t1;
+create index il1 on t1(c2) storing (c3);
+create index il2 on t1(c2);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 700
+show index on t1;
+show index on t1;
+show index on t1 like '%il_';
+show index on t1 like '%idx\\__il0';
+show index on t1 like '%1';
+show index on t1 where index_name='__3033__idx__il1' and status=1;
+show index on t1 where index_name like '%il_'and status=1;
+#还有索引表状态改变后查看索引表状态的目前没有实现，等到实现后再加进去吧

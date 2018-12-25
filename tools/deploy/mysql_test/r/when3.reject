@@ -1,0 +1,177 @@
+drop table if exists t1;
+create table t1(pk int primary key, c1 int);
+insert into t1 values(1,1);
+insert into t1 values(2,2);
+begin;
+replace into t1 values(1,100) when row_count(insert into t1 values(1,10) when row_count(delete from t1 where pk=1)=1)=1;
+rollback;
+select * from t1;
+pk	c1
+1	1
+2	2
+begin;
+replace into t1 values(1,100) when row_count(insert into t1 values(1,10) when row_count(delete from t1 where pk=1)=1)=1;
+select * from t1;
+pk	c1
+1	1
+2	2
+commit;
+select * from t1;
+pk	c1
+1	100
+2	2
+begin;
+insert into t1 values(2,200) when row_count(delete from t1 where pk=2 when row_count(replace into t1 values(2,20))>0)<2;
+rollback;
+select * from t1;
+pk	c1
+1	100
+2	2
+begin;
+insert into t1 values(2,200) when row_count(delete from t1 where pk=2 when row_count(replace into t1 values(2,20))>0)<2;
+commit;
+select * from t1;
+pk	c1
+1	100
+2	200
+begin;
+replace into t1 values(3,300) when row_count(replace into t1 values(3,30) when row_count(insert into t1 values(3,3))=1)>0;
+rollback;
+select * from t1;
+pk	c1
+1	100
+2	200
+begin;
+replace into t1 values(3,300) when row_count(replace into t1 values(3,30) when row_count(insert into t1 values(3,3))=1)>0;
+commit;
+select * from t1;
+pk	c1
+1	100
+2	200
+3	300
+insert into t1 values(4,400) when row_count(replace into t1 values(4,40) when row_count(insert into t1 values(4,4))>0)=1;
+ERROR 23000: Duplicate entry ' <3001.16>=int32:4' for key 'PRIMARY'
+select * from t1;
+pk	c1
+1	100
+2	200
+3	300
+replace into t1 values(5,500) when row_count(insert into t1 values(5,10) when row_count(replace into t1 values(5,5))=1)<2;
+ERROR 23000: Duplicate entry ' <3001.16>=int32:5' for key 'PRIMARY'
+select * from t1;
+pk	c1
+1	100
+2	200
+3	300
+insert into t1 values(5,10000) when row_count(replace into t1 values(5,1000) when row_count(insert into t1 values(1,1))<2)=1;
+ERROR 23000: Duplicate entry ' <3001.16>=int32:1' for key 'PRIMARY'
+select * from t1;
+pk	c1
+1	100
+2	200
+3	300
+replace into t1 values(5,500) when row_count(replace into t1 values(5,50) when row_count(insert into t1 values(5,5))=1)>1;
+ERROR HY000: Number 2 When filter failed, ret=-5064, func 1: ROW_COUNT()=1
+select * from t1;
+pk	c1
+1	100
+2	200
+3	300
+begin;
+insert into t1 values(6,6) when 
+row_count(delete from t1 where pk=6 when row_count(replace into t1 values(6,6))>0)=1
+and  
+row_count(delete from t1 where pk=6 when row_count(insert into t1 values(6,6))=1)>0;
+commit;
+select * from t1;
+pk	c1
+1	100
+2	200
+3	300
+6	6
+begin;
+insert into t1 values(7,7) when
+row_count(delete from t1 where pk=7 when row_count(replace into t1 values(7,7))=1)<2
+and  
+row_count(delete from t1 where pk=7 when row_count(insert into t1 values(7,7))<2)=1;
+rollback;
+select * from t1;
+pk	c1
+1	100
+2	200
+3	300
+6	6
+begin;
+replace into t1 values(7,700) when
+row_count(replace into t1 values(7,70) when row_count(insert into t1 values(7,7))=1)=1
+and
+row_count(replace into t1 values(7,1) when row_count(replace into t1 values(7,0))<2)>0;
+commit;
+select * from t1;
+pk	c1
+1	100
+2	200
+3	300
+6	6
+7	700
+insert into t1 values(8,8) when
+row_count(insert into t1 values(8,8))<2
+and  
+row_count(insert into t1 values(9,9))>0;
+ERROR 23000: Duplicate entry ' <3001.16>=int32:8' for key 'PRIMARY'
+select * from t1;
+pk	c1
+1	100
+2	200
+3	300
+6	6
+7	700
+replace into t1 values(9,90) when
+row_count(insert into t1 values(1,1))=1
+and
+row_count(insert into t1 values(9,9))>0;
+ERROR 23000: Duplicate entry ' <3001.16>=int32:1' for key 'PRIMARY'
+select * from t1;
+pk	c1
+1	100
+2	200
+3	300
+6	6
+7	700
+insert into t1 values(10,100) when
+row_count(insert into t1 values(10,10))<2
+and
+row_count(insert into t1 values(1,1))>0;
+ERROR 23000: Duplicate entry ' <3001.16>=int32:1' for key 'PRIMARY'
+select * from t1;
+pk	c1
+1	100
+2	200
+3	300
+6	6
+7	700
+replace into t1 values(11,11) when
+row_count(delete from t1 where pk=11 when row_count(replace into t1 values(11,11))=1)>2
+and
+row_count(delete from t1 where pk=11 when row_count(replace into t1 values(11,11))=1)=1;
+ERROR HY000: Number 3 When filter failed, ret=-5064, func 1: ROW_COUNT()=1, func 2: ROW_COUNT()=1
+select * from t1;
+pk	c1
+1	100
+2	200
+3	300
+6	6
+7	700
+replace into t1 values(12,12) when
+row_count(delete from t1 where pk=11 when row_count(replace into t1 values(11,11))=1)=1
+and
+row_count(delete from t1 where pk=11 when row_count(replace into t1 values(11,11))=1)<0;
+ERROR HY000: Number 3 When filter failed, ret=-5064, func 1: ROW_COUNT()=1, func 2: ROW_COUNT()=1
+select * from t1;
+pk	c1
+1	100
+2	200
+3	300
+6	6
+7	700
+drop table t1;

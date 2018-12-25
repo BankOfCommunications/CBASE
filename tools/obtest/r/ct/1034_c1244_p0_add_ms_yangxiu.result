@@ -1,0 +1,23 @@
+ob1=OBI(cluster=1244)
+ob1.ms1.set status=disable
+ob1.ms2.set status=disable
+ob1.ms3.set status=disable
+ob1.reboot
+ob1.prepare
+ob1.start_check
+ob1.set updateconfPeriod=15
+ob1.create_client
+create table t1(a int primary key,b int);
+insert into t1 values(1,1),(2,-2),(0,0);
+select * from t1;
+a	b
+0	0
+1	1
+2	-2
+ob1.ms1.set status=enable
+ob1.ms2.set status=enable
+ob1.ms3.set status=enable
+ob1.ms1.start
+ob1.ms2.start
+ob1.ms3.start
+ob1.stop_check

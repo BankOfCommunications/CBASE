@@ -1,0 +1,4 @@
+-- fail, but mysql is ok!!!
+select (user_id, item_id, 10) in ((1, 8, 9), (2,9,6), (select user_id, item_id, qty)) from order_list;
+parse_sql error!
+syntax error at 1:84

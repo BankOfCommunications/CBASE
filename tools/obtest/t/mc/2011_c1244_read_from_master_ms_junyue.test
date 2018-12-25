@@ -1,0 +1,140 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+
+sleep 60;
+deploy ob1.mysql set global ob_read_consistency=4;
+sleep 10;
+let $c=deploy_get_value(ob1.mysql_p select cluster_id,cluster_role,cluster_flow_percent from __all_cluster);
+--echo $c
+
+deploy ob1.create_client;
+
+let $cnt=3;
+let $selectSum=0;
+let $insertSum=0;
+let $updateSum=0;
+let $deleteSum=0;
+while($cnt >=0)
+{
+    let $a = deploy_get_value(ob2.ms$cnt.monitor sql_select_count);
+	let $selectSum = math($selectSum+$a);
+	let $a = deploy_get_value(ob2.ms$cnt.monitor sql_insert_count);
+	let $insertSum = math($insertSum+$a);
+	let $a = deploy_get_value(ob2.ms$cnt.monitor sql_update_count);
+	let $updateSum = math($updateSum+$a);
+	let $a = deploy_get_value(ob2.ms$cnt.monitor sql_delete_count);
+    let $deleteSum = math($deleteSum+$a);
+    dec $cnt;
+}
+
+create table t1(c1 int primary key, c2 int);
+
+--disable_query_log
+--disable_result_log
+let $cnt=1000;
+while($cnt > 500)
+{
+  eval replace into t1 values($cnt,$cnt);
+  dec $cnt;
+}
+while($cnt)
+{
+  eval insert into t1 values($cnt,$cnt);
+  dec $cnt;
+}
+
+let $cnt=1000;
+while($cnt > 500)
+{
+  eval update t1 set c2=1 where c1=$cnt;
+  dec $cnt;
+}
+while($cnt)
+{
+  eval delete from t1 where c1=$cnt;
+  dec $cnt;
+}
+
+# wait for slave ob create tablet
+#sleep 60;
+let $cnt=1000;
+while($cnt)
+{
+  eval select * from t1 where c1=$cnt;
+  dec $cnt;
+}
+let $mlms=deploy_get_value(ob1.fs0.mysql_port);
+let $slms=deploy_get_value(ob2.fs0.mysql_port);
+
+let $a=deploy_get_value(ob1.mysql_p select value>0 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name like '%sql_succ_query_count%' and svr_port!=$mlms);
+--echo master cluster
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select value>0 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name like 'sql_replace_count' and svr_port!=$mlms);
+--echo master cluster replace count
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select value>0 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name like 'sql_insert_count' and svr_port!=$mlms);
+--echo master cluster insert count
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select value>0 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name like 'sql_update_count' and svr_port!=$mlms);
+--echo master cluster update count
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select value>0 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name like 'sql_delete_count' and svr_port!=$mlms);
+--echo master cluster delete count
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select value>0 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name like 'sql_select_count' and svr_port!=$mlms);
+--echo master cluster select count
+--echo $a
+
+let $cnt=3;
+let $select2Sum=0;
+let $insert2Sum=0;
+let $update2Sum=0;
+let $delete2Sum=0;
+while($cnt >=0)
+{
+    let $a = deploy_get_value(ob2.ms$cnt.monitor sql_select_count);
+    let $select2Sum = math($select2Sum+$a);
+    let $a = deploy_get_value(ob2.ms$cnt.monitor sql_insert_count);
+    let $insert2Sum = math($insert2Sum+$a);
+    let $a = deploy_get_value(ob2.ms$cnt.monitor sql_update_count);
+    let $update2Sum = math($update2Sum+$a);
+    let $a = deploy_get_value(ob2.ms$cnt.monitor sql_delete_count);
+    let $delete2Sum = math($delete2Sum+$a);
+    dec $cnt;
+}
+
+let $sub = math($select2Sum - $selectSum);
+if($sub > 0)
+{
+	--echo slave cluster select count $select2Sum,befor $selectSum
+}
+
+let $sub = math($insert2Sum - $insertSum);
+if($sub > 0)
+{
+    --echo slave cluster insert count $insert2Sum,befor $insertSum
+}
+
+let $sub = math($update2Sum - $updateSum);
+if($sub > 0)
+{
+    --echo slave cluster update count $update2Sum,befor $updateSum
+}
+
+let $sub = math($delete2Sum - $deleteSum);
+if($sub > 0)
+{
+    --echo slave cluster insert count $delete2Sum,befor $deleteSum
+}
+
+

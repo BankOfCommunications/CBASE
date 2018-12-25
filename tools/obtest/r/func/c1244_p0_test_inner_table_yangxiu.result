@@ -1,0 +1,272 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.create_client
+ob1.prepare
+ob1.start_check
+******  begin verify inner table ************
+SHOW VARIABLES like '%increment%';
+variable_name	value
+auto_increment_increment	1
+SHOW GLOBAL VARIABLES like '%increment%';
+variable_name	value
+auto_increment_increment	1
+show grants;
+grants
+GRANT ALL PRIVILEGES ,GRANT OPTION ON * TO 'admin'
+GRANT GRANT OPTION ON test TO 'admin'
+ob1.mysql show processlist
+SHOW TABLES like '\\_\\_%';
+table_name
+__first_tablet_entry
+__all_all_column
+__all_join_info
+__all_client
+__all_cluster
+__all_server
+__all_server_session
+__all_server_stat
+__all_statement
+__all_sys_config
+__all_sys_config_stat
+__all_sys_param
+__all_sys_stat
+__all_table_privilege
+__all_trigger_event
+__all_user
+show columns from __all_sys_stat;
+field	type	nullable	key	default	extra
+gm_create	createtime	0	0	NULL	
+gm_modify	modifytime	0	0	NULL	
+cluster_id	int	0	1	NULL	
+name	varchar(256)	0	2	NULL	
+data_type	int	0	0	NULL	
+value	varchar(256)	0	0	NULL	
+info	varchar(256)	0	0	NULL	
+select table_name from __first_tablet_entry limit 1;
+table_name
+__all_client
+select table_id from __all_all_column limit 1;
+table_id
+4
+select * from __all_join_info;
+gm_create	gm_modify	left_table_id	left_column_id	right_table_id	right_column_id	left_table_name	left_column_name	right_table_name	right_column_name
+ob1.mysql select * from __all_server_session
+select name,data_type from __all_sys_param limit 1;
+name	data_type
+auto_increment_increment	1
+select cluster_id,name,data_type from __all_sys_stat;
+cluster_id	name	data_type
+0	ob_current_privilege_version	1
+0	ob_max_used_table_id	1
+0	ob_max_user_id	1
+select table_id,priv_all from __all_table_privilege;
+table_id	priv_all
+3001	1
+select user_name,user_id from __all_user;
+user_name	user_id
+admin	1
+count(*)
+5
+ob1.ms0.stop
+ob1.cs0.stop
+ob1.$slaveups.stop
+********** after stop server ***********
+SHOW VARIABLES like '%increment%';
+variable_name	value
+auto_increment_increment	1
+SHOW GLOBAL VARIABLES like '%increment%';
+variable_name	value
+auto_increment_increment	1
+show grants;
+grants
+GRANT ALL PRIVILEGES ,GRANT OPTION ON * TO 'admin'
+GRANT GRANT OPTION ON test TO 'admin'
+ob1.mysql show processlist
+SHOW TABLES like '\\_\\_%';
+table_name
+__first_tablet_entry
+__all_all_column
+__all_join_info
+__all_client
+__all_cluster
+__all_server
+__all_server_session
+__all_server_stat
+__all_statement
+__all_sys_config
+__all_sys_config_stat
+__all_sys_param
+__all_sys_stat
+__all_table_privilege
+__all_trigger_event
+__all_user
+show columns from __all_sys_stat;
+field	type	nullable	key	default	extra
+gm_create	createtime	0	0	NULL	
+gm_modify	modifytime	0	0	NULL	
+cluster_id	int	0	1	NULL	
+name	varchar(256)	0	2	NULL	
+data_type	int	0	0	NULL	
+value	varchar(256)	0	0	NULL	
+info	varchar(256)	0	0	NULL	
+select table_name from __first_tablet_entry limit 1;
+table_name
+__all_client
+select table_id from __all_all_column limit 1;
+table_id
+4
+select * from __all_join_info;
+gm_create	gm_modify	left_table_id	left_column_id	right_table_id	right_column_id	left_table_name	left_column_name	right_table_name	right_column_name
+ob1.mysql select * from __all_server_session
+select name,data_type from __all_sys_param limit 1;
+name	data_type
+auto_increment_increment	1
+select cluster_id,name,data_type from __all_sys_stat;
+cluster_id	name	data_type
+0	ob_current_privilege_version	1
+0	ob_max_used_table_id	1
+0	ob_max_user_id	1
+select table_id,priv_all from __all_table_privilege;
+table_id	priv_all
+3001	1
+select user_name,user_id from __all_user;
+user_name	user_id
+admin	1
+count(*)
+4
+ob1.ms0.nstart
+ob1.cs0.nstart
+ob1.$slaveups.nstart
+********** add server **********
+SHOW VARIABLES like '%increment%';
+variable_name	value
+auto_increment_increment	1
+SHOW GLOBAL VARIABLES like '%increment%';
+variable_name	value
+auto_increment_increment	1
+show grants;
+grants
+GRANT ALL PRIVILEGES ,GRANT OPTION ON * TO 'admin'
+GRANT GRANT OPTION ON test TO 'admin'
+ob1.mysql show processlist
+SHOW TABLES like '\\_\\_%';
+table_name
+__first_tablet_entry
+__all_all_column
+__all_join_info
+__all_client
+__all_cluster
+__all_server
+__all_server_session
+__all_server_stat
+__all_statement
+__all_sys_config
+__all_sys_config_stat
+__all_sys_param
+__all_sys_stat
+__all_table_privilege
+__all_trigger_event
+__all_user
+show columns from __all_sys_stat;
+field	type	nullable	key	default	extra
+gm_create	createtime	0	0	NULL	
+gm_modify	modifytime	0	0	NULL	
+cluster_id	int	0	1	NULL	
+name	varchar(256)	0	2	NULL	
+data_type	int	0	0	NULL	
+value	varchar(256)	0	0	NULL	
+info	varchar(256)	0	0	NULL	
+select table_name from __first_tablet_entry limit 1;
+table_name
+__all_client
+select table_id from __all_all_column limit 1;
+table_id
+4
+select * from __all_join_info;
+gm_create	gm_modify	left_table_id	left_column_id	right_table_id	right_column_id	left_table_name	left_column_name	right_table_name	right_column_name
+ob1.mysql select * from __all_server_session
+select name,data_type from __all_sys_param limit 1;
+name	data_type
+auto_increment_increment	1
+select cluster_id,name,data_type from __all_sys_stat;
+cluster_id	name	data_type
+0	ob_current_privilege_version	1
+0	ob_max_used_table_id	1
+0	ob_max_user_id	1
+select table_id,priv_all from __all_table_privilege;
+table_id	priv_all
+3001	1
+select user_name,user_id from __all_user;
+user_name	user_id
+admin	1
+count(*)
+5
+ob1.stop_check
+********** switch cluster **********
+ob1.switch_cluster ob2
+SHOW VARIABLES like '%increment%';
+variable_name	value
+auto_increment_increment	1
+SHOW GLOBAL VARIABLES like '%increment%';
+variable_name	value
+auto_increment_increment	1
+show grants;
+grants
+GRANT ALL PRIVILEGES ,GRANT OPTION ON * TO 'admin'
+GRANT GRANT OPTION ON test TO 'admin'
+ob1.mysql show processlist
+show TABLES like '\\_\\_%';
+table_name
+__first_tablet_entry
+__all_all_column
+__all_join_info
+__all_client
+__all_cluster
+__all_server
+__all_server_session
+__all_server_stat
+__all_statement
+__all_sys_config
+__all_sys_config_stat
+__all_sys_param
+__all_sys_stat
+__all_table_privilege
+__all_trigger_event
+__all_user
+show columns from __all_sys_stat;
+field	type	nullable	key	default	extra
+gm_create	createtime	0	0	NULL	
+gm_modify	modifytime	0	0	NULL	
+cluster_id	int	0	1	NULL	
+name	varchar(256)	0	2	NULL	
+data_type	int	0	0	NULL	
+value	varchar(256)	0	0	NULL	
+info	varchar(256)	0	0	NULL	
+select table_name from __first_tablet_entry limit 1;
+table_name
+__all_client
+select table_id from __all_all_column limit 1;
+table_id
+4
+select * from __all_join_info;
+gm_create	gm_modify	left_table_id	left_column_id	right_table_id	right_column_id	left_table_name	left_column_name	right_table_name	right_column_name
+ob1.mysql select * from __all_server_session
+select name,data_type from __all_sys_param limit 1;
+name	data_type
+auto_increment_increment	1
+select cluster_id,name,data_type from __all_sys_stat;
+cluster_id	name	data_type
+0	ob_current_privilege_version	1
+0	ob_max_used_table_id	1
+0	ob_max_user_id	1
+select table_id,priv_all from __all_table_privilege;
+table_id	priv_all
+3001	1
+select user_name,user_id from __all_user;
+user_name	user_id
+admin	1
+count(*)
+5

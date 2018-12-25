@@ -1,0 +1,71 @@
+drop table if exists t1;
+create table t1 (c1 int primary key ,c2 int,c3 int );
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create index il0 on t1(c2) storing (c3);
+insert into t1 values(1,1,1);
+"merge"
+[major_freeze] err=0
+select * from  __3001__idx__il0;
+c1	c2	c3
+1	1	1
+insert into t1(c1,c3) values(2,2);
+select * from  __3001__idx__il0;
+c1	c2	c3
+1	1	1
+2	NULL	2
+insert into t1(c1,c3) values(4,3);
+select * from  __3001__idx__il0;
+c1	c2	c3
+1	1	1
+2	NULL	2
+4	NULL	3
+create index il2 on t1(c1) storing (c3);
+"merge"
+[major_freeze] err=0
+explain insert into t1(c1,c3) values (3,3);
+Query Plan
+Explain()
+UpsExecutor(ups_plan=PhysicalPlan(operators_num=10 query_num=3 trans_id=TransID(sd=0,ups=0.0.0.0,start=0) start_trans=N trans_req=TransReq(type=1,isolation=2,start_time=0,timeout=100000000,idletime=100000000))
+====MainQuery====
+ObUpsModifyWithDmlType(dml_type=insert)
+ObIndexTrigger(main_table_id_=3001 index_num_=2 cur_index_=0)
+InsertDBSemFilter(input_values_subquery=7 values=ExprValues(values_num=0, values=, row_desc=rowkey_cell_count[0],)
+)
+ObEmptyRowFilter()
+MuitipleGetMerge(children_num=2)
+Child0:
+MemSSTableScan(static_data_subquery=3, row_desc=rowkey_cell_count[0],, row_store=data_size=0 block_count=0, from_deserialize=N)
+Child1:
+IncScan(scan_type=MGET[1], hotspot=false, lock=1, subquery=7, get_param=NULL scan_param=NULL)
+====SubQuery1====
+Values(row_store=data_size=0 block_count=0)
+TableRpcScan(read_method=GET, is use index for storing=0,index tid=-1; is use index without storing=0,index tid=-1,rpc_scan=<RpcScan(Hint=<max_parallel_count=20, is_get_skip_empty_row_=false, read_method_=2, read_consistency=FROZEN>, tid=18446744073709551615 Filter(filters=[expr<NULL,18446744073709551615>=[COL<3001,16>|ROW<1>|LEFT_PARAM_END<2>|int:3|ROW<1>|ROW<1>|IN<2>|],])Project(rowkey_count=0, columns=[expr<3001,16>=[COL<3001,16>|],expr<NULL,65520>=[COL<NULL,65520>|]])[Get RowNum:0]:
+)TransID(sd=0,ups=0.0.0.0,start=0>)
+====SubQuery2====
+ExprValues(values_num=2, values=<0:expr<NULL,65519>=[int:3|]> <1:expr<NULL,65518>=[int:3|]> , row_desc=rowkey_cell_count[1],<3001,16>,<3001,18>,)
+)
+
+explain insert into t1(c1,c2) values(4,4);
+Query Plan
+Explain()
+UpsExecutor(ups_plan=PhysicalPlan(operators_num=10 query_num=3 trans_id=TransID(sd=0,ups=0.0.0.0,start=0) start_trans=N trans_req=TransReq(type=1,isolation=2,start_time=0,timeout=100000000,idletime=100000000))
+====MainQuery====
+ObUpsModifyWithDmlType(dml_type=insert)
+ObIndexTrigger(main_table_id_=3001 index_num_=2 cur_index_=0)
+InsertDBSemFilter(input_values_subquery=7 values=ExprValues(values_num=0, values=, row_desc=rowkey_cell_count[0],)
+)
+ObEmptyRowFilter()
+MuitipleGetMerge(children_num=2)
+Child0:
+MemSSTableScan(static_data_subquery=3, row_desc=rowkey_cell_count[0],, row_store=data_size=0 block_count=0, from_deserialize=N)
+Child1:
+IncScan(scan_type=MGET[1], hotspot=false, lock=1, subquery=7, get_param=NULL scan_param=NULL)
+====SubQuery1====
+Values(row_store=data_size=0 block_count=0)
+TableRpcScan(read_method=GET, is use index for storing=0,index tid=-1; is use index without storing=0,index tid=-1,rpc_scan=<RpcScan(Hint=<max_parallel_count=20, is_get_skip_empty_row_=false, read_method_=2, read_consistency=FROZEN>, tid=18446744073709551615 Filter(filters=[expr<NULL,18446744073709551615>=[COL<3001,16>|ROW<1>|LEFT_PARAM_END<2>|int:4|ROW<1>|ROW<1>|IN<2>|],])Project(rowkey_count=0, columns=[expr<3001,16>=[COL<3001,16>|],expr<NULL,65520>=[COL<NULL,65520>|]])[Get RowNum:0]:
+)TransID(sd=0,ups=0.0.0.0,start=0>)
+====SubQuery2====
+ExprValues(values_num=2, values=<0:expr<NULL,65519>=[int:4|]> <1:expr<NULL,65518>=[int:4|]> , row_desc=rowkey_cell_count[1],<3001,16>,<3001,17>,)
+)
+

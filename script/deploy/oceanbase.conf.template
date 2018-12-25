@@ -1,0 +1,90 @@
+#Time-stamp: <2013-09-17 16:12:10 ryan>
+# Author: 符风 <fufeng.syd@alibaba-inc.com>
+# 集群初始化工具使用的配置文件
+# 所有以#@开始的行有特殊含义不允许当注释删除
+
+#@begin_global
+[settings]
+# rs_admin工具的位置，这个绝大多数情况不用修改
+rs_admin=./bin/rs_admin
+# oceanbase安装的目录
+ob_home=/home/admin/oceanbase
+[public]
+# appname
+appname=dbatest
+# 主集群ID，与后面的集群名称相对应。即以#@begin_cluster_x和#@begin_cluster_x开头的行。
+# 若不指定，则默认使用数字最小的集群为主集群。
+# 注意：ob内部会使用纯数字的ID，这个配置中的数字部分即为ob内部使用的集群ID号。
+master_cluster_id=cluster_1
+# 网络接口的名字，默认是bond0。放到不同的section下可以单独为那个section中的server进行配置
+devname=bond0
+[rootserver]
+# rootserver的端口
+port=2500
+# rootserver存放commitlog的目录
+commitlog_dir=/data/log1/rs_commitlog
+[chunkserver]
+# chunkserver的端口
+port=2600
+# chunkserver机型使用的磁盘数目
+# 需要已经建立/data/{1..max_disk_num}的目录
+max_disk_num=10
+[mergeserver]
+# mergeserver的端口
+port=2800
+# mergeserver的MySQL端口
+sql_port=2880
+# 部署在rootserver上的listener ms的MySQL端口
+# 不推荐修改
+lms_port=2828
+lms_supervisor=true
+supervisor=false
+[updateserver]
+# updateserver的端口
+port=2700
+# updateserver用于每日合并的端口
+inner_port=2701
+# updateserver转储用的磁盘的数目
+# 需要已经建立/data/{1..max_disk_num}的目录
+max_disk_num=4
+# updateserver存放commitlog的目录
+commitlog_dir=/data/log1/ups_commitlog
+#@end_global
+
+#@begin_init_config
+# 各个server启动时使用的配置项
+[rootserver]
+
+[chunkserver]
+
+[mergeserver]
+
+[updateserver]
+
+#@end_init_config
+
+#@begin_cluster_1
+[public]
+[rootserver]
+# rootserver的vip地址
+# vip=10.10.0.1
+# 所有rootserver的ip地址
+# 10.10.10.10
+[updateserver]
+# 所有updateserver的ip地址
+# 10.10.10.10
+[chunkserver]
+# 所有chunkserver的ip地址
+# 10.10.10.20
+# 10.10.10.30
+# 10.10.10.40
+[mergeserver]
+# 所有mergeserver的ip地址
+# 10.10.10.20
+# 10.10.10.30
+# 10.10.10.40
+#@end_cluster_1
+
+##@begin_cluster_2
+## 所有内容可以参考cluster_1的配置
+##@end_cluster_2

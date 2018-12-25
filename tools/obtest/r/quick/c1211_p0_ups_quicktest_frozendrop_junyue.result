@@ -1,0 +1,2620 @@
+ob1=OBI(cluster=1211);
+ob1.reboot;
+ob1.mysql set global ob_read_consistency=3;
+ob1.mysql alter system set minor_num_limit=10 server_type=updateserver;
+ob1.source include/merge.inc;
+ob1.mysql_p show variables like 'ob_read_consistency';
+variable_name	value
+ob_read_consistency	3
+ob1.mysql_p select name,value from __all_sys_config_stat where name = 'read_master_master_ups_percent' or name = 'read_slave_master_ups_percent';
+name	value
+read_master_master_ups_percent	50
+read_slave_master_ups_percent	50
+ob1.mysql_p select name,value from __all_sys_config_stat where name = 'minor_num_limit';
+name	value
+minor_num_limit	10
+minor_num_limit	10
+ob1.$m_ups.status;
+master
+ob1.$s_ups.status;
+sync
+ob1.create_client;
+create table t1(c1 int primary key, c2 int);
+insert into t1 values(0,100);
+ob1.major_freeze;
+ob1.check_cs_version 2;
+case 1 froze will kill trx
+ob1.connect conn1;
+set autocommit=0;
+insert into t1 values(1,99);
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+insert into t1 values(2,98);
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=2;
+ob1.minor_freeze;
+insert into t1 values(3,97);
+ERROR 25S03: transaction is rolled back
+commit;
+ob1.ups0.check_memtable_status 3_1-1 dumped;
+ob1.ups1.check_memtable_status 3_1-1 dumped;
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+commit;
+insert into t1 values(1,99);
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+insert into t1 values(2,98);
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=2;
+ob1.minor_freeze;
+commit;
+ERROR UNKNOWN: failed to start a transaction
+ob1.ups0.check_memtable_status 3_2-2 dumped;
+ob1.ups1.check_memtable_status 3_2-2 dumped;
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+commit;
+insert into t1 values(1,99);
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+insert into t1 values(2,98);
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=2;
+ob1.minor_freeze;
+rollback;
+ob1.ups0.check_memtable_status 3_3-3 dumped;
+ob1.ups1.check_memtable_status 3_3-3 dumped;
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1;
+c1	c2
+0	100
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=1;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=2;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+select * from t1 where c1=3;
+c1	c2
+commit;
+case 2 strong read  after freeze
+set autocommit=0;
+insert into t1 values(-1,101);
+commit;
+ob1.minor_freeze;
+set autocommit=1;
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+ob1.ups0.check_memtable_status 3_4-4 dumped;
+ob1.ups1.check_memtable_status 3_4-4 dumped;
+case 3 strong read  after drop
+ob1.ups_admin -t drop;
+set autocommit=1;
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+case 3.1 strong read  after major freeze
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+ob1.major_freeze;
+ob1.check_cs_version 2;
+set autocommit=1;
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+ob1.ups0.check_memtable_status 3_5-5 dumped;
+ob1.ups1.check_memtable_status 3_5-5 dumped;
+case 3.2 strong read after drop
+set autocommit=1;
+insert into t1 values(3,97);
+update t1 set c2=c2+1 where c1=3;
+update t1 set c2=c2+1 where c1=3;
+update t1 set c2=c2+1 where c1=3;
+delete from t1 where c1=3;
+insert into t1 values(3,97);
+update t1 set c2=c2+1 where c1=3;
+update t1 set c2=c2+1 where c1=3;
+update t1 set c2=c2+1 where c1=3;
+ob1.minor_freeze;
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+ob1.ups0.check_memtable_status 4_1-1 dumped;
+ob1.ups1.check_memtable_status 4_1-1 dumped;
+ob1.ups_admin -t drop;
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1;
+c1	c2
+-1	101
+0	100
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+select * from t1 where c1=3;
+c1	c2
+3	100
+case 4 innertable delete
+set autocommit=1;
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+0
+ob1.minor_freeze;
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+ob1.ups_admin -t drop;
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+select count(*) from __all_client;
+count(*)
+0
+ob1.ups0.check_memtable_status 4_2-2 dumped;
+ob1.ups1.check_memtable_status 4_2-2 dumped;
+case 5 innertable delete/insert
+set autocommit=1;
+select count(*) from __all_client;
+count(*)
+0
+insert into __all_client(client_ip,version) values('testip','testversion');
+select count(*) from __all_client;
+count(*)
+1
+delete from __all_client where client_ip='testip' and version='testversion';
+select count(*) from __all_client;
+count(*)
+0
+insert into __all_client(client_ip,version) values('testip','testversion');
+select count(*) from __all_client;
+count(*)
+1
+ob1.minor_freeze;
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+ob1.ups_admin -t drop;
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+select count(*) from __all_client;
+count(*)
+1
+ob1.ups0.check_memtable_status 4_3-3 dumped;
+ob1.ups1.check_memtable_status 4_3-3 dumped;
+ob1.$m_ups.status;
+master
+ob1.$s_ups.status;
+sync

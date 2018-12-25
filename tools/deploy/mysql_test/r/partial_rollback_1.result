@@ -1,0 +1,21 @@
+drop table if exists t1,t2,t3,t4;
+create table t1(pk int primary key, a int);
+insert into t1 values(1,1);
+begin;
+update t1 set a=2 where pk=1;
+begin;
+replace into t1 values (2,2),(3,3),(4,4);
+replace into t1 values (5,5),(3,3),(6,6);
+ERROR HY000: Exclusive lock conflict 'int:3' for key 'PRIMARY'
+commit;
+commit;
+select * from t1;
+pk	a
+1	2
+2	2
+3	3
+4	4
+drop table t1;
+select count(*) from __all_server where svr_type='updateserver';
+count(*)
+2

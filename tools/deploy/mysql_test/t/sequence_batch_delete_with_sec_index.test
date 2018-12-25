@@ -1,0 +1,172 @@
+--disable_warnings
+drop table if exists seq_insert;
+--enable_warnings
+
+create table seq_insert(id int primary key,c1 int,c2 decimal(25,0));
+
+create index seq_insert_index1 on seq_insert (c1) storing (c2);
+create index seq_insert_index2 on seq_insert (c2) storing (c1);
+
+create or replace sequence seq;
+insert into seq_insert values(nextval for seq,nextval for seq+nextval for seq,0);
+insert into seq_insert values(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq);
+
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 600
+
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='seq_insert',table_id,1);
+
+--let $index_head =__
+
+--let $index1_end =__idx__seq_insert_index1
+--let $index1_name=$index_head$n$index1_end
+echo $index1_name;
+
+--let $index2_end =__idx__seq_insert_index2
+--let $index2_name=$index_head$n$index2_end
+echo $index2_name;
+
+--let $select_for_index1=select * from $index1_name
+--let $select_for_index2=select * from $index2_name
+
+eval select * from $index1_name;
+eval select * from $index2_name;
+
+
+# 1
+select * from seq_insert;
+# 2
+eval select * from $index1_name; # index1 on TABLE seq_insert
+eval select * from $index2_name; # index2 on TABLE seq_insert
+# 3
+delete from seq_insert where id = prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 4
+--error 65535
+delete from seq_insert where id = prevval for seq1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 5
+delete from seq_insert where id = prevval for seq +1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 6
+delete from seq_insert where id >= prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 7
+delete from seq_insert where id >= prevval for seq-2;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 8
+create or replace sequence seq;
+--error 65535
+delete from seq_insert where id = prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 9
+create or replace sequence seq;
+--error 65535
+delete from seq_insert where id <= prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 10
+create or replace sequence seq;
+--error 65535
+delete from seq_insert where id = prevval for seq +1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 11
+create or replace sequence seq;
+--error 65535
+delete from seq_insert where id <= prevval for seq +1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 12
+create or replace sequence seq;
+--error 65535
+delete from seq_insert where id = prevval for seq +prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 13
+create or replace sequence seq;
+--error 65535
+delete from seq_insert where id <= prevval for seq +prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 14
+select nextval for seq from seq_insert;
+delete from seq_insert where id between 10 and prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 15
+select nextval for seq from seq_insert;
+delete from seq_insert where id between 9 and prevval for seq+1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 16
+select nextval for seq from seq_insert;
+delete from seq_insert where id between 9 and prevval for seq+prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 17
+select nextval for seq from seq_insert;
+--error 65535
+delete from seq_insert where id between 9 and prevval for seq+prevval for seq1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 18
+create or replace sequence seq as decimal(25,0) minvalue 1234567891234567891234;
+select nextval for seq;
+--error 5047
+delete from seq_insert where id = prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 19
+create or replace sequence seq as decimal(25,0) minvalue 1234567891234567891234;
+select nextval for seq;
+--error 79
+delete from seq_insert where id >= prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 20
+create or replace sequence seq quick;
+--error 65535
+delete from seq_insert where id = prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 21
+create or replace sequence seq quick;
+select nextval for seq;
+delete from seq_insert where id = prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 22
+create or replace sequence seq quick;
+select nextval for seq;
+delete from seq_insert where id <= prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+

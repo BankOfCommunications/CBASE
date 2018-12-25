@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE dbmonster-schema PUBLIC "-//kernelpanic.pl//DBMonster Database Schema DTD 1.1//EN" "http://dbmonster.kernelpanic.pl/dtd/dbmonster-schema-1.1.dtd">
+<dbmonster-schema>
+	<name>Test Schema</name>
+	<table name="sbtest" rows="${ups_rows}">
+		<key databaseDefault="false">
+			<generator type="com.etao.monster.generator.MaxKeyGenerator">
+				<property name="columnName" value="id" />
+				<property name="nextId" value="${cs_rows}" />
+			</generator>
+		</key>
+		<column name="k" databaseDefault="false">
+			<generator type="com.etao.monster.generator.NumberGenerator">
+				<property name="maxValue" value="${total_rows}" />
+				<property name="minValue" value="0" />
+				<property name="nulls" value="0" />
+				<property name="returnedType" value="long" />
+				<property name="scale" value="0" />
+			</generator>
+		</column>
+		<column name="c" databaseDefault="false">
+			<generator type="com.etao.monster.generator.StringGenerator">
+				<property name="allowSpaces" value="true" />
+				<property name="excludeChars" value="" />
+				<property name="maxLength" value="120" />
+				<property name="minLength" value="10" />
+				<property name="nulls" value="0" />
+			</generator>
+		</column>
+		<column name="pad" databaseDefault="false">
+			<generator type="com.etao.monster.generator.StringGenerator">
+				<property name="allowSpaces" value="true" />
+				<property name="excludeChars" value="" />
+				<property name="maxLength" value="60" />
+				<property name="minLength" value="10" />
+				<property name="nulls" value="0" />
+			</generator>
+		</column>
+	</table>
+</dbmonster-schema>

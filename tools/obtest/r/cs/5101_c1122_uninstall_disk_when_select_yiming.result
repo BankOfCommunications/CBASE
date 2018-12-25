@@ -1,0 +1,14 @@
+ob1=OBI(cluster=1122, sub_dir_list=1)
+ob1.reboot
+ob1.source include/merge.inc
+ob1.source include/migrate.inc
+ob1.prepare
+ob1.major_freeze
+ob1.check_cs_version 2
+ob1.start_check
+ob1.cs0.cs_admin uninstall_disk  1
+ob1.cs0.rm_sstable 1
+io_num check OK
+ob1.cs0.cs_admin install_disk  /home/$user/obtest_data/1
+migrate begin
+ob1.stop_check

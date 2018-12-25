@@ -1,0 +1,23 @@
+create table t_quota(id int primary key, "Create" char(90));
+insert into t_quota values(1, 'sigle quotation marks');
+insert into t_quota values(2, "double quotation marks");
+ERROR HY000: Unknown value double quotation marks
+select * from t_quota;
+id	Create
+1	sigle quotation marks
+select * from t_quota where "Create" like '%quotation%';
+id	Create
+1	sigle quotation marks
+select * from t_quota order by Create;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'Create' at line 1
+create table t_quota_another("Id" int primary key, "Create" char(90));
+select * from t_quota_another order by id;
+ERROR 42S22: Unkown column name id
+create table t_quota_another('Id' int primary key, "Create" char(90));
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''Id' int primary key, "Create" char(90))' at line 1
+insert into t_quota_another values(1, 'sigle quotation marks'), (2, 'value 2');
+select * from t_quota_another where "Id" > 1;
+Id	Create
+2	value 2
+drop table t_quota_another;
+drop table t_quota;

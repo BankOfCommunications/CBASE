@@ -1,0 +1,4 @@
+-- fail, value can not be subquery
+update item set item_cost= (select min(item_price) from item) where item_id=100;
+Sub-query is illeagal in INSERT/UPDATE statement or AGGREGATION function
+Resolve error!

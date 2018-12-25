@@ -1,0 +1,4 @@
+-- fail
+update item, user set item_name='jiu gui jiu' where item_id=user_id and item_id=100;
+parse_sql error!
+syntax error at 1:12

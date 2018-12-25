@@ -1,0 +1,129 @@
+ob1=OBI(cluster=1122)
+ob1.reboot
+ob1.source include/merge.inc
+ob1.mysql alter system set merge_delay_for_lsync='60s' server_type=chunkserver
+ob1.create_client
+create table t1(i1 int primary key, v1 varchar(20));
+replace into t1 values(20,'version2');
+replace into t1 values(19,'version2');
+replace into t1 values(18,'version2');
+replace into t1 values(17,'version2');
+replace into t1 values(16,'version2');
+replace into t1 values(15,'version2');
+replace into t1 values(14,'version2');
+replace into t1 values(13,'version2');
+replace into t1 values(12,'version2');
+replace into t1 values(11,'version2');
+replace into t1 values(10,'version2');
+replace into t1 values(9,'version2');
+replace into t1 values(8,'version2');
+replace into t1 values(7,'version2');
+replace into t1 values(6,'version2');
+replace into t1 values(5,'version2');
+replace into t1 values(4,'version2');
+replace into t1 values(3,'version2');
+replace into t1 values(2,'version2');
+replace into t1 values(1,'version2');
+select /*+read_consistency(frozen)*/* from t1;
+i1	v1
+ob1.major_freeze
+select /*+read_consistency(frozen)*/* from t1;
+i1	v1
+1	version2
+2	version2
+3	version2
+4	version2
+5	version2
+6	version2
+7	version2
+8	version2
+9	version2
+10	version2
+11	version2
+12	version2
+13	version2
+14	version2
+15	version2
+16	version2
+17	version2
+18	version2
+19	version2
+20	version2
+replace into t1 values(10,'version2-1');
+replace into t1 values(9,'version2-1');
+replace into t1 values(8,'version2-1');
+replace into t1 values(7,'version2-1');
+replace into t1 values(6,'version2-1');
+replace into t1 values(5,'version2-1');
+replace into t1 values(4,'version2-1');
+replace into t1 values(3,'version2-1');
+replace into t1 values(2,'version2-1');
+replace into t1 values(1,'version2-1');
+select /*+read_consistency(frozen)*/* from t1;
+i1	v1
+1	version2
+2	version2
+3	version2
+4	version2
+5	version2
+6	version2
+7	version2
+8	version2
+9	version2
+10	version2
+11	version2
+12	version2
+13	version2
+14	version2
+15	version2
+16	version2
+17	version2
+18	version2
+19	version2
+20	version2
+ob1.check_cs_version 2
+select /*+read_consistency(frozen)*/* from t1;
+i1	v1
+1	version2
+2	version2
+3	version2
+4	version2
+5	version2
+6	version2
+7	version2
+8	version2
+9	version2
+10	version2
+11	version2
+12	version2
+13	version2
+14	version2
+15	version2
+16	version2
+17	version2
+18	version2
+19	version2
+20	version2
+ob1.major_freeze
+select /*+read_consistency(frozen)*/* from t1;
+i1	v1
+1	version2-1
+2	version2-1
+3	version2-1
+4	version2-1
+5	version2-1
+6	version2-1
+7	version2-1
+8	version2-1
+9	version2-1
+10	version2-1
+11	version2
+12	version2
+13	version2
+14	version2
+15	version2
+16	version2
+17	version2
+18	version2
+19	version2
+20	version2

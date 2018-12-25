@@ -1,0 +1,38 @@
+DROP TABLE IF EXISTS t1;
+select name, value from __all_sys_config_stat where name like 'read_only';
+name	value
+read_only	false
+create table t1 (c1 int primary key, c2 int);
+insert into t1 values (1, 2);
+alter system set read_only = true server_type=mergeserver;
+select name, value from __all_sys_config_stat where name like 'read_only';
+name	value
+read_only	true
+insert into t1 values (2, 2);
+ERROR HY000: The server is read only and no update is permitted. Ask your DBA for help.
+select * from t1 where c1 = 1 for update;
+ERROR HY000: The server is read only and no update is permitted. Ask your DBA for help.
+replace into t1 values (2, 3);
+ERROR HY000: The server is read only and no update is permitted. Ask your DBA for help.
+update t1 set c2 = 3 where c1 = 1;
+ERROR HY000: The server is read only and no update is permitted. Ask your DBA for help.
+delete from t1 where c1 = 1;
+ERROR HY000: The server is read only and no update is permitted. Ask your DBA for help.
+select * from t1;
+c1	c2
+1	2
+alter system set read_only = false server_type=mergeserver;
+select name, value from __all_sys_config_stat where name like 'read_only';
+name	value
+read_only	false
+insert into t1 values (2, 2);
+select * from t1 where c1 = 1 for update;
+c1	c2
+1	2
+replace into t1 values (2, 3);
+update t1 set c2 = 3 where c1 = 1;
+delete from t1 where c1 = 1;
+select * from t1;
+c1	c2
+2	3
+drop table t1;

@@ -1,0 +1,136 @@
+drop table if exists t1,t2,t3,t4;
+create table t1
+(
+a int primary key,
+b char(10)
+);
+insert into t1 values (1,'one');
+insert into t1 values (2,'two');
+insert into t1 values (3,'three');
+insert into t1 values (4,'four');
+set @a=2;
+prepare stmt1 from select * from t1 where a <= ?;
+execute stmt1 using @a;
+a	b
+1	one
+2	two
+set @a=3;
+execute stmt1 using @a;
+a	b
+1	one
+2	two
+3	three
+deallocate prepare no_such_statement;
+ERROR HY007: Unknown prepared statement handler (no_such_statement) given to DEALLOCATE PREPARE
+execute stmt1;
+ERROR HY093: Incorrect arguments number to EXECUTE, need 1 arguments
+prepare stmt2 from prepare nested_stmt from 'select 1';
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'prepare nested_stmt from 'select 1'' at line 1
+prepare stmt2 from execute stmt1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'execute stmt1' at line 1
+prepare stmt2 from deallocate prepare z;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'deallocate prepare z' at line 1
+prepare stmt3 from insert into t1 values (?,?);
+set @arg1=5;
+set @arg2='five';
+execute stmt3 using @arg1, @arg2;
+select * from t1 where a>3;
+a	b
+4	four
+5	five
+prepare stmt4 from update t1 set b=? where a=?;
+set @arg1=55;
+set @arg2='five';
+execute stmt4 using @arg1, @arg2;
+select * from t1 where a>3;
+a	b
+4	four
+5	five
+prepare stmt5 from select ? + a from t1;
+set @a=1;
+execute stmt5 using @a;
+? + a
+2
+3
+4
+5
+6
+execute stmt5 using @no_such_var;
+ERROR HY000: Variable no_such_var Unknown
+set @nullvar=1;
+set @nullvar=NULL;
+execute stmt5 using @nullvar;
+? + a
+NULL
+NULL
+NULL
+NULL
+NULL
+set @nullvar2=NULL;
+execute stmt5 using @nullvar2;
+? + a
+NULL
+NULL
+NULL
+NULL
+NULL
+create table t2
+(
+a int primary key,
+b int
+);
+insert into t2(a) values (0);
+set @arg00=NULL ;
+prepare stmt1 from select 1 FROM t2 where a=? ;
+execute stmt1 using @arg00 ;
+1
+drop table t1,t2;
+create table t1(a varchar(2), b varchar(3), primary key(a,b), c varchar(4));
+prepare stmt1 from select a, b from t1;
+execute stmt1;
+a	b
+execute stmt1;
+a	b
+deallocate prepare stmt1;
+drop table t1;
+create table t1 (a varchar(10) primary key, b varchar) ;
+insert into t1 (a) values ('yahoo');
+prepare stmt from select a from t1 where a like ?;
+set @var='google';
+execute stmt using @var;
+a
+execute stmt using @var;
+a
+drop table t1;
+create table t1 ( a int primary key , b int);
+prepare stmt from select a from t1 where a between ? and ?;
+set @a=1;
+execute stmt using @a, @a;
+a
+execute stmt using @a, @a;
+a
+execute stmt using @a, @a;
+a
+drop table t1;
+drop table if exists t1;
+create table t1 (c1 int not null, c2 int not null,c3 int,
+primary key  (c1,c2));
+insert into t1(c1,c2) values (200887, 860);
+insert into t1(c1,c2) values (200887, 200887);
+select * from t1 where (c1=200887 and c2=200887) or c2=860;
+c1	c2	c3
+200887	860	NULL
+200887	200887	NULL
+prepare stmt from select * from t1 where (c1=200887 and c2=200887) or c2=860;
+execute stmt;
+c1	c2	c3
+200887	860	NULL
+200887	200887	NULL
+prepare stmt from select * from t1 where (c1=200887 and c2=?) or c2=?;
+set @a=200887;
+set @b=860;
+execute stmt using @a, @b;
+c1	c2	c3
+200887	860	NULL
+200887	200887	NULL
+drop table t1;

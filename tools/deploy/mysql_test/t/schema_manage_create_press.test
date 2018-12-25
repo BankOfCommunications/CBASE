@@ -1,0 +1,38 @@
+--disable_warnings
+drop table if exists t1,t2 ,t3,t4,t5;
+--enable_warnings
+
+--let $create =create table t
+--let $create_end= (c1 int primary key,c2 double,c3 datetime,c5 int,c6 createtime)
+--let $drop_head = drop table if exists tdfddfd
+--let $table_list=
+--let $sql=
+--let $count=700
+while($count)
+{
+--let $sql=$create$count $create_end
+eval $sql;
+dec $count;
+}
+show tables;
+--let $value = query_get_value(select count(*) from __all_ddl_operation,count(*),1)
+if ($value==1014)
+   {
+   echo "create 1000table  right";
+   }
+--let $count=1000
+
+while($count)
+{
+--let $table_list=$table_list,t$count
+dec $count;
+}
+--let $sql=$drop_head$table_list
+eval $sql;
+--let $value = query_get_value(select count(*) from __all_ddl_operation,count(*),1)
+if ($value==2014)
+   {
+   echo "create 1000table  right";
+   }
+show tables;
+

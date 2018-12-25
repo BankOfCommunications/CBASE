@@ -1,0 +1,29 @@
+using database test;
+drop table if exists ie_ins_rep_del;
+create table ie_ins_rep_del
+(
+i0 int,
+dc0 decimal(20, 4),
+vc0 varchar(256),
+primary key(i0)
+);
+select * from ie_ins_rep_del;
+i0	dc0	vc0
+0	12.3200	shanghai
+1	34.5500	beijing
+2	11.1100	suqian
+3	12.1212	suzhou
+select * from ie_ins_rep_del;
+i0	dc0	vc0
+0	12.3000	rep
+1	34.5500	beijing
+2	11.1100	suqian
+3	12.1212	suzhou
+4	13.1100	suqian11
+5	12.1612	suzhou22
+select * from ie_ins_rep_del;
+i0	dc0	vc0
+0	12.3000	rep
+3	12.1212	suzhou
+4	13.1100	suqian11
+5	12.1612	suzhou22

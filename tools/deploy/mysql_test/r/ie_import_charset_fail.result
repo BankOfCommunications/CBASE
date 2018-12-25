@@ -1,0 +1,22 @@
+using database test;
+drop table if exists ie_charset;
+create table ie_charset
+(
+it0 int,
+it1 int,
+it2 int,
+bg0 bigint,
+bg1 bigint,
+bg2 bigint,
+dc0 decimal(20,4),
+dc1 decimal(20,4),
+dc2 decimal(20,4),
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256),
+primary key(it0, bg0, dc0, vc0)
+);
+ERROR code_convert
+Conversion error 
+select * from ie_charset;
+it0	it1	it2	bg0	bg1	bg2	dc0	dc1	dc2	vc0	vc1	vc2

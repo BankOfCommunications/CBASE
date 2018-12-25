@@ -1,0 +1,261 @@
+drop table if exists t1, t2;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from insert into t1 values (?,'d',2);
+set @x=4;
+execute stmt1 using @x;
+alter table t1 add d int;
+set @x=5;
+execute stmt1 using @x;
+ERROR HY000: Column count doesn't match value count
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+4	d	2	NULL
+deallocate prepare stmt1;
+drop table t1;
+create table t1(a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3);
+prepare stmt2 from insert into t1 values (?,'d',3);
+set @x=3;
+execute stmt2 using @x;
+alter table t1 drop q;
+ERROR 42S22: Column 'q' doesn't exist
+set @x=4;
+execute stmt2 using @x;
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	d	3
+4	d	3
+deallocate prepare stmt2;
+prepare stmt3 from insert into t1 values (?,'d',3);
+set @x=5;
+execute stmt3 using @x;
+alter table t1 drop c;
+set @x=6;
+execute stmt3 using @x;
+ERROR HY000: Column count doesn't match value count
+select * from t1;
+a	b
+1	a
+2	b
+3	d
+4	d
+5	d
+deallocate prepare stmt3;
+prepare stmt4 from insert into t1 values (?,'d');
+set @x=7;
+execute stmt4 using @x;
+alter table t1 add c int;
+alter table t1 drop c;
+set @x=8;
+execute stmt4 using @x ;
+select * from t1;
+a	b
+1	a
+2	b
+3	d
+4	d
+5	d
+7	d
+8	d
+deallocate prepare stmt4;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt5 from insert into t1 values (?,'d',4);
+set @x=4;
+execute stmt5 using @x;
+alter table t1 drop b;
+alter table t1 add b varchar(255);
+set @x=5;
+execute stmt5 using @x;
+select * from t1;
+a	c	b
+1	2	NULL
+2	3	NULL
+3	4	NULL
+4	4	NULL
+5	0	4
+deallocate prepare stmt5;
+prepare stmt6 from insert into t1 values (?,'d',2);
+set @x=6;
+execute stmt6 using @x;
+alter table t1 drop b;
+alter table t1 add b int;
+set @x=7;
+execute stmt6 using @x;
+select * from t1;
+a	c	b
+1	2	NULL
+2	3	NULL
+3	4	NULL
+4	4	NULL
+5	0	NULL
+6	0	NULL
+7	0	2
+deallocate prepare stmt6;
+prepare stmt7 from insert into t1 values (?,2,6);
+set @x=8;
+execute stmt7 using @x;
+drop table t1;
+set @x=9;
+execute stmt7 using @x;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt7;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt8 from insert into t1 values (?,2,3);
+set @x=4;
+execute stmt8 using @x;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+set @x=5;
+execute stmt8 using @x ;
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+5	2	3
+deallocate prepare stmt8;
+prepare stmt9 from insert into t1 values (?,2,5);
+set @x=4;
+execute stmt9 using @x;
+drop table t1;
+create table t1( a int primary key,b varchar(255));
+set @x=5;
+execute stmt9 using @x;
+ERROR HY000: Column count doesn't match value count
+select * from t1;
+a	b
+deallocate prepare stmt9;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt10 from insert into t1(a,b,c) values (?,'d',6);
+set @x=4;
+execute stmt10 using @x;
+alter table t1 add d int;
+set @x=5;
+execute stmt10 using @x;
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+4	d	6	NULL
+5	d	6	NULL
+deallocate prepare stmt10;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+alter table t1 add d int;
+prepare stmt11 from insert into t1(a,b,c) values (?,'d',3);
+set @x=4;
+execute stmt11 using @x;
+alter table t1 drop d;
+set @x=5;
+execute stmt11 using @x;
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+4	d	3
+5	d	3
+deallocate prepare stmt11;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+alter table t1 add d int;
+prepare stmt12 from insert into t1(a,b,c) values (?,'d',2);
+set @x=4;
+execute stmt12 using @x;
+alter table t1 drop c;
+set @x=5;
+execute stmt12 using @x;
+ERROR 42S22: Unknown column name c
+select * from t1;
+a	b	d
+1	a	NULL
+2	b	NULL
+3	c	NULL
+4	d	NULL
+deallocate prepare stmt12;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt13 from insert into t1(a,b) values (?,'d');
+set @x=4;
+execute stmt13 using @x;
+alter table t1 drop c;
+set @x=5;
+execute stmt13 using @x;
+select * from t1;
+a	b
+1	a
+2	b
+3	c
+4	d
+5	d
+deallocate prepare stmt13;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt14 from insert into t1(a,b,c) values (?,'d',1);
+set @x=4;
+execute stmt14 using @x;
+alter table t1 drop c;
+alter table t1 add c int;
+set @x=5;
+execute stmt14 using @x;
+select * from t1;
+a	b	c
+1	a	NULL
+2	b	NULL
+3	c	NULL
+4	d	NULL
+5	d	1
+deallocate prepare stmt14;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt15 from insert into t1(a,b,c) values (?,'d',1);
+set @x=4;
+execute stmt15 using @x;
+alter table t1 drop b;
+alter table t1 add b int;
+set @x=5;
+execute stmt15 using @x;
+select * from t1;
+a	c	b
+1	2	NULL
+2	3	NULL
+3	4	NULL
+4	1	NULL
+5	1	0
+deallocate prepare stmt15;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt16 from insert into t1(a,b,c) values (?,'d',1);
+set @x=4;
+execute stmt16 using @x;
+alter table t1 add d int;
+alter table t1 drop d;
+set @x=5;
+execute stmt16 using @x;
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+4	d	1
+5	d	1
+deallocate prepare stmt16;

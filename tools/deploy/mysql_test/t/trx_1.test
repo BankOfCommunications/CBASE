@@ -1,0 +1,314 @@
+--disable_warnings
+drop table if exists t1,t2,t3,t4;
+--enable_warnings
+
+
+###
+# update within trx
+##
+create table t1(pk int primary key, a int);
+insert into t1 values(1,1);
+insert into t1 values(2,1);
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn3,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn4,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+##
+# CASE1: conn1
+##
+
+connection conn1;
+
+--echo -- conn1 update row1 to  +1
+begin;
+update t1 set a=a+1 where pk = 1;
+
+connection conn2;
+begin;
+--echo -- conn2 update row2 to  +1, then update row1 to +1
+update t1 set a=a+1 where pk = 2;
+--error 5049
+update t1 set a=a+1 where pk = 1;
+ROLLBACK;
+
+
+connection conn1;
+commit;
+--echo --expect (1,2),(2,1)
+select * from t1;
+
+drop table t1;
+
+--echo ###################
+
+create table t1(pk varchar primary key, a varchar);
+insert into t1 values('1','1');
+insert into t1 values('2','1');
+
+##
+# CASE1: conn1
+##
+
+connection conn1;
+--echo -- conn1 update row1 to  '2'
+begin;
+update t1 set a='2' where pk = '1';
+
+connection conn2;
+begin;
+--echo -- conn2 update row2 to  '2', then update row1 to '3'
+update t1 set a='2' where pk = '2';
+--error 5049
+update t1 set a='3' where pk = '1';
+ROLLBACK;
+
+connection conn1;
+commit;
+--echo --expect ('1','2'),('2','1')
+select * from t1;
+
+drop table t1;
+
+--echo ###################
+
+create table t1(pk int primary key, int1 int, int2 int, int3 int, int4 int);
+
+insert into t1 values(1, 1, 1, -1, -1);
+insert into t1 values(2, 2, 2, -2, -2);
+insert into t1 values(3, 3, 3, -3, -3);
+insert into t1 values(4, 4, 4, -4, -4);
+insert into t1 values(5, 5, 5, -5, -5);
+
+select sum(int1+int2+int3+int4) as mysum from t1;
+
+connection conn1;
+
+begin;
+update t1 set int1=int1+1 where pk=1;
+update t1 set int3=int3-1 where pk=3;
+update t1 set int3=int3-1 where pk=1;
+update t1 set int1=int1+1 where pk=3;
+commit;
+
+connection conn2;
+begin;
+update t1 set int1=int1+1 where pk=2;
+update t1 set int1=int1+1 where pk=4;
+update t1 set int3=int3-1 where pk=4;
+update t1 set int3=int3-1 where pk=2;
+
+
+connection conn3;
+begin;
+update t1 set int1=int1+1 where pk=5;
+update t1 set int3=int3-1 where pk=5;
+update t1 set int3=int3-1 where pk=1;
+update t1 set int1=int1+1 where pk=1;
+
+connection conn4;
+begin;
+update t1 set int3=int3-1 where pk=3;
+update t1 set int1=int1+1 where pk=3;
+--error 5049
+update t1 set int1=int1+1 where pk=2;
+--error 5049
+update t1 set int3=int3-1 where pk=2;
+ROLLBACK;
+
+connection conn2;
+commit;
+
+connection conn3;
+commit;
+
+select * from t1;
+
+
+drop table t1;
+
+
+--echo ###################
+
+create table t1(f1 int, f2 int, a int, primary key(f1,f2));
+
+insert into t1 values(1,1,1);
+insert into t1 values(1,2,1);
+insert into t1 values(2,1,1);
+insert into t1 values(2,2,1);
+
+connection conn1;
+begin;
+update t1 set a=a+1 where f1=1 and f2=1;
+update t1 set a=a+1 where f1=2 and f2=1;
+
+connection conn2;
+begin;
+update t1 set a=a+1 where f1=1 and f2=2;
+update t1 set a=a+1 where f1=2 and f2=2;
+
+connection conn1;
+commit;
+connection conn2;
+commit;
+
+--echo --expect (1,1,2),(1,2,2),(2,1,2),(2,2,2)
+select * from t1;
+
+
+connection conn1;
+begin;
+update t1 set a=a+1 where f1=1 and f2=1;
+update t1 set a=a+1 where f1=2 and f2=2;
+connection conn3;
+begin;
+update t1 set a=a+1 where f1=2 and f2=1;
+
+connection conn2;
+begin;
+update t1 set a=a+1 where f1=1 and f2=2;
+--error 5049
+update t1 set a=a+1 where f1=1 and f2=1;
+ROLLBACK;
+
+connection conn1;
+commit;
+connection conn3;
+commit;
+--echo --expect (1,1,3),(1,2,2),(2,1,3),(2,2,3)
+select * from t1;
+
+
+connection conn1;
+begin;
+--echo --rowkey is required
+update t1 set a=a+1 where f1=1;
+ROLLBACK;
+
+--echo --expect (1,1,3),(1,2,2),(2,1,3),(2,2,3)
+select * from t1;
+
+
+
+drop table t1;
+
+
+
+--echo ###################
+
+create table t1(f1 int, f2 varchar, a int, primary key(f1,f2));
+
+insert into t1 values(1,'1',1);
+insert into t1 values(1,'2',1);
+insert into t1 values(2,'1',1);
+insert into t1 values(2,'2',1);
+
+connection conn1;
+begin;
+update t1 set a=a+1 where f1=1 and f2='1';
+update t1 set a=a+1 where f1=2 and f2='1';
+
+connection conn2;
+begin;
+update t1 set a=a+1 where f1=1 and f2='2';
+update t1 set a=a+1 where f1=2 and f2='2';
+
+connection conn1;
+commit;
+connection conn2;
+commit;
+
+--echo --expect (1,'1',2),(1,'2',2),(2,'1',2),(2,'2',2)
+select * from t1;
+
+
+connection conn1;
+begin;
+update t1 set a=a+1 where f1=1 and f2='1';
+update t1 set a=a+1 where f1=2 and f2='2';
+connection conn3;
+begin;
+update t1 set a=a+1 where f1=2 and f2='1';
+
+connection conn2;
+begin;
+update t1 set a=a+1 where f1=1 and f2='2';
+--error 5049
+update t1 set a=a+1 where f1=1 and f2='1';
+ROLLBACK;
+
+connection conn1;
+commit;
+connection conn3;
+commit;
+--echo --expect (1,'1',3),(1,'2',2),(2,'1',3),(2,'2',3)
+select * from t1;
+
+
+connection conn1;
+begin;
+--echo --rowkey is required
+update t1 set a=a+1 where f1=1;
+ROLLBACK;
+
+--echo --expect (1,'1',3),(1,'2',2),(2,'1',3),(2,'2',3)
+select * from t1;
+drop table t1;
+
+
+
+--echo ################### update more columns
+
+create table t1(f1 int, f2 varchar, a int, b int, primary key(f1,f2));
+
+insert into t1 values(1,'1',1,0);
+insert into t1 values(1,'2',1,0);
+insert into t1 values(2,'1',1,0);
+insert into t1 values(2,'2',1,0);
+
+connection conn1;
+begin;
+update t1 set a=a+1,b=b-1 where f1=1 and f2='1';
+update t1 set a=a+1,b=b-1 where f1=2 and f2='1';
+
+connection conn2;
+begin;
+update t1 set a=a+1,b=b-1 where f1=1 and f2='2';
+update t1 set a=a+1,b=b-1 where f1=2 and f2='2';
+
+connection conn1;
+commit;
+connection conn2;
+commit;
+
+--echo --expect (1,'1',2,-1),(1,'2',2,-1),(2,'1',2,-1),(2,'2',2,-1)
+select * from t1;
+
+
+connection conn1;
+begin;
+update t1 set a=a+1,b=b-1 where f1=1 and f2='1';
+update t1 set a=a+1,b=b-1 where f1=2 and f2='2';
+connection conn3;
+begin;
+update t1 set a=a+1,b=b-1 where f1=2 and f2='1';
+
+connection conn2;
+begin;
+update t1 set a=a+1,b=b-1 where f1=1 and f2='2';
+--error 5049
+update t1 set a=a+1,b=b-1 where f1=1 and f2='1';
+ROLLBACK;
+
+connection conn1;
+commit;
+connection conn3;
+commit;
+--echo --expect (1,'1',3,-2),(1,'2',2,-1),(2,'1',3,-2),(2,'2',3,-2)
+select * from t1;
+
+drop table t1;
+
+
+

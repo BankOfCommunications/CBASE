@@ -1,0 +1,102 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+
+sleep 60;
+
+deploy ob1.mysql set global ob_read_consistency=3;
+sleep 10;
+
+let $c=deploy_get_value(ob1.mysql_p select cluster_id,cluster_role,cluster_flow_percent from __all_cluster);
+--echo $c
+
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=50 where cluster_id=1;
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=50 where cluster_id=2;
+sleep 10;
+
+let $c=deploy_get_value(ob1.mysql_p select cluster_id,cluster_role,cluster_flow_percent from __all_cluster);
+--echo $c
+
+#delete obdatasouce log
+deploy ob1.sh rm -f ~/logs/obdatasource/obdatasource.log*;
+deploy ob1.sh rm -f ~/logs/obdatasource/obdatasource-lb-monitor.log*;
+
+deploy ob1.create_client;
+sleep 60;
+
+let $cnt=100;
+while($cnt)
+{
+    eval create table t$cnt(c1 int primary key, c2 int, c3 int);
+    dec $cnt;
+}
+let $cnt=100;
+while($cnt)
+{
+    eval alter table t$cnt drop column c3;
+    dec $cnt;
+}
+while($cnt)
+{
+    eval alter table t$cnt add column c3 int;
+    dec $cnt;
+}
+
+let $cnt=100;
+while($cnt)
+{
+    eval drop table t$cnt;
+    dec $cnt;
+}
+
+--echo master cluster
+let $cnt=0;
+let $sum=0;
+while($cnt < 4)
+{
+  let $a=deploy_get_value(ob1.ms$cnt.monitor sql_succ_query_count);
+  let $sum=math($sum+$a);
+  inc $cnt;
+}
+--echo sql_succ_query_count
+if($sum >= 100)
+{
+   --echo success
+}
+
+let $cnt=0;
+let $sum=0;
+while($cnt < 4)
+{
+  let $b=deploy_get_value(ob1.ms$cnt.monitor sql_create_table_count);
+  let $sum=math($sum+$b);
+  inc $cnt;
+}
+--echo sql_create_table_count
+if($sum >= 100)
+{
+   --echo success
+}
+
+let $cnt=0;
+let $sum=0;
+while($cnt < 4)
+{
+  let $c=deploy_get_value(ob1.ms$cnt.monitor sql_drop_table_count);
+  let $sum=math($sum+$c);
+  inc $cnt;
+}
+--echo sql_drop_table_count
+if($sum >= 100)
+{
+   --echo success
+}
+
+--echo check obdatasouce log
+let $a = deploy_get_value(ob1.sh_p if grep ERROR ~/logs/obdatasource/obdatasource-lb-monitor.log*; then echo false; else echo true;fi);
+--echo $a
+let $a = deploy_get_value(ob1.sh_p if grep ERROR ~/logs/obdatasource/obdatasource.log*; then echo false; else echo true; fi);
+--echo $a

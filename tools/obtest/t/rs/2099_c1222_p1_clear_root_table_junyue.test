@@ -1,0 +1,49 @@
+deploy ob1=OBI(cluster=1222, use_fms=0);
+deploy ob2=OBI(cluster=1222, use_fms=0);
+ob2.rs0.set master=ob1.rs0;
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+
+
+deploy ob1.source include/merge.inc;
+sleep 10;
+deploy ob1.create_client;
+deploy ob1.rs_admin  dump_root_table;
+
+create table test(id int primary key, name varchar, addr varchar, birthday timestamp, money int, score float) TABLET_MAX_SIZE=512000;
+create table t1(c1 int primary key ,c2 int) TABLET_MAX_SIZE=4000;
+create table t2(c1 int primary key ,c2 int);
+create table t3(c1 int primary key ,c2 int);
+
+sleep 60;
+
+ob1.prepare s;
+
+
+deploy ob1.rs_admin  dump_root_table;
+deploy ob1.rs_admin  clean_root_table;
+
+deploy ob1.major_freeze;
+
+deploy ob1.rs_admin  dump_root_table;
+deploy ob1.rs0.check_log_until_success "start to clean root table";
+select * from t1;
+deploy ob1.check_cs_version 2;
+deploy ob2.check_cs_version 2;
+
+sleep 30;
+
+deploy ob1.rs_admin  dump_root_table;
+
+deploy ob2.rs_admin  dump_root_table;
+
+--echo master rs 
+let $a=deploy_get_value(ob1.rs0.sh_p grep "meta_table_.size" ~/ob1/log/rootserver.log  | sed  "s#.*] ##g");
+--echo $a
+
+--echo slave rs 
+let $b=deploy_get_value(ob2.rs0.sh_p grep "meta_table_.size" ~/ob2/log/rootserver.log  | sed  "s#.*] ##g");
+--echo $b
+
+

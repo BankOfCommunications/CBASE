@@ -1,0 +1,61 @@
+31和32的/home/wushi.ly/olapdrive目录为测试目录，该目录包括如下文件夹：
+chunk： chunk server相关文件
+gen： 预分配所生成数据的tablet range
+lib： libaray
+merge： merge server相关文件
+ob_deploy.sh： 执行脚本
+olapdrive： olap 负载产生工具
+root： root server相关文件
+tools： tools，用于设置cs，rs，ups的相关工具
+update： update server相关文件
+
+生成原始数据，这部分工作已经完成，不需再做，如果要重新生成，按照如下步骤：
+全都在31这台服务器上操作
+1. 修改olapdrive目录下的olapdrive.conf文件
+	write_thread_count = 1 
+	read_thread_count = 0 
+	network_timeout=10000000 
+	stat_dump_interval = 5000000
+	write_day_count = 10
+	daily_unit_count = 10000000
+	read_day_count = 7 
+	log_level = 0 
+
+	write_thread_count必须为1，read_thread_count为0，总数量为daily_unit_count * write_day_count
+2. 根据需要更新各个server的可执行文件
+    修改ob_deploy.sh文件顶部的scp可执行文件的服务器路径，比如：
+    OCEANBASE_COMPILE_HOME="huating@10.232.35.41:/home/huating/workspace/rev_0_3_0_ii_dev/oceanbase"
+    修改成你的源代码目录，并编译好了各个server
+3. 运行./ob_deploy.sh stopc 停止各个server和清理各个server的log信息
+4. 运行./ob_deploy.sh pdata
+5. 运行 ./ob_deploy.sh start
+6. cd到olapdrive目录运行./olapdrive -f olapdrive.conf -N,有-N选项表示日志输出到屏幕，否则输出到log文件中
+7. 如果导入数据完成，强制ups major freeze最后的一个版本，运行./ob_deploy.sh freeze， 等待合并完成
+
+数据生成完成后，执行olap测试
+1. 修改olapdrive目录下的olapdrive.conf文件
+	write_thread_count = 0
+	read_thread_count = 10 
+	network_timeout=10000000 
+	stat_dump_interval = 5000000
+	write_day_count = 10
+	daily_unit_count = 10000000
+	read_day_count = 7 
+	log_level = 0 
+	write_thread_count必须为0，read_thread_count为你需要的设定值，read_day_count一般设置为7，表示读取7天的
+	数据进行处理，如果OB一共只有1天的数据，read_day_count设置为7，也只会读取1天的数据，log_level一般设置为0，
+	为最高级别，只周期打印一些信息，设置为1，会打印每个测试的概要信息，设置为2，会打印出错的详细信息
+2. 如果OB已经停止，则运行./ob_deploy.sh start
+3. cd到olapdrive目录运行./olapdrive -f olapdrive.conf -N,有-N选项表示日志输出到屏幕，否则输出到log文件中
+4. 如需停止测试，停止olapdrive，然后运行./ob_deploy.sh nstop
+现在测试中还会有出错的日志打印出来，主要是没有支持定点数，如果测试压力不够，可以多启动几个olapdrive进行测试
+
+table介绍：
+lzp4p： 模拟量子统计的数据表，rowkey为：unit_id + thedate + campaign_id + adgroup_id + type + bidword_id(or creative_id), 
+	共41字节，其中type一个字节，其它的都为8字节
+campaign： campaign的元信息表，rowkey为unit_id + campaign_id， 16字节
+adgroup：adgroup的元信息表，rowkey为unit_id + campaign_id + adgroup_id，32字节
+meta：总的元信息表，就一行数据，rowkeye为8字节，全0的rowkey
+
+lzp4p表中每天的数据都是一样的，每行中数据列的值都与 bidword_id(or creative_id)相等，所以无论写入多少天的数据，只需要知道
+相关元信息表的数据和天数，就可以计算出任何的查询结果进行校验。元信息表中记录的是start_id和end_id.

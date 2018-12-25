@@ -1,0 +1,36 @@
+-- ok, sytax ok, we don't check value type now
+insert into user (user_id, user_name, user_desc) values ('100', 'da fen qi', 'a turtle');
+<logical_plan Begin>
+    <StmtList Begin>
+        ObInsertStmt 0 Begin
+            <TableItemList Begin>
+                {Num 0, TableId:1002, TableName:user, AliasName:NULL, Type:BASE_TABLE, RefId: 1002}
+            <TableItemList End>
+            <ColumnItemList Begin>
+                {Num 0, ColumnId:2, ColumnName:user_id, TableRef:1002}
+                {Num 1, ColumnId:3, ColumnName:user_name, TableRef:1002}
+                {Num 2, ColumnId:5, ColumnName:user_desc, TableRef:1002}
+            <ColumnItemList End>
+            INTO ::= <1002>
+            VALUES ::= <1, 2, 3>
+        ObInsertStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_STRING : 100
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (NULL : 18446744073709551612)
+        T_STRING : da fen qi
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (NULL : 18446744073709551611)
+        T_STRING : a turtle
+        ObSqlRawExpr 2 End
+    <ExprList End>
+<logical_plan End>
+

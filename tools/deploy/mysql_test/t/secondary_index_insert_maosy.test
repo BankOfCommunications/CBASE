@@ -1,0 +1,91 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1 (c1 datetime ,c2 int ,c3 varchar(8),c4 timestamp,c5 double ,c6 decimal(5,4),primary key (c1));
+
+insert into t1 values ('2015-08-08 12:13:16',1,'maosiyu','2015-06-07 11:23:45.763261',2.36455,3.26),('3012-08-08 12:13:16',2,'maosiyu','2015-06-07 11:23:45.763261',2.36455,4.18),('1960-08-08 12:13:16',1,'maosiyu','2015-06-07 11:23:45.763261',2.36455,9.56);
+
+create index il0 on t1(c6,c3,c5) storing(c2,c4);
+create index il1 on t1(c6,c2) storing(c5,c3,c4);
+create index il2 on t1(c3,c5) storing(c2);
+create index il3 on t1(c3,c6,c5);
+create index il4 on t1(c1);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 700
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+--let $table_head =__
+--let $table_end =__idx__il0
+--let $table_name=$table_head$n$table_end
+echo $table_name;
+eval select * from $table_name;
+
+--let $table_end1=__idx__il1
+--let $table_name1=$table_head$n$table_end1
+eval select * from $table_name1;
+
+--let $table_end2=__idx__il2
+--let $table_name2=$table_head$n$table_end2
+eval select * from $table_name2;
+
+--let $table_end3=__idx__il3
+--let $table_name3=$table_head$n$table_end3
+eval select * from $table_name3;
+--let $table_end4=__idx__il4
+--let $table_name4=$table_head$n$table_end4
+eval select * from $table_name4;
+
+
+# on row
+insert into t1(c1,c2,c3,c5,c6) values('1020-03-09 15:30:36',25,'hahhaha',6.32256,3.2547);
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+#calculate
+insert into t1 (c1,c2,c3,c5,c6) values('2015-06-07 11:23:45.763261',89*98,'mace',8/1.23,7.9/8.25);
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+insert into t1 (c1,c2,c3,c5,c6) values('2015-08-09 16:34:36.876319',89/98,'mauybe',8.00/1.25,0.12*9);
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+# the column 
+insert into t1 (c1,c6,c2) values('2015-06-07 11:24:45.763261',7/53,8/7);
+insert into t1 (c1,c6,c3) values('2015-06-07 11:25:45.763261',7/53,'hahahce');
+insert into t1 (c1,c6) values('2015-06-07 11:26:45.763261',7/53);
+insert into t1 (c1,c6,c5) values('2015-06-07 11:27:45.763261',7/53,8*0.125);
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+insert into t1 (c1,c6,c2,c3) values('2015-06-05 11:23:45.763261',7/7.8,7,'subrina');
+insert into t1 (c1,c6,c3,c5) values('2015-06-06 11:23:45.763261',7/7,'hahahce',5.66426);
+insert into t1 (c1,c6,c2,c5) values('2015-06-08 11:23:45.763261',7*0.2254,1232344,83.5546534);
+select * from t1;
+eval select * from $table_name;
+eval select * from $table_name1;
+eval select * from $table_name2;
+eval select * from $table_name3;
+eval select * from $table_name4;
+
+
+
+

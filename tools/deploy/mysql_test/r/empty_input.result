@@ -1,0 +1,2 @@
+/*!40101 SET SQL_MODE='' */;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near '/*!40101 SET SQL_MODE='' */' at line 1

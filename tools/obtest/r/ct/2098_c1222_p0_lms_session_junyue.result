@@ -1,0 +1,12 @@
+ob1=OBI(cluster=1111);
+ob2=OBI(cluster=1111);
+ob2.rs0.set master=ob1.rs0;
+ob1.reboot;
+ob2.reboot;
+ob1.create_client;
+master cluster
+login<=2 logout<=2 fail_login succ_query select
+login<=2 is ok
+slave cluster lms was not used;
+login logout fail_login succ_query select
+0 0 0 0 0

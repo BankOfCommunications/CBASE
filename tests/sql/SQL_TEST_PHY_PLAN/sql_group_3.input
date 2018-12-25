@@ -1,0 +1,9 @@
+-- fail, Unknown column '0' in 'group clause'
+<<Part 1 : SQL STRING>>
+select user_id, sum(qty) from order_list where user_id < 1000 group by 0;
+[2012-07-17 15:19:16] ERROR resolve_group_clause (build_plan.cpp:1682) [47123780730880] Unknown column '0' in 'group clause'
+
+<<Part 2 : PARSE TREE>>
+Resolve error!
+
+

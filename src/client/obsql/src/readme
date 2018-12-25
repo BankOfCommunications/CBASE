@@ -1,0 +1,23 @@
+obsql是应用访问分布式数据库Oceanbase的c++客户端
+
+obsql使用方式
+1、obsql是以动态库的形式提供给用户使用，使用之前需设置环境变量LD_PRELOAD
+   指向提供的so文件
+   Ex: export LD_PRELOAD=/home/admin/obsql/lib/libobsql.so.0.0.0
+
+2、设置环境变量OB_SQL_CONFIG_DIR用来表示obsql配置文件的目录 obsql.config是配置
+   文件的名字
+   Ex: export OB_SQL_CONFIG_DIR=/home/admin/obsql/config
+
+3、需要配置服务器的配合例如淘宝的diamond
+
+配置文件示例
+logfile=/tmp/obsql.log
+initurl=http://10.232.102.182:8080/diamond-server/config.co?dataId=fangjiconfig
+loglevel=DEBUG
+minconn=2
+maxconn=50
+
+配置服务器上的配置示例
+10.235.152.9:3142    集群一 rootserver ip/port
+10.235.152.8:3142    集群二 rootserver ip/port

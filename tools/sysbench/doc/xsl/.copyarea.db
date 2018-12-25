@@ -1,0 +1,10 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\sysbench\doc\xsl
+2
+6
+f:xhtml-chunk.xsl|1|166f7760515|717|dca54f2b|4fab2dd268b711e8a8030002c8c1274c|0
+b:Makefile.am|1|166f7760502|324|4a609b1|4dab2db668b711e8a8030002c8c1274c|0
+10:xhtml-common.xsl|1|166f776053a|6b4|a77b111a|51bb2dee68b711e8a8030002c8c1274c|0
+9:xhtml.xsl|1|166f7760579|1e6|b1eba46a|561b2e2668b711e8a8030002c8c1274c|0
+e:catalog.xml.in|1|166f776058d|2d9|508e567|590b2e4268b711e8a8030002c8c1274c|0
+b:Makefile.in|1|166f7760564|297b|a43edeb|53bb2e0a68b711e8a8030002c8c1274c|0

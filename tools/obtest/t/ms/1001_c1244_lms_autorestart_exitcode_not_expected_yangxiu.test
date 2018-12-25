@@ -1,0 +1,44 @@
+deploy ob1=OBI(cluster=1244);
+
+deploy ob1.reboot;
+sleep 30;
+
+deploy ob1.prepare;
+deploy ob1.start_check;
+
+# new data
+deploy ob1.create_client;
+create table t1(c1 int primary key,c2 int);
+
+sleep 10;
+insert into t1 values(-1,1),(-2,2),(-3,3),(-4,4);
+
+# scan ups
+select * from t1;
+
+#kill -9 ,terminated by SIGKILL,not expected; kill -6 terminated by SIGABRT; not expected
+
+--disable_result_log
+--disable_query_log
+let $cnt = 10;
+while($cnt>0)
+{
+	deploy ob1.fs0.kill -9;
+	sleep 6;
+	eval insert into t1 values($cnt,1);
+	
+	deploy ob1.fs0.kill -6;
+	sleep 6;
+	select * from t1;
+	
+	let $a = deploy_get_value(ob1.fs0.sh_p ps uxf |grep mergeserver | grep -v grep | wc -l);
+	--echo $a
+
+	dec $cnt;
+}
+--enable_result_log
+--enable_query_log
+
+
+deploy ob1.stop_check;
+

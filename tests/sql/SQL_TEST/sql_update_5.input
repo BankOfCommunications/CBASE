@@ -1,0 +1,68 @@
+-- ok
+update item set item_name=item_name||'jiu gui jiu', item_cost= 89, item_price=99 where item_id=(select max(item_id) from item);
+<logical_plan Begin>
+    <StmtList Begin>
+        ObUpdateStmt 0 Begin
+            <TableItemList Begin>
+                {Num 0, TableId:1001, TableName:item, AliasName:NULL, Type:BASE_TABLE, RefId: 1001}
+            <TableItemList End>
+            <ColumnItemList Begin>
+                {Num 0, ColumnId:3, ColumnName:item_name, TableRef:1001}
+                {Num 1, ColumnId:4, ColumnName:item_cost, TableRef:1001}
+                {Num 2, ColumnId:5, ColumnName:item_price, TableRef:1001}
+                {Num 3, ColumnId:2, ColumnName:item_id, TableRef:1001}
+            <ColumnItemList End>
+            WHERE ::= <4>
+            UPDATE ::= <1001>
+            SET ::= <3, 1>, <4, 2>, <5, 3>
+        ObUpdateStmt 0 End
+        ObSelectStmt 1 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1001, TableName:item, AliasName:NULL, Type:BASE_TABLE, RefId: 1001}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:2, ColumnName:item_id, TableRef:1001}
+        <ColumnItemList End>
+        SELECT ::= <5>
+        FROM ::= <1001>
+        ObSelectStmt 1 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_OP_CNN
+            T_REF_COLUMN : [table_id, column_id] = [1001, 3]
+            T_STRING : jiu gui jiu
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (NULL : 18446744073709551612)
+        T_INT : 89
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (NULL : 18446744073709551611)
+        T_INT : 99
+        ObSqlRawExpr 2 End
+        ObSqlRawExpr 3 Begin
+        expr_id = 4
+        (table_id : column_id) = (NULL : 18446744073709551609)
+        T_OP_EQ
+            T_REF_COLUMN : [table_id, column_id] = [1001, 2]
+            T_REF_QUERY : 2
+        ObSqlRawExpr 3 End
+        ObSqlRawExpr 4 Begin
+        expr_id = 5
+        (table_id : column_id) = (NULL : 18446744073709551610)
+        T_REF_COLUMN : [table_id, column_id] = [NULL, 18446744073709551610]
+        ObSqlRawExpr 4 End
+        ObSqlRawExpr 5 Begin
+        expr_id = 6
+        (table_id : column_id) = (NULL : 18446744073709551610)
+        T_FUN_MAX
+            T_REF_COLUMN : [table_id, column_id] = [1001, 2]
+        ObSqlRawExpr 5 End
+    <ExprList End>
+<logical_plan End>
+

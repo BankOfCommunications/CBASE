@@ -1,0 +1,25 @@
+drop table if exists c;
+
+create table c (c1 int primary key, c2 varchar(8));
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create index c_index on c(c2);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 600
+show index on c;
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+connection conn1;
+begin;						
+insert into c values(1,1);
+
+connection conn2;
+begin;
+--error 5049
+update c set c2 = 2 where c1 = 1;
+commit;
+
+connection conn1;
+commit;

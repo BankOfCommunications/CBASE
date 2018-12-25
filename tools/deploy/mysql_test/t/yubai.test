@@ -1,0 +1,28 @@
+#--disable_parsing
+# it's a bug caused by merge_delete.test, rows deleted can still be searched.
+
+--disable_warnings
+drop table if exists sbtest;
+--enable_warnings
+
+CREATE TABLE sbtest (id INTEGER  NOT NULL , k integer  DEFAULT '0' NOT NULL, c char(120) DEFAULT '' NOT NULL, pad char(60) DEFAULT '' NOT NULL, PRIMARY KEY  (id) ) ;
+
+--echo insert 100 rows to ups
+--let $count=1
+while($count < 101)
+{ 
+    --let $stmt=INSERT INTO sbtest(id, k, c, pad) VALUES($count,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt')
+    eval $stmt;
+    inc $count; 
+}
+
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 1
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t drop;
+
+delete  from sbtest where id=1;
+select * from sbtest where id=1;
+
+
+
+

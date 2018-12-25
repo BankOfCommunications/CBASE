@@ -1,0 +1,69 @@
+using database test;
+drop table if exists ie_trim;
+create table ie_trim
+(
+it0 int,
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256),
+primary key(it0, vc0)
+);
+select * from ie_trim;
+it0	vc0	vc1	vc2
+0	a	NULL	NULL
+1	b	NULL	sun
+2	c	hello	sun
+3	e	hello	sun
+4	f	hello	sun
+5	g	hello	sun
+drop table if exists ie_trim;
+create table ie_trim
+(
+it0 int,
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256),
+primary key(it0, vc0)
+);
+select * from ie_trim;
+it0	vc0	vc1	vc2
+0	a	NULL	NULL
+1	b	NULL	sun
+2	c	hello	sun
+3	e	hello	sun
+4	f	hello	sun
+5	g	hello	sun
+drop table if exists ie_trim;
+create table ie_trim
+(
+it0 int,
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256),
+primary key(it0, vc0)
+);
+select * from ie_trim;
+it0	vc0	vc1	vc2
+0	a	NULL	NULL
+1	b	NULL	sun
+2	c	  hello	sun
+3	e	hello	sun
+4	f	  hello	sun
+5	g	hello	sun
+drop table if exists ie_trim;
+create table ie_trim
+(
+it0 int,
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256),
+primary key(it0, vc0)
+);
+select * from ie_trim;
+it0	vc0	vc1	vc2
+0	a	NULL	NULL
+1	b	NULL	sun
+2	c	  hello	sun
+3	e	hello	sun
+4	f	  hello	sun
+5	g	hello	sun

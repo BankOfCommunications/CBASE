@@ -1,0 +1,45 @@
+let $cnt=200;
+
+# 创建200个表
+while($cnt)
+{
+   eval create table t$cnt(pk int primary key, c1 int);
+   eval insert into t$cnt values(1,1);
+   dec $cnt;
+}
+
+show tables;
+
+# 删除这200个表
+let $cnt=200;
+while($cnt)
+{
+   eval drop table t$cnt;
+   --error 5019
+   eval select * from t$cnt;
+   dec $cnt;
+}
+
+show tables;
+# 创建表并立即删除表，反复200次
+
+while($cnt)
+{
+   eval create table t$cnt(pk int primary key, c1 int);
+   eval insert into t$cnt values(1,1);
+   eval drop table t$cnt;
+   --error 5019
+   eval select * from t$cnt;
+   dec $cnt;
+}
+
+show tables;
+
+
+
+
+
+
+
+
+

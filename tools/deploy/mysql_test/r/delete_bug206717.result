@@ -1,0 +1,2 @@
+drop table if exists sbtest;
+[major_freeze] err=0

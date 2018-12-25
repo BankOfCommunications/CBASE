@@ -1,0 +1,422 @@
+drop table if exists t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from select a from t1 where a=?;
+set @a=2;
+execute stmt1 using @a;
+a
+2
+deallocate prepare stmt1;
+prepare stmt2 from select a from t1 where a=?;
+set @a=2;
+execute stmt2 using @a;
+a
+2
+deallocate prepare stmt2;
+prepare stmt3  from select a,b from t1 where a=?;
+set @a=2;
+execute stmt3 using @a;
+a	b
+2	b
+prepare stmt3 from select a,b from t1 where a=?;
+set @a=2;
+execute stmt3 using @a;
+a	b
+2	b
+prepare stmt3 from select a,b from t1 where a=?;
+set @a=2;
+execute stmt3 using @a;
+a	b
+2	b
+set @a=3;
+execute stmt3 using @a;
+a	b
+3	c
+deallocate prepare stmt3;
+prepare stmt4 from select a,b from t1 where a=?;
+set @a=2;
+execute stmt4 using @a;
+a	b
+2	b
+deallocate prepare stmt4;
+prepare stmt5 from select a,b from t1 where a=?;
+set @a=2;
+execute stmt5 using @a;
+a	b
+2	b
+set @a=3;
+execute stmt5 using @a;
+a	b
+3	c
+deallocate prepare stmt5;
+prepare stmt6 from select a,b from t1 where a=? and b='b';
+set @a=2;
+execute stmt6 using @a;
+a	b
+2	b
+prepare stmt6 from select a,b from t1 where a=? and b='b';
+set @a=2;
+execute stmt6 using @a;
+a	b
+2	b
+alter table t1 add d int;
+set @a=2;
+execute stmt6 using @a;
+a	b
+2	b
+set @a=2;
+execute stmt6 using @a;
+a	b
+2	b
+deallocate prepare stmt6;
+prepare stmt7 from select a,b from t1  where a=? and b='b';
+set @a=2;
+execute stmt7 using @a;
+a	b
+2	b
+prepare stmt7 from select a,b from t1 where a=? and b='b';
+set @a=2;
+execute stmt7 using @a;
+a	b
+2	b
+alter table t1 drop d ;
+set @b=2;
+execute stmt7 using @b;
+a	b
+2	b
+set @b=2;
+execute stmt7 using @b;
+a	b
+2	b
+deallocate prepare stmt7;
+prepare stmt8 from select a,b from t1 where a=? and b='b';
+set @a=2;
+execute stmt8 using @a;
+a	b
+2	b
+prepare stmt8 from select a,b from t1 where a=? and b='b';
+set @a=2;
+execute stmt8 using @a;
+a	b
+2	b
+alter table t1 drop b ;
+set @a=2;
+execute stmt8 using @a;
+ERROR HY000: OB--1: Unknown error
+set @a=2;
+execute stmt8 using @a;
+ERROR HY000: OB--1: Unknown error
+deallocate prepare stmt8;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt9 from select a,b from t1 where b=? and a=1;
+set @b='a';
+execute stmt9 using @b;
+a	b
+1	a
+prepare stmt9 from select a,b from t1 where b=? and a=1;
+set @b='a';
+execute stmt9 using @b;
+a	b
+1	a
+alter table t1 add d int;
+alter table t1 drop d ;
+set @b='a';
+execute stmt9 using @b;
+a	b
+1	a
+set @b='a';
+execute stmt9 using @b;
+a	b
+1	a
+deallocate prepare stmt9;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt10 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt10 using @b;
+a	b
+2	b
+prepare stmt10 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt10 using @b;
+a	b
+2	b
+alter table t1 drop c ;
+alter table t1 add c int;
+set @b='b';
+execute stmt10 using @b;
+a	b
+2	b
+set @b='b';
+execute stmt10 using @b;
+a	b
+2	b
+deallocate prepare stmt10;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt11 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt11 using @b;
+a	b
+2	b
+prepare stmt11 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt11 using @b;
+a	b
+2	b
+alter table t1 drop c ;
+alter table t1 add c varchar(255);
+set @b='b';
+execute stmt11 using @b;
+a	b
+2	b
+set @b='b';
+execute stmt11 using @b;
+a	b
+2	b
+deallocate prepare stmt11;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt12 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt12 using @b;
+a	b
+2	b
+prepare stmt12 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt12 using @b;
+a	b
+2	b
+alter table t1 drop b ;
+alter table t1 add b varchar(255);
+set @b='b';
+execute stmt12 using @b;
+ERROR HY000: OB--1: Unknown error
+set @b='hah';
+execute stmt12 using @b;
+ERROR HY000: OB--1: Unknown error
+deallocate prepare stmt12;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt13 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt13 using @b;
+a	b
+2	b
+prepare stmt13 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt13 using @b;
+a	b
+2	b
+alter table t1 drop b ;
+alter table t1 add b int;
+set @b='b';
+execute stmt13 using @b;
+ERROR HY000: OB--1: Unknown error
+set @b='b';
+execute stmt13 using @b;
+ERROR HY000: OB--1: Unknown error
+deallocate prepare stmt13;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt14 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt14 using @b;
+a	b
+2	b
+prepare stmt14 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt14 using @b;
+a	b
+2	b
+drop table t1;
+set @b='b';
+execute stmt14 using @b;
+ERROR HY000: OB--1: Unknown error
+set @b='b';
+execute stmt14 using @b;
+ERROR HY000: OB--1: Unknown error
+deallocate prepare stmt14;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt15 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt15 using @b;
+a	b
+2	b
+prepare stmt15 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt15 using @b;
+a	b
+2	b
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+set @b='b';
+execute stmt15 using @b;
+ERROR HY000: OB--1: Unknown error
+set @b='b';
+execute stmt15 using @b;
+ERROR HY000: OB--1: Unknown error
+deallocate prepare stmt15;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt16 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt16 using @b;
+a	b
+2	b
+prepare stmt16 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt16 using @b;
+a	b
+2	b
+drop table t1;
+create table t1( a int primary key,b varchar(255));
+set @b='b';
+execute stmt16 using @b;
+ERROR HY000: OB--1: Unknown error
+set @b='b';
+execute stmt16 using @b;
+ERROR HY000: OB--1: Unknown error
+deallocate prepare stmt16;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,1),(2,'b',3,3),(3,'c',4,2);
+prepare stmt17 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt17 using @b;
+a	b
+2	b
+prepare stmt17 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt17 using @b;
+a	b
+2	b
+drop table t1;
+create table t1( a int primary key,c varchar(255));
+set @b='b';
+execute stmt17 using @b;
+ERROR HY000: OB--1: Unknown error
+set @b='b';
+execute stmt17 using @b;
+ERROR HY000: OB--1: Unknown error
+deallocate prepare stmt17;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt18 from select a,b from t1 where b=? and a=1;
+set @b='a';
+execute stmt18 using @b;
+a	b
+1	a
+prepare stmt18 from select a,b from t1 where b=? and a=1;
+set @b='a';
+execute stmt18 using @b;
+a	b
+1	a
+alter table t1 add d int;
+alter table t1 drop d ;
+set @b='a';
+execute stmt18 using @b;
+a	b
+1	a
+set @b='a';
+execute stmt18 using @b;
+a	b
+1	a
+deallocate prepare stmt18;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+prepare stmt19 from select a,b from t1 where b=? and a=2;
+set @b=2;
+execute stmt19 using @b;
+a	b
+prepare stmt19 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt19 using @b;
+a	b
+alter table t1 drop c ;
+alter table t1 add c int;
+set @b='b';
+execute stmt19 using @b;
+a	b
+set @b='b';
+execute stmt19 using @b;
+a	b
+deallocate prepare stmt19;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt20 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt20 using @b;
+a	b
+2	b
+prepare stmt20 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt20 using @b;
+a	b
+2	b
+alter table t1 drop c ;
+alter table t1 add c varchar(255);
+set @b='b';
+execute stmt20 using @b;
+a	b
+2	b
+set @b='b';
+execute stmt20 using @b;
+a	b
+2	b
+deallocate prepare stmt20;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt21 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt21 using @b;
+a	b
+2	b
+prepare stmt21 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt21 using @b;
+a	b
+2	b
+alter table t1 drop b ;
+alter table t1 add b varchar(255);
+set @b='b';
+execute stmt21 using @b;
+ERROR HY000: OB--1: Unknown error
+set @b='b';
+execute stmt21 using @b;
+ERROR HY000: OB--1: Unknown error
+deallocate prepare stmt21;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt22 from select a,b from t1 where b=? and a=2;
+set @b='b';
+execute stmt22 using @b;
+a	b
+2	b
+prepare stmt22 from select a,b from t1 where b=? and a=2;
+set @b=2;
+execute stmt22 using @b;
+ERROR S1004: OB-5023: Illegal type
+alter table t1 drop b ;
+alter table t1 add b int;
+set @b='b';
+execute stmt22 using @b;
+ERROR HY000: OB--1: Unknown error
+set @b='b';
+execute stmt22 using @b;
+ERROR HY000: OB--1: Unknown error
+deallocate prepare stmt22;

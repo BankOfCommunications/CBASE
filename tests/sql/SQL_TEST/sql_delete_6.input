@@ -1,0 +1,7 @@
+-- fail, Unkown column name item_name
+delete from user where item_name='jiu yin zhen jing';
+[2012-08-13 18:05:48] DEBUG ob_schema.cpp:2311 [139840185405568] userX,4:item_name,9 not fould [16]
+Unkown column name item_name
+Resolve error!
+
+

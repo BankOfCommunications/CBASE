@@ -1,0 +1,17 @@
+ob1=OBI(cluster=1133)
+ob1.reboot
+ob1.source include/merge.inc
+ob1.create_client
+ob1.major_freeze
+ob1.rs0.stop
+ob1.ms0.force_stop
+ob1.rs0.nstart
+select svr_type from __all_server;
+svr_type
+chunkserver
+chunkserver
+chunkserver
+mergeserver
+mergeserver
+rootserver
+updateserver

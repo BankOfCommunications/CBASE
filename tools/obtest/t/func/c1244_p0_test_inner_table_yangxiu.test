@@ -1,0 +1,112 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+
+deploy ob1.create_client;
+deploy ob1.prepare;
+sleep 60;
+
+deploy ob1.start_check;
+
+########## verify inner table ###############
+--echo ******  begin verify inner table ************
+SHOW VARIABLES like '%increment%';
+SHOW GLOBAL VARIABLES like '%increment%';
+show grants;
+deploy ob1.mysql show processlist;
+SHOW TABLES like '\\_\\_%';
+show columns from __all_sys_stat;
+
+select table_name from __first_tablet_entry limit 1;   
+select table_id from __all_all_column limit 1;
+select * from __all_join_info;
+deploy ob1.mysql select * from __all_server_session;
+select name,data_type from __all_sys_param limit 1; 
+select cluster_id,name,data_type from __all_sys_stat;  
+select table_id,priv_all from __all_table_privilege;  
+select user_name,user_id from __all_user;
+let $a = deploy_get_value(ob1.mysql_p select count(*) from (select * from __all_server_stat) tt where svr_type='mergeserver' and name='sql_select_count'); 
+--echo $a
+
+############## stop server ##############
+deploy ob1.ms0.stop;
+deploy ob1.cs0.stop;
+let $slaveups=deploy_get_value(ob1.get_slave_ups);
+deploy ob1.$slaveups.stop;
+sleep 20;
+
+##########   verify inner table  ##############
+--echo ********** after stop server ***********
+SHOW VARIABLES like '%increment%';
+SHOW GLOBAL VARIABLES like '%increment%';
+show grants;
+deploy ob1.mysql show processlist;
+SHOW TABLES like '\\_\\_%';
+show columns from __all_sys_stat;
+
+select table_name from __first_tablet_entry limit 1; 
+select table_id from __all_all_column limit 1;
+select * from __all_join_info;
+deploy ob1.mysql select * from __all_server_session;
+select name,data_type from __all_sys_param limit 1;
+select cluster_id,name,data_type from __all_sys_stat;
+select table_id,priv_all from __all_table_privilege;
+select user_name,user_id from __all_user;
+let $a = deploy_get_value(ob1.mysql_p select count(*) from (select * from __all_server_stat) tt where svr_type='mergeserver' and name='sql_select_count');
+--echo $a
+
+######## add server ###########
+deploy ob1.ms0.nstart;
+deploy ob1.cs0.nstart;
+deploy ob1.$slaveups.nstart;
+sleep 20;
+
+##########   verify inner table  ##############
+--echo ********** add server **********
+SHOW VARIABLES like '%increment%';
+SHOW GLOBAL VARIABLES like '%increment%';
+show grants;
+deploy ob1.mysql show processlist;
+SHOW TABLES like '\\_\\_%';
+show columns from __all_sys_stat;
+
+select table_name from __first_tablet_entry limit 1;
+select table_id from __all_all_column limit 1;
+select * from __all_join_info;
+deploy ob1.mysql select * from __all_server_session;
+select name,data_type from __all_sys_param limit 1;
+select cluster_id,name,data_type from __all_sys_stat;
+select table_id,priv_all from __all_table_privilege;
+select user_name,user_id from __all_user;
+let $a = deploy_get_value(ob1.mysql_p select count(*) from (select * from __all_server_stat) tt where svr_type='mergeserver' and name='sql_select_count');
+--echo $a
+
+deploy ob1.stop_check;
+
+############# switch cluster ##########
+--echo ********** switch cluster **********
+deploy ob1.switch_cluster ob2; 
+
+###########  verify inner table ##########
+SHOW VARIABLES like '%increment%';
+SHOW GLOBAL VARIABLES like '%increment%';
+show grants;
+deploy ob1.mysql show processlist;
+show TABLES like '\\_\\_%';
+show columns from __all_sys_stat;
+
+select table_name from __first_tablet_entry limit 1;
+select table_id from __all_all_column limit 1;
+select * from __all_join_info;
+deploy ob1.mysql select * from __all_server_session;
+select name,data_type from __all_sys_param limit 1;
+select cluster_id,name,data_type from __all_sys_stat;
+select table_id,priv_all from __all_table_privilege;
+select user_name,user_id from __all_user;
+let $a = deploy_get_value(ob1.mysql_p select count(*) from (select * from __all_server_stat) tt where svr_type='mergeserver' and name='sql_select_count');
+--echo $a
+

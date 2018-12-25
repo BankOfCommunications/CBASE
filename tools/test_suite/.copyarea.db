@@ -1,0 +1,9 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\test_suite
+2
+5
+c:suite_cntl.c|1|166f77a434f|2ed|4ef2d7ef|404c8fca68d311e8a8030002c8c1274c|0
+b:Makefile.am|1|166f77a42f8|1b4|cf688d68|3ddc8fae68d311e8a8030002c8c1274c|0
+7:suite.c|1|166f77a43af|c38|2b3ab22d|428c8fe668d311e8a8030002c8c1274c|0
+6:test.c|1|166f77a43ed|1d3|14478d65|44ac900268d311e8a8030002c8c1274c|0
+c:suite_config|1|166f77a442b|2000|20000001|46dc901e68d311e8a8030002c8c1274c|0

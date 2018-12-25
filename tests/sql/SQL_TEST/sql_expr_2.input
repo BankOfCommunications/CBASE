@@ -1,0 +1,41 @@
+-- ok
+select 'deng' lname, 'pu fang' as fname, lname||fname from user u where 1;
+[2012-08-13 18:05:48] DEBUG ob_schema.cpp:2311 [139840185405568] useruX,4:lname,5 not fould [16]
+[2012-08-13 18:05:48] DEBUG ob_schema.cpp:2311 [139840185405568] useruX,4:fname,5 not fould [16]
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:18446744073709551613, TableName:user, AliasName:u, Type:ALIAS_TABLE, RefId: 1002}
+        <TableItemList End>
+        WHERE ::= <4>
+        SELECT ::= <1, lname>, <2, fname>, <3>
+        FROM ::= <18446744073709551613>
+        ObSelectStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_STRING : deng
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (NULL : 18446744073709551612)
+        T_STRING : pu fang
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (NULL : 18446744073709551611)
+        T_OP_CNN
+            T_REF_COLUMN : [table_id, column_id] = [NULL, 18446744073709551613]
+            T_REF_COLUMN : [table_id, column_id] = [NULL, 18446744073709551612]
+        ObSqlRawExpr 2 End
+        ObSqlRawExpr 3 Begin
+        expr_id = 4
+        (table_id : column_id) = (NULL : 18446744073709551610)
+        T_INT : 1
+        ObSqlRawExpr 3 End
+    <ExprList End>
+<logical_plan End>
+

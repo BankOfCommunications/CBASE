@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+export LD_LIBRARY_PATH=/usr/local/staf/lib/:$LD_LIBRARY_PATH
+
+## 
+#export CLASSPATH=`pwd`/target:`pwd`/target/log4j.properties
+
+#java -Duserid=$(id -u) -cp target/mytest-1.1-SNAPSHOT-jar-with-dependencies.jar com.etao.mytest.main.MyTest  -result_file r/a.result -test_file t/a.test -record
+
+jar=`ls jar/*.jar`
+case=$1
+extra1=$2
+extra2=$3
+
+if [ -z $case ] ;then
+    exit 1
+fi
+if [ $case = "help" ];then
+    java -Duserid=$(id -u) -cp $jar com.etao.mytest.deploy.Deploy  $@
+    exit 0
+fi
+
+case=`echo $case|sed "s#\.#/#g"`
+echo $case
+
+java -Duserid=$(id -u) -Dlog4j.log.app=$case -cp $jar com.etao.mytest.main.MyTest  -result_file r/$case.result -test_file t/$case.test  $extra1  $extra2
+
+#-result_file r/a.result -test_file t/a.test -record

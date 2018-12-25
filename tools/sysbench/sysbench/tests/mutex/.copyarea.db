@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\sysbench\sysbench\tests\mutex
+2
+4
+a:sb_mutex.c|1|166f7761791|f94|88ce09be|e81b355e68b711e8a8030002c8c1274c|0
+b:Makefile.am|1|166f77617ab|375|845f2114|eaab357a68b711e8a8030002c8c1274c|0
+e:CMakeLists.txt|1|166f77617c1|342|9cf8130d|ecab359668b711e8a8030002c8c1274c|0
+b:Makefile.in|1|166f77617d9|41da|fa700bba|ef2b35b268b711e8a8030002c8c1274c|0

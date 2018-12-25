@@ -1,0 +1,5 @@
+replace into collect_info /*+rowkey,a:8*/ (a, user_nick) values(10,'mynickname');
+1
+select user_nick from collect_info where /*+rowkey,a:8 */ a = 10;
+user_nick
+'mynickname'

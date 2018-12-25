@@ -1,0 +1,100 @@
+--disable_warnings
+drop table if exists t1,t2,m1,m2,n1,n2;
+--enable_warnings
+
+# empty table
+
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+
+create table t1(c1 int primary key,c2 int);
+alter table t1 rename to t2;
+--error 5019
+select * from t1;
+select * from t2;
+
+create table m1(c1 int primary key,c2 int);
+desc m1;
+rename table m1 to m2;
+--error 5019
+desc m1;
+desc m2;
+
+drop table if exists t1,t2,m1,m2;
+create table t1(c1 int primary key,c2 int);
+insert into t1 values(1,1),(2,2),(3,3);
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 600
+rename table t1 to t2;
+--error 5019
+desc t1;
+desc t2;
+insert into t2 values(4,4);
+
+rename table t2 to t1;
+select * from t1;
+--error 5019
+select * from t2;
+insert into t1 values(5,5);
+select * from t1;
+--error 5019
+select * from t2;
+drop table if exists t1,t2;
+
+create table n1(c1 int primary key,c2 int);
+create table n2(c1 int primary key,c2 int);
+insert into n1 values(1,1);
+insert into n2 values(1,1),(2,2);
+rename table n1 to n1_temp;
+rename table n2 to n1;
+rename table n1_temp to n2;
+select * from n1;
+select * from n2;
+
+drop table if exists n1,n2;
+
+create table t1(c1 int primary key,c2 int);
+create table t2(c1 int primary key,c2 int);
+--error 5019
+rename table t1 to t2;
+--error 5019
+rename table t100 to t200;
+
+drop table if exists t1;
+
+create table t1(c1 int primary key,c2 int);
+alter table t1 rename c1 to c3;
+desc t1;
+drop table if exists t1;
+
+create table t1(c1 int primary key,c2 int);
+desc t1;
+alter table t1 rename column c1 to c3;
+desc t1;
+insert into t1 values(1,1),(2,2),(3,3);
+select * from t1;
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 400
+alter table t1 rename c2 to c1;
+select * from t1;
+insert into t1 values(4,4);
+alter table t1 rename c3 to c2;
+select * from t1;
+
+alter table t1 rename c1 to c3,add c4 int;
+select * from t1;
+--error 5008
+alter table t1 rename c2 to c3;
+alter table t1 drop c3,rename c2 to c1;
+select * from t1;
+--error 5009
+alter table t1 rename c200 to c300;
+drop table t1;
+
+create table t1(c1 int primary key,c2 int,c3 int);
+desc t1;
+--error 5008
+alter table t1 drop c2,rename c1 to c3;
+desc t1;
+drop table t1;
+

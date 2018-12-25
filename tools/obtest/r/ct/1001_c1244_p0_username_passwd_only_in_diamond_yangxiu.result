@@ -1,0 +1,14 @@
+ob1=OBI(cluster=1244)
+ob1.reboot
+ob1.set_diamond_user admin
+ob1.set_diamond_pwd admin
+ob1.start_diamond localhost
+ob1.set username=,passwd=
+ob1.create_client
+create table t1(a int primary key,b int);
+insert into t1 values(1,1),(2,2);
+select * from t1;
+a	b
+1	1
+2	2
+ob1.stop_diamond

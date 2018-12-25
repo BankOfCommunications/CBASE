@@ -1,0 +1,283 @@
+[schema_scanner_1_2]
+# table
+# FIXME: DO WE NEED THIS?
+table_id = 1001
+table_name = lz_rpt_p4p_effect_info
+
+# fullfilled = 1, not fullfilled = 0
+is_fullfilled = 1
+fullfilled_item_num = 1
+
+# data version
+data_version = 1
+
+# scanner range
+range_start   = 001
+range_end     = 002
+range_start_inclusive = 1
+range_start_min = 0
+range_end_inclusive = 1
+range_end_max = 0
+
+# scanner data file
+scanner_data=scanner_data.txt
+
+
+
+[schema_scanner_3_4]
+
+
+# table
+# FIXME: DO WE NEED THIS?
+table_id = 1001
+table_name = lz_rpt_p4p_effect_info
+
+# fullfilled = 1, not fullfilled = 0
+is_fullfilled = 1
+fullfilled_item_num = 1
+
+# data version
+data_version = 1
+
+# scanner range
+range_start   = 003
+range_end     = 004
+range_start_inclusive = 1
+range_start_min = 0
+range_end_inclusive = 1
+range_end_max = 0
+
+# scanner data file
+scanner_data=scanner_data.txt
+
+
+[schema_scanner_1_4]
+# table
+# FIXME: DO WE NEED THIS?
+table_id = 1001
+table_name = lz_rpt_p4p_effect_info
+
+# fullfilled = 1, not fullfilled = 0
+is_fullfilled = 1
+fullfilled_item_num = 4
+
+# data version
+data_version = 1
+
+# scanner range
+range_start   = 001
+range_end     = 004
+range_start_inclusive = 1
+range_start_min = 0
+range_end_inclusive = 1
+range_end_max = 0
+
+# scanner data file
+scanner_data=scanner_data_1_4.txt
+
+
+
+
+[schema_scanner_5_6]
+
+# table
+# FIXME: DO WE NEED THIS?
+table_id = 1001
+table_name = lz_rpt_p4p_effect_info
+
+# fullfilled = 1, not fullfilled = 0
+is_fullfilled = 1
+fullfilled_item_num = 1
+
+# data version
+data_version = 1
+
+# scanner range
+range_start   = 005
+range_end     = 006
+range_start_inclusive = 1
+range_start_min = 0
+range_end_inclusive = 1
+range_end_max = 0
+
+# scanner data file
+scanner_data=scanner_data.txt
+
+[schema_scanner_7_8]
+# table
+# FIXME: DO WE NEED THIS?
+table_id = 1001
+table_name = lz_rpt_p4p_effect_info
+
+# fullfilled = 1, not fullfilled = 0
+is_fullfilled = 1
+fullfilled_item_num = 1
+
+# data version
+data_version = 1
+
+# scanner range
+range_start   = 007
+range_end     = 008
+range_start_inclusive = 1
+range_start_min = 0
+range_end_inclusive = 1
+range_end_max = 0
+
+
+# scanner data file
+scanner_data=scanner_data.txt
+
+
+
+[schema_scanner_5_8]
+
+# table
+# FIXME: DO WE NEED THIS?
+table_id = 1001
+table_name = lz_rpt_p4p_effect_info
+
+# fullfilled = 1, not fullfilled = 0
+is_fullfilled = 1
+fullfilled_item_num = 1
+
+# data version
+data_version = 1
+
+# scanner range
+range_start   = 005
+range_end     = 008
+range_start_inclusive = 1
+range_start_min = 0
+range_end_inclusive = 1
+range_end_max = 0
+
+# scanner data file
+scanner_data=scanner_data_5_8.txt
+
+
+
+
+[schema_scanner_1_8]
+
+# table
+# FIXME: DO WE NEED THIS?
+table_id = 1001
+table_name = lz_rpt_p4p_effect_info
+
+# fullfilled = 1, not fullfilled = 0
+is_fullfilled = 1
+fullfilled_item_num = 1
+
+# data version
+data_version = 1
+
+# scanner range
+range_start   = 001
+range_end     = 008
+range_start_inclusive = 1
+range_start_min = 0
+range_end_inclusive = 1
+range_end_max = 0
+
+# scanner data file
+scanner_data=scanner_data.txt
+
+
+[schema_scanner_9_12]
+
+# table
+# FIXME: DO WE NEED THIS?
+table_id = 1001
+table_name = lz_rpt_p4p_effect_info
+
+# fullfilled = 1, not fullfilled = 0
+is_fullfilled = 1
+fullfilled_item_num = 4
+
+# data version
+data_version = 1
+
+# scanner range
+range_start   = 009
+range_end     = 012
+range_start_inclusive = 1
+range_start_min = 0
+range_end_inclusive = 1
+range_end_max = 0
+
+# scanner data file
+scanner_data=scanner_data_5_8.txt
+
+
+
+
+[tablet_location_cache]
+
+# tablet range <-> location 
+
+table_id_0 = 1001
+range_start_0=000
+range_end_0=004
+server_list_0 = 10.10.10.1,10.10.10.2
+
+
+table_id_1 = 1001
+range_start_1 = 004
+range_end_1   = 008
+server_list_1= 10.10.10.1,10.10.10.2
+
+
+table_id_2 = 1001
+range_start_2 = 008
+range_end_2   = 012
+server_list_2= 10.10.10.2,10.10.10.3
+
+
+[scan_param]
+# table
+table_id = 1001
+table_name = lz_rpt_p4p_effect_info
+# range
+range_start   = 001
+#AAAAAAAAAAAAAAAAAAAA00000
+range_end     = 012
+#AAAAAAAAAAAAAAAAAAAAFFFFF
+range_start_inclusive = 1
+range_start_min = 0
+range_end_inclusive = 1
+range_end_max = 0
+# scan dir 0:forward; 1:backword
+scan_direction = 0 
+# limit info
+limit_offset  = 0
+limit_count   = 0
+
+#select unit_p4p_id, time_stamp from table where time_stamp > 0 orderby unit_p4p_id DESC
+# condition
+#where_cond    = `time_stamp` > 0
+#having_cond   = unit_p4p_id > 100
+# basic column
+column_name_0  = unit_p4p_id
+#column_name_1  = time_stamp
+# complex column
+#complex_column_expr_0 = `time_stamp` + `unit_p4p_id`
+# group by
+#groupby_column_name_0 = unit_p4p_id
+# order by column
+# order 0:ASC, 1:DESC
+#orderby_column_name_0 = unit_p4p_id
+#orderby_column_order_0 = 0
+#orderby_column_name_1 = time_stamp
+#orderby_column_order_1 = 1
+#select unit_p4p_id, SUM(time_stamp) as x, x + unit_p4p_id from table groupby unit_p4p_id orderby unit_p4p_id DESC
+#agg
+#agg_column_name_0=time_stamp
+#agg_column_as_name_0=sum_time_stamp
+# OP 1=SUM, 2=COUNT, 3=MAX, 4=MIN
+#agg_column_op_0=1
+#agg_column_is_return_0=1
+#complex agg
+#agg_complex_column_name_0=sum_time_stamp * 10
+
+

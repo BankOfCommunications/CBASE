@@ -1,0 +1,6610 @@
+ob1=OBI(cluster=1222,use_fms=0)
+ob1.reboot
+ob1.update_cluster
+ob1.create_client
+create table t1(c1 int primary key, c2 int);
+insert into t1 values(1,1);
+insert into t1 values(2,1);
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+ob1.cs0.stop
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+select * from t1 where c1=1;
+c1	c2
+1	1
+select * from t1 where c1=2;
+c1	c2
+2	1
+success
+success

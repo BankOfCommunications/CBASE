@@ -1,0 +1,17 @@
+--disable_warnings
+drop table if exists t1,t2;
+--enable_warnings
+
+create table t1(i int primary key, c1 char(1), c256 char(256), dt datetime, d  datetime, ct createtime, mt modifytime);
+
+
+let $n = 100000;
+let $i=0;
+--echo insert different rows to t1
+while($i < $n) 
+{
+    eval insert into t1(i,c1,c256,dt,d) values($i,'1','$i','2012-10-10 12:00:00','2012-10-10');
+    inc $i;
+}
+
+drop table t1;

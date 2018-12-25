@@ -1,0 +1,48 @@
+ob1=OBI(cluster=1133)
+ob1.reboot
+create table t1 (id int, c1 int, primary key(id));
+insert into t1 values (1,1);
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+delete from t1 where id=1;
+set autocommit=0;
+insert into t1 values (1,1);
+select * from t1 where id=1 for update;
+id	c1
+1	1
+update t1 set c1=c1+1 where id=1;
+update t1 set c1=c1+1 where id=1;
+set autocommit=1;
+ob1.ups0.restart
+select * from t1;
+id	c1
+1	3

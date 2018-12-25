@@ -1,0 +1,138 @@
+drop table if exists t1;
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1 (c1 int primary key ,c2 int,c3 int );
+insert into t1 values(1,1,1),(2,2,2),(3,3,3);
+create index il0 on t1(c2) storing (c3);
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+__3001__idx__il0	1
+update t1 set c2=10 where c1=1;
+__3001__idx__il0
+select * from __3001__idx__il0;
+c1	c2	c3
+2	2	2
+3	3	3
+1	10	1
+drop table t1;
+set autocommit=0;
+create table t1 (c1 int primary key ,c2 int,c3 int );
+insert into t1 values(1,1,1),(2,2,2),(3,3,3);
+create index il0 on t1(c2) storing (c3);
+"merge"
+[major_freeze] err=0
+set autocommit=0;
+show index on t1;
+index_name	status
+__3003__idx__il0	1
+update t1 set c2=10 where c1=1;
+select * from __3003__idx__il0;
+c1	c2	c3
+commit ;
+select * from __3003__idx__il0;
+c1	c2	c3
+commit;
+update t1 set c2=20 where c1=2;
+commit;
+select * from __3003__idx__il0;
+c1	c2	c3
+commit ;
+drop table t1;
+commit ;
+set autocommit=1;
+create table t1 (c1 int primary key ,c2 int,c3 int );
+insert into t1 values(1,1,1),(2,2,2),(3,3,3);
+create index il0 on t1(c2) storing (c3);
+update t1 set c2=10 where c1=1;
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+__3005__idx__il0	1
+set autocommit=0;
+select * from __3005__idx__il0;
+c1	c2	c3
+2	2	2
+3	3	3
+1	10	1
+commit;
+select * from __3005__idx__il0;
+c1	c2	c3
+2	2	2
+3	3	3
+1	10	1
+set autocommit =1;
+create index il2 on t1(c2);
+"merge"
+[major_freeze] err=0
+set autocommit=0;
+update t1 set c2=10 where c1=2;
+show index on t1;
+index_name	status
+__3005__idx__il0	1
+__3005__idx__il2	1
+select * from __3005__idx__il2;
+c1	c2	ob_virtual_col
+3	3	NULL
+1	10	NULL
+2	10	NULL
+commit;
+select * from __3005__idx__il2;
+c1	c2	ob_virtual_col
+3	3	NULL
+1	10	NULL
+2	10	NULL
+update t1 set c2=10 where c1=2;
+create index il3 on t1(c2);
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+__3005__idx__il0	1
+__3005__idx__il2	1
+__3005__idx__il3	1
+select * from __3005__idx__il3;
+c1	c2	ob_virtual_col
+3	3	NULL
+1	10	NULL
+2	10	NULL
+commit;
+select * from __3005__idx__il3;
+c1	c2	ob_virtual_col
+3	3	NULL
+1	10	NULL
+2	10	NULL
+set autocommit =1;
+update t1 set c3 =100 where c1=2;
+select * from __3005__idx__il3;
+c1	c2	ob_virtual_col
+3	3	NULL
+1	10	NULL
+2	10	NULL
+drop table t1;
+create table t1 (c1 int primary key ,c2 decimal(3,2), c3 bool,c4 datetime);
+insert into t1 values(1,1.23,1,'2012-09-08 12:00:22'),(2,1.23,1,'2012-09-08 12:00:22');
+create index il0 on t1(c4, c2) storing(c3);
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+__3009__idx__il0	1
+update t1 set c2=3.22 where c1=2;
+select * from __3009__idx__il0;
+c1	c2	c3	c4
+1	1.23	1	2012-09-08 12:00:22
+2	3.22	1	2012-09-08 12:00:22
+create index il1 on t1 (c3,c2,c1) storing(c4);
+"merge"
+[major_freeze] err=0
+select * from __3009__idx__il0;
+c1	c2	c3	c4
+1	1.23	1	2012-09-08 12:00:22
+2	3.22	1	2012-09-08 12:00:22
+select * from __3009__idx__il1;
+c1	c2	c3	c4
+1	1.23	1	2012-09-08 12:00:22
+2	3.22	1	2012-09-08 12:00:22

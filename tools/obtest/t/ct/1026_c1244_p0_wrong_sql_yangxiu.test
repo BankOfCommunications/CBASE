@@ -1,0 +1,38 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+
+deploy ob1.create_client;
+deploy ob1.prepare;
+create table t1(c1 int primary key,c2 int);
+sleep 60;
+
+deploy ob1.start_check;
+insert into t1 values(1,1),(2,2),(3,3),(4,4);
+select * from t1;
+
+--disable_query_log
+--disable_result_log
+let $cnt=1000;
+while($cnt)
+{
+	--error 5009
+	select c from t1;
+	dec $cnt;
+}
+
+#sql
+--enable_query_log
+--enable_result_log
+drop table t1;
+create table t2(a int primary key,b int);
+sleep 60;
+insert into t2 values (5,1),(6,2),(7,3),(8,4);
+update t2 set b=10 where a=6;
+select * from t2;
+
+deploy ob1.stop_check;

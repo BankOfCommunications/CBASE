@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\importserver
+2
+4
+b:Makefile.am|1|166f774dbfe|35a|20b72597|e5dab41668ad11e8a8030002c8c1274c|0
+3:etc|2|0|0|0|ea1ab43e68ad11e8a8030002c8c1274c|0
+6:lib_6u|2|0|0|0|f99ab52268ad11e8a8030002c8c1274c|0
+6:lib_5u|2|0|0|0|019ab58668ae11e8a8030002c8c1274c|0

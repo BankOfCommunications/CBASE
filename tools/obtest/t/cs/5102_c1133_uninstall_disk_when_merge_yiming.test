@@ -1,0 +1,76 @@
+deploy ob1=OBI(cluster=1133);
+deploy ob1.reboot;
+
+deploy ob1.source include/merge.inc;
+sleep 10;
+
+deploy ob1.prepare s;
+deploy ob1.major_freeze; 
+
+deploy ob1.start_check;
+
+let $cnt=1;
+let $user = deploy_get_value(ob1.sh_p whoami);
+
+--disable_result_log
+while($cnt)
+{
+  sleep 3;
+  deploy ob1.cs0.cs_admin uninstall_disk  1;  
+  deploy ob1.cs0.cs_admin uninstall_disk  2;
+  deploy ob1.cs0.cs_admin uninstall_disk  3;
+  deploy ob1.cs0.cs_admin uninstall_disk  4;
+  deploy ob1.cs0.cs_admin uninstall_disk  5;
+  deploy ob1.cs0.cs_admin uninstall_disk  6;
+  deploy ob1.cs0.cs_admin uninstall_disk  7;
+
+  deploy ob1.cs1.cs_admin uninstall_disk  1;
+  deploy ob1.cs1.cs_admin uninstall_disk  2;
+  deploy ob1.cs1.cs_admin uninstall_disk  3;
+  deploy ob1.cs1.cs_admin uninstall_disk  4;
+  deploy ob1.cs1.cs_admin uninstall_disk  5;
+  deploy ob1.cs1.cs_admin uninstall_disk  6;
+  deploy ob1.cs1.cs_admin uninstall_disk  7;
+
+  deploy ob1.cs0.rm_sstable 1;
+  deploy ob1.cs0.rm_sstable 2;
+  deploy ob1.cs0.rm_sstable 3;
+  deploy ob1.cs0.rm_sstable 4;
+  deploy ob1.cs0.rm_sstable 5;
+  deploy ob1.cs0.rm_sstable 6;
+  deploy ob1.cs0.rm_sstable 7;
+
+	deploy ob1.cs1.rm_sstable 1;
+  deploy ob1.cs1.rm_sstable 2;
+  deploy ob1.cs1.rm_sstable 3;
+  deploy ob1.cs1.rm_sstable 4;
+  deploy ob1.cs1.rm_sstable 5;
+  deploy ob1.cs1.rm_sstable 6;
+  deploy ob1.cs1.rm_sstable 7;
+
+  sleep 10;
+
+  deploy ob1.cs0.cs_admin install_disk  /home/$user/obtest_data/1;
+  deploy ob1.cs0.cs_admin install_disk  /home/$user/obtest_data/2;
+  deploy ob1.cs0.cs_admin install_disk  /home/$user/obtest_data/3;
+  deploy ob1.cs0.cs_admin install_disk  /home/$user/obtest_data/4;
+  deploy ob1.cs0.cs_admin install_disk  /home/$user/obtest_data/5;
+  deploy ob1.cs0.cs_admin install_disk  /home/$user/obtest_data/6;
+  deploy ob1.cs0.cs_admin install_disk  /home/$user/obtest_data/7;
+
+  deploy ob1.cs1.cs_admin install_disk  /home/$user/obtest_data/1;
+  deploy ob1.cs1.cs_admin install_disk  /home/$user/obtest_data/2;
+  deploy ob1.cs1.cs_admin install_disk  /home/$user/obtest_data/3;
+  deploy ob1.cs1.cs_admin install_disk  /home/$user/obtest_data/4;
+  deploy ob1.cs1.cs_admin install_disk  /home/$user/obtest_data/5;
+  deploy ob1.cs1.cs_admin install_disk  /home/$user/obtest_data/6;
+  deploy ob1.cs1.cs_admin install_disk  /home/$user/obtest_data/7;
+  
+  dec $cnt;
+}
+
+--enable_result_log
+
+sleep 60;
+
+deploy ob1.stop_check;

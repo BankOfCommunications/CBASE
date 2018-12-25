@@ -1,0 +1,30 @@
+#+Title:  Deploy之sysbench使用说明
+#+Author: junyue
+#+Email:  xiaojun.chengxj@taobao.com
+
+* 说明
+  此文件夹存放的是sysbench的控制脚本，用于启动sysbench。是deploy框架的一部分。
+  #+begin_example
+  deploy是元启写的包含ob部署，控制，测试的框架。
+  #+end_example
+
+* 主要功能
+- 支持prepare/run/cleanup三种命令
+- 支持oltp的complex/notrx/simple/join/sp 五种测试模式
+- 支持sum/distinct/orderby/between等查询
+   
+* 使用方法
+  提供的接口:
+  #+begin_src sh
+    ./deploy ob1.sysbench [prepare|run|cleanup] [requests=*] [seconds=*] [rows=*] [threads=*]
+  #+end_src
+  说明：
+  + prepare/run/cleanup 指定其中1个
+  + requests表示最大请求数目，在complex模式的时候指的是事务的个数
+  + seconds表示最长运行时间
+    当requests或者seconds满足时sysbench都会结束
+  + threads表示线程数目
+  + 其他参数需要在config.py配置
+
+* 其它补充
+- 以后会增加场景的支持

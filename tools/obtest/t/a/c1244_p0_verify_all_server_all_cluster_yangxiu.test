@@ -1,0 +1,62 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+
+
+#verify __all_cluster 
+let $a=deploy_get_value(ob1.mysql_p select count(*) from __all_cluster);
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select count(*)=0 from __all_cluster where cluster_id is null);
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select count(*)=0 from __all_cluster where cluster_vip is null);
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select count(*)=0 from __all_cluster where cluster_port is null);
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select count(*)=0 from __all_cluster where cluster_flow_percent is null);
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select count(*)=0 from __all_cluster where read_strategy is null);
+--echo $a
+
+#verify __all_server
+
+let $a=deploy_get_value(ob1.mysql_p select count(*) from __all_server);
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select count(*)=0 from __all_server where cluster_id is null);
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select count(*)=0 from __all_server where svr_type is null);
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select count(*)=0 from __all_server where svr_ip is null);
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select count(*)=0 from __all_server where svr_port is null);
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select count(*)=0 from __all_server where inner_port is null);
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select count(*) from __all_server where inner_port != 0 and svr_type='mergeserver');
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select count(*) from __all_server where inner_port != 0 and svr_type='updateserver');
+--echo $a
+
+
+let $a=deploy_get_value(ob1.mysql_p select count(*)=0 from __all_server where svr_role is null);
+--echo $a
+
+
+
+
+

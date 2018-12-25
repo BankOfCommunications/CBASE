@@ -1,0 +1,114 @@
+--echo case 1: do update in trx
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+drop table if exists t1;
+
+create table t1(c0 int primary key, c1 int);
+
+prepare stmt_i from insert into t1 values(?,?),(?,?);
+prepare stmt_u from update t1 set c1=? where c0=?;
+prepare stmt_d from delete from t1 where c0=?;
+prepare stmt_s from select c0,c1 from t1 where c0=? for update;
+prepare stmt_select from select c0,c1 from t1;
+
+set autocommit=0;
+set @a1=1;
+set @b1=1;
+set @a2=2;
+set @b2=2;
+execute stmt_i using @a1,@b1,@a2,@b2;
+execute stmt_u using @b2,@a1;
+execute stmt_d using @a2;
+execute stmt_s using @a1;
+execute stmt_s using @a2;
+commit;
+set autocommit=1;
+execute stmt_select;
+disconnect conn1;
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+drop table if exists t1;
+
+create table t2(c0 varchar primary key, c1 varchar);
+
+prepare stmt_i from insert into t2 values(?,?),(?,?);
+prepare stmt_u from update t2 set c1=? where c0=?;
+prepare stmt_d from delete from t2 where c0=?;
+prepare stmt_s from select c0,c1 from t2 where c0=? for update;
+prepare stmt_select from select c0,c1 from t2;
+
+set autocommit=0;
+set @a1='s1';
+set @b1='s1';
+set @a2='s2';
+set @b2='s2';
+execute stmt_i using @a1,@b1,@a2,@b2;
+execute stmt_u using @b2,@a1;
+execute stmt_d using @a2;
+execute stmt_s using @a1;
+execute stmt_s using @a2;
+commit;
+set autocommit=1;
+execute stmt_select;
+disconnect conn1;
+
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+drop table if exists t2;
+
+create table t3(c0 datetime primary key, c1 datetime);
+
+prepare stmt_i from insert into t3 values(?,?),(?,?);
+prepare stmt_u from update t3 set c1=? where c0=?;
+prepare stmt_d from delete from t3 where c0=?;
+prepare stmt_s from select c0,c1 from t3 where c0=? for update;
+prepare stmt_select from select c0,c1 from t3;
+
+set autocommit=0;
+set @a1=timestamp'2013-03-28 12:18:01';
+set @b1=timestamp'2013-03-28 12:18:01';
+set @a2=timestamp'2013-03-28 12:19:01';
+set @b2=timestamp'2013-03-28 12:19:01';
+execute stmt_i using @a1,@b1,@a2,@b2;
+execute stmt_u using @b2,@a1;
+execute stmt_d using @a2;
+execute stmt_s using @a1;
+execute stmt_s using @a2;
+commit;
+set autocommit=1;
+execute stmt_select;
+disconnect conn1;
+
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+drop table if exists t3;
+
+create table t4(c0 double primary key, c1 double);
+
+prepare stmt_i from insert into t4 values(?,?),(?,?);
+prepare stmt_u from update t4 set c1=? where c0=?;
+prepare stmt_d from delete from t4 where c0=?;
+prepare stmt_s from select c0,c1 from t4 where c0=? for update;
+prepare stmt_select from select c0,c1 from t4;
+
+set autocommit=0;
+set @a1=1.5;
+set @b1=1.6;
+set @a2=2.5;
+set @b2=2.6;
+execute stmt_i using @a1,@b1,@a2,@b2;
+execute stmt_u using @b2,@a1;
+execute stmt_d using @a2;
+execute stmt_s using @a1;
+execute stmt_s using @a2;
+commit;
+set autocommit=1;
+execute stmt_select;
+disconnect conn1;
+
+
+
+

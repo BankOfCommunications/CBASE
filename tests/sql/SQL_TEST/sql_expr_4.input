@@ -1,0 +1,4 @@
+-- fail, different columns
+select * from user where (user_id, user_name, user_age) in (select * from user);
+In operands contain different column(s)
+Resolve error!

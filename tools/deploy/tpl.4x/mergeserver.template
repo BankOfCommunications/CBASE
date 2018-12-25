@@ -1,0 +1,25 @@
+
+[merge_server]
+port=$port
+dev_name=$dev
+task_queue_size=512
+task_thread_count=50
+network_timeout_us=3000000
+location_cache_size_mb=32
+location_cache_timeout_us=600000000
+log_file=log/mergeserver.log.$ip:$port
+pid_file=log/mergeserver.pid.$ip:$port
+log_level=$log_level
+trace_log_level=$trace_log_level
+max_log_file_size=1024
+intermediate_buffer_size_mbyte=8
+memory_size_limit_percent=30
+upslist_interval_us=1000000
+max_req_process_time_us = 10000000
+
+[obmysql]
+obmysql_port=$mysql_port
+
+[root_server]
+vip=${rs0.ip}
+port=${rs0.port}

@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\sysbench\sysbench\tests\threads
+2
+4
+c:sb_threads.c|1|166f7761510|10b7|38056560|dddb34de68b711e8a8030002c8c1274c|0
+b:Makefile.am|1|166f77614f0|37f|108a24ac|dbab34c268b711e8a8030002c8c1274c|0
+e:CMakeLists.txt|1|166f7761561|346|ee54147d|dffb34fa68b711e8a8030002c8c1274c|0
+b:Makefile.in|1|166f7761771|427e|9f4046aa|e24b351668b711e8a8030002c8c1274c|0

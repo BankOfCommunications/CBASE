@@ -1,0 +1,48 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.source include/merge.inc
+ob1.prepare
+ob1.start_check
+ob1.create_client
+create table t1(a int primary key,b int);
+insert into t1 values(1,1),(2,2),(0,0),(-1,-1);
+ob1.major_freeze
+ob1.major_freeze
+ob1.check_cs_version 3
+ob2.check_cs_version 3
+select * from t1;
+a	b
+-1	-1
+0	0
+1	1
+2	2
+ob1.stop_check
+ob1.stop
+ob2.stop
+ob1.nstart
+ob1.rs0.set_obi_role OBI_MASTER
+ob2.nstart
+insert into t1 values(5,1),(6,2);
+select * from t1;
+a	b
+-1	-1
+0	0
+1	1
+2	2
+5	1
+6	2
+ob1.switch_cluster ob2
+replace into t1 values(7,3),(8,4);
+select * from t1;
+a	b
+-1	-1
+0	0
+1	1
+2	2
+5	1
+6	2
+7	3
+8	4

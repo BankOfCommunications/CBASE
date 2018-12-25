@@ -1,0 +1,106 @@
+--source $LOCAL_DIR/mysql_test/import-export/include.inc 
+
+--let $TABLE=ie_charset
+--let $DB=test
+--let $TEST_NAME=ie_charset_fail
+--let $IM_FILE=$IM_DEL/ie_charset.del
+--let $IM_FILE_U=$IM_DEL/ie_charset_u.del
+--let $EX_FILE=$EX_DEL/$TEST_NAME.del
+
+eval using database $DB;
+# --disable_warnings
+eval drop table if exists $TABLE;
+# --enable_warnings
+
+eval create table ie_charset
+(
+it0 int,
+it1 int,
+it2 int,
+
+bg0 bigint,
+bg1 bigint,
+bg2 bigint,
+
+dc0 decimal(20,4),
+dc1 decimal(20,4),
+dc2 decimal(20,4),
+
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256),
+
+primary key(it0, bg0, dc0, vc0)
+
+);
+
+exec > $IM2_LOG/$TEST_NAME.log;
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $IM2_LOG/$TEST_NAME.log 
+--badfile $IM2_BAD/$TEST_NAME.bad 
+--dbname $DB 
+-f $IM_FILE_U
+--g2u
+&> /dev/null | cat;
+
+exec grep 'code_convert' $IM2_LOG/$TEST_NAME.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";
+
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $IM2_LOG/$TEST_NAME.log 
+--badfile $IM2_BAD/$TEST_NAME.bad 
+--dbname $DB 
+-f $IM_FILE
+--g2u
+&> /dev/null;
+
+eval select * from $TABLE;
+
+exec > $EX_LOG/$TEST_NAME.log;
+
+exec $EX_EXE 
+-t $DB.$TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $EX_LOG/$TEST_NAME.log 
+--badfile $EX_BAD/$TEST_NAME.bad 
+-f $EX_FILE
+--g2u
+&> /dev/null | cat;
+
+exec cat $EX_FILE;
+exec grep 'format_column' $EX_LOG/$TEST_NAME.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";
+
+eval delete from $TABLE;
+
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $IM2_LOG/$TEST_NAME.log 
+--badfile $IM2_BAD/$TEST_NAME.bad 
+--dbname $DB 
+-f $IM_FILE
+&> /dev/null;
+
+eval select * from $TABLE;
+
+exec > $EX_LOG/$TEST_NAME.log;
+
+exec $EX_EXE 
+-t $DB.$TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $EX_LOG/$TEST_NAME.log 
+--badfile $EX_BAD/$TEST_NAME.bad 
+-f $EX_FILE
+--u2g
+&> /dev/null | cat;
+
+exec cat $EX_FILE;
+exec grep 'format_column' $EX_LOG/$TEST_NAME.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";

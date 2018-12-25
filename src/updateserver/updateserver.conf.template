@@ -1,0 +1,193 @@
+[public]
+log_file = ./log/updateserver.log
+pid_file = ./log/updateserver.pid
+log_level = info
+
+[root_server]
+vip = 
+port = 2500
+
+[update_server]
+port = 2700
+ups_inner_port = 2701
+devname = bond0
+
+# lsync IP/PORT, 如果配了这个地址，备主UPS会从lsync那里取日志，如果没配，备主UPS会从主主UPS那取日志。
+lsync_ip=
+lsync_port=3000
+
+#应用名
+app_name = must_be_update
+
+#以下参数需要根据实际机器的配置情况修改
+####################################################################################################
+
+#以下为可reload的项目
+##################################################
+#总内存使用上限 超过后不再分配 单位GB
+#48G/96G/192G内存机器上的推荐配置分别为44/92/188
+total_memory_limit = 44
+#所有memtable内存使用上限 超过后不再分配 单位GB
+#这个配置项与blockcache和blockindex_cache大小之和不能超过total_memory_limit
+#并且建议要为收包、线程局部存储等逻辑预留约5G的内存
+#48G/96G/192G内存机器上的推荐配置分别为36/82/173
+table_memory_limit = 36
+
+#活跃memtable内存使用上限 超过后执行一次冻结 单位GB
+#在灌入数据很快的场景 建议配置为table_memory_limit的1/2或1/3，已获得并发转储的机会和更快的释放内存
+#而对于普通线上写入的场景 建议配置为比table_memory_limit小5-10G
+active_mem_limit_gb = 10
+#minor版本的个数大于或等于这个数后再次执行freeze则执行major freeze
+#对于旁路导入的应用 需要注意配置为较大的值
+minor_num_limit = 4
+#sstable被加载到内存的最长时间 超过这个时间的sstable被卸载 文件被改名到trash目录 单位
+#建议保存在占用磁盘(SSD)空间超过一半的情况下删除旧的sstable
+sstable_time_limit_s = 259200
+#每天定时执行升级主版本号的冻结操作的时间 格式为%H:%M 非法格式为不执行
+#如需禁止自动定时触发 配置为-1即可
+major_freeze_duty_time = 01:00
+
+#Memtable可用内存小于这个值时开始drop frozen的table
+table_available_warn_size_gb = 20
+#Memtable可用内存小于这个值是开始drop frozen的table 并打印error日志
+table_available_error_size_gb = 10
+
+#sstable cache预热时间(单位秒 0表示不预热 最小10秒 最大1800秒)
+#对于大量灌入数据的应用 建议配置为0
+warm_up_time_s = 600
+
+#是否使用2和3作为create_time和modify_time列的id，非0表示是
+#如果是0 表示需要从schema中获取create_time和modify_time列的id
+using_static_cm_column_id = 0
+
+#是否使用hash索引
+using_hash_index = 1
+##################################################
+
+
+#以下项目不可reload
+##################################################
+#读取sstable的blockcache的大小 单位MB
+#根据冻结表的大小配置
+#48G/96G/192G内存机器上的推荐配置分别为2048/4096/8192
+blockcache_size_mb = 2048
+#读取sstable的blockindex cache的大小单位 MB
+#根据生成的sstable文件大小和其中的block大小配置 对于旁路导入很多sstable文件的情况则需要配置的更大
+#48G/96G/192G内存机器上的推荐配置分别为1024/2048/4096
+blockindex_cache_size_mb = 1024
+
+#commitlog目录
+log_dir = /home/admin/oceanbase/ups_commitlog
+#sstable文件存储的根目录
+store_root = /home/admin/oceanbase/ups_data
+
+#标记UPS是实时备机还是非实时备机,1表示为实时备机, 2表示非实时备机
+slave_type = 1
+##################################################
+
+####################################################################################################
+
+
+
+#以下参数通常情况下可以使用默认值
+####################################################################################################
+#commitlog文件大小单位MB
+log_size_mb = 64
+#写commitlog时是否每次都sync到磁盘 生产环境必须配置为1
+log_sync_type = 1
+
+#主动fetch schema失败最多重试次数
+fetch_schema_times = 10
+#主动fetch schema超时时间单位us
+fetch_schema_timeout_us = 3000000
+#向rootserver汇报版本号失败最多重试次数
+resp_root_times = 10
+#向rootserver汇报版本号超时时间单位us
+resp_root_timeout_us = 1000000
+#回放日志时是否对memtable进行checksum检查
+replay_checksum_flag = 1
+#是否允许写请求不带上权限验证的token 目前client不支持权限 必须配置为1
+allow_write_without_token = 1
+#处理RPC时,对端没有提供超时时间情况下,默认的超时时间,等待超过这个时间的包直接丢弃不处理,单位us
+packet_max_timewait = 1000000
+#主机执行一次批处理超过这个时间或备机写本地日志超过这个时间的情况下打印日志,单位us
+trans_proc_time_warn_us = 1000000
+
+#libeasy 处理io的线程个数
+io_thread_count = 1
+#读线程个数
+read_thread_count = 28
+#转储线程个数
+store_thread_count = 5
+#读任务队列长度
+read_queue_size = 10000
+#写任务队列长度
+write_queue_size = 10000
+#日志同步任务队列长度
+log_queue_size = 10000
+# lease队列的长度
+lease_queue_size=100
+# 转储sstable任务队列的长度
+store_queue_size=100
+#一次批处理最多的写任务数
+write_thread_batch_num = 1024
+
+# UPS向主UPS或lsync注册的超时时间
+register_timeout_us=3000000
+# 主UPS给备UPS同步日志超时时间
+log_sync_timeout_us = 500000
+
+#单次keep_alive的有效期
+ups_keep_alive_timeout_us = 5000000
+#主UPS lease提前过期的时间(单位:us)
+lease_timeout_in_advance_us = 500000
+
+# 从lsync或主UPS那取日志超时时间
+lsync_fetch_timeout_us = 10000000
+# replay重试等待的时间
+replay_wait_time_us = 50000
+# 取日志重试等待的时间
+fetch_log_wait_time_us=500000
+
+# 备UPS与主UPS日志延迟的时间超过了这个值会报警
+log_sync_delay_warn_time_threshold_us=500000
+# 备UPS与主UPS的日志延迟的条数超过了这个值会报警
+max_n_lagged_log_allowed=10000
+# 备UPS与主UPS日志延迟报警的最小时间间隔
+log_sync_delay_warn_report_interval_us =10000000
+
+# 备机在收到主机推送的commitlog后是否等回放完或刷盘成功后再响应主机: 0表示不等，1表示等回放完，2表示等回放并且刷盘完
+wait_slave_sync_type=0
+# 等回放或刷盘的超时时间
+wait_slave_sync_time_us=100000
+
+# 每次处理网络请求时，以下面概率处理低优先级请求，概率以百分比的形式给出
+low_priv_cur_percent=10
+# 是否根据下面设定lower_limit和upper_limit动态调整处理低优先级网络请求的概率
+low_priv_adjust_flag=1
+# 低优先级网络请求的最小带宽, 单位M/s, 若low_priv_adjust_flag设置为1，
+# 并且最近一段时间低优先级的网络请求使用网络带宽比下面的值小, 则提高低优先级请求的处理概率, 每次调整概率加1%
+low_priv_network_lower_limit=30
+# 低优先级网络请求的最大带宽, 单位M/s, 若low_priv_adjust_flag设置为1，
+# 并且最近一段时间低优先级的网络请求使用网络带宽比下面的值大, 则降低低优先级请求的处理概率, 每次调整概率减1%
+low_priv_network_upper_limit=80
+
+#两次升级主版本号时间差的最小值 如果小于这个值则执行major freze失败
+min_major_freeze_interval_s = 3600
+#store_root下raid目录名的匹配式
+raid_regex = ^raid[0-9]+$
+#raid目录下指向磁盘实际目录的软链接的名字匹配式
+dir_regex = ^store[0-9]+$
+#写sstable的压缩方法动态库名
+sstable_compressor_name = snappy_1.0
+#写sstable的block的大小 单位Byte
+sstable_block_size = 4096
+#Memtable中当一行中的cell数量超过这值时就执行一次合并
+max_row_cell_num = 128
+#是否使用bloomfilter优化memtable的查询
+using_memtable_bloomfilter = 0
+#转储写sstbale是否使用dio
+sstable_dio_writing = 1
+
+####################################################################################################
+

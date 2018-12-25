@@ -1,0 +1,42 @@
+deploy ob1=OBI(cluster=1233, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable);
+
+deploy ob1.reboot;
+sleep 10;
+
+--echo put item info to ups 
+deploy ob1.smart_insert item_info,0,0,0;
+
+deploy ob1.source include/merge.inc;
+sleep 10;
+
+--echo new userid 3000 
+deploy ob1.smart_insert collect_info,3000,0,0;
+deploy ob1.check 3000,0,0;
+
+--echo new userid 3001
+deploy ob1.smart_insert collect_info,3001,0,0;
+deploy ob1.check 3001,0,0;
+
+--echo new userid 3002
+deploy ob1.smart_insert collect_info,3002,0,0;
+deploy ob1.check 3002,0,0;
+
+
+deploy ob1.major_freeze;
+
+sleep 120;
+
+deploy ob1.check_cs_version 2;
+
+deploy ob1.check 3000,0,0;
+deploy ob1.check 3001,0,0;
+deploy ob1.check 3002,0,0;
+
+let $cnt=0;
+while($cnt < 3000)
+{
+  deploy ob1.check $cnt,0,0;
+  deploy ob1.check $cnt,3050,30;
+  deploy ob1.check $cnt,6199,61;
+  inc $cnt;
+}

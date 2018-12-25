@@ -1,0 +1,4 @@
+-- fail
+update item i set i.item_name='jiu gui jiu' where item_id=100;
+parse_sql error!
+syntax error at 1:13

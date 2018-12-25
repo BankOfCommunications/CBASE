@@ -1,0 +1,13 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\syschecker\client
+2
+9
+12:ob_base_client.cpp|1|166f7778b7a|0|0|689baeea68c111e8a8030002c8c1274c|0
+f:ob_server_rpc.h|1|166f7778c12|5c7|4433e178|6d6baf2268c111e8a8030002c8c1274c|0
+b:Makefile.am|1|166f7778bd7|30a|4c03fbca|6adbaf0668c111e8a8030002c8c1274c|0
+b:ob_client.h|1|166f7778ccf|93f|2d87e5cd|6fdbaf3e68c111e8a8030002c8c1274c|0
+d:ob_client.cpp|1|166f7778d55|14f7|276449ff|721baf5a68c111e8a8030002c8c1274c|0
+15:ob_server_manager.cpp|1|166f7778dce|bc4|e5e48fa5|741baf7668c111e8a8030002c8c1274c|0
+11:ob_server_rpc.cpp|1|166f7778ebd|cbe|4363e126|761baf9268c111e8a8030002c8c1274c|0
+10:ob_base_client.h|1|166f7778ec8|0|0|784bafae68c111e8a8030002c8c1274c|0
+13:ob_server_manager.h|1|166f7778f3d|774|72f7817|7a5bafca68c111e8a8030002c8c1274c|0

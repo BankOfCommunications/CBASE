@@ -1,0 +1,21 @@
+
+deploy ob1=OBI(cluster=1122);
+deploy ob1.reboot;
+ob1.source include/merge.inc
+sleep 10;
+deploy ob1.create_client;
+create table t1(a int primary key, b varchar);
+sleep 60;
+insert into t1 values(1,'a'),(2,'b'),(3,'c');
+insert into t1 values(4,'a'),(5,'b'),(6,'c');
+insert into t1 values(7,'a'),(8,'b'),(9,'c');
+insert into t1 values(10,'a'),(11,'b'),(12,'c');
+deploy ob1.major_freeze;
+select /*+ READ_CONSISTENCY(STATIC) */* from t1;
+sleep 20
+select /*+ READ_CONSISTENCY(STATIC) */* from t1;
+
+
+
+#ob1.check_cs_version 2;
+#select /*+ READ_CONSISTENCY(STATIC) */* from t1;

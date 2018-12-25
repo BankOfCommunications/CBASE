@@ -1,0 +1,49 @@
+--disable_warnings 
+drop table if exists t1,t2;
+--enable_warnings
+# create table  has 15 primary key
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1 (c1 int ,c2 int ,c3 int ,c4 int ,c5 int ,c6 int ,c7 int ,c8 int ,c9 int ,
+				c10 int , c11 int ,c12 int ,c13 int ,c14 int ,c15 int ,c16 int,c17 int,c18 int,
+				primary key (c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15) );
+#create index 1207
+create index il on t1(c1)storing (c16);
+#create index 1208
+create index il1 on t1(c16)storing (c17);
+#create index 1209
+--error 5007
+create index il2 on t1(c16,c17)storing (c18);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 700
+show index on t1;
+drop table t1;
+create table t1 (c1 int ,c2 int ,c3 int ,c4 int ,c5 int ,c6 int ,c7 int ,c8 int ,c9 int ,
+				c10 int , c11 int ,c12 int ,c13 int ,c14 int ,c15 int ,c16 int,c17 int,c18 int,
+				primary key(c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16) );
+#create index 1210
+--error 5007
+create index il on t1(c17)storing (c18);
+#create index 1211
+create index il1 on t1(c1)storing (c17);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 300
+show index on t1;
+drop table t1;
+create table t1 (c1 int primary key,c2 int ,c3 int ,c4 int ,c5 int ,c6 int ,c7 int ,c8 int ,c9 int ,
+				c10 int , c11 int ,c12 int ,c13 int ,c14 int ,c15 int ,c16 int,c17 int,c18 int);
+# create index 1212
+create index il on t1(c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16)storing (c17);
+# create index 1213
+create index il1 on t1(c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c1)storing (c16);
+# create index 1214
+--error 5007
+create index il2 on t1(c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17)storing (c18);
+# create index 1215
+create index il3 on t1(c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c1)storing (c17);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 400
+show index on t1;

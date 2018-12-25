@@ -1,0 +1,31 @@
+deploy ob1=OBI(cluster=1233, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable);
+
+deploy ob1.reboot;
+sleep 10;
+
+--echo put item info to ups
+deploy ob1.smart_insert item_info,0,0,0;
+
+deploy ob1.source include/merge.inc;
+sleep 10;
+
+--echo update item 0
+deploy ob1.smart_add item_info,0,0,0,1000;
+--echo new userid 3000 
+deploy ob1.smart_insert collect_info,3000,0,0;
+deploy ob1.smart_query select  user_nick,is_shared,note,collect_time,stat,tag,category,title,picurl,owner_id,owner_nick,price,ends,proper_xml,comment_count,collector_count,total_money,collect_time_precise,user_id,item_type,item_id from collect_info where user_id=3000 and item_type=0 and item_id=0;
+
+deploy ob1.major_freeze;
+
+sleep 120;
+
+deploy ob1.check_cs_version 2;
+
+deploy ob1.smart_query select  user_nick,is_shared,note,collect_time,stat,tag,category,title,picurl,owner_id,owner_nick,price,ends,proper_xml,comment_count,collector_count,total_money,collect_time_precise,user_id,item_type,item_id from collect_info where user_id=3000 and item_type=0 and item_id=0;
+
+let $cnt=0;
+while($cnt < 3000)
+{
+  deploy ob1.smart_query select  user_nick,is_shared,note,collect_time,stat,tag,category,title,picurl,owner_id,owner_nick,price,ends,proper_xml,comment_count,collector_count,total_money,collect_time_precise,user_id,item_type,item_id from collect_info where user_id=$cnt and item_type=0 and item_id=0;
+  inc $cnt;
+}

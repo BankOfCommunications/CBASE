@@ -1,0 +1,6 @@
+create user 'u1' identified by 'pass1';
+grant create on * to 'u1';
+create  table t3(a int primary key, b int);
+revoke drop on * from 'u1';
+drop table t3;
+ERROR HY000: no privilege

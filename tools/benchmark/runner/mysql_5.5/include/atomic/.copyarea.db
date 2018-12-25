@@ -1,0 +1,10 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\benchmark\runner\mysql_5.5\include\atomic
+2
+6
+8:nolock.h|1|166f7772ef0|983|4ca21741|1a5b917e68bf11e8a8030002c8c1274c|0
+8:rwlock.h|1|166f7772f25|1061|9542915c|1cdb919a68bf11e8a8030002c8c1274c|0
+e:gcc_builtins.h|1|166f7772f6d|69c|2f8d05e8|1efb91b668bf11e8a8030002c8c1274c|0
+9:solaris.h|1|166f7772fa8|977|a447b65c|210b91d268bf11e8a8030002c8c1274c|0
+e:generic-msvc.h|1|166f7772fe8|123f|abb9cb6f|236b91ee68bf11e8a8030002c8c1274c|0
+9:x86-gcc.h|1|166f7773026|16c2|f760402a|257b920a68bf11e8a8030002c8c1274c|0

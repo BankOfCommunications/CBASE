@@ -1,0 +1,21 @@
+drop table if exists t1,t2,left_table;
+create table t1 (c_int int, c_ts timestamp, c_vchar varchar(250));
+ERROR HY000: no primary key specified:table_name[t1]
+drop table t1;
+ERROR 42S02: table 'test.t1' does not exist
+create table t1( a int primary key,b int);
+insert into t1 values(1,1);
+select a from t1;
+a
+1
+drop table t1;
+select * from t1;
+ERROR 42S02: table 'test.t1' does not exist
+create table left_table (      k1 varchar,      k2 varchar,      v1 int ,      v2 varchar,      v3 int,      primary key (k1, k2) );
+create table left_table (      k1 varchar,      k2 varchar,      v1 int ,      v2 varchar,      v3 int,      primary key (k1, k2) );
+ERROR 42S01: table 'left_table' already exists
+create table t1 (v varchar(30), c char(3), e char(20), t varchar(256) primary key);
+create table t1 (v varchar(30), c char(3), e char(20), t varchar(256) primary key);
+ERROR 42S01: table 't1' already exists
+drop table t1;
+drop table left_table;

@@ -1,0 +1,4 @@
+[2012-07-05 18:15:32][ERROR] [SQLOperation   :116] - ERROR: Failed to get insert result::
+[2012-07-05 18:15:32][ERROR] [SQLOperation   :116] - ERROR: Illegal prepared statement param: $1
+  Position: 64
+[2012-07-05 18:15:32][ERROR] [SQLOperation   :116] - ERROR: Failed to get result:undecodable [table_name:collect_info]

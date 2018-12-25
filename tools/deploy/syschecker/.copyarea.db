@@ -1,0 +1,12 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\deploy\syschecker
+2
+8
+a:syschecker|1|166f778ebce|9b51bb|cbecb0ea|164c1d0a68ca11e8a8030002c8c1274c|0
+11:ob3.qushan.schema|1|166f778ecb8|db6|fec6ef07|1b6c1d4268ca11e8a8030002c8c1274c|0
+18:syschecker.conf.template|1|166f778ec04|348|d2482441|195c1d2668ca11e8a8030002c8c1274c|0
+8:Makefile|1|166f778db1f|1d4|8d069529|12bc1cee68ca11e8a8030002c8c1274c|0
+9:stress.sh|1|166f778ed30|3a3|b0114e8|1d7c1d5e68ca11e8a8030002c8c1274c|0
+d:syschecker.py|1|166f778ed81|46a|ff4280fb|1f7c1d7a68ca11e8a8030002c8c1274c|0
+6:gen.sh|1|166f778ee35|41d|fae94130|21bc1d9668ca11e8a8030002c8c1274c|0
+11:syschecker.schema|1|166f778ee6c|db6|fec6ef07|23dc1db268ca11e8a8030002c8c1274c|0

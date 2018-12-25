@@ -1,0 +1,4 @@
+select svr_type from __all_server where svr_type=4;
+svr_type
+4
+4

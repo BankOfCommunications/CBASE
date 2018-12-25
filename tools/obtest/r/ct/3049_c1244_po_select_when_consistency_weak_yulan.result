@@ -1,0 +1,14 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.mysql set global ob_read_consistency=3
+ob1.sh rm -f ~/logs/obdatasource/obdatasource*.log
+ob1.sh rm -f ~/logs/obdatasource/obdatasource-lb-monitor*.log
+ob1.create_client
+create table t1(c1 int primary key, c2 int);
+success
+check obdatasouce log
+true
+true

@@ -1,0 +1,12 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\common\nb_accessor
+2
+8
+e:nb_scan_cond.h|1|166f7748aa2|42a|1aad5945|fcfa817a68a911e8a8030002c8c1274c|0
+12:ob_nb_accessor.cpp|1|166f7748ab7|461a|85b3324d|fefa819668a911e8a8030002c8c1274c|0
+e:nb_query_res.h|1|166f7748e04|875|8dbcc624|05aa81ea68aa11e8a8030002c8c1274c|0
+10:nb_scan_cond.cpp|1|166f7748de8|728|fd5c6c4e|032a81ce68aa11e8a8030002c8c1274c|0
+10:ob_nb_accessor.h|1|166f7748dcd|cad|77303624|00ea81b268aa11e8a8030002c8c1274c|0
+e:nb_table_row.h|1|166f7748e25|50d|3a5cb6b9|07ba820668aa11e8a8030002c8c1274c|0
+10:nb_table_row.cpp|1|166f7748e42|d93|e55f223c|09ca822268aa11e8a8030002c8c1274c|0
+10:nb_query_res.cpp|1|166f7748e64|1321|a7af9a79|0bca823e68aa11e8a8030002c8c1274c|0

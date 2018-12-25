@@ -1,0 +1,14 @@
+# privileges related functions
+--disable_abort_on_error
+create user 'u1' identified by 'pass1', 'u2' identified by 'pass2', 'u3' identified by 'pass3', 'u4' identified by 'pass4';
+drop user 'u1', 'u2';
+set password = 'lala';
+set password for 'u3' = 'kaka';
+alter user 'u4' identified by 'u4pass';
+alter user 'u4' locked;
+alter user 'u4' unlocked;
+rename user 'u4' to 'admin2', 'u3' to 'admin3';
+grant SELECT, CREATE USER on * to 'admin2', 'admin3';
+grant UPDATE, GRANT OPTION on __first_tablet_entry to 'admin2';
+revoke CREATE USER on * from 'admin2';
+revoke ALL PRIVILEGES, GRANT OPTION from 'admin2', 'admin3';

@@ -1,0 +1,5 @@
+drop table if exists sbtest;
+[major_freeze] err=0
+SELECT j1.* from sbtest as j1,sbtest as j2 where j1.id=j2.id and j1.id=250000 and j2.id=250000;
+id	k	c	pad
+250000	0	 	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt

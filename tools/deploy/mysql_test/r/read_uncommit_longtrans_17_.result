@@ -1,0 +1,13 @@
+drop table if exists c;
+create table c (c1 int primary key, c2 varchar(8));
+begin;
+insert into c values(1,1);
+begin;
+insert into c values(2,2);
+commit;
+select * from c where c1 = 2;
+c1	c2
+select * from c;
+c1	c2
+1	1
+commit;

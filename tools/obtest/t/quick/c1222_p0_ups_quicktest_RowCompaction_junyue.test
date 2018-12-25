@@ -1,0 +1,60 @@
+ob1=OBI(cluster=1211);
+ob1.reboot;
+
+ob1.mysql set global ob_read_consistency=3;
+sleep 10;
+let $a=deploy_get_value(ob1.mysql_p show variables like 'ob_read_consistency');
+--echo $a
+
+let $a=deploy_get_value(ob1.ups0.status);
+--echo ups0 status is $a
+let $b=deploy_get_value(ob1.ups1.status);
+--echo ups1 status is $b
+
+ob1.create_client;
+
+create table t1(c1 int primary key, c2 int, c3 createtime);
+
+insert into t1(c1,c2) values(1,1);
+
+let $a=query_get_value(select * from t1,c3,1);
+
+
+let $cnt=31;
+while($cnt)
+{
+   update t1 set c2=c2+1 where c1=1;
+   dec $cnt;
+}
+
+
+delete from t1 where c1=1;
+
+
+
+ob1.connect conn1;
+
+connection conn1;
+set autocommit=0;
+
+insert into t1(c1,c2) values(1,1);
+update t1 set c2=c2-1 where c1=1;
+update t1 set c2=c2-1 where c1=1;
+commit;
+
+set autocommit=1;
+
+let $b=query_get_value(select * from t1,c3,1);
+
+if($a == $b)
+{
+    --echo bug!!!
+    --echo $a vs. $b
+} 
+
+disconnect conn1;
+
+let $a=deploy_get_value(ob1.ups0.status);
+--echo ups0 status is $a
+let $b=deploy_get_value(ob1.ups1.status);
+--echo ups1 status is $b

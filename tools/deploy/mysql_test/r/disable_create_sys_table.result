@@ -1,0 +1,13 @@
+show variables like '%disable_create_sys_table%';
+variable_name	value
+ob_disable_create_sys_table	1
+create table __x (c1 int primary key, c2 int);
+ERROR HY000: invalid table name to create, table_name=__x
+drop table __all_client;
+ERROR 42S02: table 'test.__all_client' does not exist
+set ob_disable_create_sys_table=false;
+show variables like '%disable_create_sys_table%';
+variable_name	value
+ob_disable_create_sys_table	0
+create table __x (c1 int primary key, c2 int);
+drop table __x;

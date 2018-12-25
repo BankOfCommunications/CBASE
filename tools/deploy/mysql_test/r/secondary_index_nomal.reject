@@ -1,0 +1,63 @@
+drop table if exists t1;
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1 (c1 int primary key ,c2 int,c3 int );
+create index il0 on t1(c2) storing (c3);
+create index il1 on t1(c2) storing (c3);
+create index il2 on t1(c2);
+create index il3 on t1(c1) storing (c1);
+ERROR HY000: Storing Columns c1 can not be rowkey!
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+__3001__idx__il0	0
+__3001__idx__il1	0
+__3001__idx__il2	0
+drop table t1;
+drop table if exists t1,t2;
+create table t1(c1 int primary key,c2 int);
+create table t2(c1 int primary key,c2 int);
+create index il on t1(c1) storing (c2);
+create index il on t2(c1) storing (c2);
+create index il1 on t1(c2) storing (c2);
+ERROR HY000: There is same column in storing columns and index_columns: 'c2'
+create index il1 on t2(c2) storing (c2);
+ERROR HY000: There is same column in storing columns and index_columns: 'c2'
+create index il2 on t1(c2) storing (c1);
+ERROR HY000: Storing Columns c1 can not be rowkey!
+create index il2 on t2(c2) storing (c1);
+ERROR HY000: Storing Columns c1 can not be rowkey!
+create index il3 on t1(c2) ;
+create index il3 on t2(c2) ;
+drop table t1,t2;
+create table t1(c1 int primary key,c2 int);
+create table t2(c1 int primary key,c2 int,c3 int);
+create index it1 on t1(c1) storing (c2);
+create index it2 on t2(c2) storing (c3);
+drop table t1,t2;
+create table t1(c1 int,c2 int,c3 int, primary key(c1,c2));
+create index il on t1(c2) storing (c3);
+drop table t1;
+create table t1(c1 int primary key ,c2 int ,c3 int,c4 int );
+create index il1 on t1(c2) storing (c3);
+create index il2 on t1(c2) storing (c3);
+create index il3 on t1(c1) storing (c2);
+drop table if exists t1,t2;
+create table t1(c1 int primary key ,c2 int ,c3 int,c4 int );
+insert into t1 values(1,1,1,1),(2,2,2,2);
+create index il on t1(c2) storing (c3);
+"merge"
+[major_freeze] err=0
+3021
+select * from __3021__idx__il;
+select * from __3021__idx__il;;
+c1	c2	c3
+1	1	1
+2	2	2
+insert into t1 values (3,3,3,3);
+select * from __3021__idx__il;;
+c1	c2	c3
+1	1	1
+2	2	2
+3	3	3

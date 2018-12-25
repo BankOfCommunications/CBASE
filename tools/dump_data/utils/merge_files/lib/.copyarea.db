@@ -1,0 +1,9 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\dump_data\utils\merge_files\lib
+2
+5
+19:commons-logging-1.0.4.jar|1|166f776ed0d|947f|6ff5ca9|d97b819a68bd11e8a8030002c8c1274c|0
+16:hadoop-0.19.2-core.jar|1|166f776ef3c|246f16|b91fd3a6|dbeb81b668bd11e8a8030002c8c1274c|0
+1d:commons-logging-api-1.0.4.jar|1|166f776ef7f|665a|bb98b74|de4b81d268bd11e8a8030002c8c1274c|0
+1c:hadoop-0.20.1+133-mrunit.jar|1|166f776f530|c80c|e2c9f031|e2eb820a68bd11e8a8030002c8c1274c|0
+f:junit-4.8.2.jar|1|166f776f4e4|39f20|9477f585|e05b81ee68bd11e8a8030002c8c1274c|0

@@ -1,0 +1,30 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+create table t1 (c1 int primary key ,c2 int,c3 int );
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+insert into t1 values(1,1,1),(2,2,2);
+create index il0 on t1(c2) storing (c3);
+replace into t1 values(1,1,1);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 700
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+--let $table_head =__
+--let $table_end =__idx__il0
+--let $table_name=$table_head$n$table_end
+eval select * from  $table_name;
+
+replace into t1(c1,c2) values(2,3);
+eval select * from  $table_name;
+replace into t1 values(3,3,3);
+eval select * from  $table_name;
+
+
+create index il2 on t1(c1) storing (c3);
+
+ explain replace into t1(c1,c3) values (3,3);
+ 
+ explain replace into t1(c1,c2) values(4,4);
+drop table t1;

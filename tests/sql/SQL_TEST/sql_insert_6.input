@@ -1,0 +1,5 @@
+-- fail, Unkown column name item_desc
+insert into user (user_id, user_name, item_desc) values (100, 'da fen qi', 'a turtle');
+[2012-08-13 18:05:48] DEBUG ob_schema.cpp:2311 [139840185405568] useruser_iduser_name,4:item_desc,9 not fould [16]
+Unkown column name item_desc
+Resolve error!

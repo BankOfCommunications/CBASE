@@ -1,0 +1,147 @@
+#--disable_abort_on_error
+
+drop table if exists t1;
+
+create table t1(c1 int primary key,c2 int);
+
+set autocommit=0;
+
+# case: when and when and when success
+
+begin;
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1))=1 and row_count(insert into t1 values(2,2)) = 1 and row_count(insert into t1 values(3,3),(4,4)) = 2;
+commit;
+
+select * from t1;
+commit;
+
+delete  from t1 where c1=1;
+delete  from t1 where c1=2;
+delete  from t1 where c1=3;
+delete  from t1 where c1=4;
+commit;
+
+# case: when and when and when rollback
+begin;
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1))=1 and row_count(insert into t1 values(2,2)) = 1 and row_count(insert into t1 values(3,3),(4,4)) = 2;
+rollback;
+
+select * from t1;
+commit;
+
+# case: 
+begin;
+--error 5064
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1))=1 and row_count(update t1 set c2=0 where c1=1)=0;
+commit;
+select * from t1;
+commit;
+
+# case: 
+begin;
+--error 5064
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1))=1 and row_count(update t1 set c2=0 where c1=1)=0;
+rollback;
+select * from t1;
+commit;
+
+# case: when and when and when, cond = false
+
+begin;
+--error 5024
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1))=1 and row_count(insert into t1 values(2,2)) = 1 and row_count(insert into t1 values(1,1),(4,4)) = 2;
+commit;
+
+select * from t1;
+commit;
+
+# case: when and when and when, cond = false
+
+begin;
+--error 5064
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1))=1 and row_count(insert into t1 values(2,2)) = 1 and row_count(insert into t1 values(3,3),(4,4)) = 1;
+commit;
+
+select * from t1;
+commit;
+
+
+
+# case: when and when and when, cond = false
+
+begin;
+--error 5064
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1))=0 and row_count(insert into t1 values(2,2)) = 1 and row_count(insert into t1 values(3,3),(4,4)) = 2;
+commit;
+
+select * from t1;
+commit;
+
+
+# case: when and when and when, cond = false
+begin;
+--error 5064
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1))=1 and row_count(insert into t1 values(2,2)) = 1 and row_count(insert into t1 values(3,3),(4,4)) = 2 and false;
+commit;
+
+select * from t1;
+commit;
+
+# case: when order
+begin;
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=1)=0 and row_count(insert into t1 values(1,1)) = 1;
+commit;
+select * from t1;
+delete from t1 where c1=1;
+commit;
+
+# case: when order
+begin;
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 1 and row_count(delete from t1 where c1=1)=1;
+commit;
+select * from t1;
+commit;
+
+# case: nest when
+begin;
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=1 when row_count(insert into t1 values(1,1)) = 1 ) = 1;
+commit;
+select * from t1;
+commit;
+
+begin;
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=1 when row_count(insert into t1 values(1,1) when row_count(delete from t1 where c1=1) = 0 ) = 1 ) = 1;
+commit;
+select * from t1;
+commit;
+
+
+# case: nest when
+begin;
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=1 when row_count(insert into t1 values(1,1)) = 1 ) = 1;
+rollback;
+select * from t1;
+commit;
+
+begin;
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=1 when row_count(insert into t1 values(1,1) when row_count(delete from t1 where c1=1) = 0 ) = 1 ) = 1;
+rollback;
+select * from t1;
+commit;
+
+# case: nest when
+begin;
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1) when row_count(update t1 set c2=0 where c1=1 when row_count(delete from t1 where c1=1) = 0)=0 ) = 1 ;
+rollback;
+select * from t1;
+commit;
+
+# case: nest when
+begin;
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1) when row_count(update t1 set c2=0 where c1=1 when row_count(delete from t1 where c1=1) = 0)=0 ) = 1 ;
+commit;
+select * from t1;
+delete from t1 where c1=1;
+commit;
+
+

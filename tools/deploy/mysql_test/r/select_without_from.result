@@ -1,0 +1,30 @@
+SELECT 12 + 45 FROM DUAL;
+12 + 45
+57
+SELECT 12 + 45 FROM DUAL WHERE 10 > 5;
+12 + 45
+57
+SELECT c1 FROM DUAL;
+ERROR 42S22: Unkown column name c1
+SELECT 12 + 45 FROM DUAL WHERE 10 > 5 LIMIT 10;
+12 + 45
+57
+SELECT 12 + 45 FROM DUAL WHERE 10 > 5 LIMIT 0;
+12 + 45
+SELECT 12 + 45 FROM DUAL LIMIT 0;
+12 + 45
+SELECT 12 + 45;
+12 + 45
+57
+SELECT 12 + 45 WHERE 10 > 5;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'WHERE 10 > 5' at line 1
+SELECT 12 + 45 LIMIT 10;
+12 + 45
+57
+SELECT 12 + 45 LIMIT 0;
+12 + 45
+SELECT c1;
+ERROR 42S22: Unkown column name c1
+SELECT length('asdfg');
+length('asdfg')
+5

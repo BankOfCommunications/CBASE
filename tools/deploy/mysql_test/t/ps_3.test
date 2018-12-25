@@ -1,0 +1,185 @@
+--disable_warnings
+drop table if exists t1,t2,t3,t4;
+--enable_warnings
+
+############################# 5.0 tests start ################################
+#
+#
+# Bug#6102 'Server crash with prepared statement and blank after
+# function name'
+# ensure that stored functions are cached when preparing a statement
+# before we open tables
+#
+
+create table t1 (a varchar(20) primary key, b int); 
+insert into t1 values ('foo', 1);
+
+ 
+prepare stmt FROM SELECT length(a) FROM t1; 
+
+--error 5001
+prepare stmt2 FROM 'SELECT not_a_function (a) FROM t1'; 
+
+drop table t1;
+
+
+
+#
+# Bug#7306 LIMIT ?, ? and also WL#1785 ' Prepared statements: implement
+# support for placeholders in LIMIT clause.'
+# Add basic test coverage for the feature.
+# 
+
+
+create table t1 (a int primary key, b int);
+insert into t1 (a,b) values (1,0), (2,0), (3,0), (4,0), (5,0), (6,0), (7,0), (8,0), (9,0), (10,0);
+
+
+prepare stmt from select * from t1 limit ?, ?;
+set @offset=0;
+set @limit=1;
+execute stmt using @offset, @limit;
+
+
+select * from t1 limit 0, 1;
+
+
+set @offset=3;
+set @limit=2;
+execute stmt using @offset, @limit;
+
+
+select * from t1 limit 3, 2;
+
+
+prepare stmt from select * from t1 limit ?;
+execute stmt using @limit;
+prepare stmt from select * from t1 union all select * from t1 limit ?, ?;
+set @offset=9;
+set @limit=2;
+execute stmt using @offset, @limit;
+prepare stmt from (select * from t1 limit ?, ?) union all
+                   (select * from t1 limit ?, ?) order by a limit ?;
+execute stmt using @offset, @limit, @offset, @limit, @limit;
+
+drop table t1;
+deallocate prepare stmt;
+
+
+
+create table t1 (a int primary key, b int);
+insert into t1 (a,b) values (2,8),(1,9),(3,7);
+
+
+# Will order by index
+prepare stmt from select * from t1 order by ?;
+set @a=NULL;
+execute stmt using @a;
+set @a=1;
+execute stmt using @a;
+set @a=2;
+execute stmt using @a;
+deallocate prepare stmt;
+
+# For reference:
+
+
+select * from t1 order by 1;
+
+
+# Will not order by index.
+prepare stmt from select * from t1 order by ?+1;
+set @a=0;
+execute stmt using @a;
+set @a=1;
+execute stmt using @a;
+deallocate prepare stmt;
+
+# For reference:
+
+
+select * from t1 order by 1+1;
+
+
+drop table t1;
+
+
+# BUG#21166: Prepared statement causes signal 11 on second execution
+#
+# Changes in an item tree done by optimizer weren't properly
+# registered and went unnoticed, which resulted in preliminary freeing
+# of used memory.
+#
+--disable_warnings
+DROP TABLE IF EXISTS t1, t2, t3;
+--enable_warnings
+
+
+CREATE TABLE t1 (i INT primary key, j INT);
+CREATE TABLE t2 (i INT primary key, j INT);
+CREATE TABLE t3 (i INT primary key, j INT);
+
+
+PREPARE stmt FROM SELECT * FROM t1 JOIN t2 ON (t2.i = t1.i)
+                   LEFT JOIN t3 ON t3.i = t1.i
+                   WHERE t1.i = ?;
+
+SET @a= 1;
+EXECUTE stmt USING @a;
+EXECUTE stmt USING @a;
+
+DEALLOCATE PREPARE stmt;
+DROP TABLE IF EXISTS t1, t2, t3;
+
+
+#
+# BUG#21081: SELECT inside stored procedure returns wrong results
+#
+--disable_warnings
+DROP TABLE IF EXISTS t1, t2;
+--enable_warnings
+
+
+CREATE TABLE t1 (i INT primary key, j INT);
+CREATE TABLE t2 (i INT primary key, j INT);
+
+INSERT INTO t1 VALUES (1,0), (2,0);
+INSERT INTO t2 VALUES (1,0);
+
+
+PREPARE stmt FROM SELECT t2.i FROM t1 LEFT JOIN t2 ON t2.i = t1.i
+                   WHERE t1.i = ?;
+
+SET @arg= 1;
+EXECUTE stmt USING @arg;
+SET @arg= 2;
+EXECUTE stmt USING @arg;
+SET @arg= 1;
+EXECUTE stmt USING @arg;
+
+DEALLOCATE PREPARE stmt;
+DROP TABLE t1, t2;
+
+#
+# Bug#33798: prepared statements improperly handle large unsigned ints
+#
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+
+
+create table t1 (a bigint  primary key, b bigint);
+
+
+prepare stmt from insert into t1 values (?,?);
+
+set @a= 9999999999999999;
+set @b= 14632475938453979136;
+execute stmt using @a, @b;
+
+
+select * from t1;
+
+
+deallocate prepare stmt;
+drop table t1;

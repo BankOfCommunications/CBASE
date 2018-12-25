@@ -1,0 +1,7 @@
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Case: SelectWhereOrderLimit
+Auth: wushi.ly@taobao.com
+File: select_where_order_limit.(h|cpp)
+Desc: SELECT * FROM olap WHERE d = 255 ORDER BY z DESC
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

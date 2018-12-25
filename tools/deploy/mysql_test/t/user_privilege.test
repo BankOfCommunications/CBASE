@@ -1,0 +1,16 @@
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+create user 'u1' identified by 'pass1';
+grant create on * to 'u1';
+
+--real_sleep 10
+
+connect (conn2,$OBMYSQL_MS0,u1,pass1,test,$OBMYSQL_PORT);
+create  table t3(a int primary key, b int);
+
+connection conn1;
+revoke drop on * from 'u1';
+--real_sleep 10
+
+connection conn2;
+--error 5036
+drop table t3;

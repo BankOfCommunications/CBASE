@@ -1,0 +1,1 @@
+create table table1 (rk_column varchar(40), column_2 varchar(1200), column_3 varchar(1200), column_4 varchar(1200), column_5 int, column_6 int, column_7 int, c_time createtime, m_time modifytime, seed_column int, rowkey_info int, cell_num int, suffix_length int, suffix_num int, prefix_end int, primary key(rk_column));

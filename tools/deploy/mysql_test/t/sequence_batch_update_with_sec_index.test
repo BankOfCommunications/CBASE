@@ -1,0 +1,410 @@
+--disable_warnings
+drop table if exists seq_insert;
+--enable_warnings
+
+create table seq_insert(id int primary key,c1 int,c2 decimal(25,0));
+
+create index seq_insert_index1 on seq_insert (c1) storing (c2);
+create index seq_insert_index2 on seq_insert (c2) storing (c1);
+create or replace sequence seq;
+
+insert into seq_insert values(nextval for seq,nextval for seq+nextval for seq,0);
+insert into seq_insert values(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq),(nextval for seq,nextval for seq+nextval for seq,prevval for seq);
+
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 600
+
+
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='seq_insert',table_id,1);
+
+--let $index_head =__
+
+--let $index1_end =__idx__seq_insert_index1
+--let $index1_name=$index_head$n$index1_end
+echo $index1_name;
+
+--let $index2_end =__idx__seq_insert_index2
+--let $index2_name=$index_head$n$index2_end
+echo $index2_name;
+
+--let $select_for_index1=select * from $index1_name
+--let $select_for_index2=select * from $index2_name
+
+eval select * from $index1_name;
+eval select * from $index2_name;
+
+# 1
+select * from seq_insert;  
+# 2
+eval select * from $index1_name; # index1 on TABLE seq_insert
+eval select * from $index2_name; # index2 on TABLE seq_insert
+# 3 
+update seq_insert set c1 =3  where id < prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 4
+update seq_insert set c1 =3  where id = prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 5
+update seq_insert set c1 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 6
+create or replace sequence seq;
+update seq_insert set c1 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 7
+create or replace sequence seq;
+update seq_insert set c2 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 8
+create or replace sequence seq;
+update seq_insert set c1 = nextval for seq + nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 9
+create or replace sequence seq;
+update seq_insert set c2 = nextval for seq + nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 10
+create or replace sequence seq;
+--error 65535
+update seq_insert set c1 = nextval for seq + prevval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 11
+create or replace sequence seq;
+--error 65535
+update seq_insert set c2 = nextval for seq + prevval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 12
+create or replace sequence seq;
+select nextval for seq from seq_insert;
+update seq_insert set c1 = prevval for seq + prevval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 13
+create or replace sequence seq;
+select nextval for seq from seq_insert;
+update seq_insert set c2 = prevval for seq + prevval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 14
+create or replace sequence seq minvalue 1 maxvalue 3 cycle;
+update seq_insert set c1 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 15
+create or replace sequence seq minvalue 1 maxvalue 3 cycle;
+update seq_insert set c2 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 16
+create or replace sequence seq as decimal(3,0) minvalue 20;
+update seq_insert set c1 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 17
+create or replace sequence seq as decimal(3,0) minvalue 20;
+update seq_insert set c2 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 18
+create or replace sequence seq as decimal(3,0) minvalue 20 maxvalue 23 cycle;
+update seq_insert set c1 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 19
+create or replace sequence seq as decimal(3,0) minvalue 20 maxvalue 23 cycle;
+update seq_insert set c2 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 20
+update seq_insert set c1 = prevval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 21
+update seq_insert set c2 = prevval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 22
+create or replace sequence seq quick;
+--error 65535
+update seq_insert set c1 = prevval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 23
+create or replace sequence seq quick;
+--error 65535
+update seq_insert set c2 = prevval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 24
+create or replace sequence seq quick;
+update seq_insert set c1 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 25
+create or replace sequence seq quick;
+update seq_insert set c2 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 26
+create or replace sequence seq quick;
+update seq_insert set c1 = nextval for seq+nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 27
+create or replace sequence seq quick;
+update seq_insert set c2 = nextval for seq + nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 28
+update seq_insert set c1 = nextval for seq+prevval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 29
+update seq_insert set c2 = nextval for seq +prevval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 30
+update seq_insert set c1 = prevval for seq+prevval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 31
+update seq_insert set c2 = prevval  for seq +prevval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 32
+create or replace sequence seq quick minvalue 3 maxvalue 4 cycle;
+update seq_insert set c1 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 33
+create or replace sequence seq quick minvalue 3 maxvalue 4 cycle;
+update seq_insert set c2 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 34
+create or replace sequence seq quick minvalue 3 maxvalue 5 cycle;
+update seq_insert set c1 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 35
+create or replace sequence seq quick minvalue 3 maxvalue 5 cycle;
+update seq_insert set c2 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 36
+create or replace sequence seq;
+update seq_insert set c1 = nextval for seq where id >=10;
+update seq_insert set c1 = 88 where id between 1 and prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 37
+create or replace sequence seq;
+update seq_insert set c2 = nextval for seq where id >=10;
+update seq_insert set c2 = 88 where id between 1 and prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 38
+create or replace sequence seq;
+update seq_insert set c1 = nextval for seq where id >=10;
+update seq_insert set c1 =nextval for seq where id between 1 and prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 39
+create or replace sequence seq;
+update seq_insert set c2 = nextval for seq where id >=10;
+update seq_insert set c2 = nextval for seq where id between 1 and prevval for seq;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 40
+create or replace sequence seq;
+update seq_insert set c1= nextval for seq where id =0;
+select current_value from __all_sequence where sequence_name='seq';
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 41
+create or replace sequence seq;
+update seq_insert set c2= nextval for seq where id =0;
+select current_value from __all_sequence where sequence_name='seq';
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 42
+create or replace sequence seq as  decimal(25,0) minvalue 11111111111111111111111.0;
+--error 79
+update seq_insert set c1 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 43
+create or replace sequence seq as decimal(25,0) minvalue 11111111111111111111111.0;
+update seq_insert set c2 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 44
+create or replace sequence seq as  decimal(25,0) minvalue 11111111111111111111111.0  maxvalue 11111111111111111111113.0;
+--error 79
+update seq_insert set c1 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 45
+create or replace sequence seq as decimal(25,0) minvalue 11111111111111111111111.0  maxvalue 11111111111111111111113.0;
+--error 65535
+update seq_insert set c2 = nextval for seq where id >=1;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 46
+create or replace sequence seq as  decimal(25,0)  quick  minvalue 11111111111111111111111.0;
+--error 79
+update seq_insert set c1 = nextval for seq where id >=1;
+--error 65535
+select prevval for seq from seq_insert;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 47
+create or replace sequence seq as decimal(25,0)  quick minvalue 11111111111111111111111.0;
+update seq_insert set c2 = nextval for seq where id >=1;
+select prevval for seq from seq_insert;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 48
+create or replace sequence seq as  decimal(25,0)  quick minvalue 11111111111111111111111.0  maxvalue 11111111111111111111113.0 ;
+--error 79
+update seq_insert set c1 = nextval for seq where id >=1;
+--error 65535
+select prevval for seq from seq_insert;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 49
+create or replace sequence seq as decimal(25,0)  quick minvalue 11111111111111111111111.0  maxvalue 11111111111111111111113.0 ;
+--error 65535
+update seq_insert set c2 = nextval for seq where id >=1;
+--error 65535
+select prevval for seq from seq_insert;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 50
+create or replace sequence seq as  decimal(25,0)  quick minvalue 11111111111111111111111.0  maxvalue 11111111111111111111113.0   increment by 2 ;
+--error 79
+update seq_insert set c1 = nextval for seq where id >=1;
+--error 65535
+select prevval for seq from seq_insert;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 51
+create or replace sequence seq as decimal(25,0)  quick minvalue 11111111111111111111111.0  maxvalue 11111111111111111111113.0   increment by 2 ;
+--error 65535
+update seq_insert set c2 = nextval for seq where id >=1;
+--error 65535
+select prevval for seq from seq_insert;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 51
+create or replace sequence seq as decimal(25,0)    quick minvalue 11111111111111111111111.0 maxvalue 11111111111111111111333.0 increment by 2 ;
+--error 79
+update seq_insert set c1 = nextval for seq where id >=1;
+--error 65535
+select prevval for seq from seq_insert;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 52
+create or replace sequence seq as decimal(25,0)    quick minvalue 11111111111111111111111.0 maxvalue 11111111111111111111333.0 increment by 2 ;
+update seq_insert set c2 = nextval for seq where id >=1;
+select prevval for seq from seq_insert;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 53
+create or replace sequence seq as decimal(25,0)    quick minvalue 11111111111111111111111.0 maxvalue 11111111111111111111333.0 increment by 2 ;
+--error 65535
+update seq_insert set c1 = nextval for seq where id <prevval for seq;
+--error 65535
+select prevval for seq from seq_insert;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 54
+create or replace sequence seq as decimal(25,0)    quick minvalue 11111111111111111111111.0 maxvalue 11111111111111111111333.0 increment by 2 ;
+--error 65535
+update seq_insert set c2 = nextval for seq where id <prevval for seq;
+--error 65535
+select prevval for seq from seq_insert;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 55
+create or replace sequence seq as decimal(25,0)    quick minvalue 11111111111111111111111.0 maxvalue 11111111111111111111333.0 increment by 2 ;
+select nextval for seq from seq_insert;
+--error 79
+update seq_insert set c1 = nextval for seq where id <prevval for seq;
+select prevval for seq from seq_insert;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+# 56
+create or replace sequence seq as decimal(25,0)    quick minvalue 11111111111111111111111.0 maxvalue 11111111111111111111333.0 increment by 2 ;
+select nextval for seq from seq_insert;
+--error 79
+update seq_insert set c2 = nextval for seq where id <prevval for seq;
+select prevval for seq from seq_insert;
+select * from seq_insert;
+eval select * from $index1_name;
+eval select * from $index2_name;
+

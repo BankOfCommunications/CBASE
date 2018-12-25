@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE dbmonster-schema PUBLIC "-//kernelpanic.pl//DBMonster Database Schema DTD 1.1//EN" "http://dbmonster.kernelpanic.pl/dtd/dbmonster-schema-1.1.dtd">
+<dbmonster-test>
+	<name>app1</name>
+	<query num="1" name="join_point_query">
+		<sql> SELECT j1.c FROM sbtest as j1, sbtest as j2 WHERE j1.id=j2.id and j1.id=? and j2.id=?</sql>
+		<param name="id1" type="int">
+			<generator type="com.etao.monster.generator.NumberGenerator">
+				<property name="maxValue" value="${total_rows}" />
+				<property name="minValue" value="0" />
+				<property name="nulls" value="0" />
+				<property name="returnedType" value="long" />
+				<property name="scale" value="0" />
+			</generator>
+		</param>
+		<param name="id2" type="int">
+			<generator type="com.etao.monster.generator.DependGenerator">
+				<property name="queryName" value="join_point_query" />
+				<property name="paramName" value="id1" />
+			</generator>
+		</param>
+	</query>
+</dbmonster-test>

@@ -1,0 +1,35 @@
+ob1=OBI(cluster=2233,app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable,use_vip=1)
+ob1.cs2.set sstable_dist=0
+ob1.cs2.set status=disable
+ob1.rs0.set extra_config=tablet_replicas_num=2,enable_balance=True
+ob1.rs1.set extra_config=tablet_replicas_num=2,enable_balance=True
+ob1.reboot
+ob1.source include/merge.inc
+ob1.source include/migrate.inc
+ob1.create_client
+ob1.prepare
+create table t1(a int primary key,b int);
+insert into t1 values(1,1),(-1,0),(-2,-2),(10,10);
+select * from t1;
+a	b
+-2	-2
+-1	0
+1	1
+10	10
+ob1.major_freeze
+ob1.check_cs_version 2,2
+ob1.cs2.set status=enable
+ob1.cs2.start
+ob1.cleanHA
+ob1.$a.setfailcount 1
+update t1 set b=200 where a=-2;
+select * from t1;
+a	b
+-2	200
+-1	0
+1	1
+10	10
+drop table t1;
+ob1.major_freeze
+ob1.check_cs_version 3
+ob1.check_cs_balance

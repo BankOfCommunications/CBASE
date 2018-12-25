@@ -1,0 +1,146 @@
+drop table if exists t1,t2,m1,m2,n1,n2;
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1(c1 int primary key,c2 int);
+alter table t1 rename to t2;
+select * from t1;
+ERROR 42S02: table 'test.t1' does not exist
+select * from t2;
+c1	c2
+create table m1(c1 int primary key,c2 int);
+desc m1;
+field	type	nullable	key	default	extra
+c1	int32	1	1	NULL	
+c2	int32	1	0	NULL	
+rename table m1 to m2;
+desc m1;
+ERROR 42S02: Unknown table "test.m1"
+desc m2;
+field	type	nullable	key	default	extra
+c1	int32	1	1	NULL	
+c2	int32	1	0	NULL	
+drop table if exists t1,t2,m1,m2;
+create table t1(c1 int primary key,c2 int);
+insert into t1 values(1,1),(2,2),(3,3);
+[major_freeze] err=0
+rename table t1 to t2;
+desc t1;
+ERROR 42S02: Unknown table "test.t1"
+desc t2;
+field	type	nullable	key	default	extra
+c1	int32	1	1	NULL	
+c2	int32	1	0	NULL	
+insert into t2 values(4,4);
+rename table t2 to t1;
+select * from t1;
+c1	c2
+1	1
+2	2
+3	3
+4	4
+select * from t2;
+ERROR 42S02: table 'test.t2' does not exist
+insert into t1 values(5,5);
+select * from t1;
+c1	c2
+1	1
+2	2
+3	3
+4	4
+5	5
+select * from t2;
+ERROR 42S02: table 'test.t2' does not exist
+drop table if exists t1,t2;
+create table n1(c1 int primary key,c2 int);
+create table n2(c1 int primary key,c2 int);
+insert into n1 values(1,1);
+insert into n2 values(1,1),(2,2);
+rename table n1 to n1_temp;
+rename table n2 to n1;
+rename table n1_temp to n2;
+select * from n1;
+c1	c2
+1	1
+2	2
+select * from n2;
+c1	c2
+1	1
+drop table if exists n1,n2;
+create table t1(c1 int primary key,c2 int);
+create table t2(c1 int primary key,c2 int);
+rename table t1 to t2;
+ERROR 42S02: Table 't2' already exist
+rename table t100 to t200;
+ERROR 42S02: Table 't100' doesn't exist
+drop table if exists t1;
+create table t1(c1 int primary key,c2 int);
+alter table t1 rename c1 to c3;
+desc t1;
+field	type	nullable	key	default	extra
+c3	int32	1	1	NULL	
+c2	int32	1	0	NULL	
+drop table if exists t1;
+create table t1(c1 int primary key,c2 int);
+desc t1;
+field	type	nullable	key	default	extra
+c1	int32	1	1	NULL	
+c2	int32	1	0	NULL	
+alter table t1 rename column c1 to c3;
+desc t1;
+field	type	nullable	key	default	extra
+c3	int32	1	1	NULL	
+c2	int32	1	0	NULL	
+insert into t1 values(1,1),(2,2),(3,3);
+select * from t1;
+c3	c2
+1	1
+2	2
+3	3
+[major_freeze] err=0
+alter table t1 rename c2 to c1;
+select * from t1;
+c3	c1
+1	1
+2	2
+3	3
+insert into t1 values(4,4);
+alter table t1 rename c3 to c2;
+select * from t1;
+c2	c1
+1	1
+2	2
+3	3
+4	4
+alter table t1 rename c1 to c3,add c4 int;
+select * from t1;
+c2	c3	c4
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+alter table t1 rename c2 to c3;
+ERROR 42S21: Column 'c3' already exist
+alter table t1 drop c3,rename c2 to c1;
+select * from t1;
+c1	c4
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+alter table t1 rename c200 to c300;
+ERROR 42S22: Column 'c200' doesn't exist
+drop table t1;
+create table t1(c1 int primary key,c2 int,c3 int);
+desc t1;
+field	type	nullable	key	default	extra
+c1	int32	1	1	NULL	
+c2	int32	1	0	NULL	
+c3	int32	1	0	NULL	
+alter table t1 drop c2,rename c1 to c3;
+ERROR 42S21: Column 'c3' already exist
+desc t1;
+field	type	nullable	key	default	extra
+c1	int32	1	1	NULL	
+c2	int32	1	0	NULL	
+c3	int32	1	0	NULL	
+drop table t1;

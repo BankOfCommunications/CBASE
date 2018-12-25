@@ -1,0 +1,620 @@
+ob1=OBI(cluster=1211)
+ob1.reboot
+ob1.mysql set global ob_read_consistency=3
+ob1.$m_ups.status;
+master
+ob1.$s_ups.status;
+sync
+ob1.create_client
+create table t1(pk int primary key, c1 int);
+insert into t1 values(1,1),(2,2);
+set autocommit = 0;
+insert into t1 values (3,3) when row_count(insert into t1 values(1,1))=1;
+ERROR 23000: Duplicate entry ' <3001.16>=int:1' for key 'PRIMARY'
+commit;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+insert into t1 values (3,3) when row_count(update t1 set c1=2 where pk=3)=1;
+ERROR HY000: Number 1 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+commit;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+insert into t1 values (3,3) when row_count(insert into t1 values(1,1))=1;
+ERROR 23000: Duplicate entry ' <3001.16>=int:1' for key 'PRIMARY'
+rollback;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+insert into t1 values (3,3) when row_count(update t1 set c1=2 where pk=3)=1;
+ERROR HY000: Number 1 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+rollback;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+insert into t1 values (1,1) when row_count(insert into t1 values(3,3))=1;
+ERROR 23000: Duplicate entry ' <3001.16>=int:1' for key 'PRIMARY'
+commit;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+insert into t1 values (1,1) when row_count(insert into t1 values(3,3))=1;
+ERROR 23000: Duplicate entry ' <3001.16>=int:1' for key 'PRIMARY'
+rollback;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+insert into t1 values (3,3) when row_count(insert into t1 values(4,4) when row_count(insert into t1 values(1,1))=1)=1;
+ERROR 23000: Duplicate entry ' <3001.16>=int:1' for key 'PRIMARY'
+commit;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+insert into t1 values (3,3) when row_count(insert into t1 values(4,4) when row_count(update t1 set c1=2 where pk=3)=1)=1;
+ERROR HY000: Number 1 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+commit;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+insert into t1 values (3,3) when row_count(insert into t1 values(4,4) when row_count(insert into t1 values(1,1))=1)=1;
+ERROR 23000: Duplicate entry ' <3001.16>=int:1' for key 'PRIMARY'
+rollback;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+insert into t1 values (3,3) when row_count(insert into t1 values(4,4) when row_count(update t1 set c1=2 where pk=3)=1)=1;
+ERROR HY000: Number 1 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+rollback;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+insert into t1 values (3,3) when row_count(insert into t1 values(2,2) when row_count(update t1 set c1=2 where pk=1)=1)=1;
+ERROR 23000: Duplicate entry ' <3001.16>=int:2' for key 'PRIMARY'
+commit;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+insert into t1 values (3,3) when row_count(update t1 set c1=2 where pk=3 when row_count(update t1 set c1=2 where pk=1)=1)=1;
+ERROR HY000: Number 2 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+commit;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+insert into t1 values (3,3) when row_count(insert into t1 values(2,2) when row_count(update t1 set c1=2 where pk=1)=1)=1;
+ERROR 23000: Duplicate entry ' <3001.16>=int:2' for key 'PRIMARY'
+rollback;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+insert into t1 values (3,3) when row_count(update t1 set c1=2 where pk=3 when row_count(update t1 set c1=2 where pk=1)=1)=1;
+ERROR HY000: Number 2 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+rollback;
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+select * from t1;
+pk	c1
+1	1
+2	2
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+ob1.$m_ups.status;
+master
+ob1.$s_ups.status;
+sync
+ob1.$m_ups.nfind_log "table_mgr->check_checksum";

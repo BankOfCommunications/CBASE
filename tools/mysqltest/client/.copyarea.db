@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\mysqltest\client
+2
+4
+c:sql_string.h|1|166f7766638|2949|ae552440|242b5ede68bb11e8a8030002c8c1274c|0
+11:completion_hash.h|1|166f7766681|76f|85067b2b|264b5efa68bb11e8a8030002c8c1274c|0
+d:client_priv.h|1|166f77666bc|ed1|2c0972b2|284b5f1668bb11e8a8030002c8c1274c|0
+d:my_readline.h|1|166f77666fe|5f3|7ed0eb6f|2a5b5f3268bb11e8a8030002c8c1274c|0

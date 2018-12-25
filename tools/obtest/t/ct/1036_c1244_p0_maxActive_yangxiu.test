@@ -1,0 +1,51 @@
+deploy ob1=OBI(cluster=1211);
+
+deploy ob1.reboot;
+sleep 10;
+
+#unit ms
+deploy ob1.set sessionTimeout=30000;
+deploy ob1.create_client;
+
+deploy ob1.prepare;
+
+#set maxActive = 8
+deploy ob1.set_diamond minIdle:1;
+
+create table t1(a int primary key,b int);
+sleep 60;
+deploy ob1.set_diamond maxActive:2;
+sleep 60;
+insert into t1 values(1,1),(2,2);
+deploy ob1.start_check;
+
+let $a = deploy_get_value(ob1.ms0.monitor sql_succ_login_count);
+let $b = deploy_get_value(ob1.ms0.monitor sql_logout_count);
+let $c = deploy_get_value(ob1.ms0.monitor sql_fail_login_count);
+let $d = math($a-$b+$c);
+--echo $d
+
+deploy ob1.stop_check;
+sleep 60;
+
+let $a = deploy_get_value(ob1.ms0.monitor sql_succ_login_count);
+let $b = deploy_get_value(ob1.ms0.monitor sql_logout_count);
+let $c = deploy_get_value(ob1.ms0.monitor sql_fail_login_count);
+let $d = math($a-$b+$c);
+--echo $d
+
+#set maxActive:15
+deploy ob1.set_diamond maxActive:15;
+sleep 60;
+deploy ob1.start_check;
+deploy ob1.start_check;
+deploy ob1.start_check;
+
+sleep 10;
+
+let $a = deploy_get_value(ob1.ms0.monitor sql_succ_login_count);
+let $b = deploy_get_value(ob1.ms0.monitor sql_logout_count);
+let $c = deploy_get_value(ob1.ms0.monitor sql_fail_login_count);
+let $d = math($a-$b+$c);
+--echo $d
+

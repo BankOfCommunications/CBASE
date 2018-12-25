@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\script\maintanance
+2
+4
+e:cleanexpire.sh|1|166f77af2ff|206|f9d2928f|c3bcc8b268d711e8a8030002c8c1274c|0
+8:gmscp.sh|1|166f77af34b|228|6dac92e3|c67cc8ce68d711e8a8030002c8c1274c|0
+a:gethost.sh|1|166f77af385|1b0|2d577d2|c8ecc8ea68d711e8a8030002c8c1274c|0
+5:gm.sh|1|166f77af3be|1f8|6df58500|cafcc90668d711e8a8030002c8c1274c|0

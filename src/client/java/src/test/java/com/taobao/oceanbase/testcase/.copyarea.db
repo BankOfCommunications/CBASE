@@ -1,0 +1,22 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\client\java\src\test\java\com\taobao\oceanbase\testcase
+2
+12
+25:UpdateListTestCaseExecuteForJoin.java|1|166f774cd79|653c|7cbacc4d|0b4aa8fa68ad11e8a8030002c8c1274c|0
+22:RowKeyReverseQueryTestForInfo.java|1|166f774ce1f|5b95|e690ac9f|144aa96a68ad11e8a8030002c8c1274c|0
+19:QueryTestCaseForItem.java|1|166f774cefd|c6cb|b304a28f|18eaa9a268ad11e8a8030002c8c1274c|0
+1d:QueryTestCaseForWhere_04.java|1|166f774cce8|2e153|c6b4b889|095aa8de68ad11e8a8030002c8c1274c|0
+1f:GetFunctionTestCaseForJoin.java|1|166f774cdad|22e4d|73714d54|0d4aa91668ad11e8a8030002c8c1274c|0
+1d:QueryTestCaseForWhere_05.java|1|166f774cf49|699d|494d9c61|1d1aa9da68ad11e8a8030002c8c1274c|0
+1b:BatchInterfaceTestCase.java|1|166f774cf26|94c9|cac7297e|1b2aa9be68ad11e8a8030002c8c1274c|0
+21:UpdateTestCaseExecuteForJoin.java|1|166f774cca2|bf1a|536ec8d1|054aa8a668ad11e8a8030002c8c1274c|0
+1e:GetTestCaseExecuteForJoin.java|1|166f774cc38|666d|21dc1fd0|fe9aa85268ac11e8a8030002c8c1274c|0
+1d:QueryTestCaseForWhere_01.java|1|166f774ce5d|13ef2|595314b6|168aa98668ad11e8a8030002c8c1274c|0
+18:ColumnGroupTestCase.java|1|166f774cf68|81fb|8faca516|1f4aa9f668ad11e8a8030002c8c1274c|0
+20:QueryTestCaseForWhere_04_XX.java|1|166f774cc23|1f346|7968e90f|fc0aa83668ac11e8a8030002c8c1274c|0
+19:QueryTestCaseForInfo.java|1|166f774cc62|d88c|467d1fbd|00caa86e68ad11e8a8030002c8c1274c|0
+1d:QueryTestCaseForWhere_06.java|1|166f774ccc6|4e95|3d5f168e|074aa8c268ad11e8a8030002c8c1274c|0
+25:RemoveListTestCaseExecuteForJoin.java|1|166f774cdd4|20ca|759b4250|0f5aa93268ad11e8a8030002c8c1274c|0
+21:InsertTestCaseExecuteForJoin.java|1|166f774cc82|19afb|e0423c2f|031aa88a68ad11e8a8030002c8c1274c|0
+25:InsertListTestCaseExecuteForJoin.java|1|166f774cdf7|b240|4196bb6a|123aa94e68ad11e8a8030002c8c1274c|0
+21:RemoveTestCaseExecuteForJoin.java|1|166f774cf8e|2090|50deec23|21caaa1268ad11e8a8030002c8c1274c|0

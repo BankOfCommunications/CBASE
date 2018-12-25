@@ -1,0 +1,22 @@
+#--disable_abort_on_error
+
+##
+## Test of binary protocol
+##
+#
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+
+##
+## fix_fields problem
+##
+create table t1 (mat_id INT  NOT NULL  PRIMARY KEY, matintnum CHAR(6) NOT NULL);
+insert into t1 values (1, 'hello');
+--error 5071
+SELECT mat_id, matintnum FROM t1 union SELECT 0, 0 from t1;
+
+# it is a bug.
+#SELECT mat_id, matintnum FROM t1 union SELECT 10, 0x410041 from t1;
+SELECT mat_id, matintnum FROM t1 union SELECT 10, 0x4141 from t1;
+drop table t1;

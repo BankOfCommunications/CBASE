@@ -1,0 +1,18 @@
+deploy ob1=OBI(cluster=1133);
+
+deploy ob1.reboot;
+
+deploy ob1.source include/merge.inc;
+sleep 10;
+
+deploy ob1.create_client;
+
+deploy ob1.major_freeze;
+sleep 60;
+
+deploy ob1.rs0.stop;
+deploy ob1.ms0.force_stop;
+deploy ob1.rs0.nstart;
+sleep 60;
+
+select svr_type from __all_server;

@@ -1,0 +1,37 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob1.reboot;
+
+sleep 10;
+
+deploy ob1.prepare;
+
+#new data
+deploy ob1.create_client;
+create table t1(pk int primary key, c1 varchar);
+insert into t1 values(-1,'s1'),(-2,'s2');
+select * from t1;
+
+#master ups stop ,then start
+let $master_ups = deploy_get_value(ob1.get_master_ups);
+let $slave_ups = deploy_get_value(ob1.get_slave_ups);
+deploy ob1.$master_ups.force_stop;
+sleep 10;
+deploy ob1.$master_ups.start;
+
+#wait for reselect master ups
+sleep 10;
+let $master_ups1 = deploy_get_value(ob1.get_master_ups);
+let $slave_ups1 = deploy_get_value(ob1.get_slave_ups);
+
+
+if($master_ups == $master_ups1)
+{
+    --echo master_ups is error
+}
+if($slave_ups == $slave_ups1)
+{
+    --echo slave_ups is error
+}
+
+select * from t1;
+

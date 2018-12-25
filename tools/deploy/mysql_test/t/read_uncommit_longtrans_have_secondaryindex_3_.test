@@ -1,0 +1,126 @@
+drop table if exists c,d,e,f,g,h;
+create table c (c1 int primary key, c2 varchar(8));
+create table d (d1 int primary key, d2 varchar(8));
+create table e (e1 int primary key, e2 varchar(8),e3 varchar(8));
+create table f (f1 int primary key, f2 varchar(8));
+create table g (g1 int primary key, g2 varchar(8));
+create table h (h1 int primary key, h2 varchar(8));
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create index c_index on c(c2);
+create index d_index on d(d2);
+create index e_index on e(e2);
+create index f_index on f(f2);
+create index g_index on g(g2);
+create index h_index on h(h2);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 1200
+show index on c;
+show index on d;
+show index on e;
+show index on f;
+show index on g;
+show index on h;
+begin;
+let $i=1001;
+while($i < 4001) 
+{
+    eval insert into c(c1,c2) values($i,'1');
+    inc $i;
+}
+let $i=1001;
+while($i < 4001) 
+{
+    eval insert into d(d1,d2) values($i,'1');
+    inc $i;
+}
+let $i=1001;
+while($i < 4001) 
+{
+    eval insert into e(e1,e2,e3) values($i,'1','1');
+    inc $i;
+}
+let $i=1001;
+while($i < 4001) 
+{
+    eval insert into f(f1,f2) values($i,'1');
+    inc $i;
+}
+let $i=1001;
+while($i < 4001) 
+{
+    eval insert into g(g1,g2) values($i,'1');
+    inc $i;
+}
+let $i=1001;
+while($i < 4001) 
+{
+    eval insert into h(h1,h2) values($i,'1');
+    inc $i;
+}
+insert into c values(1,'c');
+insert into c values(2,1);
+insert into c values(3,1);
+insert into c values(4,1);
+insert into c values(5,1);
+insert into c values(6,1);
+insert into c values(7,1);
+insert into c values(8,1);
+insert into d values(1,1);
+insert into d values(2,'d');
+insert into d values(3,1);
+insert into d values(4,1);
+insert into d values(5,1);
+insert into d values(6,1);
+insert into e values(1,1,1);
+insert into e values(2,1,1);
+insert into e values(3,'e','e');
+insert into e values(4,1,1);
+insert into e values(5,1,1);
+insert into e values(6,1,1);
+insert into f values(1,1);
+insert into f values(2,1);
+insert into f values(3,1);
+insert into f values(4,'f');
+insert into f values(5,1);
+insert into f values(6,1);
+insert into g values(1,1);
+insert into g values(2,1);
+insert into g values(3,1);
+insert into g values(4,1);
+insert into g values(5,'g');
+insert into g values(6,1);
+insert into h values(1,1);
+insert into h values(2,1);
+insert into h values(3,1);
+insert into h values(4,1);
+insert into h values(5,1);
+insert into h values(6,'h');
+select * from c
+left join e on c.c1 = e.e1;
+select * from c
+left join e on c.c1 = e.e1
+inner join f on e.e1 = f.f1
+right join g on c.c1 = g.g1
+left join h on c.c1 = h.h1 ,d 
+where c.c1 = d.d1 and c.c2 = 'c';
+select * from c
+left join e on c.c1 = e.e1 and c.c2 = 'c'
+inner join f on e.e1 = f.f1
+right join g on c.c1 = g.g1
+left join h on c.c1 = h.h1 ,d 
+where c.c1 = d.d1 ;
+select /*+join(si,si,si,si)*/* from c
+left join e on c.c1 = e.e1
+inner join f on e.e1 = f.f1
+left join g on c.c1 = g.g1
+left join h on c.c1 = h.h1 ,d 
+where c.c1 = d.d1 and c.c1=1001;	
+select /*+join(bloomfilter_join,bloomfilter_join,bloomfilter_join,bloomfilter_join)*/* from c
+left join e on c.c1 = e.e1
+inner join f on e.e1 = f.f1
+left join g on c.c1 = g.g1
+left join h on c.c1 = h.h1 ,d 
+where c.c1 = d.d1 and c.c1=1001;		
+commit;

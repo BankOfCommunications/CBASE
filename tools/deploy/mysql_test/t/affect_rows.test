@@ -1,0 +1,23 @@
+--disable_warnings
+drop table if exists t1,t2,t3,t4;
+--enable_warnings
+create table t1(pk varchar primary key, a int);
+# --affect_rows 1
+insert into t1 values('a',1);
+# --affect_rows 2
+insert into t1 values('b',2),('c',3);
+
+# --affect_rows 1
+update t1 set a=0 where pk = 'a';
+
+# --affect_rows 0
+update t1 set a=0 where pk = 'z';
+
+# --affect_rows 1
+delete from t1 where pk='a';
+
+# --affect_rows 0
+delete from t1 where pk='z';
+
+drop table t1;
+

@@ -1,0 +1,59 @@
+ob1=OBI(cluster=1244)
+ob1.reboot
+ob1.source include/merge.inc
+ob1.create_client
+create table t1 (a int primary key,b int);
+create table t2 (a int primary key,b int);
+insert into t1 values(1,1),(2,1),(-2,1),(-3,1);
+insert into t2 values(1,1),(2,1);
+select * from t1;
+a	b
+-3	1
+-2	1
+1	1
+2	1
+select * from t2;
+a	b
+1	1
+2	1
+ob1.major_freeze
+ob1.check_cs_version 2
+select * from t1;
+a	b
+-3	1
+-2	1
+1	1
+2	1
+ob1.mysql update __first_tablet_entry set is_read_static=1 where table_name='t1'
+ob1.rs_admin refresh_schema
+update t1 set b=10 where a=1;
+insert into t1 values(0,1),(3,2);
+delete from t1 where a=2;
+update t2 set b=20 where a=1;
+insert into t2 values(0,1),(3,2);
+delete from t2 where a=2;
+select * from t1;
+a	b
+-3	1
+-2	1
+1	1
+2	1
+select * from t2;
+a	b
+0	1
+1	20
+3	2
+ob1.mysql update __first_tablet_entry set is_read_static=0 where table_name='t1'
+ob1.rs_admin refresh_schema
+select * from t1;
+a	b
+-3	1
+-2	1
+0	1
+1	10
+3	2
+select * from t2;
+a	b
+0	1
+1	20
+3	2

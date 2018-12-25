@@ -1,0 +1,131 @@
+--disable_warnings
+drop table if exists t1,t2,t3,t4;
+--enable_warnings
+
+
+###
+# delete within trx
+##
+create table t1(pk int primary key, a int);
+insert into t1 values(1,1);
+insert into t1 values(2,1);
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn3,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn4,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+##
+# CASE1: 
+##
+
+connection conn1;
+begin;
+delete from t1 where pk=1;
+select * from t1;
+
+connection conn2;
+begin;
+delete from t1 where pk=2;
+select * from t1;
+
+connection conn1;
+commit;
+connection conn2;
+commit;
+
+select * from t1;
+
+insert into t1 values(1,1),(2,1);
+
+connection conn1;
+begin;
+delete from t1 where pk=1;
+
+connection conn2;
+begin;
+--error 5049
+delete from t1 where pk=1;
+ROLLBACK;
+
+
+
+connection conn1;
+commit;
+select * from t1;
+
+
+insert into t1 values(1,1);
+
+connection conn1;
+begin;
+delete from t1 where pk=1;
+--echo expect (1,1),(2,1)
+select * from t1;
+commit;
+--echo expect (2,1)
+select * from t1;
+
+connection conn2;
+begin;
+--echo --delete a non-exist row
+delete from t1 where pk=1;
+commit;
+--echo expect (2,1)
+select * from t1;
+
+drop table t1;
+
+
+create table t1(pk int primary key, a int);
+
+insert into t1 values(1,1),(2,1),(3,1),(4,1);
+
+connection conn1;
+begin;
+delete from t1 where pk=1;
+delete  from t1 where pk=2;
+
+connection conn2;
+begin;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+--error 5049
+delete from  t1 where pk=1;
+ROLLBACK;
+
+connection conn3; 
+select * from t1;
+
+connection conn1;
+commit;
+
+connection conn3;
+--echo expect(3,1),(4,1)
+select * from t1;
+
+drop table t1;
+
+create table t1(f1 int , f2 int, a int, primary key(f1,f2));
+
+insert into t1 values(1,1,1),(1,2,1),(2,1,1),(2,2,1);
+
+connection conn1;
+begin;
+delete  from t1 where f1=1 and f2=1;
+
+connection conn2;
+begin;
+delete from t1 where f1=1 and f2=2;
+
+connection conn2;
+commit;
+connection conn1;
+commit;
+
+connection conn3;
+--echo expect(2,1,1),(2,2,1)
+select * from t1;
+
+drop table t1;
+

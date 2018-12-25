@@ -1,0 +1,70 @@
+drop table if exists t1,t2,t3;
+alter system set merge_delay_interval='1s' server_type=chunkserver,min_major_freeze_interval='1s' server_type=updateserver;
+alter system set merge_delay_for_lsync='1s' server_type=chunkserver;
+alter system set min_drop_cache_wait_time='10s' server_type=chunkserver;
+alter system set merge_thread_per_disk=10 server_type=chunkserver;
+alter system set each_tablet_sync_meta=False server_type=chunkserver;
+create table t1(i1 int, s1 char, d1 datetime,i2 int, primary key(i1,s1,d1));
+insert into t1 values(NULL,'s1','2013-1-25',1);
+insert into t1 values(1,NULL,'2013-1-25',1);
+insert into t1 values(1,'s1',NULL,1);
+insert into t1 values(NULL,'s1',NULL,1);
+insert into t1 values(NULL,NULL,'2013-1-25',1);
+insert into t1 values(1,NULL,NULL,1);
+insert into t1 values(NULL,NULL,NULL,1);
+insert into t1 values(NULL,NULL,'2013-1-26',1);
+insert into t1 values(NULL,NULL,NULL,NULL);
+ERROR 23000: Duplicate entry ' <3001.16>=null: <3001.17>=null: <3001.18>=null:' for key 'PRIMARY'
+insert into t1 values(NULL,NULL,NULL,NULL);
+ERROR 23000: Duplicate entry ' <3001.16>=null: <3001.17>=null: <3001.18>=null:' for key 'PRIMARY'
+update t1 set i2=1 where i1 is NULL and s1 is NULL;
+update t1 set i2=1 where i1 is NULL and s1 is NULL and d1 is NULL;
+delete from t1 where i1 is NULL and s1 is NULL and d1 is NULL;
+delete from t1 where i1 is NULL and s1='s1' and d1 is NULL;
+delete from t1 where i1=1 and s1='s1' and d1 is NULL;
+insert into t1 values(NULL,NULL,NULL,NULL);
+insert into t1 values(NULL,'s1',NULL,NULL);
+select * from t1;
+i1	s1	d1	i2
+1	NULL	2013-01-25 00:00:00	1
+1	NULL	NULL	1
+NULL	s1	2013-01-25 00:00:00	1
+NULL	s1	NULL	NULL
+NULL	NULL	2013-01-25 00:00:00	1
+NULL	NULL	2013-01-26 00:00:00	1
+NULL	NULL	NULL	NULL
+[major_freeze] err=0
+select * from t1;
+i1	s1	d1	i2
+1	NULL	2013-01-25 00:00:00	1
+1	NULL	NULL	1
+NULL	s1	2013-01-25 00:00:00	1
+NULL	s1	NULL	NULL
+NULL	NULL	2013-01-25 00:00:00	1
+NULL	NULL	2013-01-26 00:00:00	1
+NULL	NULL	NULL	NULL
+select * from t1;
+i1	s1	d1	i2
+1	NULL	2013-01-25 00:00:00	1
+1	NULL	NULL	1
+NULL	s1	2013-01-25 00:00:00	1
+NULL	s1	NULL	NULL
+NULL	NULL	2013-01-25 00:00:00	1
+NULL	NULL	2013-01-26 00:00:00	1
+NULL	NULL	NULL	NULL
+insert into t1 values(NULL,NULL,NULL,NULL);
+ERROR 23000: Duplicate entry ' <3001.16>=null: <3001.17>=null: <3001.18>=null:' for key 'PRIMARY'
+insert into t1 values(NULL,'s1',NULL,NULL);
+ERROR 23000: Duplicate entry ' <3001.16>=null: <3001.17>=varchar:s1 <3001.18>=null:' for key 'PRIMARY'
+insert into t1 values(1,'s1',NULL,NULL);
+select * from t1;
+i1	s1	d1	i2
+1	s1	NULL	NULL
+1	NULL	2013-01-25 00:00:00	1
+1	NULL	NULL	1
+NULL	s1	2013-01-25 00:00:00	1
+NULL	s1	NULL	NULL
+NULL	NULL	2013-01-25 00:00:00	1
+NULL	NULL	2013-01-26 00:00:00	1
+NULL	NULL	NULL	NULL
+drop table t1;

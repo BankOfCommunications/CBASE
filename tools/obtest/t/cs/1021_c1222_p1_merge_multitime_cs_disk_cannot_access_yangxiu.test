@@ -1,0 +1,47 @@
+ob1=OBI(cluster=1222,sub_dir_list=1);
+
+#use iof
+ob1.cs0.set use_iof=1;
+
+ob1.reboot;
+
+ob1.source include/merge.inc;
+sleep 10;
+
+ob1.create_client;
+create table t1 (a int primary key,b int);
+insert into t1 values(1,1),(2,2),(3,3);
+
+#merge
+ob1.major_freeze;
+ob1.check_cs_version 2;
+
+let $a=deploy_get_value(ob1.cs0.dumpsst 3001,1,idx_2_1);
+
+#some sstable broken
+ob1.cs0.iof EIO 1 $a 1;
+
+#merge
+let $cnt = 5;
+while($cnt>0)
+{
+	ob1.major_freeze;
+	sleep 15;
+	dec $cnt;
+}
+
+let $version=deploy_get_value(ob1.cs1.monitor serving_version);
+if($version != 7)
+{
+	--echo cs1 serving_version is not correct.
+}
+
+
+#disk ok
+ob1.cs0.iof EIO 1 $a 0;
+sleep 10;
+
+ob1.check_cs_version 7;
+
+
+

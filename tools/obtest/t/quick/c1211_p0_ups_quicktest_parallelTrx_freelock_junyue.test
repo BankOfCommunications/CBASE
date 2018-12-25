@@ -1,0 +1,258 @@
+ob1=OBI(cluster=1211);
+ob1.reboot;
+
+ob1.mysql set global ob_read_consistency=3;
+sleep 10;
+ob1.mysql_p show variables like 'ob_read_consistency';
+
+ob1.mysql_p select name,value from __all_sys_config_stat where name = 'read_master_master_ups_percent' or name = 'read_slave_master_ups_percent';
+
+let $m_ups=deploy_get_value(ob1.get_master_ups);
+let $s_ups=deploy_get_value(ob1.get_slave_ups);
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+
+
+ob1.create_client;
+drop table if exists t1;
+create table t1(c1 int primary key, c2 int);
+
+ob1.connect conn1;
+set autocommit=0;
+set session ob_tx_timeout=10000000;
+ob1.connect conn2;
+set autocommit=0;
+
+
+--echo case 3 free lock man
+# t1 free lock after trx commit
+connection conn1;
+update t1 set c2=c2+1 where c1=2;
+
+connection conn2;
+send update t1 set c2=c2+1 where c1=2;
+
+connection conn1;
+sleep 1;
+commit;
+
+connection conn2;
+reap;
+
+select * from t1 where c1=2;
+
+commit;
+
+# t1 free lock after trx rollback
+connection conn1;
+update t1 set c2=c2+1 where c1=2;
+
+connection conn2;
+send update t1 set c2=c2+1 where c1=2;
+
+connection conn1;
+sleep 1;
+rollback;
+
+connection conn2;
+reap;
+commit;
+
+select * from t1 where c1=2;
+
+commit;
+
+
+
+# t1 free lock after trx-timeout
+connection conn1;
+update t1 set c2=c2+1 where c1=2;
+sleep 11;
+
+connection conn2;
+send update t1 set c2=c2+1 where c1=2;
+
+connection conn1;
+--error 119
+commit;
+
+connection conn2;
+reap;
+commit;
+
+select * from t1 where c1=2;
+commit;
+
+# t1 free lock after trx commit
+connection conn1;
+insert into t1  values(2,2);
+
+connection conn2;
+send replace into t1  values(2,2);
+
+connection conn1;
+sleep 1;
+commit;
+
+connection conn2;
+reap;
+
+select * from t1 where c1=2;
+commit;
+delete  from t1 where c1=2;
+commit;
+
+# t1 free lock after trx rollback
+connection conn1;
+insert into t1  values(2,2);
+
+connection conn2;
+send replace into t1  values(2,2);
+
+connection conn1;
+sleep 1;
+rollback;
+connection conn2;
+reap;
+commit;
+select * from t1 where c1=2;
+commit;
+delete  from t1 where c1=2;
+commit;
+
+# t1 free lock after trx-timeout
+connection conn1;
+insert into t1  values(2,2);
+sleep 11;
+
+connection conn2;
+send replace into t1  values(2,2);
+
+connection conn1;
+--error 119
+commit;
+
+connection conn2;
+reap;
+commit;
+
+
+select * from t1 where c1=2;
+commit;
+
+# t1 free lock after trx-timeout
+connection conn1;
+select * from t1 where c1=2 for update;
+sleep 11;
+
+connection conn2;
+send select * from t1 where c1=2 for update;
+
+connection conn1;
+--error 119
+commit;
+
+connection conn2;
+reap;
+commit;
+
+select * from t1 where c1=2;
+commit;
+
+# t1 free lock after trx commit
+connection conn1;
+select * from t1 where c1=2 for update;
+
+connection conn2;
+send select * from t1 where c1=2 for update;
+
+connection conn1;
+sleep 1;
+commit;
+
+connection conn2;
+reap;
+
+select * from t1 where c1=2;
+
+commit;
+
+# t1 free lock after trx rollback
+connection conn1;
+select * from t1 where c1=2 for update;
+
+connection conn2;
+send select * from t1 where c1=2 for update;
+
+connection conn1;
+sleep 1;
+rollback;
+connection conn2;
+reap;
+commit;
+select * from t1 where c1=2;
+commit;
+
+# t1 free lock after trx-timeout
+connection conn1;
+delete from t1 where c1=2;
+sleep 11;
+
+connection conn2;
+send delete from t1 where c1=2;
+
+connection conn1;
+--error 119
+commit;
+
+connection conn2;
+reap;
+commit;
+
+select * from t1 where c1=2;
+commit;
+
+# t1 free lock after trx commit
+connection conn1;
+delete from t1 where c1=2;
+
+connection conn2;
+send delete from t1 where c1=2;
+
+connection conn1;
+sleep 1;
+commit;
+
+connection conn2;
+reap;
+
+select * from t1 where c1=2;
+
+commit;
+
+# t1 free lock after trx rollback
+connection conn1;
+delete from t1 where c1=2;
+
+connection conn2;
+send delete from t1 where c1=2;
+
+connection conn1;
+sleep 1;
+rollback;
+connection conn2;
+reap;
+commit;
+select * from t1 where c1=2;
+commit;
+
+
+
+
+
+
+
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+
+

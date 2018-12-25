@@ -1,0 +1,11 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.create_client
+ob1.prepare
+create table t1(c1 int primary key,c2 int);
+ob1.mysql update __all_cluster set cluster_flow_percent=0 where cluster_id=1
+ob1.mysql update __all_cluster set cluster_flow_percent=100 where cluster_id=2
+ob1.connect conn1 fs0 admin admin test

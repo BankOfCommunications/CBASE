@@ -1,0 +1,69 @@
+-- ok
+select * from order_list where qty is not null and order_desc is null;
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1003, TableName:order_list, AliasName:NULL, Type:BASE_TABLE, RefId: 1003}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:2, ColumnName:id, TableRef:1003}
+            {Num 1, ColumnId:3, ColumnName:user_id, TableRef:1003}
+            {Num 2, ColumnId:4, ColumnName:item_id, TableRef:1003}
+            {Num 3, ColumnId:5, ColumnName:qty, TableRef:1003}
+            {Num 4, ColumnId:6, ColumnName:order_time, TableRef:1003}
+            {Num 5, ColumnId:7, ColumnName:order_desc, TableRef:1003}
+        <ColumnItemList End>
+        WHERE ::= <7> <8>
+        SELECT ::= <1, id>, <2, user_id>, <3, item_id>, <4, qty>, <5, order_time>, <6, order_desc>
+        FROM ::= <1003>
+        ObSelectStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (1003 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 2]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (1003 : 3)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 3]
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (1003 : 4)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 4]
+        ObSqlRawExpr 2 End
+        ObSqlRawExpr 3 Begin
+        expr_id = 4
+        (table_id : column_id) = (1003 : 5)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+        ObSqlRawExpr 3 End
+        ObSqlRawExpr 4 Begin
+        expr_id = 5
+        (table_id : column_id) = (1003 : 6)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 6]
+        ObSqlRawExpr 4 End
+        ObSqlRawExpr 5 Begin
+        expr_id = 6
+        (table_id : column_id) = (1003 : 7)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 7]
+        ObSqlRawExpr 5 End
+        ObSqlRawExpr 6 Begin
+        expr_id = 7
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_OP_IS_NOT
+            T_REF_COLUMN : [table_id, column_id] = [1003, 7]
+            T_NULL : NULL
+        ObSqlRawExpr 6 End
+        ObSqlRawExpr 7 Begin
+        expr_id = 8
+        (table_id : column_id) = (NULL : 18446744073709551612)
+        T_OP_IS
+            T_REF_COLUMN : [table_id, column_id] = [1003, 7]
+            T_NULL : NULL
+        ObSqlRawExpr 7 End
+    <ExprList End>
+<logical_plan End>
+

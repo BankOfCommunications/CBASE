@@ -1,0 +1,702 @@
+drop table if exists test_key1;
+drop table if exists test_key2;
+drop table if exists test_key3;
+create table test_key1(co1 int primary key,co2 bigint,co3 decimal(10,5),co4 varchar(256),co5 bool,co6 date);
+create table test_key2(co1 bigint primary key,co2 int,co3 decimal(10,5),co4 varchar(256),co5 bool,co6 date);
+create table test_key3(co1 bigint,co2 int,co3 decimal(10,5),co4 varchar(256),co5 bool,co6 date,primary key(co1,co2,co3));
+desc test_key1;
+field	type	nullable	key	default	extra
+co1	int32	1	1	NULL	
+co2	int	1	0	NULL	
+co3	decimal(10,5)	1	0	NULL	
+co4	varchar(256)	1	0	NULL	
+co5	bool	1	0	NULL	
+co6	date	1	0	NULL	
+desc test_key1;
+field	type	nullable	key	default	extra
+co1	int32	1	1	NULL	
+co2	int	1	0	NULL	
+co3	decimal(10,5)	1	0	NULL	
+co4	varchar(256)	1	0	NULL	
+co5	bool	1	0	NULL	
+co6	date	1	0	NULL	
+insert into test_key1 values(NULL,1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key1 values(1,1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key1 values(2.2,1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key1 values(1.55687,1,2.88,'int32 test',false,'2015-10-13');
+ERROR 23000: Duplicate entry ' <3001.16>=int32:1' for key 'PRIMARY'
+insert into test_key1 values(timestamp '1990-01-01 10:10:10',1,2.88,'int32 test',false,'2015-10-13');
+ERROR HY000: OB-5047: No rowkey column specified
+insert into test_key1 values('1990-01-01 10:10:10',1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key1 values('hello!',1,2.88,'int32 test',false,'2015-10-13');
+ERROR HY000: OB-5047: No rowkey column specified
+insert into test_key1 values('596',1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key1 values(true,1,2.88,'int32 test',false,'2015-10-13');
+ERROR 23000: Duplicate entry ' <3001.16>=int32:1' for key 'PRIMARY'
+insert into test_key1 values(5.882,1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key1 values(date '2000-01-01',1,2.88,'int32 test',false,'2015-10-13');
+ERROR HY000: OB-5047: No rowkey column specified
+insert into test_key1 values(time '10:11:12',1,2.88,'int32 test',false,'2015-10-13');
+ERROR HY000: OB-5047: No rowkey column specified
+desc test_key2;
+field	type	nullable	key	default	extra
+co1	int	1	1	NULL	
+co2	int32	1	0	NULL	
+co3	decimal(10,5)	1	0	NULL	
+co4	varchar(256)	1	0	NULL	
+co5	bool	1	0	NULL	
+co6	date	1	0	NULL	
+desc test_key2;
+field	type	nullable	key	default	extra
+co1	int	1	1	NULL	
+co2	int32	1	0	NULL	
+co3	decimal(10,5)	1	0	NULL	
+co4	varchar(256)	1	0	NULL	
+co5	bool	1	0	NULL	
+co6	date	1	0	NULL	
+insert into test_key2 values(NULL,1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key2 values(1,1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key2 values(2.2,1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key2 values(1.55687,1,2.88,'int32 test',false,'2015-10-13');
+ERROR 23000: Duplicate entry ' <3002.16>=int:1' for key 'PRIMARY'
+insert into test_key2 values(timestamp '1990-01-01 10:10:10',1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key2 values('1990-01-01 10:10:10',1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key2 values('hello!',1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key2 values('596',1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key2 values(true,1,2.88,'int32 test',false,'2015-10-13');
+ERROR 23000: Duplicate entry ' <3002.16>=int:1' for key 'PRIMARY'
+insert into test_key2 values(5.882,1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key2 values(date '2000-01-01',1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key2 values(time '10:11:12',1,2.88,'int32 test',false,'2015-10-13');
+desc test_key3;
+field	type	nullable	key	default	extra
+co1	int	1	1	NULL	
+co2	int32	1	2	NULL	
+co3	decimal(10,5)	1	3	NULL	
+co4	varchar(256)	1	0	NULL	
+co5	bool	1	0	NULL	
+co6	date	1	0	NULL	
+desc test_key3;
+field	type	nullable	key	default	extra
+co1	int	1	1	NULL	
+co2	int32	1	2	NULL	
+co3	decimal(10,5)	1	3	NULL	
+co4	varchar(256)	1	0	NULL	
+co5	bool	1	0	NULL	
+co6	date	1	0	NULL	
+insert into test_key3 values(NULL,1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key3 values(1,1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key3 values(2.2,1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key3 values(1.55687,1,2.88,'int32 test',false,'2015-10-13');
+ERROR 23000: Duplicate entry ' <3003.16>=int:1 <3003.17>=int32:1 <3003.18>=decimal:2.88000' for key 'PRIMARY'
+insert into test_key3 values(timestamp '1990-01-01 10:10:10',1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key3 values('1990-01-01 10:10:10',1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key3 values('hello!',1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key3 values('596',1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key3 values(true,1,2.88,'int32 test',false,'2015-10-13');
+ERROR 23000: Duplicate entry ' <3003.16>=int:1 <3003.17>=int32:1 <3003.18>=decimal:2.88000' for key 'PRIMARY'
+insert into test_key3 values(5.882,1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key3 values(date '2000-01-01',1,2.88,'int32 test',false,'2015-10-13');
+insert into test_key3 values(time '10:11:12',1,2.88,'int32 test',false,'2015-10-13');
+drop table if exists test_airthemetic;
+create table test_airthemetic(co1 int primary key,c_int int,c_bigint bigint,c_float float,c_double double,c_datetime timestamp,c_timestamp timestamp,c_varchar varchar(256),c_ctime createtime, c_mtime modifytime,c_bool bool,c_decimal decimal(10,5),c_date date,c_time time);
+insert into test_airthemetic(co1) values (1);
+select co1+c_int from test_airthemetic;
+co1+c_int
+NULL
+select co1-c_int from test_airthemetic;
+co1-c_int
+NULL
+select co1*c_int from test_airthemetic;
+co1*c_int
+NULL
+select co1/c_int from test_airthemetic;
+co1/c_int
+NULL
+select c_int+c_bigint from test_airthemetic;
+c_int+c_bigint
+NULL
+select c_int-c_bigint from test_airthemetic;
+c_int-c_bigint
+NULL
+select c_int*c_bigint from test_airthemetic;
+c_int*c_bigint
+NULL
+select c_int/c_bigint from test_airthemetic;
+c_int/c_bigint
+NULL
+select c_int+c_float from test_airthemetic;
+c_int+c_float
+NULL
+select c_int-c_float from test_airthemetic;
+c_int-c_float
+NULL
+select c_int*c_float from test_airthemetic;
+c_int*c_float
+NULL
+select c_int/c_float from test_airthemetic;
+c_int/c_float
+NULL
+select c_int+c_double from test_airthemetic;
+c_int+c_double
+NULL
+select c_int-c_double from test_airthemetic;
+c_int-c_double
+NULL
+select c_int*c_double from test_airthemetic;
+c_int*c_double
+NULL
+select c_int/c_double from test_airthemetic;
+c_int/c_double
+NULL
+select c_int+c_datetime from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int-c_datetime from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int*c_datetime from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int/c_datetime from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int+c_timestamp from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int-c_timestamp from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int*c_timestamp from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int/c_timestamp from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int+c_varchar from test_airthemetic;
+c_int+c_varchar
+NULL
+select c_int-c_varchar from test_airthemetic;
+c_int-c_varchar
+NULL
+select c_int*c_varchar from test_airthemetic;
+c_int*c_varchar
+NULL
+select c_int/c_varchar from test_airthemetic;
+c_int/c_varchar
+NULL
+select c_int+c_bool from test_airthemetic;
+c_int+c_bool
+NULL
+select c_int-c_bool from test_airthemetic;
+c_int-c_bool
+NULL
+select c_int*c_bool from test_airthemetic;
+c_int*c_bool
+NULL
+select c_int/c_bool from test_airthemetic;
+c_int/c_bool
+NULL
+select c_int+c_decimal from test_airthemetic;
+c_int+c_decimal
+NULL
+select c_int-c_decimal from test_airthemetic;
+c_int-c_decimal
+NULL
+select c_int*c_decimal from test_airthemetic;
+c_int*c_decimal
+NULL
+select c_int/c_decimal from test_airthemetic;
+c_int/c_decimal
+NULL
+select c_int+c_date from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int-c_date from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int*c_date from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int/c_date from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int+c_time from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int-c_time from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int*c_time from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int/c_time from test_airthemetic;
+ERROR S1004: Illegal type
+drop table if exists test_airthemetic;
+create table test_airthemetic(co1 int primary key,c_int int,c_bigint bigint,c_float float,c_double double,c_datetime timestamp,c_timestamp timestamp,c_varchar varchar(256),c_ctime createtime, c_mtime modifytime,c_bool bool,c_decimal decimal(10,5),c_date date,c_time time);
+insert into test_airthemetic(co1, c_int, c_bigint,c_float, c_double, c_datetime, c_timestamp,  c_varchar, c_bool, c_decimal, c_date, c_time) values(1, 1, 5, 1.1, 1.1234567, '1970-01-01 08:00:00', '2015-10-09 10:24:32.123456', 'test int32' ,true, 1256.668, '1998-10-24', '09:44:11');
+insert into test_airthemetic(co1, c_int, c_bigint,c_float, c_double, c_datetime, c_timestamp,  c_varchar, c_bool, c_decimal, c_date, c_time) values(2, 2, 5, 1.1, 1.1234567, '1970-01-01 08:00:00', '2015-10-09 10:24:32.123456', '1258' ,true, 1256.668, '1998-10-24', '09:44:11');
+insert into test_airthemetic(co1, c_int) values(3, 0);
+select co1+c_int from test_airthemetic where co1 = 1;
+co1+c_int
+2
+select co1-c_int from test_airthemetic where co1 = 1;
+co1-c_int
+0
+select co1*c_int from test_airthemetic where co1 = 1;
+co1*c_int
+1
+select co1/c_int from test_airthemetic where co1 = 1;
+co1/c_int
+1
+select co1/c_int from test_airthemetic where co1 = 3;
+ERROR 22012: OB-78: Divided by zero
+select c_int+c_bigint from test_airthemetic where co1 = 1;
+c_int+c_bigint
+6
+select c_int-c_bigint from test_airthemetic where co1 = 1;
+c_int-c_bigint
+-4
+select c_int*c_bigint from test_airthemetic where co1 = 1;
+c_int*c_bigint
+5
+select c_int/c_bigint from test_airthemetic where co1 = 1;
+c_int/c_bigint
+0
+select c_int+c_float from test_airthemetic where co1 = 1;
+c_int+c_float
+2.1
+select c_int-c_float from test_airthemetic where co1 = 1;
+c_int-c_float
+-0.1
+select c_int*c_float from test_airthemetic where co1 = 1;
+c_int*c_float
+1.1
+select c_int/c_float from test_airthemetic where co1 = 1;
+c_int/c_float
+0.909091
+select c_int+c_double from test_airthemetic where co1 = 1;
+c_int+c_double
+2.1234567
+select c_int-c_double from test_airthemetic where co1 = 1;
+c_int-c_double
+-0.12345669999999997
+select c_int*c_double from test_airthemetic where co1 = 1;
+c_int*c_double
+1.1234567
+select c_int/c_double from test_airthemetic where co1 = 1;
+c_int/c_double
+0.8901099615143157
+select c_int+c_datetime from test_airthemetic where co1 = 1;
+ERROR S1004: Illegal type
+select c_int-c_datetime from test_airthemetic where co1 = 1;
+ERROR S1004: Illegal type
+select c_int*c_datetime from test_airthemetic where co1 = 1;
+ERROR S1004: Illegal type
+select c_int/c_datetime from test_airthemetic where co1 = 1;
+ERROR S1004: Illegal type
+select c_int+c_timestamp from test_airthemetic where co1 = 1;
+ERROR S1004: Illegal type
+select c_int-c_timestamp from test_airthemetic where co1 = 1;
+ERROR S1004: Illegal type
+select c_int*c_timestamp from test_airthemetic where co1 = 1;
+ERROR S1004: Illegal type
+select c_int/c_timestamp from test_airthemetic where co1 = 1;
+ERROR S1004: Illegal type
+select c_int+c_varchar from test_airthemetic where co1 = 1;
+ERROR 0A000: OB-7: Not supported feature or function
+select c_int-c_varchar from test_airthemetic where co1 = 1;
+ERROR 0A000: OB-7: Not supported feature or function
+select c_int*c_varchar from test_airthemetic where co1 = 1;
+ERROR 0A000: OB-7: Not supported feature or function
+select c_int/c_varchar from test_airthemetic where co1 = 1;
+c_int/c_varchar
+0
+select c_int+c_varchar from test_airthemetic where co1 = 2;
+c_int+c_varchar
+1260
+select c_int-c_varchar from test_airthemetic where co1 = 2;
+c_int-c_varchar
+-1256
+select c_int*c_varchar from test_airthemetic where co1 = 2;
+c_int*c_varchar
+2516
+select c_int/c_varchar from test_airthemetic where co1 = 2;
+c_int/c_varchar
+0.001589825119236884
+select c_int+c_ctime from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int-c_ctime from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int*c_ctime from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int/c_ctime from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int+c_mtime from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int-c_mtime from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int*c_mtime from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int/c_mtime from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int+c_bool from test_airthemetic;
+c_int+c_bool
+2
+3
+NULL
+select c_int-c_bool from test_airthemetic;
+c_int-c_bool
+0
+1
+NULL
+select c_int*c_bool from test_airthemetic;
+c_int*c_bool
+1
+2
+NULL
+select c_int/c_bool from test_airthemetic;
+c_int/c_bool
+1
+2
+NULL
+select c_int+c_decimal from test_airthemetic;
+c_int+c_decimal
+1257.66800
+1258.66800
+NULL
+select c_int-c_decimal from test_airthemetic;
+c_int-c_decimal
+-1255.66800
+-1254.66800
+NULL
+select c_int*c_decimal from test_airthemetic;
+c_int*c_decimal
+1256.66800
+2513.33600
+NULL
+select c_int/c_decimal from test_airthemetic;
+c_int/c_decimal
+0.0007957551238672425811749801856974157
+0.0015915102477344851623499603713948314
+NULL
+select c_int+c_date from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int-c_date from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int*c_date from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int/c_date from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int+c_time from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int-c_time from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int*c_time from test_airthemetic;
+ERROR S1004: Illegal type
+select c_int/c_time from test_airthemetic;
+ERROR S1004: Illegal type
+drop table if exists test_bound;
+create table test_bound(id int primary key,co1 int);
+insert into test_bound values(1,2147483647);
+insert into test_bound values(2,2147483648);
+ERROR HY000: OB-79: Value out of range
+insert into test_bound values(3,-2147483648);
+insert into test_bound values(4,-2147483649);
+ERROR HY000: OB-79: Value out of range
+drop table if exists test_update;
+create table test_update(co1 bigint primary key,co2 int);
+create or replace sequence seq;
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+update test_update set co2= null where co1 = 1;
+select * from test_update;
+co1	co2
+1	NULL
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 12345 where co1 = 1;
+select * from test_update;
+co1	co2
+1	12345
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 12345678910 where co1 = 1;
+ERROR HY000: OB-79: Value out of range
+select * from test_update;
+co1	co2
+1	12345
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 123.0 where co1 = 1;
+select * from test_update;
+co1	co2
+1	123
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 123.0 where co1 = 1;
+select * from test_update;
+co1	co2
+1	123
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 123.0000000000000001 where co1 = 1;
+select * from test_update;
+co1	co2
+1	123
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 12345678919.0000000000001 where co1 = 1;
+ERROR HY000: OB-79: Value out of range
+select * from test_update;
+co1	co2
+1	123
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= '1345.' where co1 = 1;
+select * from test_update;
+co1	co2
+1	1345
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= '1345.' where co1 = 1;
+select * from test_update;
+co1	co2
+1	1345
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= '321' where co1 = 1;
+select * from test_update;
+co1	co2
+1	321
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= '98765432112345' where co1 = 1;
+ERROR HY000: OB-19: Size overflow
+select * from test_update;
+co1	co2
+1	321
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 'abc' where co1 = 1;
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_update;
+co1	co2
+1	321
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2=true where co1 = 2;
+select * from test_update;
+co1	co2
+1	321
+2	1
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2=false where co1 = 2;
+select * from test_update;
+co1	co2
+1	321
+2	0
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2='2015-12-12 12:21:16.1234' where co1 = 2;
+select * from test_update;
+co1	co2
+1	321
+2	2015
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2='2015-12-12' where co1 = 2;
+select * from test_update;
+co1	co2
+1	321
+2	2015
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2='12:21:32' where co1 = 2;
+select * from test_update;
+co1	co2
+1	321
+2	12
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+drop table if exists test_delete;
+create table test_delete(co1 bigint primary key,co2 int);
+create or replace sequence seq;
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+delete from test_delete where co1 =1;
+select * from test_delete;
+co1	co2
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+delete from test_delete where co1 >9;
+select * from test_delete;
+co1	co2
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+delete from test_delete where co1 <3;
+select * from test_delete;
+co1	co2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+delete from test_delete where co1 >=9;
+select * from test_delete;
+co1	co2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+delete from test_delete where co1 <=3;
+select * from test_delete;
+co1	co2
+4	4
+5	5
+6	6
+7	7
+8	8
+delete from test_delete where co1 between 4 and 5;
+select * from test_delete;
+co1	co2
+6	6
+7	7
+8	8
+delete from test_delete where co1 in(7,8);
+select * from test_delete;
+co1	co2
+6	6

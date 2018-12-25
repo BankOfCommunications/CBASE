@@ -1,0 +1,25 @@
+ob1=OBI(cluster=1222,use_fms=0)
+ob1.force_stop
+ob1.cleanup
+ob1.genconf
+ob1.rsync
+ob1.mkdir
+ob1.rs0.start
+ob1.ms1.start
+ob1.ms0.start
+ob1.ups0.start
+ob1.ups1.start
+ob1.cs0.start
+ob1.cs1.start
+ob1.set_obi_role
+ob1.ms1.stop
+ob1.bootstrap
+ob1.update_cluster
+ob1.create_client
+create table t1(a int primary key, b int);
+insert into t1 values(1,1),(-1,-1);
+select * from t1;
+a	b
+-1	-1
+1	1
+drop table t1;

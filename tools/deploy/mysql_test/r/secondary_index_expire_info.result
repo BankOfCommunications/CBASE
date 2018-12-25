@@ -1,0 +1,24 @@
+drop table if exists t1,t2;
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1 (c1 int primary key ,c2 int ,c3 int,c4 int);
+update  __first_tablet_entry set expire_condition = '$SYS_DATE>c2+60' where table_name = 't1' and db_name='test';
+server[127.0.0.1:9500], timeout=20000000
+do_rs_admin, cmd=18...
+Okay
+create index il on t1(c1) storing(c3);
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+__3001__idx__il	1
+drop table t1;
+create table t1 (c1 int primary key ,c2 int ,c3 int,c4 int);
+create index il on t1(c1) storing(c3);
+"merge"
+[major_freeze] err=0
+update  __first_tablet_entry set expire_condition = '$SYS_DATE>c2+60' where table_name = 't1' and db_name='test';
+ERROR HY000: can not update expire condition ,because table has index!
+alter table t1 add c5 int ;
+update  __first_tablet_entry set expire_condition = '$SYS_DATE>c5+60' where table_name = 't1' and db_name='test';
+ERROR HY000: can not update expire condition ,because table has index!

@@ -1,0 +1,11 @@
+drop table if exists c;
+create table c (c1 int primary key, c2 varchar(8));
+set autocommit= 0 ;
+insert into c values(1,1);
+set autocommit= 0 ;
+insert into c values(2,2);
+commit;
+select * from c where c1 = 2 for update;
+c1	c2
+2	2
+commit;

@@ -1,0 +1,26 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+create table t1 (c1 int primary key ,c2 int);
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+# create 9 indexes 1201
+create index il0 on t1(c1) storing (c2);
+create index il1 on t1(c1) storing (c2);
+create index il2 on t1(c1) storing (c2);
+create index il3 on t1(c1) storing (c2);
+create index il4 on t1(c1) storing (c2);
+create index il5 on t1(c1) storing (c2);
+create index il6 on t1(c1) storing (c2);
+create index il7 on t1(c1) storing (c2);
+create index il8 on t1(c1) storing (c2);
+#create 10 indexes1202
+create index i19 on t1(c1) storing (c2);
+#create 11 indexes1203
+--error 65535
+create index i20 on t1(c1) storing (c2);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 1200
+show index on t1;
+drop table t1;

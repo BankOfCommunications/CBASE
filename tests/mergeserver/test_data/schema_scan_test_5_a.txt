@@ -1,0 +1,90 @@
+[schema_scanner_1_4]
+# table
+table_id = 1001
+table_name = lz_rpt_p4p_effect_info
+# fullfilled = 1, not fullfilled = 0
+is_fullfilled = 0
+fullfilled_item_num = 4
+# data version
+data_version = 1
+# scanner range
+range_start   = 001
+range_end     = 008
+range_start_inclusive = 1
+range_start_min = 0
+range_end_inclusive = 1
+range_end_max = 0
+# scanner data file
+scanner_data=scanner_data_1_4.txt
+
+[schema_scanner_5_8]
+# table
+table_id = 1001
+table_name = lz_rpt_p4p_effect_info
+# fullfilled = 1, not fullfilled = 0
+is_fullfilled = 1
+fullfilled_item_num = 4
+# data version
+data_version = 1
+# scanner range
+range_start   = 001
+range_end     = 008
+range_start_inclusive = 1
+range_start_min = 0
+range_end_inclusive = 1
+range_end_max = 0
+# scanner data file
+scanner_data=scanner_data_5_8.txt
+
+[tablet_location_cache]
+# tablet range <-> location 
+table_id_0 = 1001
+range_start_0=000
+range_end_0=008
+server_list_0 = 10.10.10.1,10.10.10.2
+
+
+[scan_param]
+# table
+table_id = 1001
+table_name = lz_rpt_p4p_effect_info
+# range
+range_start   = 001
+#AAAAAAAAAAAAAAAAAAAA00000
+range_end     = 008
+#AAAAAAAAAAAAAAAAAAAAFFFFF
+range_start_inclusive = 1
+range_start_min = 0
+range_end_inclusive = 1
+range_end_max = 0
+# scan dir 0:forward; 1:backword
+scan_direction = 0 
+# limit info
+limit_offset  = 0
+limit_count   = 0
+# condition
+#where_cond    = `time_stamp` > 0
+#having_cond   = unit_p4p_id > 100
+# basic column
+column_name_0  = unit_p4p_id
+#column_name_1  = time_stamp
+# complex column
+#complex_column_expr_0 = `time_stamp` + `unit_p4p_id`
+# group by
+groupby_column_name_0 = unit_p4p_id
+# order by column
+# order 0:ASC, 1:DESC
+#orderby_column_name_0 = unit_p4p_id
+#orderby_column_order_0 = 0
+#orderby_column_name_1 = time_stamp
+#orderby_column_order_1 = 1
+#agg
+#agg_column_name_0=time_stamp
+#agg_column_as_name_0=sum_time_stamp
+# OP 1=SUM, 2=COUNT, 3=MAX, 4=MIN
+#agg_column_op_0=1
+#agg_column_is_return_0=1
+#complex agg
+#agg_complex_column_name_0=sum_time_stamp * 10
+
+

@@ -1,0 +1,58 @@
+deploy ob1=OBI(cluster=1222);
+deploy ob2=OBI(cluster=1222);
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+
+deploy ob1.source include/merge.inc;
+sleep 10;
+
+deploy ob1.create_client;
+
+create table t1(a int primary key,b varchar) TABLET_MAX_SIZE=500000;
+create table t2(a int primary key,b varchar) TABLET_MAX_SIZE=20000000;
+sleep 60;
+
+--disable_query_log
+--disable_result_log
+let $cnt = 20000;
+while($cnt >0)
+{
+	eval replace into t1 values($cnt,'aaaaaaaaaaaaaaaaaffffffffffffffffffffffffffcccccccccccccccccccccddddddddddddddddddddddeeeeeeeeeeeeeeeeeeeeeeee');
+	eval replace into t2 values($cnt,'aaaaaaaaaaaaaaaaaffffffffffffffffffffffffffcccccccccccccccccccccddddddddddddddddddddddeeeeeeeeeeeeeeeeeeeeeeee');
+	dec $cnt;
+}
+
+deploy ob1.major_freeze;
+
+deploy ob1.cs0.restart;
+deploy ob1.cs1.restart;
+deploy ob1.rs0.restart;
+deploy ob1.rs0.set_obi_role OBI_MASTER;
+
+sleep 20;
+
+deploy ob1.check_cs_version 2;
+deploy ob2.check_cs_version 2;
+
+let $a = deploy_get_value(ob1.cs0.monitor old_ver_tablets_num);
+--echo $a;
+
+let $a = deploy_get_value(ob1.cs0.monitor new_ver_tablets_num);
+--echo $a;
+
+let $a = deploy_get_value(ob2.cs0.monitor old_ver_tablets_num);
+--echo $a;
+
+let $a = deploy_get_value(ob2.cs0.monitor new_ver_tablets_num);
+--echo $a;
+
+let $a = deploy_get_value(ob1.mysql_p select count(*) from t1);
+--echo $a;
+
+let $a = deploy_get_value(ob2.mysql_p select count(*) from t2);
+--echo $a;
+
+

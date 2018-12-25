@@ -1,0 +1,11 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\client\java\src\main\java\com\taobao\oceanbase\parser
+2
+7
+e:OBQLLexer.java|1|166f774bfdc|59aa|64cdd884|61caa03e68ac11e8a8030002c8c1274c|0
+c:OBQLWalker.g|1|166f774c019|b14|e7088135|65daa07668ac11e8a8030002c8c1274c|0
+e:QBLParser.java|1|166f774bfac|433|93f56950|5d9aa00668ac11e8a8030002c8c1274c|0
+16:AntlrStringStream.java|1|166f774c003|210|64e19ece|63daa05a68ac11e8a8030002c8c1274c|0
+f:OBQLWalker.java|1|166f774c043|c94f|16fe7b16|69eaa0ae68ac11e8a8030002c8c1274c|0
+f:OBQLParser.java|1|166f774c02e|1118e|81a01962|67daa09268ac11e8a8030002c8c1274c|0
+6:OBQL.g|1|166f774bfc1|8fc|49c592e0|5faaa02268ac11e8a8030002c8c1274c|0

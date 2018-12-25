@@ -1,0 +1,18 @@
+ob1=OBI(cluster=1211)
+ob1.reboot
+ob1.set sessionTimeout=30000
+ob1.create_client
+ob1.prepare
+ob1.set_diamond minIdle:1
+create table t1(a int primary key,b int);
+ob1.set_diamond maxActive:2
+insert into t1 values(1,1),(2,2);
+ob1.start_check
+2
+ob1.stop_check
+1
+ob1.set_diamond maxActive:15
+ob1.start_check
+ob1.start_check
+ob1.start_check
+9

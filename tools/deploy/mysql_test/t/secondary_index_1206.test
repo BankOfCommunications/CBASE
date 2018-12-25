@@ -1,0 +1,39 @@
+--disable_warnings 
+drop table if exists t1;
+--enable_warnings
+
+#create table have 102 columns 
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+--let $head= create table t1(c1 int primary key  
+--let $sql=
+--let $count=102
+while($count!=1)
+{
+--let $sql=$sql, c$count int 
+dec $count;
+}
+--let $end=)
+eval $head$sql$end;
+ 
+#create index have 99 columns
+--let $index_head = create index il on t1(c1) storing (c2
+--let $index_sql= 
+--let $index_count=99
+while($index_count!=2)
+{
+--let $index_sql=$index_sql , c$index_count
+dec $index_count;
+}
+echo $index_head$index_sql$end;
+eval $index_head$index_sql$end;
+drop index il on t1;
+#show index on t1;
+#create index have 100 columns
+
+eval create index il1 on t1(c1) storing (c2$index_sql,c100$end;
+
+drop index il1 on t1;
+#create index have 101 columns
+--error 5042
+eval create index il2 on t1(c1) storing (c2$index_sql,c100,c101$end;

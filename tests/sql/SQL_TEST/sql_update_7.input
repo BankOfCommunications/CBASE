@@ -1,0 +1,4 @@
+-- fail, Invalid use of group function
+update item set item_cost= 89, item_price=max(item_cost) where item_id=100;
+Invalid use of group function
+Resolve error!

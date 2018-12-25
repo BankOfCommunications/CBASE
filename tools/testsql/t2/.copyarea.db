@@ -1,0 +1,6 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\testsql\t2
+2
+2
+23:insert_select_bind_int_varchar.test|1|166f77ad603|241|cf28a136|1a8cc02a68d711e8a8030002c8c1274c|0
+2f:insert_delete_select_bind_int_varchar_date.test|1|166f77ad653|33d|5f0ae43c|1c9cc04668d711e8a8030002c8c1274c|0

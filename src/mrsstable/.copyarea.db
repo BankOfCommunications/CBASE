@@ -1,0 +1,7 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\mrsstable
+2
+3
+3:src|2|0|0|0|4e3a388e68a411e8a8030002c8c1274c|0
+b:Makefile.am|1|166f773de1e|1a0|29c087a3|4b8a386668a411e8a8030002c8c1274c|0
+7:pom.xml|1|166f773de4c|8c1|5d85c1cb|870a3b7268a411e8a8030002c8c1274c|0

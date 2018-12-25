@@ -1,0 +1,38 @@
+drop table if exists c,d;
+create table c (c1 int primary key, c2 varchar(8));
+create table d (d1 int primary key, d2 varchar(8));
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create index c_index on c(c2);
+create index d_index on d(d2);
+"merge"
+[major_freeze] err=0
+show index on c;
+index_name	status
+__3001__idx__c_index	1
+show index on d;
+index_name	status
+__3002__idx__d_index	1
+set autocommit= 0 ;
+insert into c values(1,1);
+insert into d values(1,1);
+set autocommit= 0 ;
+select * from c,d where c.c1 = d.d1;
+c1	c2	d1	d2
+select * from c 
+left join d on c.c1 = d.d1;
+c1	c2	d1	d2
+select * from c 
+right join d on c.c1 = d.d1;
+c1	c2	d1	d2
+select * from c 
+inner join d on c.c1 = d.d1;
+c1	c2	d1	d2
+select/*+join(si)*/ * from c 
+left join d on c.c1 = d.d1;
+c1	c2	d1	d2
+select/*+join(bloomfilter_join)*/ * from c 
+left join d on c.c1 = d.d1;
+c1	c2	d1	d2
+commit;
+commit;

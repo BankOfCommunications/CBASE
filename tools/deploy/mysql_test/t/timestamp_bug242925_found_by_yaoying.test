@@ -1,0 +1,9 @@
+drop table if exists test_table;
+
+create table test_table(id int, name varchar(64), age int,  birth datetime, school_date timestamp, height float, weight double, home varchar(64), description varchar(64), primary key(id,age));
+
+replace into test_table values(1,'abc', 38, '1988-01-29', '1993-09-01', 158.778, 50.06432, 'shiyan', 'rd'),(2,'yy', 30, '1984-3-16', '1990-09-01', 165.624, 59.870, 'shanghai', 'dba'),(3,'cm', 18, '1987-01-12', '1992-09-01', 160.234, 51.364, 'hangzhou', 'qa'),(4,'my', 26, '1987-06-29', '1994-09-01', 159.008, 48.786, 'beijing', 'sa');
+
+select * from test_table;
+
+drop table test_table;

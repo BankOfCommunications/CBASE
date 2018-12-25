@@ -1,0 +1,48 @@
+deploy ob_import=OBI(cluster=1133);
+deploy ob_import_slave=OBI(cluster=1133);
+
+deploy ob_import_slave.rs0.set master=ob_import.rs0;
+deploy ob_import.reboot;
+deploy ob_import_slave.reboot;
+
+
+sleep 60;
+
+deploy ob_import.create_client;
+deploy ob_import.cs0.plugin ProxyServer.reboot;
+deploy ob_import.cs1.plugin ProxyServer.reboot;
+deploy ob_import.cs2.plugin ProxyServer.reboot;
+
+deploy ob_import_slave.cs0.plugin ProxyServer.reboot;
+deploy ob_import_slave.cs1.plugin ProxyServer.reboot;
+deploy ob_import_slave.cs2.plugin ProxyServer.reboot;
+
+
+deploy ob_import.rs0.plugin ImportServer.reboot;
+
+deploy ob_import.source t/import/inc/importconf.inc;
+
+deploy ob_import.rs0.plugin ImportCli.reboot;
+
+deploy ob_import.rs0.plugin ImportCli.execute -t CREATE_BYPASS_CONFIG collect_info;
+deploy ob_import.rs0.plugin ImportCli.check_conf collect_info collect_info.ini;
+
+deploy ob_import.rs0.plugin ImportCli.execute -t OVERWRITE /group/public/yiming/tables_data_new/collect_info collect_info;
+sleep 60;
+
+deploy ob_import.rs0.check_log_until_success "load table success, table_name=collect_info table_id=3005";
+
+deploy ob_import.rs0.plugin ImportCli.execute -t OVERWRITE /group/public/yiming/tables_data_new/collect_info collect_info;
+sleep 60;
+
+deploy ob_import.rs0.check_log_until_success "load table success, table_name=collect_info table_id=3006";
+
+sleep 2;
+select table_name, table_id, status from load_data_history;
+deploy ob_import.mysql update __all_cluster set cluster_flow_percent=0 where cluster_id=1;
+deploy ob_import.mysql update __all_cluster set cluster_flow_percent=100 where cluster_id=2;
+deploy ob_import.rs0.plugin ImportCli.check collect_info;
+
+deploy ob_import.mysql update __all_cluster set cluster_flow_percent=100 where cluster_id=1;
+deploy ob_import.mysql update __all_cluster set cluster_flow_percent=0 where cluster_id=2;
+deploy ob_import.rs0.plugin ImportCli.check collect_info;

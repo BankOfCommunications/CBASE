@@ -1,0 +1,71 @@
+--source $LOCAL_DIR/mysql_test/import-export/include.inc 
+
+--let $TABLE=ie_diff_delimas
+--let $DB=test
+--let $TEST_NAME=ie_diff_delimas
+--let $IM_FILE=$IM_DEL/ie_diff_delimas.del
+--let $EX_FILE=$EX_DEL/$TEST_NAME.del
+
+eval using database $DB;
+# --disable_warnings
+eval drop table if exists $TABLE;
+# --enable_warnings
+
+eval create table ie_diff_delimas
+(
+it0 int,
+it1 int,
+it2 int,
+
+dc0 decimal(20,4),
+dc1 decimal(20,4),
+dc2 decimal(20,4),
+
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256),
+
+ts0 timestamp,
+ts1 timestamp,
+
+primary key(it0,dc0, vc0, ts0)
+
+);
+
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE
+&> /dev/null;
+
+eval select * from $TABLE;
+
+exec $EX_EXE --masterpercent 100 
+-t $DB.$TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $EX_LOG/$TABLE.log 
+--badfile $EX_BAD/$TABLE.bad 
+-f $EX_FILE
+--delima 64
+--rec-delima 10,94
+&> /dev/null;
+
+exec cat $EX_FILE;
+
+exec $EX_EXE --masterpercent 100 
+-t $DB.$TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $EX_LOG/$TABLE.log 
+--badfile $EX_BAD/$TABLE.bad 
+-f $EX_FILE
+--delima 64,94
+--rec-delima 10
+&> /dev/null;
+
+exec cat $EX_FILE;

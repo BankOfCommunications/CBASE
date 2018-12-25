@@ -1,0 +1,82 @@
+
+${{
+inst1 = sub2('$inst1', locals())
+inst2 = sub2('$inst2', locals())
+if inst1 != '$inst1' and inst2 != '$inst2':
+    _ob_instances_cfg = """obi_count=2
+obi0_rs_vip=${%(inst1)s.rs0.ip}
+obi0_rs_port=${%(inst1)s.rs0.port}
+obi0_read_percentage=30
+obi0_random_ms = 0
+obi1_rs_vip=${%(inst2)s.rs0.ip}
+obi1_rs_port=${%(inst2)s.rs0.port}
+obi1_read_percentage=70
+obi1_random_ms = 0""" % dict(inst1=inst1, inst2=inst2)
+else:
+    _ob_instances_cfg = """obi_count=1
+obi0_rs_vip=${rs0.ip}
+obi0_rs_port=${rs0.port}
+obi0_read_percentage=30
+obi0_random_ms = 0"""
+}}
+[ob_instances]
+${_ob_instances_cfg}
+[root_server]
+pid_file=log/rootserver.pid.$ip:$port
+log_file=log/rootserver.log.$ip:$port
+data_dir=data/rs
+log_level=$log_level
+trace_log_level=$trace_log_level
+dev_name=$dev
+vip=${rs0.ip}
+port=${rs0.port}
+
+thread_count=20
+read_queue_size=500
+write_queue_size=50
+
+log_queue_size=50
+network_timeout=1000000
+migrate_wait_seconds=1
+
+log_dir_path=data/rs_commitlog
+log_size=64
+
+state_check_period_us=500000
+replay_wait_time_us=5000
+log_sync_limit_kb=51200
+log_sync_type=1
+register_times=10
+register_timeout_us=2000000
+
+lease_on=1
+lease_interval_us=15000000
+lease_reserved_time_us=10000000
+cs_command_interval_us=1000000
+__create_table_in_init=1
+__safe_copy_count_in_init=1
+__enable_cache_schema=1
+
+[update_server]
+vip=${ups0.ip}
+port=${ups0.port}
+ups_inner_port=${ups0.inner_port}
+lease_us=9000000
+lease_reserved_us=8500000
+ups_renew_reserved_us=7770000
+waiting_reigster_duration_us=2000000
+
+[schema]
+file_name=${schema}
+
+[chunk_server]
+lease=10000000
+switch_hour=23
+disk_high_level=85
+disk_trigger_level=75
+shared_adjacnet=10
+safe_lost_one_duration=28800
+wait_init_duration=1
+max_merge_duration=14400
+cs_probation_period=1
+max_concurrent_migrate_per_cs=2

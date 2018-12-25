@@ -1,0 +1,38 @@
+--disable_warnings
+drop table if exists t1,t2,t3;
+--enable_warnings
+
+alter system set merge_delay_interval='1s' server_type=chunkserver,min_major_freeze_interval='1s' server_type=updateserver;
+alter system set merge_delay_for_lsync='1s' server_type=chunkserver;
+alter system set min_drop_cache_wait_time='10s' server_type=chunkserver;
+alter system set merge_thread_per_disk=10 server_type=chunkserver;
+alter system set each_tablet_sync_meta=False server_type=chunkserver;
+--real_sleep 10
+create table t1(pk int primary key,extra int);
+
+insert into t1(pk) values(NULL);
+--let $v=0
+while($v < 10)
+{
+  eval insert into t1(pk) values($v);
+  inc $v;
+}
+--error 5024
+update t1 set pk=1 where pk is NULL;
+update t1 set pk=11 where pk is NULL;
+--error 5024
+update t1 set pk=2 where pk=1;
+update t1 set pk=12 where pk=1;
+delete from t1 where pk is NULL;
+delete from t1 where pk=0;
+select * from t1;
+insert into t1(pk) values(NULL);
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+select * from t1;
+--real_sleep 120
+select * from t1;
+--error 5024
+insert into t1(pk) values(NULL);
+
+drop table t1;
+

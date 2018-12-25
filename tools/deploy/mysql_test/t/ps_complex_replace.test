@@ -1,0 +1,122 @@
+--disable_warnings
+drop table if exists t1,t2,t3,t4;
+--enable_warnings
+
+create table t1(i1 int, f1 float, s1 varchar, d1 datetime, i2 int, f2 float,s2 varchar, d2 datetime,primary key(i1,f1,s1,d1));
+prepare stmt_replace from replace into t1 values(?,?,?,?,?,?,?,?);
+--let $l=10
+while($l)
+{
+    eval set @i1=$l;
+    eval set @f1=$l.5;
+    eval set @s1='abcdefg';
+    eval set @d1=timestamp'2020-02-02 20:00:00';
+    dec $l;
+    eval set @i2=$l;
+    eval set @f2=$l.5;
+    eval set @s2='abcdefgh';
+    eval set @d2=timestamp'2020-02-01 20:00:00';
+    execute stmt_replace using @i1,@f1,@s1,@d1,@i2,@f2,@s2,@d2;
+}
+select * from t1;
+drop table t1;
+
+
+create table t1(i1 int, f1 float, s1 varchar, d1 datetime, i2 int, f2 float,s2 varchar, d2 datetime,primary key(i1,f1,s1,d1));
+prepare stmt_replace_i1 from replace into t1 values(1,?,?,?,?,?,?,?);
+--let $l=10
+while($l)
+{
+    eval set @f1=$l.5;
+    eval set @s1='abcdefg';
+    eval set @d1=timestamp'2020-02-02 20:00:00';
+    dec $l;
+    eval set @i2=$l;
+    eval set @f2=$l.5;
+    eval set @s2='abcdefgh';
+    eval set @d2=timestamp'2020-02-01 20:00:00';
+    execute stmt_replace_i1 using @f1,@s1,@d1,@i2,@f2,@s2,@d2;
+}
+select * from t1;
+drop table t1;
+
+create table t1(i1 int, f1 float, s1 varchar, d1 datetime, i2 int, f2 float,s2 varchar, d2 datetime,primary key(i1,f1,s1,d1));
+prepare stmt_replace_f1 from replace into t1 values(?,1.5,?,?,?,?,?,?);
+--let $l=10
+while($l)
+{
+    eval set @i1=$l;
+    eval set @s1='abcdefg';
+    eval set @d1=timestamp'2020-02-02 20:00:00';
+    dec $l;
+    eval set @i2=$l;
+    eval set @f2=$l.5;
+    eval set @s2='abcdefgh';
+    eval set @d2=timestamp'2020-02-01 20:00:00';
+    execute stmt_replace_f1 using @i1,@s1,@d1,@i2,@f2,@s2,@d2;
+}
+
+select * from t1;
+drop table t1;
+
+create table t1(i1 int, f1 float, s1 varchar, d1 datetime, i2 int, f2 float,s2 varchar, d2 datetime,primary key(i1,f1,s1,d1));
+prepare stmt_replace_s1 from replace into t1 values(?,?,'abcdefg',?,?,?,?,?);
+--let $l=10
+while($l)
+{
+    eval set @i1=$l;
+    eval set @f1=$l.5;
+    eval set @s1='abcdefg';
+    eval set @d1=timestamp'2020-02-02 20:00:00';
+    dec $l;
+    eval set @i2=$l;
+    eval set @f2=$l.5;
+    eval set @s2='abcdefgh';
+    eval set @d2=timestamp'2020-02-01 20:00:00';
+    execute stmt_replace_s1 using @i1,@f1,@d1,@i2,@f2,@s2,@d2;
+}
+select * from t1;
+drop table t1;
+
+
+create table t1(i1 int, f1 float, s1 varchar, d1 datetime, i2 int, f2 float,s2 varchar, d2 datetime,primary key(i1,f1,s1,d1));
+prepare stmt_replace_d1 from replace into t1 values(?,?,?,'2012-01-01 00:00:00',?,?,?,?);
+--let $l=10
+while($l)
+{
+    eval set @i1=$l;
+    eval set @f1=$l.5;
+    eval set @s1='abcdefg';
+    eval set @d1=timestamp'2020-02-02 20:00:00';
+    dec $l;
+    eval set @i2=$l;
+    eval set @f2=$l.5;
+    eval set @s2='abcdefgh';
+    eval set @d2=timestamp'2020-02-01 20:00:00';
+    execute stmt_replace_d1 using @i1,@f1,@s1,@i2,@f2,@s2,@d2;
+}
+select * from t1;
+drop table t1;
+
+
+
+create table t1(i1 int, f1 float, s1 varchar, d1 datetime, i2 int, f2 float,s2 varchar, d2 datetime,primary key(i1,f1,s1,d1));
+prepare stmt_replace_rowkey from replace into t1 values(10000,10000.5,'10000-abcdefg','2013-01-01 00:00:00',?,?,?,?);
+--let $l=10
+while($l)
+{
+    eval set @i1=$l;
+    eval set @f1=$l.5;
+    eval set @s1='abcdefg';
+    eval set @d1=timestamp'2020-02-02 20:00:00';
+    dec $l;
+    eval set @i2=$l;
+    eval set @f2=$l.5;
+    eval set @s2='abcdefgh';
+    eval set @d2=timestamp'2020-02-01 20:00:00';
+    execute stmt_replace_rowkey using @i2,@f2,@s2,@d2;
+}
+select * from t1;
+drop table t1;
+
+

@@ -1,0 +1,3 @@
+#!/bin/bash
+export LD_PRELOAD=/home/fangji.hcm/code/oceanbase/0_4_1_release/oceanbase/src/client/obsql/src/.libs/libobsql.so.0.0.0
+export OB_SQL_CONFIG=/home/fangji.hcm/code/oceanbase/0_4_1_release/oceanbase/src/client/obsql/src/libobsql.conf

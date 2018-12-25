@@ -1,0 +1,13 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tests\liboblog
+2
+9
+15:test_main_process.cpp|1|166f77565e6|1244|5a4468f3|511aed1268b211e8a8030002c8c1274c|0
+14:test_log_fetcher.cpp|1|166f77565f9|1f8f|6ddcb383|531aed2e68b211e8a8030002c8c1274c|0
+b:Makefile.am|1|166f77565d0|3a5|37072486|4e5aecf668b211e8a8030002c8c1274c|0
+d:liboblog.conf|1|166f7756635|34e|23933dd5|56faed6668b211e8a8030002c8c1274c|0
+16:test_mysql_adaptor.cpp|1|166f775661c|670|d0800ef4|550aed4a68b211e8a8030002c8c1274c|0
+15:test_meta_manager.cpp|1|166f775664a|f93|6c9fbb|595aed8268b211e8a8030002c8c1274c|0
+a:sample.cpp|1|166f7756688|140e|53baed83|5d5aedba68b211e8a8030002c8c1274c|0
+c:sample_r.cpp|1|166f7756667|f11|3c507bd3|5b6aed9e68b211e8a8030002c8c1274c|0
+16:liboblog.partition.lua|1|166f77566a6|526|3d1baba7|5fbaedd668b211e8a8030002c8c1274c|0

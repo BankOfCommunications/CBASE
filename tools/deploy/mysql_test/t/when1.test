@@ -1,0 +1,245 @@
+drop table if exists t1;
+
+#connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+#connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+create table t1(c1 int primary key, c2 int);
+# 1. sfu fail 
+# 1.0 when fail
+# 1.0.0 row_count expr = false
+# 1.0.0.0 insert a row
+--error 5064
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 0;
+--error 5064
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1),(2,2),(3,3)) = 2;
+# 1.0.0.1 update a row
+--error 5064
+select * from t1 where c1=1 for update when row_count(update t1 set c2=0 where c1=1) = 1;
+# 1.0.0.2 delete a row
+--error 5064
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=1) = 1;
+
+# 1.0.1 row_count expr = true
+# 1.0.1.0 insert a row
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 1;
+select * from t1 where c1=1 for update when row_count(insert into t1 values(2,2),(3,3)) = 2;
+# 1.0.1.1 update a row
+select * from t1 where c1=1 for update when row_count(update t1 set c2=0 where c1=1) = 1;
+# 1.0.1.2 delete a row
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=1) = 1;
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=2) = 1;
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=3) = 1;
+
+# 1.0.2 not row_count
+select * from t1 where c1=1 for update when true;
+--error 5064
+select * from t1 where c1=1 for update when false;
+# 1.1 sql in when failed
+# 1.1.0 insert fail
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 1;
+--error 5024
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 0;
+--error 5024
+insert into t1 values(2,2) when row_count(insert into t1 values(1,1)) = 0;
+--error 5024
+insert into t1 values(2,2) when row_count(insert into t1 values(1,1),(2,2)) = 0;
+select * from t1;
+delete  from t1 where c1=1;
+commit;
+
+# 1. sfu fail in trx
+# 1.0 when fail
+# 1.0.0 row_count expr = false
+begin;
+# 1.0.0.0 insert a row
+--error 5064
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 0;
+commit;
+select * from t1;
+begin;
+--error 5064
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1),(2,2),(3,3)) = 2;
+commit;
+select * from t1;
+begin;
+# 1.0.0.1 update a row
+--error 5064
+select * from t1 where c1=1 for update when row_count(update t1 set c2=0 where c1=1) = 1;
+commit;
+select * from t1;
+begin;
+# 1.0.0.2 delete a row
+--error 5064
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=1) = 1;
+commit;
+select * from t1;
+begin;
+
+
+# 1.0.1 row_count expr = true
+# 1.0.1.0 insert a row
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 1;
+commit;
+select * from t1;
+begin;
+select * from t1 where c1=1 for update when row_count(insert into t1 values(2,2),(3,3)) = 2;
+commit;
+select * from t1;
+begin;
+# 1.0.1.1 update a row
+select * from t1 where c1=1 for update when row_count(update t1 set c2=0 where c1=1) = 1;
+commit;
+select * from t1;
+begin;
+# 1.0.1.2 delete a row
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=1) = 1;
+commit;
+select * from t1;
+begin;
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=2) = 1;
+commit;
+select * from t1;
+begin;
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=3) = 1;
+commit;
+select * from t1;
+begin;
+
+# 1.0.2 not row_count
+select * from t1 where c1=1 for update when true;
+commit;
+select * from t1;
+begin;
+--error 5064
+select * from t1 where c1=1 for update when false;
+commit;
+select * from t1;
+begin;
+# 1.1 sql in when failed
+# 1.1.0 insert fail
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 1;
+commit;
+select * from t1;
+begin;
+--error 5024
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 0;
+commit;
+select * from t1;
+begin;
+--error 5024
+insert into t1 values(2,2) when row_count(insert into t1 values(1,1)) = 0;
+commit;
+select * from t1;
+begin;
+--error 5024
+insert into t1 values(2,2) when row_count(insert into t1 values(1,1),(2,2)) = 0;
+commit;
+select * from t1;
+delete  from t1 where c1=1;
+commit;
+# 1. sfu fail in trx
+# 1.0 when fail
+# 1.0.0 row_count expr = false
+begin;
+# 1.0.0.0 insert a row
+--error 5064
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 0;
+rollback;
+select * from t1;
+begin;
+--error 5064
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1),(2,2),(3,3)) = 2;
+rollback;
+select * from t1;
+begin;
+# 1.0.0.1 update a row
+--error 5064
+select * from t1 where c1=1 for update when row_count(update t1 set c2=0 where c1=1) = 1;
+rollback;
+select * from t1;
+begin;
+# 1.0.0.2 delete a row
+--error 5064
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=1) = 1;
+rollback;
+select * from t1;
+begin;
+
+# 1.0.1 row_count expr = true
+# 1.0.1.0 insert a row
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 1;
+rollback;
+select * from t1;
+begin;
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 1;
+commit;
+select * from t1;
+begin;
+select * from t1 where c1=1 for update when row_count(insert into t1 values(2,2),(3,3)) = 2;
+rollback;
+select * from t1;
+begin;
+select * from t1 where c1=1 for update when row_count(insert into t1 values(2,2),(3,3)) = 2;
+commit;
+select * from t1;
+begin;
+# 1.0.1.1 update a row
+select * from t1 where c1=1 for update when row_count(update t1 set c2=0 where c1=1) = 1;
+rollback;
+select * from t1;
+begin;
+# 1.0.1.2 delete a row
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=1) = 1;
+rollback;
+select * from t1;
+begin;
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=2) = 1;
+rollback;
+select * from t1;
+begin;
+select * from t1 where c1=1 for update when row_count(delete from t1 where c1=3) = 1;
+rollback;
+select * from t1;
+begin;
+
+# 1.0.2 not row_count
+select * from t1 where c1=1 for update when true;
+rollback;
+select * from t1;
+begin;
+--error 5064
+select * from t1 where c1=1 for update when false;
+rollback;
+select * from t1;
+begin;
+# 1.1 sql in when failed
+# 1.1.0 insert fail
+delete from t1 where c1=1;
+commit;
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 1;
+commit;
+select * from t1;
+begin;
+--error 5024
+select * from t1 where c1=1 for update when row_count(insert into t1 values(1,1)) = 0;
+rollback;
+select * from t1;
+begin;
+--error 5024
+insert into t1 values(2,2) when row_count(insert into t1 values(1,1)) = 0;
+rollback;
+select * from t1;
+begin;
+--error 5024
+insert into t1 values(2,2) when row_count(insert into t1 values(1,1),(2,2)) = 0;
+rollback;
+select * from t1;
+delete  from t1 where c1=1;
+delete  from t1 where c1=2;
+delete  from t1 where c1=3;
+commit;
+drop table t1;
+
+
+
+

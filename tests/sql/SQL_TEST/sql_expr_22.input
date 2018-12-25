@@ -1,0 +1,47 @@
+-- ok
+select id from order_list where qty>=5 and qty<=9999 or order_desc is not null and order_time is not null;
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1003, TableName:order_list, AliasName:NULL, Type:BASE_TABLE, RefId: 1003}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:2, ColumnName:id, TableRef:1003}
+            {Num 1, ColumnId:5, ColumnName:qty, TableRef:1003}
+            {Num 2, ColumnId:7, ColumnName:order_desc, TableRef:1003}
+            {Num 3, ColumnId:6, ColumnName:order_time, TableRef:1003}
+        <ColumnItemList End>
+        WHERE ::= <2>
+        SELECT ::= <1, id>
+        FROM ::= <1003>
+        ObSelectStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (1003 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 2]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_OP_OR
+            T_OP_AND
+                T_OP_GE
+                    T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+                    T_INT : 5
+                T_OP_LE
+                    T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+                    T_INT : 9999
+            T_OP_AND
+                T_OP_IS_NOT
+                    T_REF_COLUMN : [table_id, column_id] = [1003, 7]
+                    T_NULL : NULL
+                T_OP_IS_NOT
+                    T_REF_COLUMN : [table_id, column_id] = [1003, 6]
+                    T_NULL : NULL
+        ObSqlRawExpr 1 End
+    <ExprList End>
+<logical_plan End>
+

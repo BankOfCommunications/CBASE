@@ -1,0 +1,61 @@
+[public]
+log_file = ./updateserver.log
+pid_file = ./updateserver.pid
+log_level = info
+
+[update_server]
+vip = 10.232.36.33
+port = 22030
+ups_inner_port = 22031
+dev_name = bond0
+app_name = collect
+log_size_mb = 64
+log_dir_path = ./commitlog
+fetch_schema_times = 10
+fetch_schema_timeout_ms = 2000
+log_sync_type = 1
+
+transaction_process_time_warning_us = 1000000
+store_root = ./data
+raid_regex = ^raid[0-9]+$
+dir_regex = ^store[0-9]+$
+
+read_thread_count = 14
+read_task_queue_size = 1000
+write_task_queue_size = 1000
+log_task_queue_size = 100
+lease_task_queue_size = 100
+write_thread_batch_num = 1024
+
+log_task_queue_size = 1000
+register_times = 10
+register_timeout_ms = 2000
+
+# 备从主使用rsync命令拖日志的限速，默认值40000KB
+log_sync_limit_kb = 40000
+replay_wait_time_us = 100000
+state_check_period_us = 100000
+
+total_memory_limit = 16
+table_memory_limit = 14
+active_mem_limit_gb = 13
+frozen_mem_limit_gb = 0
+minor_num_limit = 1
+
+active_mem_limit = 4
+frozen_mem_limit = 4
+
+lease_interval_us = 8000000
+lease_reserved_time_us = 7000000
+lease_on = 1
+
+# 主同步日志给备时的超时时间，默认值500000us
+log_sync_timeout_us = 500000
+
+sstable_compressor_name = none
+
+min_major_freeze_interval_s = 10
+
+[root_server]
+vip = 10.232.36.33
+port = 22010

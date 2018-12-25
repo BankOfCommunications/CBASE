@@ -1,0 +1,4 @@
+-- fail, num of columns are not match
+select user_id, user_name from user union all select * from item;
+The used SELECT statements have a different number of columns
+Resolve error!

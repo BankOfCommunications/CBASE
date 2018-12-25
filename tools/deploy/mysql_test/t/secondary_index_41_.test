@@ -1,0 +1,132 @@
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+#nomal
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1 (c1 int primary key ,c2 int,c3 int );
+insert into t1 values(1,1,1),(2,2,2),(3,3,3);
+create index il0 on t1(c2) storing (c3);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 600
+show index on t1;
+update t1 set c2=10 where c1=1;
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+--let $table_head =__
+--let $table_end =__idx__il0
+--let $table_name=$table_head$n$table_end
+echo $table_name;
+eval select * from $table_name;
+drop table t1;
+
+#all on one Transaction
+set autocommit=0;
+create table t1 (c1 int primary key ,c2 int,c3 int );
+insert into t1 values(1,1,1),(2,2,2),(3,3,3);
+create index il0 on t1(c2) storing (c3);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 600
+set autocommit=0;
+show index on t1;
+update t1 set c2=10 where c1=1;
+let $n=query_get_value( select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+--let $table_name=$table_head$n$table_end
+eval select * from $table_name;
+commit ;
+eval select * from $table_name;
+commit;
+update t1 set c2=20 where c1=2;
+commit;
+eval select * from $table_name;
+commit ;
+drop table t1;
+commit ;
+
+##
+set autocommit=1;
+create table t1 (c1 int primary key ,c2 int,c3 int );
+insert into t1 values(1,1,1),(2,2,2),(3,3,3);
+create index il0 on t1(c2) storing (c3);
+update t1 set c2=10 where c1=1;
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 300
+show index on t1;
+set autocommit=0;
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+--let $table_name=$table_head$n$table_end
+eval select * from $table_name;
+commit;
+#set autocommit =1;
+eval select * from $table_name;
+##
+set autocommit =1;
+create index il2 on t1(c2);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 300
+set autocommit=0;
+update t1 set c2=10 where c1=2;
+--let $table_end =__idx__il2
+--let $table_name=$table_head$n$table_end
+show index on t1;
+eval select * from $table_name;
+commit;
+eval select * from $table_name;
+
+##
+update t1 set c2=10 where c1=2;
+create index il3 on t1(c2);
+--let $table_end =__idx__il3
+--let $table_name=$table_head$n$table_end
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 300
+show index on t1;
+eval select * from $table_name;
+commit;
+eval select * from $table_name;
+
+
+
+##
+set autocommit =1;
+update t1 set c3 =100 where c1=2;
+eval select * from $table_name;
+
+
+##
+drop table t1;
+create table t1 (c1 int primary key ,c2 decimal(3,2), c3 bool,c4 datetime);
+insert into t1 values(1,1.23,1,'2012-09-08 12:00:22'),(2,1.23,1,'2012-09-08 12:00:22');
+create index il0 on t1(c4, c2) storing(c3);
+let $n=query_get_value(select table_id from __first_tablet_entry where table_name='t1',table_id,1);
+--let $table_end =__idx__il0
+--let $table_name=$table_head$n$table_end
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 400
+show index on t1;
+update t1 set c2=3.22 where c1=2;
+eval select * from $table_name;
+##
+create index il1 on t1 (c3,c2,c1) storing(c4);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 300
+eval select * from $table_name;
+--let $table_end =__idx__il1
+--let $table_name=$table_head$n$table_end
+eval select * from $table_name;
+
+#create index il4 on t1(c2) storing (c3);
+#--echo "merge"
+#exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+#--real_sleep 600
+#show index on t1;
+
+#explain update t1 set c2=10 where c1=3; 
+
+#explain update t1 set c3=10 where c1=3;

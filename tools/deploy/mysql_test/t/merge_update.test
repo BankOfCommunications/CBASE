@@ -1,0 +1,100 @@
+#--disable_parsing
+--disable_warnings
+drop table if exists sbtest;
+--enable_warnings
+
+alter system set merge_delay_interval='1s' server_type=chunkserver,min_major_freeze_interval='1s' server_type=updateserver;
+alter system set merge_delay_for_lsync='1s' server_type=chunkserver;
+alter system set min_drop_cache_wait_time='10s' server_type=chunkserver;
+alter system set merge_thread_per_disk=10 server_type=chunkserver;
+alter system set each_tablet_sync_meta=False server_type=chunkserver;
+--real_sleep 10
+
+CREATE TABLE sbtest (id INTEGER  NOT NULL , k integer  DEFAULT '0' NOT NULL, c char(120) DEFAULT '' NOT NULL, pad char(60) DEFAULT '' NOT NULL, PRIMARY KEY  (id) ) ;
+
+--echo insert 100 rows to ups
+--let $count=1
+while($count < 101)
+{ 
+    --let $stmt=INSERT INTO sbtest(id, k, c, pad) VALUES($count,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt')
+    eval $stmt;
+    inc $count; 
+}
+
+--echo merge
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 120
+
+--let $count=1
+while($count < 101)
+{ 
+    --let $stmt=select * from sbtest where id = $count
+    eval $stmt;
+    inc $count; 
+}
+--echo insert another 100 rows to ups
+
+--let $count=101
+while($count < 201)
+{ 
+    --let $stmt=INSERT INTO sbtest(id, k, c, pad) VALUES($count,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt')
+    eval $stmt;
+    inc $count; 
+}
+
+--echo merge
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+
+--let $count=101
+while($count < 201)
+{ 
+    --let $stmt=select * from sbtest where id = $count
+    eval $stmt;
+    inc $count; 
+}
+
+--echo insert another 100 rows to ups
+--let $count=201
+while($count < 301)
+{ 
+    --let $stmt=INSERT INTO sbtest(id, k, c, pad) VALUES($count,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt')
+    eval $stmt;
+    inc $count; 
+}
+
+# update
+--let $count=1
+while($count < 101)
+{
+   eval update sbtest set pad = 'qwt' where id = $count;
+   eval select * from sbtest where id = $count;
+   inc $count;
+   inc $count;
+   inc $count;
+   inc $count;
+   inc $count;
+}
+--let $count=101
+while($count < 201)
+{
+   eval update sbtest set pad = 'qwt' where id = $count;
+   eval select * from sbtest where id = $count;
+   inc $count;
+   inc $count;
+   inc $count;
+   inc $count;
+   inc $count;
+}
+--let $count=201
+while($count < 301)
+{
+   eval update sbtest set pad = 'qwt' where id = $count;
+   eval select * from sbtest where id = $count;
+   inc $count;
+   inc $count;
+   inc $count;
+   inc $count;
+   inc $count;
+}
+--real_sleep 120
+drop table sbtest;

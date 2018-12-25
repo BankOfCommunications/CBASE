@@ -1,0 +1,11 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\deploy\sqltest
+2
+7
+5:mysql|1|166f778c8a7|30a4f0|52fa3c7b|5ebc151e68c911e8a8030002c8c1274c|0
+15:sqltest.conf.template|1|166f778c92a|1b6|f6e5a023|639c155668c911e8a8030002c8c1274c|0
+a:sqltest.py|1|166f778c8d5|3db|b5cc4ece|619c153a68c911e8a8030002c8c1274c|0
+e:sqlpattern.txt|1|166f778cc00|b41|5baedaf8|65ac157268c911e8a8030002c8c1274c|0
+9:stress.sh|1|166f778cc3a|3bb|4ee31be4|67ac158e68c911e8a8030002c8c1274c|0
+12:mysql.sql.template|1|166f778ccb0|14c|81076e51|6c0c15c668c911e8a8030002c8c1274c|0
+e:sqltest.schema|1|166f778cc79|253|e9e7cf6c|69cc15aa68c911e8a8030002c8c1274c|0

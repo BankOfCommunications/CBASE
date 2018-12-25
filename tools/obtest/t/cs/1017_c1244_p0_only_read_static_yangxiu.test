@@ -1,0 +1,59 @@
+deploy ob1=OBI(cluster=1244);
+
+deploy ob1.reboot;
+sleep 10;
+
+deploy ob1.source include/merge.inc;
+sleep 10;
+
+#sql
+deploy ob1.create_client;
+create table t1 (a int primary key,b int);
+create table t2 (a int primary key,b int);
+insert into t1 values(1,1),(2,1),(-2,1),(-3,1);
+insert into t2 values(1,1),(2,1);
+
+select * from t1;
+select * from t2;
+
+#merge
+deploy ob1.major_freeze;
+sleep 10;
+deploy ob1.check_cs_version 2;
+
+select * from t1;
+
+#is read static
+deploy ob1.mysql update __first_tablet_entry set is_read_static=1 where table_name='t1';
+sleep 10;
+#refresh schema
+deploy ob1.rs_admin refresh_schema;
+sleep 10;
+
+#update
+update t1 set b=10 where a=1;
+insert into t1 values(0,1),(3,2);
+delete from t1 where a=2;
+
+update t2 set b=20 where a=1;
+insert into t2 values(0,1),(3,2);
+delete from t2 where a=2;
+
+select * from t1;
+select * from t2;
+
+#modify is_read_static
+deploy ob1.mysql update __first_tablet_entry set is_read_static=0 where table_name='t1';
+sleep 10;
+#refresh schema
+deploy ob1.rs_admin refresh_schema;
+sleep 10;
+
+select * from t1;
+select * from t2;
+
+
+
+
+
+

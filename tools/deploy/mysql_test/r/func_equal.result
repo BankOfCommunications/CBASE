@@ -1,0 +1,16 @@
+drop table if exists t1,t2;
+create table t1 (id int primary key, value int);
+create table t2 (id int primary key, value int);
+insert into t1 values (1,null);
+insert into t2 values (1,null);
+select t1.*, t2.*, t1.value=t2.value from t1, t2 where t1.id=t2.id and t1.id=1;
+id	value	id	value	t1.value=t2.value
+1	NULL	1	NULL	NULL
+select * from t1 where id =id;
+id	value
+1	NULL
+select * from t1 where value = value;
+id	value
+select * from t1 where id = value or value=id;
+id	value
+drop table t1,t2;

@@ -1,0 +1,129 @@
+create database db;
+using database db;
+drop table if exists t1,t2,t3,t4;
+create table t1 (id_p int primary key, lastname varchar(20), firstname varchar(20), address varchar(20), city varchar(20), id_n int);
+insert into t1 values(1,'a','a1','a2', 'a3',3);
+insert into t1 values(2,'b','b1','b2', 'b3',3);
+insert into t1 values(3,'c','c1','c2', 'c3',2);
+create table t2(id_o int primary key, orderno int, id_p int, id_n int);
+insert into t2 values(1,1111,3,2);
+insert into t2 values(2,2222,3,1);
+insert into t2 values(3,3333,1,3);
+insert into t2 values(4,4444,1,4);
+insert into t2 values(5,5555,65,3);
+create table t3 (
+id int,
+category int,
+county int,
+state int,
+phones int,
+nophones int,
+id_n int,
+primary key (id)
+);
+insert into t3 values (3,2,11,12,5400,7800,1);
+insert into t3 values (4,2,25,12,6500,11200,3);
+insert into t3 values (5,1,37,6,10000,12000,2);
+create table t4 (
+id int,
+name varchar(255) default NULL,
+primary key (id)
+);
+insert into t4 values (1,'s1'),(2,'s2'),(3,'s3'),(4,'s4'),(5,'s5');
+select /*+ join(bloomfilter_join) */ * from t2 left join t3 on t2.id_p=t3.category and t2.orderno=t3.phones;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+3	3333	1	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+4	4444	1	4	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+1	1111	3	2	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+2	2222	3	1	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+5	5555	65	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+select /*+ join(bloomfilter_join) */ * from t2 right join t3 on t2.id_p=t3.category and t2.orderno=t3.phones;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+NULL	NULL	NULL	NULL	5	1	37	6	10000	12000	2
+NULL	NULL	NULL	NULL	3	2	11	12	5400	7800	1
+NULL	NULL	NULL	NULL	4	2	25	12	6500	11200	3
+select /*+ join(bloomfilter_join) */ * from t2 full join t3 on t2.id_p=t3.category and t2.orderno=t3.phones;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+3	3333	1	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+4	4444	1	4	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+NULL	NULL	NULL	NULL	5	1	37	6	10000	12000	2
+NULL	NULL	NULL	NULL	3	2	11	12	5400	7800	1
+NULL	NULL	NULL	NULL	4	2	25	12	6500	11200	3
+1	1111	3	2	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+2	2222	3	1	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+5	5555	65	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+select /*+ join(bloomfilter_join) */ * from t2 inner join t3 on t2.id_p=t3.category and t2.orderno=t3.phones;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+select /*+ join(bloomfilter_join) */ * from t2 left join t3 on t2.id_p=t3.category and t2.orderno=t3.phones and t2.id_n=t3.id_n;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+3	3333	1	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+4	4444	1	4	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+1	1111	3	2	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+2	2222	3	1	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+5	5555	65	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+select /*+ join(bloomfilter_join) */ * from t2 right join t3 on t2.id_p=t3.category and t2.orderno=t3.phones and t2.id_n=t3.id_n;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+NULL	NULL	NULL	NULL	5	1	37	6	10000	12000	2
+NULL	NULL	NULL	NULL	3	2	11	12	5400	7800	1
+NULL	NULL	NULL	NULL	4	2	25	12	6500	11200	3
+select /*+ join(bloomfilter_join) */ * from t2 full join t3 on t2.id_p=t3.category and t2.orderno=t3.phones and t2.id_n=t3.id_n;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+3	3333	1	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+4	4444	1	4	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+NULL	NULL	NULL	NULL	5	1	37	6	10000	12000	2
+NULL	NULL	NULL	NULL	3	2	11	12	5400	7800	1
+NULL	NULL	NULL	NULL	4	2	25	12	6500	11200	3
+1	1111	3	2	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+2	2222	3	1	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+5	5555	65	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+select /*+ join(bloomfilter_join) */ * from t2 inner join t3 on t2.id_p=t3.category and t2.orderno=t3.phones and t2.id_n=t3.id_n;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+select /*+ join(merge_join) */ * from t2 left join t3 on t2.id_p=t3.category and t2.orderno=t3.phones;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+3	3333	1	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+4	4444	1	4	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+1	1111	3	2	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+2	2222	3	1	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+5	5555	65	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+select /*+ join(merge_join) */ * from t2 right join t3 on t2.id_p=t3.category and t2.orderno=t3.phones;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+NULL	NULL	NULL	NULL	5	1	37	6	10000	12000	2
+NULL	NULL	NULL	NULL	3	2	11	12	5400	7800	1
+NULL	NULL	NULL	NULL	4	2	25	12	6500	11200	3
+select /*+ join(merge_join) */ * from t2 full join t3 on t2.id_p=t3.category and t2.orderno=t3.phones;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+3	3333	1	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+4	4444	1	4	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+NULL	NULL	NULL	NULL	5	1	37	6	10000	12000	2
+NULL	NULL	NULL	NULL	3	2	11	12	5400	7800	1
+NULL	NULL	NULL	NULL	4	2	25	12	6500	11200	3
+1	1111	3	2	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+2	2222	3	1	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+5	5555	65	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+select /*+ join(merge_join) */ * from t2 inner join t3 on t2.id_p=t3.category and t2.orderno=t3.phones;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+select /*+ join(merge_join) */ * from t2 left join t3 on t2.id_p=t3.category and t2.orderno=t3.phones and t2.id_n=t3.id_n;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+3	3333	1	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+4	4444	1	4	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+1	1111	3	2	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+2	2222	3	1	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+5	5555	65	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+select /*+ join(merge_join) */ * from t2 right join t3 on t2.id_p=t3.category and t2.orderno=t3.phones and t2.id_n=t3.id_n;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+NULL	NULL	NULL	NULL	5	1	37	6	10000	12000	2
+NULL	NULL	NULL	NULL	3	2	11	12	5400	7800	1
+NULL	NULL	NULL	NULL	4	2	25	12	6500	11200	3
+select /*+ join(merge_join) */ * from t2 full join t3 on t2.id_p=t3.category and t2.orderno=t3.phones and t2.id_n=t3.id_n;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+3	3333	1	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+4	4444	1	4	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+NULL	NULL	NULL	NULL	5	1	37	6	10000	12000	2
+NULL	NULL	NULL	NULL	3	2	11	12	5400	7800	1
+NULL	NULL	NULL	NULL	4	2	25	12	6500	11200	3
+1	1111	3	2	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+2	2222	3	1	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+5	5555	65	3	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+select /*+ join(merge_join) */ * from t2 inner join t3 on t2.id_p=t3.category and t2.orderno=t3.phones and t2.id_n=t3.id_n;
+id_o	orderno	id_p	id_n	id	category	county	state	phones	nophones	id_n
+drop table t1,t2,t3,t4;

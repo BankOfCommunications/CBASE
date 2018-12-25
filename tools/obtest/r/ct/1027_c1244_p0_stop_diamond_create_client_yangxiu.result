@@ -1,0 +1,14 @@
+ob1=OBI(cluster=1244,ct_num=1)
+ob1.reboot
+ob1.start_diamond localhost
+ob1.create_client
+ob1.prepare
+ob1.start_check
+create table t1(c1 int primary key,c2 int);
+ob1.ct0.sh rm -rf ~/.obdatasource/*
+ob1.ct0.reboot
+ob1.ct0.stop
+ob1.stop_diamond
+ob1.ct0.start
+ob1.ct0.exist
+ob1.stop_check

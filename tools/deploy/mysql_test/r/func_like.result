@@ -1,0 +1,212 @@
+drop table if exists t1;
+create table t1 (a varchar(10) primary key, b int default 0);
+insert into t1 (a) values ('a'),('abc'),('abcd'),('hello'),('test');
+select * from t1 where a like 'abc%';
+a	b
+abc	NULL
+abcd	NULL
+select * from t1 where a like 'ABC%';
+a	b
+select * from t1 where a like 'test%';
+a	b
+test	NULL
+select * from t1 where a like 'te_t';
+a	b
+test	NULL
+select * from t1 where a like '%a%';
+a	b
+a	NULL
+abc	NULL
+abcd	NULL
+select * from t1 where a like '%abcd%';
+a	b
+abcd	NULL
+select * from t1 where a like '%abc\d%';
+a	b
+abcd	NULL
+drop table t1;
+create table t1 (a varchar(10) primary key, b int default 0);
+insert into t1 (a) values ('a'), ('a\\b');
+select * from t1 where a like 'a\\%';
+a	b
+drop table t1;
+drop table if exists t1;
+create table t1(id int primary key, name varchar(20));
+insert into t1 values(1, 'hello');
+insert into t1 values(2, 'hell');
+insert into t1 values(3, 'hel');
+insert into t1 values(4, 'hello1');
+insert into t1 values(5, 'hell1');
+insert into t1 values(6, 'hel1');
+select * from t1 where name like '%h%';
+id	name
+1	hello
+2	hell
+3	hel
+4	hello1
+5	hell1
+6	hel1
+select * from t1 where name like '%hel%';
+id	name
+1	hello
+2	hell
+3	hel
+4	hello1
+5	hell1
+6	hel1
+select * from t1 where name like '%hell%';
+id	name
+1	hello
+2	hell
+4	hello1
+5	hell1
+select * from t1 where name like '%hello%';
+id	name
+1	hello
+4	hello1
+select * from t1 where name like '%h%';
+id	name
+1	hello
+2	hell
+3	hel
+4	hello1
+5	hell1
+6	hel1
+select * from t1 where name like '%h%e%l%';
+id	name
+1	hello
+2	hell
+3	hel
+4	hello1
+5	hell1
+6	hel1
+select * from t1 where name like '%h%e%l%l%';
+id	name
+1	hello
+2	hell
+4	hello1
+5	hell1
+select * from t1 where name like '%h%e%l%l%o%';
+id	name
+1	hello
+4	hello1
+select * from t1 where name like '%%h%%';
+id	name
+1	hello
+2	hell
+3	hel
+4	hello1
+5	hell1
+6	hel1
+select * from t1 where name like '%%h%%e%%l%%';
+id	name
+1	hello
+2	hell
+3	hel
+4	hello1
+5	hell1
+6	hel1
+select * from t1 where name like '%%h%%e%%l%%l%%';
+id	name
+1	hello
+2	hell
+4	hello1
+5	hell1
+select * from t1 where name like '%%h%%e%l%%l%%o%%';
+id	name
+1	hello
+4	hello1
+select * from t1 where name like '%%he%%llo%%';
+id	name
+1	hello
+4	hello1
+select * from t1 where name like '1%h%';
+id	name
+select * from t1 where name like '1%hel%';
+id	name
+select * from t1 where name like '1%hell%';
+id	name
+select * from t1 where name like '1%h%';
+id	name
+select * from t1 where name like '%hel%1';
+id	name
+4	hello1
+5	hell1
+6	hel1
+select * from t1 where name like '%hell%1';
+id	name
+4	hello1
+5	hell1
+select * from t1 where name like '%hello%1';
+id	name
+4	hello1
+select * from t1 where name like '1%hel%1';
+id	name
+select * from t1 where name like '%hell%1';
+id	name
+4	hello1
+5	hell1
+select * from t1 where name like '%hello%1';
+id	name
+4	hello1
+select * from t1 where name like '%hel%1';
+id	name
+4	hello1
+5	hell1
+6	hel1
+select * from t1 where name like '1%hell%1';
+id	name
+select * from t1 where name like '1%hello%1';
+id	name
+select * from t1 where name like '_h_';
+id	name
+select * from t1 where name like '_hel_';
+id	name
+select * from t1 where name like '_hell_';
+id	name
+select * from t1 where name like '_hello_';
+id	name
+select * from t1 where name like '_h_';
+id	name
+select * from t1 where name like '_h_e_l_';
+id	name
+select * from t1 where name like '_h_e_l_l_';
+id	name
+select * from t1 where name like '_h_e_l_l_o_';
+id	name
+select * from t1 where name like '__h__';
+id	name
+select * from t1 where name like '__h__e__l__';
+id	name
+select * from t1 where name like '__h__e__l__l__';
+id	name
+select * from t1 where name like '__h__e_l__l__o__';
+id	name
+select * from t1 where name like '__he__llo__';
+id	name
+select * from t1 where name like '1_h_';
+id	name
+select * from t1 where name like '1_hel_';
+id	name
+select * from t1 where name like '1_hell_';
+id	name
+select * from t1 where name like '1_h_';
+id	name
+select * from t1 where name like '_hel_1';
+id	name
+select * from t1 where name like '_hell_1';
+id	name
+select * from t1 where name like '_hello_1';
+id	name
+select * from t1 where name like '1_hel_1';
+id	name
+select * from t1 where name like '_hell_1';
+id	name
+select * from t1 where name like '_hello_1';
+id	name
+select * from t1 where name like '_hel_1';
+id	name
+select * from t1 where name like '1_hell_1';
+id	name
+select * from t1 where name like '1_hello_1';
+id	name

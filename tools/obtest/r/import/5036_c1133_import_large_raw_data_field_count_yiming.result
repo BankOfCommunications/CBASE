@@ -1,0 +1,12 @@
+ob_import=OBI(cluster=1133)
+ob_import.reboot
+ob_import.create_client
+ob_import.cs0.plugin ProxyServer.reboot
+ob_import.cs1.plugin ProxyServer.reboot
+ob_import.cs2.plugin ProxyServer.reboot
+ob_import.rs0.plugin ImportServer.reboot
+ob_import.source t/import/inc/importconf.inc
+ob_import.rs0.plugin ImportCli.reboot
+ob_import.rs0.plugin ImportCli.execute -t CREATE_BYPASS_CONFIG collect_info  raw_data_field_count=100
+ob_import.rs0.plugin ImportCli.check_conf collect_info 5036_1_collect_info.ini
+ob_import.rs0.plugin ImportCli.error_execute -t OVERWRITE /group/public/yiming/tables_data_new/collect_info collect_info

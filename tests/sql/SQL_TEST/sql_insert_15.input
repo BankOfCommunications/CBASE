@@ -1,0 +1,6 @@
+-- fail, duplicate column
+insert into user (user_id, user_name, user_id) values (100, 'da fen qi', 15);
+Column user_id are duplicate
+Resolve error!
+
+

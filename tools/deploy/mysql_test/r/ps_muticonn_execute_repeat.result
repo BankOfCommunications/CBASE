@@ -1,0 +1,8 @@
+drop table if exists t1,t2;
+create table t1(i int primary key, c1 char(1), c256 char(256), dt datetime, d  datetime, ct createtime, mt modifytime);
+create table t2(i int primary key, c1 char(1), c256 char(256), dt datetime, d  datetime, ct createtime, mt modifytime);
+replace into t1(i,c1,c256,dt,d) values(0,'1','xqy','2012-10-10 12:00:00','2012-10-10');
+replace into t1(i,c1,c256,dt,d) values(1,'1','xqy','2012-10-10 12:00:00','2012-10-10');
+replace into t1(i,c1,c256,dt,d) values(2,'1','xqy','2012-10-10 12:00:00','2012-10-10');
+replace into t1(i,c1,c256,dt,d) values(3,'1','xqy','2012-10-10 12:00:00','2012-10-10');
+replace into t1(i,c1,c256,dt,d) values(4,'1','xqy','2012-10-10 12:00:00','2012-10-10');

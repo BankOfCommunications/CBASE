@@ -1,0 +1,315 @@
+#!/usr/bin/env perl
+# author: Zhifeng YANG <zhuweng.yzf@taobao.com>
+# create date: 08 Sep 2011
+# description: a script for oceanbase svn commit
+
+use warnings;
+use strict;
+use Getopt::Std;
+
+# config
+my $review_board="http://rb.corp.taobao.com/r/";
+my $svn_url_prefix = "http://svn.app.taobao.net/repos/oceanbase"; # should not trailing with '/'
+
+sub print_help()
+{
+	print "Usage: ob-commit -r <review-id>\n";
+	print "       -b <bug-id> if not specified, we will guess it:)\n";
+	print "       -f force commit even if the local diff is not the same with the review\n";
+	print "       -h print this message\n";
+	print "       -v print version message\n";
+	print "       -V verbose mode\n";
+	print "\nExample:\n";
+	print "       ob-commit -r 14655 -b 114652\n";
+	print "       ob-commit -r http://rb.corp.taobao.com/r/14655/\n";
+}
+
+sub print_version()
+{
+	print "ob-commit 1.1.0\n";
+	print "Copyright (C) 2011, 2012 Alibaba Group Holding Limited.\n\n";
+	print "Written by Zhifeng YANG <zhuweng.yzf\@taobao.com>.\n";
+}
+
+our($opt_r, $opt_b, $opt_h, $opt_v, $opt_V, $opt_f);
+if (!getopts('hvfr:b:V'))
+{
+	print_help();
+	exit 1;
+}
+
+if ($opt_h)
+{
+	print_help();
+	exit 0;
+}
+
+if ($opt_v)
+{
+	print_version();
+	exit 0;
+}
+
+if (!defined $opt_r || $opt_r eq "")
+{
+	print "ERROR: no review id specified\n";
+	print_help();
+	exit 0;
+}
+
+my $review_id = $opt_r;
+my $review_url = "$review_board$review_id";
+if (substr($review_id, 0, length($review_board)) eq $review_board)
+{
+	$review_url = $review_id;
+}
+# remove trailing '/'
+$review_url =~ s/^(.*[^\/])[\/]*$/$1/;
+my $commit_files = join(" ", @ARGV);
+if ($opt_V)
+{
+	print "the URL of this review is $review_url\n";
+	print "commit files: $commit_files\n";
+}
+
+my $review_page = `wget $review_url --quiet -O -`;
+if ($review_page eq "")
+{
+	print "Does the review exist? Check $review_url. \n";
+	exit 1;
+}
+
+if ($opt_V)
+{
+	print "================================================================\n";
+	print "$review_url\n";
+	print $review_page;
+	print "================================================================\n";
+}
+
+my $review_summary;
+if ($review_page =~ /<h1 id="summary"[^>].*>([^<]+)<\/h1>/)
+{
+	$review_summary = $1;
+}
+
+my $review_description;
+if ($review_page =~ /<pre id="description"[^>].*>([^<]+)<\/pre>/)
+{
+	$review_description = $1;
+}
+
+if ($review_summary eq "")
+{
+	print "review_summary is empty. Does the review $review_id exist?\n";
+	exit 1;
+}
+
+if ($review_description eq "")
+{
+	print "review_description is empty. Does the review $review_id exist?\n";
+	exit 1;
+}
+
+# guess bug id according to the review description
+my $bug_id = 0;
+if ($review_page =~ /<span id="bugs_closed"[^>]*>(\d+)<\/span>/)
+{
+	$bug_id = $1;
+}
+if ($review_description =~ /http:\/\/bugfree.corp.taobao.com\/bug\/(\d+)/)
+{
+	$bug_id = $1;
+}
+if ($opt_b)
+{
+	$bug_id = $opt_b;
+}
+if ($opt_V)
+{
+	print "BUG ID: $bug_id\n";
+	print "REVIEW SUMMARY: $review_summary\n";
+	print "REVIEW DESCRIPTION: $review_description\n";
+}
+
+# download the review diff
+my $raw_diff_url = "$review_url/diff/raw";
+my $review_diff = `wget $raw_diff_url --quiet -O -`;
+if ($opt_V)
+{
+	print "****************************************************************\n";
+	print "review diff\n$raw_diff_url\n";
+	print $review_diff;
+	print "****************************************************************\n";
+}
+
+# get svn path prefix
+my $svn_info = `svn info`;
+my $svn_path_prefix;
+if ($svn_info =~ /$svn_url_prefix(.*)/)
+{
+	$svn_path_prefix = $1;
+	print "svn_path_prefix: $svn_path_prefix\n" if ($opt_V);
+}
+else
+{
+	print "failed to get svn path prefix\n";
+	exit 1;
+}
+
+# get commit files
+my $diff_url = "$review_url/diff/#index_header";
+my $diff_page = `wget $diff_url --quiet -O -`;
+if ($opt_V)
+{
+	print "****************************************************************\n";
+	print "$diff_url\n";
+	print $diff_page;
+	print "****************************************************************\n";
+}
+
+$commit_files = "";
+my %files_name_map;
+if ($diff_page =~ /<a name="index_footer"><\/a>(.*)<\/ol>/s)
+{
+	my $index_footer = $1;
+	#print "COMMIT FILES:\n";
+	while ($index_footer =~ m/li class="change_file_.*"><a href=\"#(\d+)\"[^>]*>([^<]+)<\/a>/gc)
+	{
+		my $seq = $1;
+		my $orig_filename = $2;
+		my $filename = $orig_filename;
+		if (substr($filename, 0, length($svn_path_prefix)) ne $svn_path_prefix)
+		{
+			print "ERROR: do you in the same dir as posting review?\nreview_file=$filename current_path=$svn_path_prefix\n";
+			exit 1;
+		}
+		$filename =~ s|$svn_path_prefix/(.*)|$1|;
+		$files_name_map{$orig_filename} = $filename;
+		#print "$seq $filename\n";
+		$commit_files = join(" ", $commit_files, $filename);
+	}
+}
+# get commit files using new method(from diff)
+print "COMMIT FILES:\n";
+$commit_files = "";
+%files_name_map = ();
+my $seq = 1;
+while ($review_diff =~ m/Index: (.*)\n===================================================================/gc)
+{
+    my $orig_filename = $1;
+    my $filename = $orig_filename;
+    if (substr($filename, 0, length($svn_path_prefix)) ne $svn_path_prefix)
+    {
+	print "ERROR: do you in the same dir as posting review?\nreview_file=$filename current_path=$svn_path_prefix\n";
+	exit 1;
+    }
+    $filename =~ s|$svn_path_prefix/(.*)|$1|;
+    $files_name_map{$orig_filename} = $filename;
+    print "$seq $filename\n";
+    $commit_files = join(" ", $commit_files, $filename);
+    $seq ++;
+}
+
+if ($commit_files eq "")
+{
+	print "ERROR: no commit file found, do you in the same dir as posting review?\n";
+	exit 1;
+}
+if ($opt_V)
+{
+	print "files name map:\n";
+	foreach my $orig (keys %files_name_map)
+	{
+		print "$orig -> $files_name_map{$orig}\n";
+	}
+}
+# substitute the files name in review diff
+foreach my $orig (keys %files_name_map)
+{
+	$review_diff =~ s|$orig|$files_name_map{$orig}|g;
+}
+if ($opt_V)
+{
+	print "****************************************************************\n";
+	print "substituted review diff\n";
+	print $review_diff;
+	print "****************************************************************\n";
+}
+
+# check diff
+my $local_diff = `svn diff --diff-cmd=diff $commit_files`;
+if ($local_diff eq "")
+{
+	print "WARNING: there is no change on local files, maybe you have committed, files=$commit_files\n";
+	exit 0;
+}
+if ($opt_V)
+{
+	print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+	print "local diff\n$commit_files\n";
+	print $local_diff;
+	print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+}
+my $same_diff = 1;
+$review_diff =~ s|\r||g;
+$local_diff =~ s|\r||g;
+if ($review_diff ne $local_diff)
+{
+	$same_diff = 0;
+}
+
+if (!$opt_f && !$same_diff)
+{
+	print "ERROR: the local change set is not the same with the review diff, cannot commit.\n";
+	print "DIFF:\n";
+
+	my $review_diff_filename = "ob-commit_review.diff";
+	my $local_diff_filename = "ob-commit_local.diff";
+	open(my $tmp1, ">", $review_diff_filename) or die "cannot open file $review_diff_filename: $!";
+	open(my $tmp2, ">", $local_diff_filename) or die "cannot open file $local_diff_filename: $!";
+	print $tmp1 "$review_diff";
+	print $tmp2 "$local_diff";
+	close($tmp1);
+	close($tmp2);
+	system("diff $review_diff_filename $local_diff_filename");
+	unlink($review_diff_filename, $local_diff_filename);
+	print "You can use -f to force commit even if the local diff is not the same with the review.\n";
+}
+else
+{
+	my $bug_message = "[new_feature] ";
+	if ($opt_f && !$same_diff)
+	{
+		print "WARNING: the local change set is not the same with the review diff, but force to commit.\n";
+		$bug_message = "[new_feature] -f ";
+	}
+	if ($bug_id != 0)
+	{
+		$bug_message = "[fixbug #$bug_id] ";
+	}
+	my $commit_message = "$bug_message $review_summary\n$review_url\n$review_description\n";
+	print "\nCOMMIT MESSAGE:\n";
+	print $commit_message;
+	# be friendly
+	$|++;                                   # autoflush STDOUT
+	print "\nDO YOU WANT TO COMMIT?(y or n) ";
+	while (my $line = <STDIN>)
+	{
+		if ($line eq "y\n")
+		{
+			print "COMMIT...\n";
+			system("svn ci -m \"$commit_message\" $commit_files");
+			last;
+		}
+		elsif ($line eq "n\n")
+		{
+			print "BYE.\n";
+			last;
+		}
+		else
+		{
+			print "DO YOU WANT TO COMMIT?(y or n) ";
+		}
+	}
+}

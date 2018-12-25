@@ -1,0 +1,67 @@
+drop table if exists t1,t2;
+create table t1 (a int auto_increment,b int , primary key (a));
+insert into t1 values(NULL),(NULL);
+ERROR HY000: Column count doesn't match value count
+insert into t1 values(NULL,1),(NULL,2);
+ERROR 23000: Duplicate entry 'null:' for key 'PRIMARY'
+update t1 set b=3 where a = NULL;
+update t1 set b=2 where b =1;
+select * from t1;
+a	b
+drop table t1;
+create table t1(a int primary key, b int);
+insert into t1 values(1,1),(2,2);
+update t1 set b=0 where a=1;
+select * from t1;
+a	b
+1	0
+2	2
+update t1 set b=0 where a=2 and b=1;
+select * from t1;
+a	b
+1	0
+2	2
+update t1 set b=0 where a=2 and b=2;
+select * from t1;
+a	b
+1	0
+2	0
+drop table t1;
+create table t1(a varchar primary key, b varchar);
+insert into t1 values(1,1),(2,2);
+update t1 set b=0 where a=1;
+select * from t1;
+a	b
+1	0
+2	2
+update t1 set b=0 where a=2 and b=1;
+select * from t1;
+a	b
+1	0
+2	2
+update t1 set b=0 where a=2 and b=2;
+select * from t1;
+a	b
+1	0
+2	0
+drop table t1;
+create table t1 (pk int primary key, a int, b int);
+insert into t1 values(1,1,1),(2,1,1),(3,NULL,NULL),(4,1,1);
+update t1 set a=0 where pk=1;
+update t1 set a=2 where pk=1 and a=0;
+update t1 set a=3 where pk=1 and a=0;
+update t1 set a=0 where pk=2 or a=1;
+update t1 set a=0 where pk=2 and a=1;
+update t1 set a=0 where pk=3 and a=NULL;
+update t1 set a=0 where pk=3 and a is NULL;
+update t1 set a=NULL where pk=3 and a=0;
+update t1 set a=0 where pk=4 and (a=2 or a=3);
+update t1 set a=0 where pk=4 and (a=2 or a=1);
+update t1 set a=10 where pk=4 and (a=2 or a=0);
+select * from t1;
+pk	a	b
+1	2	1
+2	0	1
+3	NULL	NULL
+4	10	1
+drop table t1;

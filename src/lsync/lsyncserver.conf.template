@@ -1,0 +1,15 @@
+[public]
+log_file = ./log/lsyncserver.log
+pid_file = ./log/lsyncserver.pid
+log_level = info
+
+[lsync_server]
+# 和去HA之后的版本使用时，把convert_switch_log设置为1
+convert_switch_log=1
+dev_name=bond0
+port=3000
+ups_commit_log_dir=./ups_commit_log
+ups_commit_log_file_start_id=1
+lsync_retry_wait_time_us=100000
+#'timeout' not used any more
+timeout=1000000

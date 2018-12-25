@@ -1,0 +1,63 @@
+-- ok
+select id,qty, order_desc from (select id, qty, t.order_desc from order_list t) o;
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:18446744073709551612, TableName:o, AliasName:NULL, Type:GENERATED_TABLE, RefId: 2}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:16, ColumnName:id, TableRef:18446744073709551612}
+            {Num 1, ColumnId:17, ColumnName:qty, TableRef:18446744073709551612}
+            {Num 2, ColumnId:18, ColumnName:order_desc, TableRef:18446744073709551612}
+        <ColumnItemList End>
+        SELECT ::= <4, id>, <5, qty>, <6, order_desc>
+        FROM ::= <18446744073709551612>
+        ObSelectStmt 0 End
+        ObSelectStmt 1 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:18446744073709551613, TableName:order_list, AliasName:t, Type:ALIAS_TABLE, RefId: 1003}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:2, ColumnName:id, TableRef:18446744073709551613}
+            {Num 1, ColumnId:5, ColumnName:qty, TableRef:18446744073709551613}
+            {Num 2, ColumnId:7, ColumnName:order_desc, TableRef:18446744073709551613}
+        <ColumnItemList End>
+        SELECT ::= <1, id>, <2, qty>, <3, order_desc>
+        FROM ::= <18446744073709551613>
+        ObSelectStmt 1 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (18446744073709551613 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551613, 2]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (18446744073709551613 : 5)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551613, 5]
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (18446744073709551613 : 7)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551613, 7]
+        ObSqlRawExpr 2 End
+        ObSqlRawExpr 3 Begin
+        expr_id = 4
+        (table_id : column_id) = (18446744073709551612 : 16)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551612, 16]
+        ObSqlRawExpr 3 End
+        ObSqlRawExpr 4 Begin
+        expr_id = 5
+        (table_id : column_id) = (18446744073709551612 : 17)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551612, 17]
+        ObSqlRawExpr 4 End
+        ObSqlRawExpr 5 Begin
+        expr_id = 6
+        (table_id : column_id) = (18446744073709551612 : 18)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551612, 18]
+        ObSqlRawExpr 5 End
+    <ExprList End>
+<logical_plan End>
+

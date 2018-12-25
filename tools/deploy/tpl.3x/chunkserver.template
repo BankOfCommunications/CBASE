@@ -1,0 +1,57 @@
+
+[public]
+pid_file = log/chunkserver.pid.$ip:$port
+log_file = log/chunkserver.log.$ip:$port
+log_level = $log_level
+trace_log_level=$trace_log_level
+
+[chunk_server]
+dev_name = $dev
+port = $port
+task_queue_size = 1000
+task_thread_count = 50
+max_migrate_task_count=4
+max_sstable_size = $max_sstable_size
+
+datadir_path = $dir/data/cs
+application_name = $app_name
+network_timeout= 1000000
+merge_timeout=10000000
+
+lease_check_interval=5000000
+retry_times=5
+migrate_band_limit_kbps=51200
+
+merge_mem_limit=67108864
+merge_thread_per_disk=$merge_thread_per_disk
+#reserve_sstable_copy=2
+merge_load_threshold_high=20
+merge_threshold_request_high=3000
+max_merge_thread_num=10
+
+max_version_gap = 100
+#max_version_gap = 3
+
+write_sstable_io_type = 1
+merge_delay_interval_minutes = 0
+merge_delay_for_lsync_second = 10
+min_merge_interval_second = 10
+min_drop_cache_wait_second = 10
+
+upslist_interval_us=1000000
+
+each_tablet_sync_meta = 0
+lazy_load_sstable = 1
+unmerge_if_unchanged = 1
+join_batch_count = 3000
+
+[memory_cache]
+block_cache_memsize_mb = 512
+file_info_cache_max_cache_num = 8192
+block_index_cache_memsize_mb = 1024
+join_cache_memsize_mb=4096
+sstable_row_cache_memsize_mb = 512
+
+[root_server]
+vip = ${rs0.ip}
+port = ${rs0.port}

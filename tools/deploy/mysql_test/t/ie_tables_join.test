@@ -1,0 +1,102 @@
+--source $LOCAL_DIR/mysql_test/import-export/include.inc 
+
+--let $TABLE1=ie_tables_join_1
+--let $TABLE2=ie_tables_join_2
+--let $TABLE3=ie_tables_join_3
+--let $DB=test
+--let $TEST_NAME=ie_tables_join
+--let $IM_FILE1=$IM_DEL/ie_tables_join_1.del
+--let $IM_FILE2=$IM_DEL/ie_tables_join_2.del
+--let $IM_FILE3=$IM_DEL/ie_tables_join_3.del
+--let $EX_FILE=$EX_DEL/$TEST_NAME.del
+
+eval using database $DB;
+# --disable_warnings
+eval drop table if exists ie_tables_join_1,ie_tables_join_2,ie_tables_join_3;
+# --enable_warnings
+
+eval create table ie_tables_join_1
+(
+i0 int,
+i1 int,
+
+dc decimal(20,4),
+
+ts timestamp,
+
+primary key(i0)
+
+);
+
+eval create table ie_tables_join_2
+(
+i0 int,
+i1 int,
+
+dc decimal(20,4),
+
+ts timestamp,
+
+primary key(i0)
+
+);
+
+eval create table ie_tables_join_3
+(
+i0 int,
+i1 int,
+
+dc decimal(20,4),
+
+ts timestamp,
+
+primary key(i0)
+
+);
+
+exec $IM2_EXE 
+-t $TABLE1 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $IM2_LOG/$TABLE1.log 
+--badfile $IM2_BAD/$TABLE1.bad 
+--dbname $DB 
+-f $IM_FILE1
+&> /dev/null;
+
+exec $IM2_EXE
+-t $TABLE2
+-h $RS0_IP
+-p $RS0_PORT
+-l $IM2_LOG/$TABLE2.log
+--badfile $IM2_BAD/$TABLE2.bad
+--dbname $DB
+-f $IM_FILE2
+&> /dev/null;
+
+exec $IM2_EXE
+-t $TABLE3
+-h $RS0_IP
+-p $RS0_PORT
+-l $IM2_LOG/$TABLE3.log
+--badfile $IM2_BAD/$TABLE3.bad
+--dbname $DB
+-f $IM_FILE3
+&> /dev/null;
+
+eval select * from $TABLE1;
+eval select * from $TABLE2;
+eval select * from $TABLE3;
+
+exec $EX_EXE --masterpercent 100 
+-t $DB.$TABLE1 
+-h $RS0_IP 
+-p $RS0_PORT 
+-l $EX_LOG/$TABLE1.log 
+--badfile $EX_BAD/$TABLE1.bad 
+-f $EX_FILE
+--multi-tables
+--select-statement "select a.i0, a.dc, b.i0, b.ts, c.i0 from test.ie_tables_join_1 as a inner join test.ie_tables_join_2 as b on a.i0=b.i0 join test.ie_tables_join_3 as c on b.i0=c.i0"
+&> /dev/null;
+
+exec cat $EX_FILE;

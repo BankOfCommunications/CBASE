@@ -1,0 +1,41 @@
+-- ok, expression type are not check now
+insert into user (user_id, user_name) select item_name, item_cost from item;
+<logical_plan Begin>
+    <StmtList Begin>
+        ObInsertStmt 0 Begin
+            <TableItemList Begin>
+                {Num 0, TableId:1002, TableName:user, AliasName:NULL, Type:BASE_TABLE, RefId: 1002}
+            <TableItemList End>
+            <ColumnItemList Begin>
+                {Num 0, ColumnId:2, ColumnName:user_id, TableRef:1002}
+                {Num 1, ColumnId:3, ColumnName:user_name, TableRef:1002}
+            <ColumnItemList End>
+            INTO ::= <1002>
+            SUBQUERY ::= <2>
+        ObInsertStmt 0 End
+        ObSelectStmt 1 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1001, TableName:item, AliasName:NULL, Type:BASE_TABLE, RefId: 1001}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:3, ColumnName:item_name, TableRef:1001}
+            {Num 1, ColumnId:4, ColumnName:item_cost, TableRef:1001}
+        <ColumnItemList End>
+        SELECT ::= <1, item_name>, <2, item_cost>
+        FROM ::= <1001>
+        ObSelectStmt 1 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (1001 : 3)
+        T_REF_COLUMN : [table_id, column_id] = [1001, 3]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (1001 : 4)
+        T_REF_COLUMN : [table_id, column_id] = [1001, 4]
+        ObSqlRawExpr 1 End
+    <ExprList End>
+<logical_plan End>
+

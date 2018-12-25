@@ -1,0 +1,795 @@
+drop table if exists sbtest;
+alter system set merge_delay_interval='1s' server_type=chunkserver,min_major_freeze_interval='1s' server_type=updateserver;
+alter system set merge_delay_for_lsync='1s' server_type=chunkserver;
+alter system set min_drop_cache_wait_time='10s' server_type=chunkserver;
+alter system set merge_thread_per_disk=10 server_type=chunkserver;
+alter system set each_tablet_sync_meta=False server_type=chunkserver;
+CREATE TABLE sbtest (id INTEGER  NOT NULL, name varchar, whenn datetime,  k integer  DEFAULT '0' NOT NULL,pad char(60) DEFAULT '' NOT NULL, whenn1 datetime, stat1 bool, PRIMARY KEY  (id,name,whenn) ) ;
+insert 100 rows to ups
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(1,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(2,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(3,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(4,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(5,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(6,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(7,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(8,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(9,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(10,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(11,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(12,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(13,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(14,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(15,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(16,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(17,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(18,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(19,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(20,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(21,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(22,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(23,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(24,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(25,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(26,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(27,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(28,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(29,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(30,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(31,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(32,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(33,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(34,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(35,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(36,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(37,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(38,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(39,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(40,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(41,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(42,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(43,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(44,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(45,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(46,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(47,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(48,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(49,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(50,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(51,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(52,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(53,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(54,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(55,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(56,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(57,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(58,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(59,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(60,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(61,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(62,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(63,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(64,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(65,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(66,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(67,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(68,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(69,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(70,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(71,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(72,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(73,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(74,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(75,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(76,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(77,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(78,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(79,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(80,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(81,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(82,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(83,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(84,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(85,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(86,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(87,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(88,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(89,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(90,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(91,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(92,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(93,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(94,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(95,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(96,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(97,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(98,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(99,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(100,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+merge
+[major_freeze] err=0
+select * from sbtest where id = 1;
+id	name	whenn	k	pad	whenn1	stat1
+1	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 2;
+id	name	whenn	k	pad	whenn1	stat1
+2	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 3;
+id	name	whenn	k	pad	whenn1	stat1
+3	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 4;
+id	name	whenn	k	pad	whenn1	stat1
+4	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 5;
+id	name	whenn	k	pad	whenn1	stat1
+5	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 6;
+id	name	whenn	k	pad	whenn1	stat1
+6	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 7;
+id	name	whenn	k	pad	whenn1	stat1
+7	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 8;
+id	name	whenn	k	pad	whenn1	stat1
+8	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 9;
+id	name	whenn	k	pad	whenn1	stat1
+9	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 10;
+id	name	whenn	k	pad	whenn1	stat1
+10	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 11;
+id	name	whenn	k	pad	whenn1	stat1
+11	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 12;
+id	name	whenn	k	pad	whenn1	stat1
+12	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 13;
+id	name	whenn	k	pad	whenn1	stat1
+13	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 14;
+id	name	whenn	k	pad	whenn1	stat1
+14	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 15;
+id	name	whenn	k	pad	whenn1	stat1
+15	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 16;
+id	name	whenn	k	pad	whenn1	stat1
+16	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 17;
+id	name	whenn	k	pad	whenn1	stat1
+17	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 18;
+id	name	whenn	k	pad	whenn1	stat1
+18	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 19;
+id	name	whenn	k	pad	whenn1	stat1
+19	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 20;
+id	name	whenn	k	pad	whenn1	stat1
+20	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 21;
+id	name	whenn	k	pad	whenn1	stat1
+21	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 22;
+id	name	whenn	k	pad	whenn1	stat1
+22	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 23;
+id	name	whenn	k	pad	whenn1	stat1
+23	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 24;
+id	name	whenn	k	pad	whenn1	stat1
+24	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 25;
+id	name	whenn	k	pad	whenn1	stat1
+25	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 26;
+id	name	whenn	k	pad	whenn1	stat1
+26	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 27;
+id	name	whenn	k	pad	whenn1	stat1
+27	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 28;
+id	name	whenn	k	pad	whenn1	stat1
+28	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 29;
+id	name	whenn	k	pad	whenn1	stat1
+29	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 30;
+id	name	whenn	k	pad	whenn1	stat1
+30	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 31;
+id	name	whenn	k	pad	whenn1	stat1
+31	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 32;
+id	name	whenn	k	pad	whenn1	stat1
+32	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 33;
+id	name	whenn	k	pad	whenn1	stat1
+33	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 34;
+id	name	whenn	k	pad	whenn1	stat1
+34	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 35;
+id	name	whenn	k	pad	whenn1	stat1
+35	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 36;
+id	name	whenn	k	pad	whenn1	stat1
+36	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 37;
+id	name	whenn	k	pad	whenn1	stat1
+37	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 38;
+id	name	whenn	k	pad	whenn1	stat1
+38	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 39;
+id	name	whenn	k	pad	whenn1	stat1
+39	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 40;
+id	name	whenn	k	pad	whenn1	stat1
+40	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 41;
+id	name	whenn	k	pad	whenn1	stat1
+41	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 42;
+id	name	whenn	k	pad	whenn1	stat1
+42	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 43;
+id	name	whenn	k	pad	whenn1	stat1
+43	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 44;
+id	name	whenn	k	pad	whenn1	stat1
+44	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 45;
+id	name	whenn	k	pad	whenn1	stat1
+45	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 46;
+id	name	whenn	k	pad	whenn1	stat1
+46	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 47;
+id	name	whenn	k	pad	whenn1	stat1
+47	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 48;
+id	name	whenn	k	pad	whenn1	stat1
+48	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 49;
+id	name	whenn	k	pad	whenn1	stat1
+49	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 50;
+id	name	whenn	k	pad	whenn1	stat1
+50	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 51;
+id	name	whenn	k	pad	whenn1	stat1
+51	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 52;
+id	name	whenn	k	pad	whenn1	stat1
+52	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 53;
+id	name	whenn	k	pad	whenn1	stat1
+53	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 54;
+id	name	whenn	k	pad	whenn1	stat1
+54	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 55;
+id	name	whenn	k	pad	whenn1	stat1
+55	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 56;
+id	name	whenn	k	pad	whenn1	stat1
+56	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 57;
+id	name	whenn	k	pad	whenn1	stat1
+57	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 58;
+id	name	whenn	k	pad	whenn1	stat1
+58	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 59;
+id	name	whenn	k	pad	whenn1	stat1
+59	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 60;
+id	name	whenn	k	pad	whenn1	stat1
+60	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 61;
+id	name	whenn	k	pad	whenn1	stat1
+61	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 62;
+id	name	whenn	k	pad	whenn1	stat1
+62	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 63;
+id	name	whenn	k	pad	whenn1	stat1
+63	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 64;
+id	name	whenn	k	pad	whenn1	stat1
+64	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 65;
+id	name	whenn	k	pad	whenn1	stat1
+65	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 66;
+id	name	whenn	k	pad	whenn1	stat1
+66	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 67;
+id	name	whenn	k	pad	whenn1	stat1
+67	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 68;
+id	name	whenn	k	pad	whenn1	stat1
+68	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 69;
+id	name	whenn	k	pad	whenn1	stat1
+69	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 70;
+id	name	whenn	k	pad	whenn1	stat1
+70	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 71;
+id	name	whenn	k	pad	whenn1	stat1
+71	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 72;
+id	name	whenn	k	pad	whenn1	stat1
+72	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 73;
+id	name	whenn	k	pad	whenn1	stat1
+73	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 74;
+id	name	whenn	k	pad	whenn1	stat1
+74	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 75;
+id	name	whenn	k	pad	whenn1	stat1
+75	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 76;
+id	name	whenn	k	pad	whenn1	stat1
+76	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 77;
+id	name	whenn	k	pad	whenn1	stat1
+77	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 78;
+id	name	whenn	k	pad	whenn1	stat1
+78	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 79;
+id	name	whenn	k	pad	whenn1	stat1
+79	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 80;
+id	name	whenn	k	pad	whenn1	stat1
+80	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 81;
+id	name	whenn	k	pad	whenn1	stat1
+81	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 82;
+id	name	whenn	k	pad	whenn1	stat1
+82	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 83;
+id	name	whenn	k	pad	whenn1	stat1
+83	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 84;
+id	name	whenn	k	pad	whenn1	stat1
+84	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 85;
+id	name	whenn	k	pad	whenn1	stat1
+85	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 86;
+id	name	whenn	k	pad	whenn1	stat1
+86	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 87;
+id	name	whenn	k	pad	whenn1	stat1
+87	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 88;
+id	name	whenn	k	pad	whenn1	stat1
+88	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 89;
+id	name	whenn	k	pad	whenn1	stat1
+89	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 90;
+id	name	whenn	k	pad	whenn1	stat1
+90	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 91;
+id	name	whenn	k	pad	whenn1	stat1
+91	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 92;
+id	name	whenn	k	pad	whenn1	stat1
+92	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 93;
+id	name	whenn	k	pad	whenn1	stat1
+93	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 94;
+id	name	whenn	k	pad	whenn1	stat1
+94	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 95;
+id	name	whenn	k	pad	whenn1	stat1
+95	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 96;
+id	name	whenn	k	pad	whenn1	stat1
+96	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 97;
+id	name	whenn	k	pad	whenn1	stat1
+97	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 98;
+id	name	whenn	k	pad	whenn1	stat1
+98	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 99;
+id	name	whenn	k	pad	whenn1	stat1
+99	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+select * from sbtest where id = 100;
+id	name	whenn	k	pad	whenn1	stat1
+100	junyue	2013-01-06 14:44:00	1	qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt	2013-01-07 14:44:00	NULL
+insert another 100 rows to ups
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(101,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(102,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(103,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(104,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(105,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(106,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(107,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(108,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(109,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(110,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(111,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(112,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(113,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(114,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(115,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(116,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(117,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(118,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(119,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(120,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(121,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(122,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(123,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(124,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(125,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(126,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(127,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(128,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(129,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(130,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(131,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(132,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(133,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(134,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(135,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(136,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(137,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(138,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(139,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(140,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(141,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(142,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(143,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(144,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(145,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(146,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(147,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(148,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(149,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(150,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(151,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(152,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(153,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(154,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(155,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(156,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(157,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(158,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(159,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(160,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(161,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(162,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(163,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(164,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(165,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(166,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(167,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(168,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(169,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(170,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(171,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(172,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(173,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(174,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(175,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(176,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(177,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(178,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(179,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(180,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(181,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(182,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(183,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(184,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(185,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(186,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(187,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(188,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(189,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(190,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(191,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(192,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(193,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(194,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(195,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(196,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(197,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(198,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(199,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(200,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+merge
+[major_freeze] err=0
+insert another 100 rows to ups
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(201,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(202,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(203,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(204,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(205,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(206,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(207,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(208,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(209,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(210,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(211,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(212,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(213,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(214,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(215,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(216,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(217,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(218,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(219,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(220,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(221,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(222,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(223,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(224,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(225,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(226,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(227,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(228,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(229,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(230,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(231,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(232,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(233,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(234,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(235,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(236,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(237,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(238,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(239,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(240,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(241,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(242,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(243,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(244,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(245,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(246,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(247,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(248,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(249,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(250,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(251,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(252,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(253,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(254,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(255,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(256,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(257,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(258,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(259,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(260,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(261,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(262,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(263,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(264,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(265,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(266,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(267,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(268,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(269,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(270,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(271,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(272,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(273,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(274,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(275,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(276,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(277,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(278,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(279,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(280,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(281,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(282,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(283,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(284,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(285,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(286,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(287,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(288,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(289,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(290,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(291,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(292,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(293,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(294,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(295,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(296,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(297,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(298,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(299,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+INSERT INTO sbtest(id, name, whenn, k, pad, whenn1) VALUES(300,'junyue','2013-1-6 14:44:00', 1,'qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt', '2013-1-7 14:44:00');
+delete from sbtest where id = 1 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 1;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 6 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 6;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 11 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 11;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 16 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 16;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 21 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 21;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 26 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 26;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 31 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 31;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 36 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 36;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 41 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 41;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 46 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 46;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 51 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 51;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 56 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 56;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 61 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 61;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 66 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 66;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 71 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 71;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 76 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 76;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 81 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 81;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 86 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 86;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 91 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 91;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 96 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 96;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 101 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 101;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 106 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 106;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 111 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 111;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 116 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 116;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 121 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 121;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 126 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 126;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 131 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 131;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 136 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 136;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 141 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 141;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 146 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 146;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 151 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 151;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 156 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 156;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 161 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 161;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 166 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 166;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 171 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 171;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 176 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 176;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 181 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 181;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 186 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 186;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 191 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 191;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 196 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 196;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 201 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 201;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 206 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 206;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 211 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 211;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 216 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 216;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 221 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 221;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 226 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 226;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 231 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 231;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 236 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 236;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 241 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 241;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 246 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 246;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 251 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 251;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 256 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 256;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 261 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 261;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 266 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 266;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 271 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 271;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 276 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 276;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 281 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 281;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 286 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 286;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 291 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 291;
+id	name	whenn	k	pad	whenn1	stat1
+delete from sbtest where id = 296 and name = 'junyue' and whenn = '2013-1-6 14:44:00';
+select * from sbtest where id = 296;
+id	name	whenn	k	pad	whenn1	stat1
+drop table sbtest;

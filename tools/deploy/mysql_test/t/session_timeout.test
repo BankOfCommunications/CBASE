@@ -1,0 +1,44 @@
+drop table if exists t1;
+
+
+--echo set timeout to 10s
+connect (conn3,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+set wait_timeout = 5;
+create table t1(c1 int primary key, c2 int);
+insert into t1 values(1,1);
+insert into t1 values(2,2);
+insert into t1 values(3,3);
+disconnect conn3;
+
+--echo create 2 sessions
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+
+connection conn1;
+set interactive_timeout = 1;
+--echo interactive_timeout not effective 
+begin;
+insert into t1 values(4,4);
+--real_sleep 3
+insert into t1 values(5,5);
+--real_sleep 3
+insert into t1 values(6,6);
+--real_sleep 3
+commit;
+
+select * from t1;
+
+--echo wait_timeout
+set wait_timeout = 5;
+begin;
+insert into t1 values(11,11);
+--real_sleep 10
+--error 2006
+insert into t1 values(12,12);
+--error 2006
+commit;
+
+--error 2006
+select * from t1;
+

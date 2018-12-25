@@ -1,0 +1,24 @@
+SHOW TABLES like '\\_\\_%';
+table_name
+SHOW VARIABLES like '%increment%';
+variable_name	value
+auto_increment_increment	1
+SHOW GLOBAL VARIABLES like '%increment%';
+variable_name	value
+auto_increment_increment	1
+show grants;
+grants
+GRANT ALL PRIVILEGES,GRANT OPTION ON * TO 'admin'
+GRANT ALL PRIVILEGES,GRANT OPTION ON TANG.* TO 'admin'
+GRANT ALL PRIVILEGES,GRANT OPTION ON test.* TO 'admin'
+show columns from __all_sys_stat;
+field	type	nullable	key	default	extra
+gm_create	createtime	0	0	NULL	
+gm_modify	modifytime	0	0	NULL	
+cluster_id	int	0	1	NULL	
+name	varchar(256)	0	2	NULL	
+data_type	int	0	0	NULL	
+value	varchar(256)	0	0	NULL	
+info	varchar(256)	0	0	NULL	
+show warnings;
+level	code	message

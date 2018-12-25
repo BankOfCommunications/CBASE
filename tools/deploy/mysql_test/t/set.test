@@ -1,0 +1,100 @@
+--disable_abort_on_error
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+# invalid systerm variables
+set a=1;
+set global a=1;
+set b=str;
+set c='str';
+set a;
+set a=;
+set =;
+
+# user variables
+set @a=1;
+select @a;
+set @b=str;
+set @c='str';
+select @c;
+
+set @a=1+@a;
+select @a;
+set @a= 1 +@a;
+select @a;
+set @a=1+a;
+select @a;
+
+set @a;
+set @b=1;
+select @b;
+set @a=@b;
+select @a;
+
+# expression
+
+set @a=1;
+select @a;
+set @b='str';
+select @b;
+set @c=@a+@b;
+select @c;
+set @b=2;
+set @c=@a+@b;
+select @c;
+set @c=@a/@b;
+select @c;
+set @c=@a-@b;
+select @c;
+set @c=@a*@b;
+select @c;
+set @c=@c/0;
+select @c;
+
+set @a=100;
+set @a=@a%100;
+select @a;
+# keyword
+set @status=1;
+
+# systerm variables
+--echo conn1
+set max_allowed_packet=2048000;
+set ob_read_consistency=0;
+show variables like '%max_allowed_packet%';
+show variables like '%ob_read_consistency%';
+
+connection conn2;
+--echo conn2
+show variables like '%max_allowed_packet%';
+show variables like '%ob_read_consistency%';
+
+
+--echo conn1
+connection conn1;
+set global max_allowed_packet=2048000;
+set global ob_read_consistency=0;
+show variables like '%max_allowed_packet%';
+show variables like '%ob_read_consistency%';
+
+
+--echo conn2
+connection conn2;
+show variables like '%max_allowed_packet%';
+show variables like '%ob_read_consistency%';
+
+--echo create conn3
+connect (conn3,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn3;
+show variables like '%max_allowed_packet%';
+show variables like '%ob_read_consistency%';
+
+
+## add bugfix: 
+drop table if exists t1;
+create table t1(c1 varchar(20) primary key, c2 int);
+replace into t1 values('s1',1);
+set @a='s1';
+update t1 set c2=0 where c1=@a;
+drop table t1;

@@ -1,0 +1,2136 @@
+--disable_warnings
+drop table if exists test_date,test_time,test_timestamp;
+--enable_warnings
+
+--replace_column 1 '2015-12-01'
+select current_date();
+--replace_column 1 '14:30:25'
+select current_time();
+--replace_column 1 '2015-12-01 14:30:25.932260'
+select current_timestamp();
+
+--replace_column 1 '2015-12-01'
+select current_date;
+--error 5009
+select current_time;
+--replace_column 1 '2015-12-01 14:30:25.932260'
+select current_timestamp;
+
+--error 5001
+select current_date(1);
+--error 5055
+select current_time(1);
+--error 5001
+select current_timestamp(1);
+
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,current_date());
+--replace_column 2 '2015-12-01'
+select * from test_date;
+
+create table test_time(c1 int primary key,c2 time);
+insert into test_time values(1,current_time());
+--replace_column 2 '14:30:25'
+select * from test_time;
+
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,current_timestamp());
+--replace_column 2 '2015-12-01 14:30:25.932260'
+select * from test_timestamp;
+
+drop table if exists test_date,test_time,test_timestamp;
+
+create table test_date(c1 int primary key,c2 int);
+--error 7
+insert into test_date values(1,current_date());
+select * from test_date;
+drop table if exists test_date;
+
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,current_date());
+--replace_column 2 '2015-12-01'
+select * from test_date;
+drop table if exists test_date;
+
+create table test_date(c1 int primary key,c2 date);
+--error 5001
+insert into test_date values(1,date '2000--error 01--error 01'),(2,date '2001--error 01--error 01');
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+--error 5023
+select current_date()+c2 from test_date;
+drop table if exists test_date;
+
+create table test_date(c1 int primary key,c2 time);
+insert into test_date values(1,time '09:00:00'),(2,time '08:00:00');
+--error 5023
+select current_date()+c2 from test_date;
+drop table if exists test_date;
+
+create table test_date(c1 int primary key,c2 timestamp);
+--error 5001
+insert into test_date values(1,timestamp '2000--error 01--error 01 09:00:00'),(2,timestamp '2001--error 01--error 01 08:00:00');
+insert into test_date values(1,timestamp '2000-01-01 09:00:00'),(2,timestamp '2001-01-01 08:00:00');
+--error 5023
+select current_date()+c2 from test_date;
+drop table if exists test_date;
+
+create table test_date(c1 int primary key,c2 timestamp);
+--error 5001
+insert into test_date values(1,timestamp '2000--error 01--error 01 09:00:00'),(2,timestamp '2001--error 01--error 01 08:00:00');
+insert into test_date values(1,timestamp '2000-01-01 09:00:00'),(2,timestamp '2001-01-01 08:00:00');
+--error 5023
+select current_date()+c1 from test_date;
+drop table if exists test_date;
+
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,'2000-01-01 09:00:00'),(2,'2001-01-01 08:00:00');
+--error 5023
+select current_date()+c2 from test_date;
+
+drop table if exists test_time;
+
+create table test_time(c1 int primary key,c2 date);
+--error 7
+insert into test_time values(1,current_time());
+insert into test_time values(2,current_date());
+insert into test_time values(3,current_timestamp());
+--replace_column 2 '2015-12-01'
+select * from test_time;
+drop table if exists test_time;
+
+create table test_time(c1 int primary key,c2 date);
+--error 7
+insert into test_time values(1,current_time());
+select * from test_time;
+drop table if exists test_time;
+
+create table test_time(c1 int primary key,c2 timestamp);
+insert into test_time values(1,current_timestamp());
+--replace_column 2 '2015-12-01 14:30:25.932260'
+select * from test_time;
+drop table if exists test_time;
+
+create table test_time(c1 int primary key,c2 int);
+--error 7
+insert into test_time values(1,current_time());
+select * from test_time;
+drop table if exists test_time;
+
+create table test_time(c1 int primary key,c2 varchar(20));
+insert into test_time values(1,current_time());
+--replace_column 2 '14:30:25'
+select * from test_time;
+drop table if exists test_time;
+
+create table test_time(c1 int primary key,c2 date);
+insert into test_time values(1,date '2000-01-01'),(2,date '2001-01-01');
+--error 5023
+select current_time()+c2 from test_time;
+drop table if exists test_time;
+
+create table test_time(c1 int primary key,c2 time);
+insert into test_time values(1,time '09:00:00'),(2,time '08:00:00');
+--error 5023
+select current_time()+c2 from test_time;
+drop table if exists test_time;
+
+create table test_time(c1 int primary key,c2 timestamp);
+insert into test_time values(1,timestamp '2000-01-01 09:00:00'),(2,timestamp '2001-01-01 08:00:00');
+--error 5023
+select current_time()+c2 from test_time;
+drop table if exists test_time;
+
+create table test_time(c1 int primary key,c2 timestamp);
+insert into test_time values(1,timestamp '2000-01-01 09:00:00'),(2,timestamp '2001-01-01 08:00:00');
+--error 5023
+select current_time()+c1 from test_time;
+drop table if exists test_time;
+
+create table test_time(c1 int primary key,c2 varchar(20));
+insert into test_time values(1,'2000-01-01 09:00:00'),(2,'2001-01-01 08:00:00');
+--error 5023
+select current_time()+c2 from test_time;
+
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 date);
+insert into test_timestamp values(1,current_timestamp());
+--replace_column 2 '2015-12-01'
+select * from test_timestamp;
+drop table if exists test_timestamp;
+
+create table test_timestamp(c1 int primary key,c2 date);
+insert into test_timestamp values(1,current_timestamp());
+--replace_column 2 '2015-12-01'
+select * from test_timestamp;
+drop table if exists test_timestamp;
+
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,current_timestamp());
+--replace_column 2 '2015-12-01 14:30:25.932260'
+select * from test_timestamp;
+drop table if exists test_timestamp;
+
+create table test_timestamp(c1 int primary key,c2 int);
+--error 7
+insert into test_timestamp values(1,current_timestamp());
+select * from test_timestamp;
+drop table if exists test_timestamp;
+
+create table test_timestamp(c1 int primary key,c2 varchar(20));
+insert into test_timestamp values(1,current_timestamp());
+--replace_column 2 '2015-12-01 14:30:25.932260'
+select * from test_timestamp;
+drop table if exists test_timestamp;
+
+create table test_timestamp(c1 int primary key,c2 date);
+insert into test_timestamp values(1,date '2000-01-01'),(2,date '2001-01-01');
+--error 5023
+select current_timestamp()+c2 from test_timestamp;
+drop table if exists test_timestamp;
+
+create table test_timestamp(c1 int primary key,c2 time);
+insert into test_timestamp values(1,time '09:00:00'),(2,time '08:00:00');
+--error 5023
+select current_timestamp()+c2 from test_timestamp;
+drop table if exists test_timestamp;
+
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,timestamp '2000-01-01 09:00:00'),(2,timestamp '2001-01-01 08:00:00');
+--error 5023
+select current_timestamp()+c2 from test_timestamp;
+drop table if exists test_timestamp;
+
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,timestamp '2000-01-01 09:00:00'),(2,timestamp '2001-01-01 08:00:00');
+--error 5023
+select current_timestamp()+c1 from test_timestamp;
+drop table if exists test_timestamp;
+
+create table test_timestamp(c1 int primary key,c2 varchar(20));
+insert into test_timestamp values(1,'2000-01-01 09:00:00'),(2,'2001-01-01 08:00:00');
+--error 5023
+select current_timestamp()+c2 from test_timestamp;
+select year('1900-01-01');
+--error 5105
+select year('0000-01-01');
+select year('2000-01-01');
+--error 2
+select year('20000-01-01');
+--error 2
+select year('--error 2000-01-01');
+--error 2
+select year('a');
+
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 varchar(20));
+insert into test_year values(1,'2000-01-01'),(2,'2001-01-01');
+select year(c2) from test_year;
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 varchar(20));
+insert into test_year values(1,'a'),(2,'b');
+--error 2
+select year(c2) from test_year;
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 varchar(20));
+insert into test_year values(1,'a'),(2,null);
+--error 2
+select year(c2) from test_year;
+select year(date '1900-01-01');
+--error 5001
+select year(date '0000-01-01');
+select year(date '0001-01-01');
+select year(date '2000-01-01');
+--error 5001
+select year(date '20000-01-01');
+--error 5001
+select year(date '--error 2000-01-01');
+--error 5001
+select year(date 'a');
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 date);
+insert into test_year values(1,date '2000-01-01'),(2,date '2001-01-01');
+select year(c2) from test_year;
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 date);
+--error 7
+insert into test_year values(1,1),(2,'2');
+select year(c2) from test_year;
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 date);
+insert into test_year values(1,date '2000-01-01'),(2,null);
+select year(c2) from test_year;
+--error 1
+select year(time '09:00:00');
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 time);
+insert into test_year values(1,time '08:00:00'),(2,time '09:00:00');
+--error 1
+select year(c2) from test_year;
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 time);
+--error 7
+insert into test_year values(1,1),(2,'a');
+select year(c2) from test_year;
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 time);
+insert into test_year values(1,time '08:00:00'),(2,null);
+--error 1
+select year(c2) from test_year;
+select year(timestamp '1900-01-01 00:00:00');
+select year(timestamp '0001-01-01 00:00:00.0');
+select year(timestamp '2000-01-01 08:00:00.1');
+--error 5001
+select year(timestamp '20000-01-01 09:00:00.1');
+--error 5001
+select year(timestamp '--error 2000-01-01 09:00:00.1');
+--error 5001
+select year(timestamp 'a');
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 timestamp);
+insert into test_year values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select year(c2) from test_year;
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 timestamp);
+--error 5102
+insert into test_year values(1,1),(2,'2');
+select year(c2) from test_year;
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 timestamp);
+insert into test_year values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select year(c2) from test_year;
+--error 1
+select year(1);
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 timestamp);
+insert into test_year values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+--error 1
+select year(c1) from test_year;
+--error 1
+select year(1.1);
+drop table if exists test_year;
+create table test_year(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_year values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+--error 1
+select year(c1) from test_year;
+select year(null);
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+--error 7
+insert into test_date values(1,year('2010-01-01'));
+select * from test_date;
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+--error 7
+insert into test_time values(1,year('2000-01-01'));
+select * from test_time ;
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,year('2000-01-01'));
+select * from test_timestamp;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+insert into test_date values(1,year('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,year('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+--error 5023
+select year('2000-01-01')+c2 from test_date;
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 time);
+insert into test_year values(1,time '09:00:00'),(2,time '08:00:00');
+--error 5023
+select year('2000-01-01')+c2 from test_year;
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 timestamp);
+insert into test_year values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+--error 5023
+select year('2000-01-01')+c2 from test_year;
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 timestamp);
+insert into test_year values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select year('2000-01-01')+c1 from test_year;
+drop table if exists test_year;
+create table test_year(c1 int primary key,c2 varchar(20));
+insert into test_year values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+select year('2000-01-01')+c2 from test_year;
+select month('1900-01-01');
+--error 5105
+select month('0000-01-01');
+select month('2000-01-01');
+--error 2
+select month('20000-01-01');
+--error 2
+select month('--error 2000-01-01');
+--error 2
+select month('a');
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 varchar(20));
+insert into test_month values(1,'2000-01-01'),(2,'2001-01-01');
+select month(c2) from test_month;
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 varchar(20));
+insert into test_month values(1,'a'),(2,'b');
+--error 2
+select month(c2) from test_month;
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 varchar(20));
+insert into test_month values(1,'a'),(2,null);
+--error 2
+select month(c2) from test_month;
+select month(date '1900-01-01');
+--error 5001
+select month(date '0000-01-01');
+select month(date '2000-01-01');
+--error 5001
+select month(date '20000-01-01');
+--error 5001
+select month(date '--error 2000-01-01');
+--error 5001
+select month(date 'a');
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 date);
+insert into test_month values(1,date '2000-01-01'),(2,date '2001-01-01');
+select month(c2) from test_month;
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 date);
+--error 7
+insert into test_month values(1,1),(2,'2');
+select month(c2) from test_month;
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 date);
+insert into test_month values(1,date '2000-01-01'),(2,null);
+select month(c2) from test_month;
+--error 1
+select month(time '09:00:00');
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 time);
+insert into test_month values(1,time '08:00:00'),(2,time '09:00:00');
+--error 1
+select month(c2) from test_month;
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 time);
+--error 7
+insert into test_month values(1,1),(2,'a');
+select month(c2) from test_month;
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 time);
+insert into test_month values(1,time '08:00:00'),(2,null);
+--error 1
+select month(c2) from test_month;
+select month(timestamp '1900-01-01 00:00:00');
+--error 5001
+select month(timestamp '0000-01-01 00:00:00.0');
+select month(timestamp '2000-01-01 08:00:00.1');
+--error 5001
+select month(timestamp '20000-01-01 09:00:00.1');
+--error 5001
+select month(timestamp '--error 2000-01-01 09:00:00.1');
+--error 5001
+select month(timestamp 'a');
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 timestamp);
+insert into test_month values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select month(c2) from test_month;
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 timestamp);
+--error 5102
+insert into test_month values(1,1),(2,'2');
+select month(c2) from test_month;
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 timestamp);
+insert into test_month values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select month(c2) from test_month;
+--error 1
+select month(1);
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 timestamp);
+insert into test_month values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+--error 1
+select month(c1) from test_month;
+--error 1
+select month(1.1);
+drop table if exists test_month;
+create table test_month(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_month values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+--error 1
+select month(c1) from test_month;
+select month(null);
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+--error 7
+insert into test_date values(1,month('2010-01-01'));
+select * from test_date;
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+--error 7
+insert into test_time values(1,month('2000-01-01'));
+select * from test_time;
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,month('2000-01-01'));
+select * from test_timestamp;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+insert into test_date values(1,month('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,month('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+--error 5023
+select month('2000-01-01')+c2 from test_date;
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 time);
+insert into test_month values(1,time '09:00:00'),(2,time '08:00:00');
+--error 5023
+select month('2000-01-01')+c2 from test_month;
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 timestamp);
+insert into test_month values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+--error 5023
+select month('2000-01-01')+c2 from test_month;
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 timestamp);
+insert into test_month values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select month('2000-01-01')+c1 from test_month;
+drop table if exists test_month;
+create table test_month(c1 int primary key,c2 varchar(20));
+insert into test_month values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+select month('2000-01-01')+c2 from test_month;
+select day('1900-01-01');
+--error 5105
+select day('0000-01-01');
+select day('2000-01-01');
+--error 2
+select day('20000-01-01');
+--error 2
+select day('--error 2000-01-01');
+--error 2
+select day('a');
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 varchar(20));
+insert into test_day values(1,'2000-01-01'),(2,'2001-01-01');
+select day(c2) from test_day;
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 varchar(20));
+insert into test_day values(1,'a'),(2,'b');
+--error 2
+select day(c2) from test_day;
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 varchar(20));
+insert into test_day values(1,'a'),(2,null);
+--error 2
+select day(c2) from test_day;
+select day(date '1900-01-01');
+--error 5001 
+select day(date '0000-01-01');
+select day(date '2000-01-01');
+--error 5001
+select day(date '20000-01-01');
+--error 5001
+select day(date '--error 2000-01-01');
+--error 5001
+select day(date 'a');
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 date);
+insert into test_day values(1,date '2000-01-01'),(2,date '2001-01-01');
+select day(c2) from test_day;
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 date);
+--error 7
+insert into test_day values(1,1),(2,'2');
+select day(c2) from test_day;
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 date);
+insert into test_day values(1,date '2000-01-01'),(2,null);
+select day(c2) from test_day;
+--error 1
+select day(time '09:00:00');
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 time);
+insert into test_day values(1,time '08:00:00'),(2,time '09:00:00');
+--error 1
+select day(c2) from test_day;
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 time);
+--error 7
+insert into test_day values(1,1),(2,'a');
+select day(c2) from test_day;
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 time);
+insert into test_day values(1,time '08:00:00'),(2,null);
+--error 1
+select day(c2) from test_day;
+select day(timestamp '1900-01-01 00:00:00');
+--error 5001
+select day(timestamp '0000-01-01 00:00:00.0');
+select day(timestamp '2000-01-01 08:00:00.1');
+--error 5001
+select day(timestamp '20000-01-01 09:00:00.1');
+--error 5001
+select day(timestamp '--error 2000-01-01 09:00:00.1');
+--error 5001
+select day(timestamp 'a');
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 timestamp);
+insert into test_day values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select day(c2) from test_day;
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 timestamp);
+--error 5102
+insert into test_day values(1,1),(2,'2');
+select day(c2) from test_day;
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 timestamp);
+insert into test_day values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select day(c2) from test_day;
+--error 1
+select day(1);
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 timestamp);
+insert into test_day values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+--error 1
+select day(c1) from test_day;
+--error 1
+select day(1.1);
+drop table if exists test_day;
+create table test_day(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_day values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+--error 1
+select day(c1) from test_day;
+select day(null);
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+--error 7
+insert into test_date values(1,day('2010-01-01'));
+select * from test_date;
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+--error 7
+insert into test_time values(1,day('2000-01-01'));
+select * from test_time;
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,day('2000-01-01'));
+select * from test_timestamp;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+insert into test_date values(1,day('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,day('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+--error 5023
+select day('2000-01-01')+c2 from test_date;
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 time);
+insert into test_day values(1,time '09:00:00'),(2,time '08:00:00');
+--error 5023
+select day('2000-01-01')+c2 from test_day;
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 timestamp);
+insert into test_day values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+--error 5023
+select day('2000-01-01')+c2 from test_day;
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 timestamp);
+insert into test_day values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select day('2000-01-01')+c1 from test_day;
+drop table if exists test_day;
+create table test_day(c1 int primary key,c2 varchar(20));
+insert into test_day values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+select day('2000-01-01')+c2 from test_day;
+select days('0001-01-01');
+select days('0001-01-01');
+select days('1900-01-01');
+--error 5105
+select days('0000-01-01');
+select days('2000-01-01');
+--error 2
+select days('20000-01-01');
+--error 2
+select days('--error 2000-01-01');
+--error 2
+select days('a');
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 varchar(20));
+insert into test_days values(1,'2000-01-01'),(2,'2001-01-01');
+select days(c2) from test_days;
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 varchar(20));
+insert into test_days values(1,'a'),(2,'b');
+--error 2
+select days(c2) from test_days;
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 varchar(20));
+insert into test_days values(1,'a'),(2,null);
+--error 2
+select days(c2) from test_days;
+select days(date '1900-01-01');
+--error 5001
+select days(date '0000-01-01');
+select days(date '2000-01-01');
+--error 5001
+select days(date '20000-01-01');
+--error 5001
+select days(date '--error 2000-01-01');
+--error 5001
+select days(date 'a');
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 date);
+insert into test_days values(1,date '2000-01-01'),(2,date '2001-01-01');
+select days(c2) from test_days;
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 date);
+--error 7
+insert into test_days values(1,1),(2,'2');
+select days(c2) from test_days;
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 date);
+insert into test_days values(1,date '2000-01-01'),(2,null);
+select days(c2) from test_days;
+--error 1
+select days(time '09:00:00');
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 time);
+insert into test_days values(1,time '08:00:00'),(2,time '09:00:00');
+--error 1
+select days(c2) from test_days;
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 time);
+--error 7
+insert into test_days values(1,1),(2,'a');
+select days(c2) from test_days;
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 time);
+insert into test_days values(1,time '08:00:00'),(2,null);
+--error 1
+select days(c2) from test_days;
+select days(timestamp '1900-01-01 00:00:00');
+select days(timestamp '0001-01-01 00:00:00.0');
+select days(timestamp '2000-01-01 08:00:00.1');
+--error 5001
+select days(timestamp '20000-01-01 09:00:00.1');
+--error 5001
+select days(timestamp '--error 2000-01-01 09:00:00.1');
+--error 5001
+select days(timestamp 'a');
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 timestamp);
+insert into test_days values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select days(c2) from test_days;
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 timestamp);
+--error 5102
+insert into test_days values(1,1),(2,'2');
+select days(c2) from test_days;
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 timestamp);
+insert into test_days values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select days(c2) from test_days;
+--error 1
+select days(1);
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 timestamp);
+insert into test_days values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select days(c2) from test_days;
+--error 1
+select days(1.1);
+drop table if exists test_days;
+create table test_days(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_days values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+--error 1
+select days(c1) from test_days;
+select days(null);
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+--error 7
+insert into test_date values(1,days('2010-01-01'));
+select * from test_date;
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+--error 7
+insert into test_time values(1,days('2000-01-01'));
+select * from test_time;
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+insert into test_timestamp values(1,days('2000-01-01'));
+select * from test_timestamp;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+insert into test_date values(1,days('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+insert into test_date values(1,days('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+--error 5023
+select days('2000-01-01')+c2 from test_date;
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 time);
+insert into test_days values(1,time '09:00:00'),(2,time '08:00:00');
+--error 5023
+select days('2000-01-01')+c2 from test_days;
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 timestamp);
+insert into test_days values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+--error 5023
+select days('2000-01-01')+c2 from test_days;
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 timestamp);
+insert into test_days values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+select days('2000-01-01')+c1 from test_days;
+drop table if exists test_days;
+create table test_days(c1 int primary key,c2 varchar(20));
+insert into test_days values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+select days('2000-01-01')+c2 from test_days;
+--error 2
+select hour('1900-01-01');
+--error 2
+select hour('0000-01-01');
+--error 2
+select hour('2000-01-01');
+--error 2
+select hour('2000--error 011--error 01');
+--error 2
+select hour('--error 2000-01-01');
+--error 2
+select hour('a');
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 varchar(20));
+insert into test_hour values(1,'2000-01-01'),(2,'2001-01-01');
+--error 2
+select hour(c2) from test_hour;
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 varchar(20));
+insert into test_hour values(1,'a'),(2,'b');
+--error 2
+select hour(c2) from test_hour;
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 varchar(20));
+insert into test_hour values(1,'a'),(2,null);
+--error 2
+select hour(c2) from test_hour;
+--error 1
+select hour(date '1900-01-01');
+--error 5001
+select hour(date '0000-01-01');
+--error 1
+select hour(date '2000-01-01');
+--error 5001
+select hour(date '2000--error 011--error 01');
+--error 5001
+select hour(date '--error 2000-01-01');
+--error 5001
+select hour(date 'a');
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 date);
+insert into test_hour values(1,date '2000-01-01'),(2,date '2001-01-01');
+--error 1
+select hour(c2) from test_hour;
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 date);
+--error 7
+insert into test_hour values(1,1),(2,'2');
+select hour(c2) from test_hour;
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 date);
+insert into test_hour values(1,date '2000-01-01'),(2,null);
+--error 1
+select hour(c2) from test_hour;
+select hour(time '09:00:00');
+--error 5001
+select hour(time '019:00:00');
+--error 5001
+select hour(time '--error 19:00:00');
+--error 5001
+select hour(time 'a');
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 time);
+insert into test_hour values(1,time '08:00:00'),(2,time '09:00:00');
+select hour(c2) from test_hour;
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 time);
+--error 7
+insert into test_hour values(1,1),(2,'a');
+select hour(c2) from test_hour;
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 time);
+insert into test_hour values(1,time '08:00:00'),(2,null);
+select hour(c2) from test_hour;
+select hour(timestamp '1900-01-01 00:00:00');
+--error 5001
+select hour(timestamp '0000-01-01 00:00:00.0');
+select hour(timestamp '2000-01-01 08:00:00.1');
+--error 5001
+select hour(timestamp '20000-01-01 09:00:00.1');
+--error 5001
+select hour(timestamp '--error 2000-01-01 09:00:00.1');
+--error 5001
+select hour(timestamp 'a');
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 timestamp);
+insert into test_hour values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select hour(c2) from test_hour;
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 timestamp);
+--error 5102
+insert into test_hour values(1,1),(2,'2');
+select hour(c2) from test_hour;
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 timestamp);
+insert into test_hour values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select hour(c2) from test_hour;
+--error 1
+select hour(1);
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 timestamp);
+insert into test_hour values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+--error 1
+select hour(c1) from test_hour;
+--error 1
+select hour(1.1);
+drop table if exists test_hour;
+create table test_hour(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_hour values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+--error 1
+select hour(c1) from test_hour;
+select hour(null);
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+--error 2
+insert into test_date values(1,hour('2010-01-01'));
+select * from test_date;
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+--error 2
+insert into test_time values(1,hour('2000-01-01'));
+select * from test_time;
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+--error 2
+insert into test_timestamp values(1,hour('2000-01-01'));
+select * from test_timestamp;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+--error 2
+insert into test_date values(1,hour('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+--error 2
+insert into test_date values(1,hour('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+--error 5023
+select hour('2000-01-01')+c2 from test_date;
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 time);
+insert into test_hour values(1,time '09:00:00'),(2,time '08:00:00');
+--error 5023
+select hour('2000-01-01')+c2 from test_hour;
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 timestamp);
+insert into test_hour values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+--error 5023
+select hour('2000-01-01')+c2 from test_hour;
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 timestamp);
+insert into test_hour values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+--error 2
+select hour('2000-01-01')+c1 from test_hour;
+drop table if exists test_hour;
+create table test_hour(c1 int primary key,c2 varchar(20));
+insert into test_hour values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+--error 2
+select hour('2000-01-01')+c2 from test_hour;
+--error 2
+select minute('1900-01-01');
+--error 2
+select minute('0000-01-01');
+--error 2
+select minute('2000-01-01');
+--error 2
+select minute('2000--error 011--error 01');
+--error 2
+select minute('--error 2000-01-01');
+--error 2
+select minute('a');
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 varchar(20));
+insert into test_minute values(1,'2000-01-01'),(2,'2001-01-01');
+--error 2
+select minute(c2) from test_minute;
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 varchar(20));
+insert into test_minute values(1,'a'),(2,'b');
+--error 2
+select minute(c2) from test_minute;
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 varchar(20));
+insert into test_minute values(1,'a'),(2,null);
+--error 2
+select minute(c2) from test_minute;
+--error 1
+select minute(date '1900-01-01');
+--error 5001
+select minute(date '0000-01-01');
+--error 1
+select minute(date '2000-01-01');
+--error 5001
+select minute(date '2000--error 011--error 01');
+--error 5001
+select minute(date '--error 2000-01-01');
+--error 5001
+select minute(date 'a');
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 date);
+insert into test_minute values(1,date '2000-01-01'),(2,date '2001-01-01');
+--error 1
+select minute(c2) from test_minute;
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 date);
+--error 7
+insert into test_minute values(1,1),(2,'2');
+select minute(c2) from test_minute;
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 date);
+insert into test_minute values(1,date '2000-01-01'),(2,null);
+--error 1
+select minute(c2) from test_minute;
+select minute(time '09:00:00');
+--error 5001
+select minute(time '019:00:00');
+--error 5001
+select minute(time '--error 19:00:00');
+--error 5001
+select minute(time 'a');
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 time);
+insert into test_minute values(1,time '08:00:00'),(2,time '09:00:00');
+select minute(c2) from test_minute;
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 time);
+--error 7
+insert into test_minute values(1,1),(2,'a');
+select minute(c2) from test_minute;
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 time);
+insert into test_minute values(1,time '08:00:00'),(2,null);
+select minute(c2) from test_minute;
+select minute(timestamp '1900-01-01 00:00:00');
+--error 5001
+select minute(timestamp '0000-01-01 00:00:00.0');
+select minute(timestamp '2000-01-01 08:00:00.1');
+--error 5001
+select minute(timestamp '20000-01-01 09:00:00.1');
+--error 5001
+select minute(timestamp '--error 2000-01-01 09:00:00.1');
+--error 5001
+select minute(timestamp 'a');
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 timestamp);
+insert into test_minute values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select minute(c2) from test_minute;
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 timestamp);
+--error 5102
+insert into test_minute values(1,1),(2,'2');
+select minute(c2) from test_minute;
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 timestamp);
+insert into test_minute values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select minute(c2) from test_minute;
+--error 1
+select minute(1);
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 timestamp);
+insert into test_minute values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+--error 1
+select minute(c1) from test_minute;
+--error 1
+select minute(1.1);
+drop table if exists test_minute;
+create table test_minute(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_minute values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+--error 1
+select minute(c1) from test_minute;
+select minute(null);
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+--error 2
+insert into test_date values(1,minute('2010-01-01'));
+select * from test_date;
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+--error 2
+insert into test_time values(1,minute('2000-01-01'));
+select * from test_time;
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+--error 2
+insert into test_timestamp values(1,minute('2000-01-01'));
+select * from test_timestamp;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+--error 2
+insert into test_date values(1,minute('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+--error 2
+insert into test_date values(1,minute('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+--error 5023
+select minute('2000-01-01')+c2 from test_date;
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 time);
+insert into test_minute values(1,time '09:00:00'),(2,time '08:00:00');
+--error 5023
+select minute('2000-01-01')+c2 from test_minute;
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 timestamp);
+insert into test_minute values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+--error 5023
+select minute('2000-01-01')+c2 from test_minute;
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 timestamp);
+insert into test_minute values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+--error 2
+select minute('2000-01-01')+c1 from test_minute;
+drop table if exists test_minute;
+create table test_minute(c1 int primary key,c2 varchar(20));
+insert into test_minute values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+--error 2
+select minute('2000-01-01')+c2 from test_minute;
+--error 2
+select second('1900-01-01');
+--error 2
+select second('0000-01-01');
+--error 2
+select second('2000-01-01');
+--error 2
+select second('2000--error 011--error 01');
+--error 2
+select second('--error 2000-01-01');
+--error 2
+select second('a');
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 varchar(20));
+insert into test_second values(1,'2000-01-01'),(2,'2001-01-01');
+--error 2
+select second(c2) from test_second;
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 varchar(20));
+insert into test_second values(1,'a'),(2,'b');
+--error 2
+select second(c2) from test_second;
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 varchar(20));
+insert into test_second values(1,'a'),(2,null);
+--error 2
+select second(c2) from test_second;
+--error 1
+select second(date '1900-01-01');
+--error 5001
+select second(date '0000-01-01');
+--error 1
+select second(date '2000-01-01');
+--error 5001
+select second(date '2000--error 011--error 01');
+--error 5001
+select second(date '--error 2000-01-01');
+--error 5001
+select second(date 'a');
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 date);
+insert into test_second values(1,date '2000-01-01'),(2,date '2001-01-01');
+--error 1
+select second(c2) from test_second;
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 date);
+--error 7
+insert into test_second values(1,1),(2,'2');
+select second(c2) from test_second;
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 date);
+insert into test_second values(1,date '2000-01-01'),(2,null);
+--error 1
+select second(c2) from test_second;
+select second(time '09:00:00');
+--error 5001
+select second(time '019:00:00');
+--error 5001
+select second(time '--error 19:00:00');
+--error 5001
+select second(time 'a');
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 time);
+insert into test_second values(1,time '08:00:00'),(2,time '09:00:00');
+select second(c2) from test_second;
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 time);
+--error 7
+insert into test_second values(1,1),(2,'a');
+select second(c2) from test_second;
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 time);
+insert into test_second values(1,time '08:00:00'),(2,null);
+select second(c2) from test_second;
+select second(timestamp '1900-01-01 00:00:00');
+--error 5001
+select second(timestamp '0000-01-01 00:00:00.0');
+select second(timestamp '2000-01-01 08:00:00.1');
+--error 5001
+select second(timestamp '20000-01-01 09:00:00.1');
+--error 5001
+select second(timestamp '--error 2000-01-01 09:00:00.1');
+--error 5001
+select second(timestamp 'a');
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 timestamp);
+insert into test_second values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+select second(c2) from test_second;
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 timestamp);
+--error 5102
+insert into test_second values(1,1),(2,'2');
+select second(c2) from test_second;
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 timestamp);
+insert into test_second values(1,timestamp '2000-01-01 09:00:00.1'),(2,null);
+select second(c2) from test_second;
+--error 1
+select second(1);
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 timestamp);
+insert into test_second values(1,timestamp '2000-01-01 01:00:00.1'),(2,timestamp '2001-01-01 02:00:01.1');
+--error 1
+select second(c1) from test_second;
+--error 1
+select second(1.1);
+drop table if exists test_second;
+create table test_second(c1 decimal(10,6)  primary key,c2 timestamp);
+insert into test_second values(1.1,timestamp '2000-01-01 01:00:00.1'),(2.1,timestamp '2001-01-01 02:00:01.1');
+--error 1
+select second(c1) from test_second;
+select second(null);
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+--error 2
+insert into test_date values(1,second('2010-01-01'));
+select * from test_date;
+drop table if exists test_time;
+create table test_time(c1 int primary key,c2 time);
+--error 2
+insert into test_time values(1,second('2000-01-01'));
+select * from test_time;
+drop table if exists test_timestamp;
+create table test_timestamp(c1 int primary key,c2 timestamp);
+--error 2
+insert into test_timestamp values(1,second('2000-01-01'));
+select * from test_timestamp;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 int);
+--error 2
+insert into test_date values(1,second('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 varchar(20));
+--error 2
+insert into test_date values(1,second('2000-01-01'));
+select * from test_date;
+drop table if exists test_date;
+create table test_date(c1 int primary key,c2 date);
+insert into test_date values(1,date '2000-01-01'),(2,date '2001-01-01');
+--error 5023
+select second('2000-01-01')+c2 from test_date;
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 time);
+insert into test_second values(1,time '09:00:00'),(2,time '08:00:00');
+--error 5023
+select second('2000-01-01')+c2 from test_second;
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 timestamp);
+insert into test_second values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+--error 5023
+select second('2000-01-01')+c2 from test_second;
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 timestamp);
+insert into test_second values(1,timestamp '2000-01-01 09:00:00.1'),(2,timestamp '2001-01-01 08:00:00.1');
+--error 2
+select second('2000-01-01')+c1 from test_second;
+drop table if exists test_second;
+create table test_second(c1 int primary key,c2 varchar(20));
+insert into test_second values(1, '2000-01-01 09:00:00.1'),(2, '2001-01-01 08:00:00.1');
+--error 2
+select second('2000-01-01')+c2 from test_second;
+--error 5006
+select date_add('2010-01-01',interval 1 years);
+--error 5006
+select adddate('2010-01-01',interval 1 years);
+--error 5006
+select date_add('2010',interval 1 years);
+--error 5006
+select adddate('2010',interval 1 years);
+--error 5006
+select date_add('2010-01-01',interval 1.1 years);
+--error 5006
+select adddate('2010-01-01',interval 1.1 years);
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age int);
+insert into test_adddate values(1,1),(2,2);
+--error 5006
+select date_add(id,interval 1 years) from test_adddate;
+--error 5006
+select adddate(id,interval 1 years) from test_adddate;
+--error 5006
+select date_add(1,interval 1 years);
+--error 5006
+select adddate(1,interval 1 years);
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age decimal(5,3));
+insert into test_adddate values(1,1.1),(2,2.2);
+--error 5006
+select date_add(age,interval 1 years)from test_adddate;
+--error 5006
+select adddate(age,interval 1 years)from test_adddate;
+--error 5006
+select date_add(1.1,interval 1 years);
+--error 5006
+select adddate(2.2,interval 1 years);
+select date_add(null,interval 1 years);
+select adddate(null,interval 1 years);
+select date_add(date '1970-01-01',interval 1 years);
+select adddate(date '1970-01-01',interval 1 years);
+select date_sub(date '1970-01-01',interval 1 years);
+select subdate(date '1970-01-01',interval 1 years);
+select date_add(date '1870-01-01',interval 1 years);
+select adddate(date '1870-01-01',interval 1 years);
+select date_sub(date '1870-01-01',interval 1 years);
+select subdate(date '1870-01-01',interval 1 years);
+select date_add(date '2070-01-01',interval 1 years);
+select adddate(date '2070-01-01',interval 1 years);
+select date_sub(date '2070-01-01',interval 1 years);
+select subdate(date '2070-01-01',interval 1 years);
+select date_add(date '2070-01-01',interval 1.1 years);
+select adddate(date '2070-01-01',interval 1.1 years);
+select date_sub(date '2070-01-01',interval 2.1 years);
+select subdate(date '2070-01-01',interval 2.1 years);
+select date_add(date '2070-01-01',interval 'q' years);
+select adddate(date '2070-01-01',interval 'q' years);
+select date_sub(date '2070-01-01',interval 'q' years);
+select subdate(date '2070-01-01',interval 'q' years);
+select date_add(date '2070-01-01',interval null years);
+select adddate(date '2070-01-01',interval null years);
+select date_sub(date '2070-01-01',interval null years);
+select subdate(date '2070-01-01',interval null years);
+select date_add(date '2070-01-01',interval 1 months);
+select adddate(date '2070-01-01',interval 1 months);
+select date_sub(date '2070-01-01',interval 1 months);
+select subdate(date '2070-01-01',interval 1 months);
+select date_add(date '2070-01-01',interval 1 days);
+select adddate(date '2070-01-01',interval 1 days);
+select date_sub(date '2070-01-01',interval 1 days);
+select subdate(date '2070-01-01',interval 1 days);
+--error 1
+select date_add(date '2070-01-01',interval 1 hours);
+--error 1
+select adddate(date '2070-01-01',interval 1 hours);
+--error 1
+select date_sub(date '2070-01-01',interval 1 hours);
+--error 1
+select subdate(date '2070-01-01',interval 1 hours);
+--error 1
+select date_add(date '2070-01-01',interval 1 minutes);
+--error 1
+select adddate(date '2070-01-01',interval 1 minutes);
+--error 1
+select date_sub(date '2070-01-01',interval 1 minutes);
+--error 1
+select subdate(date '2070-01-01',interval 1 minutes);
+--error 1
+select date_add(date '2070-01-01',interval 1 seconds);
+--error 1
+select adddate(date '2070-01-01',interval 1 seconds);
+--error 1
+select date_sub(date '2070-01-01',interval 1 seconds);
+--error 1
+select subdate(date '2070-01-01',interval 1 seconds);
+--error 1
+select date_add(date '2070-01-01',interval 1 microseconds);
+--error 1
+select adddate(date '2070-01-01',interval 1 microseconds);
+--error 1
+select date_sub(date '2070-01-01',interval 1 microseconds);
+--error 1
+select subdate(date '2070-01-01',interval 1 microseconds);
+--error 5001
+select date_add(date '20070-01-01',interval 1 years);
+--error 5001
+select adddate(date '20070-01-01',interval 1 years);
+--error 5001
+select date_sub(date '20070-01-01',interval 1 years);
+--error 5001
+select subdate(date '20070-01-01',interval 1 years);
+--error 5001
+select date_add(date '--error 2070-01-01',interval 1 years);
+--error 5001
+select adddate(date '--error 2070-01-01',interval 1 years);
+--error 5001
+select date_sub(date '--error 2070-01-01',interval 1 years);
+--error 5001
+select subdate(date '--error 2070-01-01',interval 1 years);
+--error 5001
+select date_add(date '2070',interval 1 years);
+--error 5001
+select adddate(date '2070',interval 1 years);
+--error 5001
+select date_sub(date '2070',interval 1 years);
+--error 5001
+select subdate(date '2070',interval 1 years);
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+--error 5103
+insert into test_adddate values(1,'2000');
+select date_add(age,interval 1 years) from test_adddate;
+select adddate(age,interval 1 years) from test_adddate;
+select date_sub(age,interval 1 years) from test_adddate;
+select subdate(age,interval 1 years) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+select date_add(age,interval 1 years) from test_adddate;
+select adddate(age,interval 1 years) from test_adddate;
+select date_sub(age,interval 1 years) from test_adddate;
+select subdate(age,interval 1 years) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+select date_add(age,interval 1 months) from test_adddate;
+select adddate(age,interval 1 months) from test_adddate;
+select date_sub(age,interval 1 months) from test_adddate;
+select subdate(age,interval 1 months) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+select date_add(age,interval 1 days) from test_adddate;
+select adddate(age,interval 1 days) from test_adddate;
+select date_sub(age,interval 1 days) from test_adddate;
+select subdate(age,interval 1 days) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+--error 1
+select date_add(age,interval 1 hours) from test_adddate;
+--error 1
+select adddate(age,interval 1 hours) from test_adddate;
+--error 1
+select date_sub(age,interval 1 hours) from test_adddate;
+--error 1
+select subdate(age,interval 1 hours) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+--error 1
+select date_add(age,interval 1 minutes) from test_adddate;
+--error 1
+select adddate(age,interval 1 minutes) from test_adddate;
+--error 1
+select date_sub(age,interval 1 minutes) from test_adddate;
+--error 1
+select subdate(age,interval 1 minutes) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+--error 1
+select date_add(age,interval 1 seconds) from test_adddate;
+--error 1
+select adddate(age,interval 1 seconds) from test_adddate;
+--error 1
+select date_sub(age,interval 1 seconds) from test_adddate;
+--error 1
+select subdate(age,interval 1 seconds) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+--error 1
+select date_add(age,interval 1 microseconds) from test_adddate;
+--error 1
+select adddate(age,interval 1 microseconds) from test_adddate;
+--error 1
+select date_sub(age,interval 1 microseconds) from test_adddate;
+--error 1
+select subdate(age,interval 1 microseconds) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,'2000-01-01');
+insert into test_adddate (id) values(2);
+--error 1
+select date_add(age,interval 1 microseconds) from test_adddate;
+--error 1
+select adddate(age,interval 1 microseconds) from test_adddate;
+--error 1
+select date_sub(age,interval 1 microseconds) from test_adddate;
+--error 1
+select subdate(age,interval 1 microseconds) from test_adddate;
+select date_add(time '09:00:00',interval 1 hours);
+select adddate(time '09:00:00',interval 1 hours);
+select date_sub(time '09:00:00',interval 1 hours);
+select subdate(time '09:00:00',interval 1 hours);
+select date_add(time '09:00:00',interval 1.2 hours);
+select adddate(time '09:00:00',interval 1.2 hours);
+select date_sub(time '09:00:00',interval 1.2 hours);
+select subdate(time '09:00:00',interval 1.2 hours);
+select date_add(time '09:00:00',interval 'a' hours);
+select adddate(time '09:00:00',interval 'a' hours);
+select date_sub(time '09:00:00',interval 'a' hours);
+select subdate(time '09:00:00',interval 'a' hours);
+select date_add(time '09:00:00',interval null hours);
+select adddate(time '09:00:00',interval null hours);
+select date_sub(time '09:00:00',interval null hours);
+select subdate(time '09:00:00',interval null hours);
+--error 1
+select date_add(time '09:00:00',interval 1 years);
+--error 1
+select adddate(time '09:00:00',interval 1 years);
+--error 1
+select date_sub(time '09:00:00',interval 1 years);
+--error 1
+select subdate(time '09:00:00',interval 1 years);
+--error 1
+select date_add(time '09:00:00',interval 1 months);
+--error 1
+select adddate(time '09:00:00',interval 1 months);
+--error 1
+select date_sub(time '09:00:00',interval 1 months);
+--error 1
+select subdate(time '09:00:00',interval 1 months);
+--error 1
+select date_add(time '09:00:00',interval 1 days);
+--error 1
+select adddate(time '09:00:00',interval 1 days);
+--error 1
+select date_sub(time '09:00:00',interval 1 days);
+--error 1
+select subdate(time '09:00:00',interval 1 days);
+select date_add(time '09:00:00',interval 1 hours);
+select adddate(time '09:00:00',interval 1 hours);
+select date_sub(time '09:00:00',interval 1 hours);
+select subdate(time '09:00:00',interval 1 hours);
+select date_add(time '09:00:00',interval 1 minutes);
+select adddate(time '09:00:00',interval 1 minutes);
+select date_sub(time '09:00:00',interval 1 minutes);
+select subdate(time '09:00:00',interval 1 minutes);
+select date_add(time '09:00:00',interval 1 seconds);
+select adddate(time '09:00:00',interval 1 seconds);
+select date_sub(time '09:00:00',interval 1 seconds);
+select subdate(time '09:00:00',interval 1 seconds);
+--error 1
+select date_add(time '09:00:00',interval 1 microseconds);
+--error 1
+select adddate(time '09:00:00',interval 1 microseconds);
+--error 1
+select date_sub(time '09:00:00',interval 1 microseconds);
+--error 1
+select subdate(time '09:00:00',interval 1 microseconds);
+--error 5001
+select date_add(time '01119:00:00',interval 1 hours);
+--error 5001
+select adddate(time '01119:00:00',interval 1 hours);
+--error 5001
+select date_sub(time '01119:00:00',interval 1 hours);
+--error 5001
+select subdate(time '01119:00:00',interval 1 hours);
+--error 5001
+select date_add(time '--error 09:00:00',interval 1 hours);
+--error 5001
+select adddate(time '--error 09:00:00',interval 1 hours);
+--error 5001
+select date_sub(time '--error 09:00:00',interval 1 hours);
+--error 5001
+select subdate(time '--error 09:00:00',interval 1 hours);
+--error 5001
+select date_add(time '--error 09',interval 1 hours);
+--error 5001
+select adddate(time '--error 09',interval 1 hours);
+--error 5001
+select date_sub(time '--error 09',interval 1 hours);
+--error 5001
+select subdate(time '--error 09',interval 1 hours);
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+--error 1
+select date_add(age,interval 1 years) from test_adddate;
+--error 1
+select adddate(age,interval 1 years) from test_adddate;
+--error 1
+select date_sub(age,interval 1 years) from test_adddate;
+--error 1
+select subdate(age,interval 1 years) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+--error 1
+select date_add(age,interval 1 months) from test_adddate;
+--error 1
+select adddate(age,interval 1 months) from test_adddate;
+--error 1
+select date_sub(age,interval 1 months) from test_adddate;
+--error 1
+select subdate(age,interval 1 months) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+--error 1
+select date_add(age,interval 1 days) from test_adddate;
+--error 1
+select adddate(age,interval 1 days) from test_adddate;
+--error 1
+select date_sub(age,interval 1 days) from test_adddate;
+--error 1
+select subdate(age,interval 1 days) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+--error 5104
+insert into test_adddate values(1,'09');
+select date_add(age,interval 1 days) from test_adddate;
+select adddate(age,interval 1 days) from test_adddate;
+select date_sub(age,interval 1 days) from test_adddate;
+select subdate(age,interval 1 days) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+select date_add(age,interval 1 hours) from test_adddate;
+select adddate(age,interval 1 hours) from test_adddate;
+select date_sub(age,interval 1 hours) from test_adddate;
+select subdate(age,interval 1 hours) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+select date_add(age,interval 1 minutes) from test_adddate;
+select adddate(age,interval 1 minutes) from test_adddate;
+select date_sub(age,interval 1 minutes) from test_adddate;
+select subdate(age,interval 1 minutes) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+select date_add(age,interval 1 seconds) from test_adddate;
+select adddate(age,interval 1 seconds) from test_adddate;
+select date_sub(age,interval 1 seconds) from test_adddate;
+select subdate(age,interval 1 seconds) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+--error 1
+select date_add(age,interval 1 microseconds) from test_adddate;
+--error 1
+select adddate(age,interval 1 microseconds) from test_adddate;
+--error 1
+select date_sub(age,interval 1 microseconds) from test_adddate;
+--error 1
+select subdate(age,interval 1 microseconds) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,'09:00:00');
+insert into test_adddate(id) values(2);
+--error 1
+select date_add(age,interval 1 years) from test_adddate;
+--error 1
+select adddate(age,interval 1 years) from test_adddate;
+--error 1
+select date_sub(age,interval 1 years) from test_adddate;
+--error 1
+select subdate(age,interval 1 years) from test_adddate;
+select date_add(timestamp '1970-01-01 08:00:00.0',interval 1 years) from test_adddate;
+select adddate(timestamp '1970-01-01 08:00:00.0',interval 1 years) from test_adddate;
+select date_sub(timestamp '1970-01-01 08:00:00.0',interval 1 years) from test_adddate;
+select subdate(timestamp '1970-01-01 08:00:00.0',interval 1 years) from test_adddate;
+select date_add(timestamp '1010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+select adddate(timestamp '1010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+select date_sub(timestamp '2010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+select subdate(timestamp '1010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+select date_add(timestamp '2010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+select adddate(timestamp '2010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+select date_sub(timestamp '2010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+select subdate(timestamp '2010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+select date_add(timestamp '2010-01-01 09:00:00.1',interval 1.1 years) from test_adddate;
+select adddate(timestamp '2010-01-01 09:00:00.1',interval 1.1 years) from test_adddate;
+select date_sub(timestamp '2010-01-01 09:00:00.1',interval 1.1 years) from test_adddate;
+select subdate(timestamp '2010-01-01 09:00:00.1',interval 1.1 years) from test_adddate;
+select date_add(timestamp '2010-01-01 09:00:00.1',interval 'a' years) from test_adddate;
+select adddate(timestamp '2010-01-01 09:00:00.1',interval 'a' years) from test_adddate;
+select date_sub(timestamp '2010-01-01 09:00:00.1',interval 'a' years) from test_adddate;
+select subdate(timestamp '2010-01-01 09:00:00.1',interval 'a' years) from test_adddate;
+select date_add(timestamp '2010-01-01 09:00:00.1',interval null years) from test_adddate;
+select adddate(timestamp '2010-01-01 09:00:00.1',interval null years) from test_adddate;
+select date_sub(timestamp '2010-01-01 09:00:00.1',interval null years) from test_adddate;
+select subdate(timestamp '2010-01-01 09:00:00.1',interval null years) from test_adddate;
+select date_add(timestamp '2010-01-01 09:00:00.1',interval 1 months) from test_adddate;
+select adddate(timestamp '2010-01-01 09:00:00.1',interval 1 months) from test_adddate;
+select date_sub(timestamp '2010-01-01 09:00:00.1',interval 1 months) from test_adddate;
+select subdate(timestamp '2010-01-01 09:00:00.1',interval 1 months) from test_adddate;
+select date_add(timestamp '2010-01-01 09:00:00.1',interval 1 days) from test_adddate;
+select adddate(timestamp '2010-01-01 09:00:00.1',interval 1 days) from test_adddate;
+select date_sub(timestamp '2010-01-01 09:00:00.1',interval 1 days) from test_adddate;
+select subdate(timestamp '2010-01-01 09:00:00.1',interval 1 days) from test_adddate;
+select date_add(timestamp '2010-01-01 09:00:00.1',interval 1 hours) from test_adddate;
+select adddate(timestamp '2010-01-01 09:00:00.1',interval 1 hours) from test_adddate;
+select date_sub(timestamp '2010-01-01 09:00:00.1',interval 1 hours) from test_adddate;
+select subdate(timestamp '2010-01-01 09:00:00.1',interval 1 hours) from test_adddate;
+select date_add(timestamp '2010-01-01 09:00:00.1',interval 1 minutes) from test_adddate;
+select adddate(timestamp '2010-01-01 09:00:00.1',interval 1 minutes) from test_adddate;
+select date_sub(timestamp '2010-01-01 09:00:00.1',interval 1 minutes) from test_adddate;
+select subdate(timestamp '2010-01-01 09:00:00.1',interval 1 minutes) from test_adddate;
+select date_add(timestamp '2010-01-01 09:00:00.1',interval 1 seconds) from test_adddate;
+select adddate(timestamp '2010-01-01 09:00:00.1',interval 1 seconds) from test_adddate;
+select date_sub(timestamp '2010-01-01 09:00:00.1',interval 1 seconds) from test_adddate;
+select subdate(timestamp '2010-01-01 09:00:00.1',interval 1 seconds) from test_adddate;
+select date_add(timestamp '2010-01-01 09:00:00.1',interval 1 microseconds) from test_adddate;
+select adddate(timestamp '2010-01-01 09:00:00.1',interval 1 microseconds) from test_adddate;
+select date_sub(timestamp '2010-01-01 09:00:00.1',interval 1 microseconds) from test_adddate;
+select subdate(timestamp '2010-01-01 09:00:00.1',interval 1 microseconds) from test_adddate;
+--error 5001
+select date_add(timestamp '12010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+--error 5001
+select adddate(timestamp '12010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+--error 5001
+select date_sub(timestamp '12010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+--error 5001
+select subdate(timestamp '12010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+--error 5001
+select date_add(timestamp '--error 2010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+--error 5001
+select adddate(timestamp '--error 2010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+--error 5001
+select date_sub(timestamp '--error 2010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+--error 5001
+select subdate(timestamp '--error 2010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+--error 5001
+select date_add(timestamp '010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+--error 5001
+select adddate(timestamp '010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+--error 5001
+select date_sub(timestamp '010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+--error 5001
+select subdate(timestamp '010-01-01 09:00:00.1',interval 1 years) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'09:00:00');
+select date_add(age,interval 1 years) from test_adddate;
+select adddate(age,interval 1 years) from test_adddate;
+select date_sub(age,interval 1 years) from test_adddate;
+select subdate(age,interval 1 years) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select date_add(age,interval 1 years) from test_adddate;
+select adddate(age,interval 1 years) from test_adddate;
+select date_sub(age,interval 1 years) from test_adddate;
+select subdate(age,interval 1 years) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select date_add(age,interval 1 months) from test_adddate;
+select adddate(age,interval 1 months) from test_adddate;
+select date_sub(age,interval 1 months) from test_adddate;
+select subdate(age,interval 1 months) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select date_add(age,interval 1 days) from test_adddate;
+select adddate(age,interval 1 days) from test_adddate;
+select date_sub(age,interval 1 days) from test_adddate;
+select subdate(age,interval 1 days) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select date_add(age,interval 1 hours) from test_adddate;
+select adddate(age,interval 1 hours) from test_adddate;
+select date_sub(age,interval 1 hours) from test_adddate;
+select subdate(age,interval 1 hours) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select date_add(age,interval 1 minutes) from test_adddate;
+select adddate(age,interval 1 minutes) from test_adddate;
+select date_sub(age,interval 1 minutes) from test_adddate;
+select subdate(age,interval 1 minutes) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select date_add(age,interval 1 seconds) from test_adddate;
+select adddate(age,interval 1 seconds) from test_adddate;
+select date_sub(age,interval 1 seconds) from test_adddate;
+select subdate(age,interval 1 seconds) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+select date_add(age,interval 1 microseconds) from test_adddate;
+select adddate(age,interval 1 microseconds) from test_adddate;
+select date_sub(age,interval 1 microseconds) from test_adddate;
+select subdate(age,interval 1 microseconds) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,'2010-01-01 09:00:00.222');
+insert into test_adddate(id) values(2);
+select date_add(age,interval 1 microseconds) from test_adddate;
+select adddate(age,interval 1 microseconds) from test_adddate;
+select date_sub(age,interval 1 microseconds) from test_adddate;
+select subdate(age,interval 1 microseconds) from test_adddate;
+select date_add(null,interval null microseconds) from test_adddate;
+select adddate(null,interval null microseconds) from test_adddate;
+select date_sub(null,interval null microseconds) from test_adddate;
+select subdate(null,interval null microseconds) from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,date_add(date '2001-01-01',interval 1 years));
+insert into test_adddate values(2,adddate(date '2001-01-01',interval 1 years));
+insert into test_adddate values(3,date_sub(date '2001-01-01',interval 1 years));
+insert into test_adddate values(4,subdate(date '2001-01-01',interval 1 years));
+--error 7
+insert into test_adddate values(5,date_add(time '09:00:00',interval 1 hours));
+--error 7
+insert into test_adddate values(6,date_add(time '09:00:00',interval 1 hours));
+--error 7
+insert into test_adddate values(7,date_add(time '09:00:00',interval 1 hours));
+--error 7
+insert into test_adddate values(8,date_add(time '09:00:00',interval 1 hours));
+insert into test_adddate values(9,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+insert into test_adddate values(10,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+insert into test_adddate values(11,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+insert into test_adddate values(12,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+select * from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+--error 7
+insert into test_adddate values(1,date_add(date '2001-01-01',interval 1 years));
+--error 7
+insert into test_adddate values(2,adddate(date '2001-01-01',interval 1 years));
+--error 7
+insert into test_adddate values(3,date_sub(date '2001-01-01',interval 1 years));
+--error 7
+insert into test_adddate values(4,subdate(date '2001-01-01',interval 1 years));
+insert into test_adddate values(5,date_add(time '09:00:00',interval 1 hours));
+insert into test_adddate values(6,adddate(time '09:00:00',interval 1 hours));
+insert into test_adddate values(7,date_sub(time '09:00:00',interval 1 hours));
+insert into test_adddate values(8,subdate(time '09:00:00',interval 1 hours));
+insert into test_adddate values(9,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+insert into test_adddate values(10,adddate(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+insert into test_adddate values(11,date_sub(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+insert into test_adddate values(12,subdate(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+select * from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,date_add(date '2001-01-01',interval 1 years));
+insert into test_adddate values(2,adddate(date '2001-01-01',interval 1 years));
+insert into test_adddate values(3,date_sub(date '2001-01-01',interval 1 years));
+insert into test_adddate values(4,subdate(date '2001-01-01',interval 1 years));
+--error 7
+insert into test_adddate values(5,date_add(time '09:00:00',interval 1 hours));
+--error 7
+insert into test_adddate values(6,date_add(time '09:00:00',interval 1 hours));
+--error 7
+insert into test_adddate values(7,date_add(time '09:00:00',interval 1 hours));
+--error 7
+insert into test_adddate values(8,date_add(time '09:00:00',interval 1 hours));
+insert into test_adddate values(9,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+insert into test_adddate values(10,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+insert into test_adddate values(11,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+insert into test_adddate values(12,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+select * from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age int);
+--error 7
+insert into test_adddate values(1,date_add(date '2001-01-01',interval 1 years));
+--error 7
+insert into test_adddate values(2,adddate(date '2001-01-01',interval 1 years));
+--error 7
+insert into test_adddate values(3,date_sub(date '2001-01-01',interval 1 years));
+--error 7
+insert into test_adddate values(4,subdate(date '2001-01-01',interval 1 years));
+--error 7
+insert into test_adddate values(5,date_add(time '09:00:00',interval 1 hours));
+--error 7
+insert into test_adddate values(6,date_add(time '09:00:00',interval 1 hours));
+--error 7
+insert into test_adddate values(7,date_add(time '09:00:00',interval 1 hours));
+--error 7
+insert into test_adddate values(8,date_add(time '09:00:00',interval 1 hours));
+--error 7
+insert into test_adddate values(9,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+--error 7
+insert into test_adddate values(10,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+--error 7
+insert into test_adddate values(11,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+--error 7
+insert into test_adddate values(12,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+select * from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age varchar(20));
+insert into test_adddate values(1,date_add(date '2001-01-01',interval 1 years));
+insert into test_adddate values(2,adddate(date '2001-01-01',interval 1 years));
+insert into test_adddate values(3,date_sub(date '2001-01-01',interval 1 years));
+insert into test_adddate values(4,subdate(date '2001-01-01',interval 1 years));
+insert into test_adddate values(5,date_add(time '09:00:00',interval 1 hours));
+insert into test_adddate values(6,date_add(time '09:00:00',interval 1 hours));
+insert into test_adddate values(7,date_add(time '09:00:00',interval 1 hours));
+insert into test_adddate values(8,date_add(time '09:00:00',interval 1 hours));
+insert into test_adddate values(9,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+insert into test_adddate values(10,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+insert into test_adddate values(11,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+insert into test_adddate values(12,date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours));
+select * from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,date '2001-01-01');
+--error 5023
+select date_add(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select date_add(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_sub(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select date_sub(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_sub(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select adddate(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select adddate(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select adddate(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select subdate(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select subdate(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select subdate(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,time '09:00:00');
+--error 5023
+select date_add(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select date_add(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_sub(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select date_sub(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_sub(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select adddate(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select adddate(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select adddate(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select subdate(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select subdate(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select subdate(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,timestamp '2001-01-01 09:00:00.22');
+--error 5023
+select date_add(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select date_add(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_sub(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select date_sub(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_sub(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select adddate(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select adddate(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select adddate(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select subdate(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select subdate(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select subdate(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age int);
+insert into test_adddate values(1,1);
+--error 5023
+select date_add(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select date_add(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_sub(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select date_sub(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_sub(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select adddate(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select adddate(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select adddate(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select subdate(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select subdate(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select subdate(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age varchar(20));
+insert into test_adddate values(1,'a');
+--error 5023
+select date_add(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select date_add(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_add(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_sub(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select date_sub(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select date_sub(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select adddate(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select adddate(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select adddate(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+--error 5023
+select subdate(date '2001-01-01',interval 1 years) + age from test_adddate;
+--error 5023
+select subdate(time '09:00:00',interval 1 hours) + age from test_adddate;
+--error 5023
+select subdate(timestamp '2001-01-01 09:00:00.22',interval 1 hours) + age from test_adddate;
+select date '2010-01-01' , date '2000-01-01';
+select date '2010-01-01' , time '09:00:00';
+select date '2010-01-01' , timestamp '2010-01-01 09:00:00.1';
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,date '2001-01-01');
+select age,  date '2000-01-01' from test_adddate;
+select age,  time '09:00:00' from test_adddate;
+select age,  timestamp '2010-01-01 09:00:00.1' from test_adddate;
+select time '09:00:00', date '2000-01-01';
+select time '09:00:00',  time '09:00:00';
+select time '09:00:00' , timestamp '2010-01-01 09:00:00.1';
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,time '09:00:00');
+select age,  date '2000-01-01' from test_adddate;
+select age,  time '09:00:00' from test_adddate;
+select age , timestamp '2010-01-01 09:00:00.1' from test_adddate;
+select timestamp '2010-01-01 09:00:00.1' , date '2000-01-01';
+select timestamp '2010-01-01 09:00:00.1' , time '09:00:00';
+select timestamp '2010-01-01 09:00:00.1' , timestamp '2010-01-01 09:00:00.1';
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,timestamp '2010-01-01 09:00:00.1');
+select age,  date '2000-01-01' from test_adddate;
+select age,  time '09:00:00' from test_adddate;
+select age,  timestamp '2010-01-01 09:00:00.1' from test_adddate;
+--error 5023
+select date_add(date '2010-01-01',interval 1 years) + date_sub(date '2010-01-01',interval 1 years);
+--replace_column 2 '2015-12-01'
+select date_add(date '2010-01-01',interval 1 years) , current_date();
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,timestamp '2010-01-01 09:00:00.1');
+select * from test_adddate where age < date_sub(timestamp '2015-01-01 09:00:00',interval 1 months);
+select * from test_adddate where age > date_add(date '2000-01-01',interval 1 years);
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,time '09:00:00');
+select * from test_adddate where age < date_sub(time '19:00:00',interval 1 hours);
+--error 5023
+select * from test_adddate where age > date_add(date '2000-01-01',interval 1 years);
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,date '2010-01-01');
+--error 5023
+select * from test_adddate where age < date_sub(time '19:00:00',interval 1 hours);
+select * from test_adddate where age > date_add(date '2000-01-01',interval 1 years);
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,timestamp '2010-01-01 09:00:00.1');
+update test_adddate set age = date_sub(timestamp '2015-01-01 09:00:00',interval 1 months) where id=1;
+update test_adddate set age = date_add(date '2000-01-01',interval 1 years) where id=1;
+select * from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,time '09:00:00');
+update test_adddate set age = date_sub(time '19:00:00',interval 1 hours) where id=1;
+--error 7
+update test_adddate set age = date_add(date '2000-01-01',interval 1 years) where id=1;
+select * from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,date '2010-01-01');
+--error 7
+update test_adddate set age = date_sub(time '19:00:00',interval 1 hours) where id=1;
+update test_adddate set age = date_add(date '2000-01-01',interval 1 years) where id=1;
+select * from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age timestamp);
+insert into test_adddate values(1,timestamp '2010-01-01 09:00:00.1');
+delete from test_adddate where id=1 and age = date_sub(timestamp '2015-01-01 09:00:00',interval 1 months);
+delete from test_adddate where id=1 and age = date_add(date '2000-01-01',interval 1 years);
+select * from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age time);
+insert into test_adddate values(1,time '09:00:00');
+delete from test_adddate where id=1 and age = date_sub(time '19:00:00',interval 1 hours);
+--error 5023
+delete from test_adddate where id=1 and age = date_add(date '2000-01-01',interval 1 years);
+select * from test_adddate;
+drop table if exists test_adddate;
+create table test_adddate(id int primary key,age date);
+insert into test_adddate values(1,date '2010-01-01');
+--error 5023
+delete from test_adddate where id=1 and age = date_sub(time '19:00:00',interval 1 hours);
+delete from test_adddate where id=1 and age = date_add(date '2000-01-01',interval 1 years);
+select * from test_adddate;
+prepare stmt1 from select current_time(),current_date(),current_timestamp();
+--replace_column 1 '14:30:25'
+--replace_column 2 '2015-12-01'
+--replace_column  1 '14:30:25' 2 '2015-12-01' 3 '2015-12-01 14:30:25.238934'
+execute stmt1;
+deallocate prepare stmt1;
+prepare stmt1 from select date_add(date '2010-01-01',interval 1 years),date_sub(timestamp '2010-01-01 09:00:01',interval 1 years),date_sub(time '09:00:00',interval 1 hours);
+execute stmt1;
+deallocate prepare stmt1;

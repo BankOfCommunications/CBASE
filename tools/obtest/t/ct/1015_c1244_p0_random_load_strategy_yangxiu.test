@@ -1,0 +1,31 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob1.reboot;
+sleep 10;
+
+#random strategy
+deploy ob1.mysql update __all_cluster set read_strategy=2 where cluster_id=1;
+sleep 10;
+
+#create client
+deploy ob1.create_client;
+create table t1(a int primary key,b int);
+insert into t1 values(1,1),(2,2),(3,3),(-1,-1);
+sleep 10;
+
+#select
+--disable_query_log
+--disable_result_log
+let $cnt=1000;
+while($cnt >0)
+{
+	select * from t1;
+	dec $cnt;
+}
+
+#get the value 
+let $lmsip = deploy_get_value(ob1.fs0.ip);
+let $lmsport = deploy_get_value(ob1.fs0.port);
+
+let $a = deploy_get_value(ob1.mysql_p select count(*)=4 from (select * from __all_server_stat ) tt where svr_type='mergeserver' and name='sql_select_count'and svr_ip !='$lmsip' and svr_port != '$lmsport' and value between 200 and 300);
+--echo $a
+

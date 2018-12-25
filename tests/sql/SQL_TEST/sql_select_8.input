@@ -1,0 +1,4 @@
+-- fail
+(select user_id, user_name from user union select item_id, item_name from item) user union  select item_id, item_name from item order by user.user_id;
+parse_sql error!
+syntax error at 1:81

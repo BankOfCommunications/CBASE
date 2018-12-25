@@ -1,0 +1,51 @@
+-- ok
+insert into user values (89+-----1, 'new'||'name', 45, 'have identifer');
+<logical_plan Begin>
+    <StmtList Begin>
+        ObInsertStmt 0 Begin
+            <TableItemList Begin>
+                {Num 0, TableId:1002, TableName:user, AliasName:NULL, Type:BASE_TABLE, RefId: 1002}
+            <TableItemList End>
+            <ColumnItemList Begin>
+                {Num 0, ColumnId:2, ColumnName:user_id, TableRef:1002}
+                {Num 1, ColumnId:3, ColumnName:user_name, TableRef:1002}
+                {Num 2, ColumnId:4, ColumnName:user_age, TableRef:1002}
+                {Num 3, ColumnId:5, ColumnName:user_desc, TableRef:1002}
+            <ColumnItemList End>
+            INTO ::= <1002>
+            VALUES ::= <1, 2, 3, 4>
+        ObInsertStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_OP_ADD
+            T_INT : 89
+            T_OP_NEG
+                T_OP_NEG
+                    T_OP_NEG
+                        T_OP_NEG
+                            T_OP_NEG
+                                T_INT : 1
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (NULL : 18446744073709551612)
+        T_OP_CNN
+            T_STRING : new
+            T_STRING : name
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (NULL : 18446744073709551611)
+        T_INT : 45
+        ObSqlRawExpr 2 End
+        ObSqlRawExpr 3 Begin
+        expr_id = 4
+        (table_id : column_id) = (NULL : 18446744073709551610)
+        T_STRING : have identifer
+        ObSqlRawExpr 3 End
+    <ExprList End>
+<logical_plan End>
+

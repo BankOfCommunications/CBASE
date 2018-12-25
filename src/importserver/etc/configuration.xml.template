@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+
+<configuration>
+<property>
+    <name>mrsstable.native.lib.path</name>
+    <value>hdfs://hdpnn:9000/group/oceanbase/app_name/lib</value>
+    <description>native library path in hdfs.</description>
+</property>
+
+<property>
+    <name>mrsstable.sstable.version</name>
+    <value>2</value>
+    <description>the sstable vertion of the native library</description>
+</property>
+
+<property>
+    <name>mapred.reduce.tasks</name>
+    <value>10</value>
+    <description>
+      Reduce tasks count, also is the total count of sstables to be generated.
+      Min value of this is 2.
+    </description>
+</property>
+
+<property>
+    <name>mrsstable.presort.sampler</name>
+    <value>random</value>
+    <description>
+        sampler type, default user specify sampler file,
+        user can slect 4 types: specify, random, interval, split
+    </description>
+</property>
+
+<property>
+    <name>mrsstable.max.sample.split</name>
+    <value>2</value>
+    <description>
+        the maximum sample split count, for split and random sampler,
+        the default value is reduceNum / 5, for interval sampler, the default
+        value is max(reduceNum * 0.05, 1)
+    </description>
+</property>
+
+<property>
+    <name>mrsstable.sample.number</name>
+    <value>10000</value>
+    <description>
+        the total sample number, for split and random sampler,
+        the default value is reduceNum * 10, for interval sampler, it isn't necessary
+    </description>
+</property>
+
+<property>
+    <name>mrsstable.sample.choose.percent</name>
+    <value>0.001</value>
+    <description>
+      the choose percent, for interval sampler, it means the frequency with which records will be emitted.
+      the random and split sampler needn't this parameter
+    </description>
+</property>
+
+<property>
+    <name>mrsstable.input.format</name>
+    <value>text</value>
+    <description>
+        the input file format, default format is text, it supports text input format
+        and sequence input format
+    </description>
+</property>
+
+<property>
+    <name>mrsstable.skip.invalid.row</name>
+    <value>0</value>
+	<description>whether skip invalid row, default is false</description>
+</property>
+
+<!--
+<property>
+  <name>mrsstable.rowkey.desc</name>
+  <value>0-0-1,1-1-1,2-2-1</value>
+  <description>
+      rowkey description, it defines the rowkey formation
+      format = <the column index in raw data>-<column type>-<len>-[is variable length]
+      [is variable length] could only be 1 or not set.
+      this will past as parameter, no use to set this param.
+  </description>
+</property>
+-->
+
+<!--
+<property>
+    <name>mrsstable.primary.delimeter</name>
+    <value>\u0001</value>
+  <description>primary delimeter in hdfs data file, default is \1.
+              this will be past as parameter, no use to set this param.
+  </description>
+</property>
+-->
+
+<!--
+<property>
+    <name>mrsstable.table.id</name>
+    <value>1001</value>
+	<description>table id, this will be past as parameter, no use to set this param.</description>
+</property>
+-->
+
+<!--
+<property>
+    <name>mrsstable.partition.file</name>
+    <value>hdfs://OceanBase036029.sqa.cm4.tbsite.net:54310/home/partition/_partition.lst</value>
+    <description>
+        partition file path in hdfs, the file name must be '_partition.lst'.
+        if the sampler is specify, it's not necessaray to set this parameter.
+    </description>
+</property>
+-->
+
+<property>
+    <name>mapred.child.java.opts</name>
+    <value>-Xmx1024m</value>
+	<description>memory limit of java child process</description>
+</property>
+
+<property>
+    <name>io.sort.mb</name>
+    <value>512</value>
+    <description>max memory used by sore operation</description>
+</property>
+
+<property>
+    <name>io.sort.factor</name>
+    <value>100</value>
+	<description>io sort factor</description>
+</property>
+
+<property>
+    <name>mapred.compress.map.output</name>
+    <value>true</value>
+	<description>whether compress the output of map</description>
+</property>
+
+</configuration>

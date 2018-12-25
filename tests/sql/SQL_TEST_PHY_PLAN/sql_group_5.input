@@ -1,0 +1,11 @@
+-- fail, Invalid use of alias which contains group function
+<<Part 1 : SQL STRING>>
+select user_id, sum(qty) from order_list where user_id < 1000 group by 1, 2;
+[2012-07-17 15:19:16] ERROR resolve_group_clause (build_plan.cpp:1696) [47123780730880] Invalid use of alias which contains group function
+
+<<Part 2 : PARSE TREE>>
+Resolve error!
+
+
+
+

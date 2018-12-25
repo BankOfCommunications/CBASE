@@ -1,0 +1,3 @@
+get mytest here:
+    http://10.232.4.35:8877/mytest-1.2-SNAPSHOT-jar-with-dependencies.jar
+

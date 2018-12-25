@@ -1,0 +1,22 @@
+[merge_server]
+#listen port
+port=22020
+#listen device
+dev_name=bond0
+task_queue_size=512
+task_thread_count=10
+network_timeout_us=100000000
+#tablet location cache size in Mbytes
+location_cache_size_mb=10
+#tablet location cache timeout in us
+location_cache_timeout_us=600000
+log_file=./mergeserver.log
+pid_file=./mergeserver.pid
+log_level=info
+max_log_file_size=1024
+memory_size_limit_percent = 50
+max_parellel_count = 20
+
+[root_server]              
+vip=10.232.36.33
+port=22010

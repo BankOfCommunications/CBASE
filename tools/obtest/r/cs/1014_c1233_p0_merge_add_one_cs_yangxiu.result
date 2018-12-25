@@ -1,0 +1,19 @@
+ob1=OBI(cluster=1233, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable)
+ob1.cs0.set sstable_dist={1,2,3}
+ob1.cs1.set sstable_dist={1,2,3}
+ob1.cs2.set sstable_dist={2,3}
+ob1.cs2.set status=disable
+ob1.rs0.set extra_config=tablet_replicas_num=2,enable_balance=True
+ob1.reboot
+ob1.source include/merge.inc
+ob1.source include/migrate.inc
+ob1.prepare
+ob1.start_check
+ob1.major_freeze
+ob1.cs2.set status=enable
+ob1.cs2.start
+ob1.cs2.check_log_until_success "merge running, cannot migrate"
+ob1.check_cs_version 2
+ob1.check_cs_sstable 404
+ob1.check_cs_balance
+ob1.stop_check

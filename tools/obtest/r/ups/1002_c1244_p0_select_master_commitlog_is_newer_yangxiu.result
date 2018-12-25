@@ -1,0 +1,23 @@
+ob1=OBI(cluster=1244)
+ob1.ups1.set status=disable
+ob1.reboot
+ob1.prepare
+ob1.create_client
+create table t1(pk int primary key, c1 varchar);
+insert into t1 values(-1,'s1'),(-2,'s2');
+select * from t1;
+pk	c1
+-2	s2
+-1	s1
+ob1.ups0.force_stop
+ob1.ups1.set status=enable
+ob1.ups1.start
+ob1.ups0.start
+replace into t1 values(0,'s3'),(1,'s4');
+OK
+select * from t1;
+pk	c1
+-2	s2
+-1	s1
+0	s3
+1	s4

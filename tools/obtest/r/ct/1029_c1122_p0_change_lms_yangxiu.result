@@ -1,0 +1,26 @@
+ob1=OBI(cluster=1122);
+ob2=OBI(cluster=1122);
+ob1.reboot;
+ob2.reboot;
+ob1.create_client;
+create table t1 (a int primary key,b int);
+insert into t1 values(1,1),(2,2),(0,0);
+select * from t1;
+a	b
+0	0
+1	1
+2	2
+ob1.set_diamond  clusterAddress=$lms;
+create table t1 (a int primary key,b int);
+insert into t1 values(1,1),(2,2);
+select * from t1;
+a	b
+1	1
+2	2
+ob1.set_diamond  clusterAddress=$lms;
+ob2.stop;
+select * from t1;
+a	b
+0	0
+1	1
+2	2

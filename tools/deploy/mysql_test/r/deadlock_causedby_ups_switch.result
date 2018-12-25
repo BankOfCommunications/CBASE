@@ -1,0 +1,9 @@
+drop table if exists t1,t2;
+create table t1(pk int primary key, a int);
+insert into t1 values(1, 0),(2,0),(0,0);
+insert into t1 values(3, 0),(5,0),(4,0);
+ERROR HY000: error message to add
+insert into t1 values(3, 0),(5,0),(4,0);
+insert into t1 values(1, 0),(2,0),(0,0);
+ERROR 42000: Duplicate entry ' <3001.16>=int:1' for key 'PRIMARY'
+drop table t1;

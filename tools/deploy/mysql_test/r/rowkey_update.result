@@ -1,0 +1,528 @@
+create database rowkey_database;
+using database rowkey_database;
+create table t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=9, id2=9, id3='1111-11-11 11:11:11', id4='000', id5=0, id6=0.0, id7=0.0, id8=0.0, id9=0, col1=0, col2=0, col3='1111-11-11 11:11:11', col4='000', col5=0, col6=0.0, col7=0.0, col8=0.0 where id1=0 and id2=1 and id3='1000-10-10 10:10:10' and id4='aaa' and id5=true and id6=1.1 and id7=2.2 and id8='3.3' and id9=1;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+9	9	1111-11-11 11:11:11	000	0	0.0	0	0	0	0	0	1111-11-11 11:11:11	000	0	0.0	0	0
+drop table t;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (1, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (2, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=9, id2=9, id3='1111-11-11 11:11:11', id4='000', id5=0, id6=0.0, id7=0.0, id8=0.0, id9=0, col1=0, col2=0, col3='1111-11-11 11:11:11', col4='000', col5=0, col6=0.0, col7=0.0, col8=0.0 where id1>=0;
+ERROR 23000: Duplicate entry ' <3002.16>=int32:9 <3002.17>=int:9 <3002.18>=precisedatetime:-27080340881000000 <3002.19>=varchar:000 <3002.20>=bool:N <3002.21>=decimal:0.0 <3002.22>=double:0.000000000000 <3002.23>=float:0.000000 <3002.24>=int32:0 <3002.25>=int32:2 <3002.26>=int:3 <3002.27>=precisedatetime:-30585851742000000 <3002.28>=varchar:bbb <3002.29>=bool:Y <3002.30>=decimal:1.1 <3002.31>=double:2.200000000000 <3002.32>=float:3.300000' for key 'PRIMARY'
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+0	1	1000-10-10 10:10:10	aaa	1	1.1	2.2	3.3	1	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+1	1	1000-10-10 10:10:10	aaa	1	1.1	2.2	3.3	1	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+2	1	1000-10-10 10:10:10	aaa	1	1.1	2.2	3.3	1	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+drop table t;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=id1+9, id2=id2+9, id3='1111-11-11 11:11:11', id5=id5+10, id6=id6+10.0, id7=id7+10.0, id8=id8+10.0, id9=id9+10, col1=col1+0, col2=col2+0, col3='1111-11-11 11:11:11', col5=col5+10, col6=col6+10.0, col7=col7+10.0, col8=col8+10.0 where id1=0 and id2=1 and id3='1000-10-10 10:10:10' and id4='aaa' and id5=true and id6=1.1 and id7=2.2 and id8='3.3' and id9=1;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+9	10	1111-11-11 11:11:11	aaa	1	11.1	12.2	13.3	11	2	3	1111-11-11 11:11:11	bbb	1	11.1	12.2	13.3
+drop table t;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (1, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (2, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=id1+9, id2=id2+9, id3='1111-11-11 11:11:11', id5=id5+10, id6=id6+10.0, id7=id7+10.0, id8=id8+10.0, id9=id9+10, col1=col1+0, col2=col2+0, col3='1111-11-11 11:11:11', col5=col5+10, col6=col6+10.0, col7=col7+10.0, col8=col8+10.0 where id1>=0;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+9	10	1111-11-11 11:11:11	aaa	1	11.1	12.2	13.3	11	2	3	1111-11-11 11:11:11	bbb	1	11.1	12.2	13.3
+10	10	1111-11-11 11:11:11	aaa	1	11.1	12.2	13.3	11	2	3	1111-11-11 11:11:11	bbb	1	11.1	12.2	13.3
+11	10	1111-11-11 11:11:11	aaa	1	11.1	12.2	13.3	11	2	3	1111-11-11 11:11:11	bbb	1	11.1	12.2	13.3
+drop table t;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=id1+9, id2=id2+9, id3='1111-11-11 11:11:11', id4='ccc', id5=id5+10, id6=id6+10.0, id7=id7+10.0, id8=id8+10.0, id9=id9+10 where  id1=0 and id2=1 and id3='1000-10-10 10:10:10' and id4='aaa' and id5=true and id6=1.1 and id7=2.2 and id8='3.3' and id9=1;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+9	10	1111-11-11 11:11:11	ccc	1	11.1	12.2	13.3	11	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+drop table t;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (1, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (2, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=id1+9, id2=id2+9, id3='1111-11-11 11:11:11', id4='ccc', id5=id5+10, id6=id6+10.0, id7=id7+10.0, id8=id8+10.0, id9=id9+10 where id1>=0;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+9	10	1111-11-11 11:11:11	ccc	1	11.1	12.2	13.3	11	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+10	10	1111-11-11 11:11:11	ccc	1	11.1	12.2	13.3	11	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+11	10	1111-11-11 11:11:11	ccc	1	11.1	12.2	13.3	11	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+drop table t;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=9, id3='1111-11-11 11:11:11', id5=0, id7=0.0, id9=0, col2=0, col4='000', col6=0.0, col8=0.0 where id1=0 and id2=1 and id3='1000-10-10 10:10:10' and id4='aaa' and id5=true and id6=1.1 and id7=2.2 and id8='3.3' and id9=1;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+9	1	1111-11-11 11:11:11	aaa	0	1.1	0	3.3	0	2	0	1000-10-10 10:10:10	000	1	0.0	2.2	0
+drop table t;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (1, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (2, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=9, id3='1111-11-11 11:11:11', id5=0, id7=0.0, id9=0, col2=0, col4='000', col6=0.0, col8=0.0 where id1>=0;
+ERROR 23000: Duplicate entry ' <3008.16>=int32:9 <3008.17>=int:1 <3008.18>=precisedatetime:-27080340881000000 <3008.19>=varchar:aaa <3008.20>=bool:N <3008.21>=decimal:1.1 <3008.22>=double:0.000000000000 <3008.23>=float:3.300000 <3008.24>=int32:0 <3008.25>=int32:2 <3008.26>=int:3 <3008.27>=precisedatetime:-30585851742000000 <3008.28>=varchar:bbb <3008.29>=bool:Y <3008.30>=decimal:1.1 <3008.31>=double:2.200000000000 <3008.32>=float:3.300000' for key 'PRIMARY'
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+0	1	1000-10-10 10:10:10	aaa	1	1.1	2.2	3.3	1	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+1	1	1000-10-10 10:10:10	aaa	1	1.1	2.2	3.3	1	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+2	1	1000-10-10 10:10:10	aaa	1	1.1	2.2	3.3	1	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+drop table t;
+create table t(id1 int primary key, col1 int);
+replace into t values (0, 0);
+replace into t values (1, 0);
+update t set id1=0, col1=1 where id1=0;
+select * from t;
+id1	col1
+0	1
+1	0
+drop table t;
+create table t(id1 int primary key, col1 int);
+replace into t values (0, 0);
+replace into t values (1, 0);
+replace into t values (2, 0);
+update t set id1=col1 where id1>=0;
+ERROR 23000: Duplicate entry ' <3010.16>=int32:0 <3010.17>=int32:0' for key 'PRIMARY'
+select * from t;
+id1	col1
+0	0
+1	0
+2	0
+drop table t;
+create table t(id1 int primary key, col1 int);
+replace into t values (0, 0);
+update t set id1=id1+1, id1=2, col1=1 where id1=0;
+ERROR HY000: OB-145: Duplicated column
+select * from t;
+id1	col1
+0	0
+drop table t;
+create table t(id1 int primary key, col1 int);
+replace into t values (0, 0);
+replace into t values (1, 0);
+replace into t values (2, 0);
+update t set id1=id1+10, id1=10 where id1>=0;
+ERROR HY000: OB-145: Duplicated column
+select * from t;
+id1	col1
+0	0
+1	0
+2	0
+drop table t;
+create table t(id1 int, id2 int, col1 int, col2 int, primary key(id1, id2));
+replace into t values (0, 0, 0, 0);
+replace into t values (1, 0, 0, 0);
+replace into t values (2, 0, 0, 0);
+update t set id1=id1+0, col1=1 where id1>=0;
+select * from t;
+id1	id2	col1	col2
+0	0	1	0
+1	0	1	0
+2	0	1	0
+update t set col1=2 where id1>=0;
+select * from t;
+id1	id2	col1	col2
+0	0	2	0
+1	0	2	0
+2	0	2	0
+delete from t where id1=0;
+drop table t;
+create sequence seq;
+create table t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=9, id2=nextval for seq, id3='1111-11-11 11:11:11', id4='000', id5=0, id6=0.0, id7=0.0, id8=0.0, id9=0, col1=nextval for seq, col2=nextval for seq, col3='1111-11-11 11:11:11', col4='000', col5=0, col6=0.0, col7=0.0, col8=0.0 where id1=0 and id2=1 and id3='1000-10-10 10:10:10' and id4='aaa' and id5=true and id6=1.1 and id7=2.2 and id8='3.3' and id9=1;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+9	1	1111-11-11 11:11:11	000	0	0.0	0	0	0	1	1	1111-11-11 11:11:11	000	0	0.0	0	0
+drop table t;
+drop sequence seq;
+create sequence seq;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (1, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (2, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=nextval for seq, id2=9, id3='1111-11-11 11:11:11', id4='000', id5=0, id6=0.0, id7=0.0, id8=0.0, id9=nextval for seq, col1=nextval for seq, col2=0, col3='1111-11-11 11:11:11', col4='000', col5=0, col6=0.0, col7=0.0, col8=0.0 where id1>=0;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+1	9	1111-11-11 11:11:11	000	0	0.0	0	0	1	1	0	1111-11-11 11:11:11	000	0	0.0	0	0
+2	9	1111-11-11 11:11:11	000	0	0.0	0	0	2	2	0	1111-11-11 11:11:11	000	0	0.0	0	0
+3	9	1111-11-11 11:11:11	000	0	0.0	0	0	3	3	0	1111-11-11 11:11:11	000	0	0.0	0	0
+drop table t;
+drop sequence seq;
+create sequence seq;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=nextval for seq+9, id2=id2+9, id3='1111-11-11 11:11:11', id5=id5+10, id6=id6+10.0, id7=id7+10.0, id8=id8+10.0, id9=nextval for seq + id9+10, col1=col1+0, col2=col2+0, col3='1111-11-11 11:11:11', col5=col5+10, col6=col6+10.0, col7=col7+10.0, col8=col8+10.0 where id1=0 and id2=1 and id3='1000-10-10 10:10:10' and id4='aaa' and id5=true and id6=1.1 and id7=2.2 and id8='3.3' and id9=1;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+10	10	1111-11-11 11:11:11	aaa	1	11.1	12.2	13.3	12	2	3	1111-11-11 11:11:11	bbb	1	11.1	12.2	13.3
+drop table t;
+drop sequence seq;
+create sequence seq;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (1, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (2, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=nextval for seq+9, id2=id2+9, id3='1111-11-11 11:11:11', id5=id5+10, id6=id6+10.0, id7=id7+10.0, id8=id8+10.0, id9=id9+10, col1=col1+0, col2=col2+0, col3='1111-11-11 11:11:11', col5=col5+10, col6=col6+10.0, col7=col7+10.0, col8=col8+10.0 where id1>=0;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+10	10	1111-11-11 11:11:11	aaa	1	11.1	12.2	13.3	11	2	3	1111-11-11 11:11:11	bbb	1	11.1	12.2	13.3
+11	10	1111-11-11 11:11:11	aaa	1	11.1	12.2	13.3	11	2	3	1111-11-11 11:11:11	bbb	1	11.1	12.2	13.3
+12	10	1111-11-11 11:11:11	aaa	1	11.1	12.2	13.3	11	2	3	1111-11-11 11:11:11	bbb	1	11.1	12.2	13.3
+drop table t;
+drop sequence seq;
+create sequence seq;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=nextval for seq+9, id2=id2+9, id3='1111-11-11 11:11:11', id4='ccc', id5=id5+10, id6=id6+10.0, id7=id7+10.0, id8=id8+10.0, id9=id9+10 where  id1=0 and id2=1 and id3='1000-10-10 10:10:10' and id4='aaa' and id5=true and id6=1.1 and id7=2.2 and id8='3.3' and id9=1;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+10	10	1111-11-11 11:11:11	ccc	1	11.1	12.2	13.3	11	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+drop table t;
+drop sequence seq;
+create sequence seq;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (1, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (2, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=nextval for seq+9, id2=id2+9, id3='1111-11-11 11:11:11', id4='ccc', id5=id5+10, id6=id6+10.0, id7=id7+10.0, id8=id8+10.0, id9=id9+10 where id1>=0;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+10	10	1111-11-11 11:11:11	ccc	1	11.1	12.2	13.3	11	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+11	10	1111-11-11 11:11:11	ccc	1	11.1	12.2	13.3	11	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+12	10	1111-11-11 11:11:11	ccc	1	11.1	12.2	13.3	11	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+drop table t;
+drop sequence seq;
+create sequence seq;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=nextval for seq, id3='1111-11-11 11:11:11', id5=0, id7=0.0, id9=0, col2=0, col4='000', col6=0.0, col8=0.0 where id1=0 and id2=1 and id3='1000-10-10 10:10:10' and id4='aaa' and id5=true and id6=1.1 and id7=2.2 and id8='3.3' and id9=1;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+1	1	1111-11-11 11:11:11	aaa	0	1.1	0	3.3	0	2	0	1000-10-10 10:10:10	000	1	0.0	2.2	0
+drop table t;
+drop sequence seq;
+create sequence seq;
+create table if not exists t(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+replace into t values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (1, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t values (2, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t set id1=nextval for seq, id3='1111-11-11 11:11:11', id5=0, id7=0.0, id9=0, col2=0, col4='000', col6=0.0, col8=0.0 where id1>=0;
+select * from t;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+1	1	1111-11-11 11:11:11	aaa	0	1.1	0	3.3	0	2	0	1000-10-10 10:10:10	000	1	0.0	2.2	0
+2	1	1111-11-11 11:11:11	aaa	0	1.1	0	3.3	0	2	0	1000-10-10 10:10:10	000	1	0.0	2.2	0
+3	1	1111-11-11 11:11:11	aaa	0	1.1	0	3.3	0	2	0	1000-10-10 10:10:10	000	1	0.0	2.2	0
+drop table t;
+drop sequence seq;
+create sequence seq;
+create table t(id1 int primary key, col1 int);
+replace into t values (0, 0);
+replace into t values (1, 0);
+replace into t values (2, 0);
+update t set id1=col1+nextval for seq where id1>=0;
+ERROR 23000: Duplicate entry ' <3022.16>=int32:1 <3022.17>=int32:0' for key 'PRIMARY'
+select * from t;
+id1	col1
+0	0
+1	0
+2	0
+drop table t;
+drop sequence seq;
+create sequence seq;
+create table t(id1 int primary key, col1 int);
+replace into t values (0, 0);
+update t set id1=id1+1, id1=2, col1=nextval for seq where id1=0;
+ERROR HY000: OB-145: Duplicated column
+select * from t;
+id1	col1
+0	0
+drop table t;
+drop sequence seq;
+create sequence seq;
+create table t(id1 int primary key, col1 int);
+replace into t values (0, 0);
+replace into t values (1, 0);
+replace into t values (2, 0);
+update t set id1=nextval for seq where id1>=0;
+ERROR 23000: Duplicate entry ' <3024.16>=int32:1 <3024.17>=int32:0' for key 'PRIMARY'
+select * from t;
+id1	col1
+0	0
+1	0
+2	0
+drop table t;
+drop sequence seq;
+create sequence seq;
+create table t(id1 int, id2 int, col1 int, col2 int, primary key(id1, id2));
+replace into t values (0, 0, 0, 0);
+replace into t values (1, 0, 0, 0);
+replace into t values (2, 0, 0, 0);
+update t set id1=id1+0, col1=nextval for seq where id1>=0;
+select * from t;
+id1	id2	col1	col2
+0	0	1	0
+1	0	2	0
+2	0	3	0
+drop table t;
+drop sequence seq;
+create sequence seq;
+select nextval for seq;
+nextval for seq
+1
+create table t(id1 int primary key, col1 int);
+replace into t values (1, 0);
+update t set col1=nextval for seq where id1=prevval for seq;
+select * from t;
+id1	col1
+1	2
+drop table t;
+drop sequence seq;
+create sequence seq;
+select nextval for seq;
+nextval for seq
+1
+create table t(id1 int primary key, col1 int);
+replace into t values (1, 1);
+update t set id1=nextval for seq where col1=prevval for seq;
+select * from t;
+id1	col1
+2	1
+drop table t;
+drop sequence seq;
+create sequence seq;
+select nextval for seq;
+nextval for seq
+1
+create table t(id1 int primary key, col1 int);
+replace into t values (1, 1);
+update t set col1=nextval for seq where id1=prevval for seq;
+select * from t;
+id1	col1
+1	2
+drop table t;
+drop sequence seq;
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+create table if not exists t2(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+create table if not exists t3(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+create table if not exists t4(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+create table if not exists t5(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+create table if not exists t6(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+create table if not exists t7(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+create table if not exists t8(id1 int, id2 bigint, id3 datetime, id4 varchar, id5 bool, id6 decimal(10, 1), id7 double, id8 float, id9 int, col1 int, col2 bigint, col3 datetime, col4 varchar, col5 bool, col6 decimal(10, 1), col7 double, col8 float, primary key (id1, id2, id3, id4, id5, id6, id7, id8, id9));
+create table t9(id1 int primary key, col1 int);
+create table t10(id1 int primary key, col1 int);
+create table t11(id1 int primary key, col1 int);
+create table t12(id1 int primary key, col1 int);
+create table t13(id1 int, id2 int, col1 int, col2 int, primary key(id1, id2));
+create table t14(id1 int primary key, col1 int);
+create table t15(id1 int primary key, col1 int);
+create table t16(id1 int primary key, col1 int);
+create table t17(id1 int, id2 int, col1 int, col2 int, primary key(id1, id2));
+create table t18(id1 int primary key, col1 int);
+create table t19(id1 int primary key, col1 int);
+create table t20(id1 int primary key, col1 int);
+create index i1 on t1(col1, col2, col3);
+create index i2 on t2(col1, col2, col3);
+create index i3 on t3(col1, col2, col3);
+create index i4 on t4(col1, col2, col3);
+create index i5 on t5(col1, col2, col3);
+create index i6 on t6(col1, col2, col3);
+create index i7 on t7(col1, col2, col3);
+create index i8 on t8(col1, col2, col3);
+create index i9 on t9(col1);
+create index i10 on t10(col1);
+create index i11 on t11(col1);
+create index i12 on t12(col1);
+create index i13 on t13(col1);
+create index i14 on t14(col1);
+create index i15 on t15(col1);
+create index i16 on t16(col1);
+create index i17 on t17(col1);
+create index i18 on t18(col1);
+create index i19 on t19(col1);
+create index i20 on t20(col1);
+"merge"
+[major_freeze] err=0
+replace into t1 values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t1 set id1=9, id2=9, id3='1111-11-11 11:11:11', id4='000', id5=0, id6=0.0, id7=0.0, id8=0.0, id9=0, col1=0, col2=0, col3='1111-11-11 11:11:11', col4='000', col5=0, col6=0.0, col7=0.0, col8=0.0 where id1=0 and id2=1 and id3='1000-10-10 10:10:10' and id4='aaa' and id5=true and id6=1.1 and id7=2.2 and id8='3.3' and id9=1;
+select * from t1;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+9	9	1111-11-11 11:11:11	000	0	0.0	0	0	0	0	0	1111-11-11 11:11:11	000	0	0.0	0	0
+replace into t2 values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t2 values (1, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t2 values (2, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t2 set id1=9, id2=9, id3='1111-11-11 11:11:11', id4='000', id5=0, id6=0.0, id7=0.0, id8=0.0, id9=0, col1=0, col2=0, col3='1111-11-11 11:11:11', col4='000', col5=0, col6=0.0, col7=0.0, col8=0.0 where id1>=0;
+ERROR 23000: Duplicate entry ' <3030.16>=int32:9 <3030.17>=int:9 <3030.18>=precisedatetime:-27080340881000000 <3030.19>=varchar:000 <3030.20>=bool:N <3030.21>=decimal:0.0 <3030.22>=double:0.000000000000 <3030.23>=float:0.000000 <3030.24>=int32:0 <3030.25>=int32:2 <3030.26>=int:3 <3030.27>=precisedatetime:-30585851742000000 <3030.28>=varchar:bbb <3030.29>=bool:Y <3030.30>=decimal:1.1 <3030.31>=double:2.200000000000 <3030.32>=float:3.300000' for key 'PRIMARY'
+select * from t2;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+0	1	1000-10-10 10:10:10	aaa	1	1.1	2.2	3.3	1	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+1	1	1000-10-10 10:10:10	aaa	1	1.1	2.2	3.3	1	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+2	1	1000-10-10 10:10:10	aaa	1	1.1	2.2	3.3	1	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+replace into t3 values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t3 set id1=id1+9, id2=id2+9, id3='1111-11-11 11:11:11', id5=id5+10, id6=id6+10.0, id7=id7+10.0, id8=id8+10.0, id9=id9+10, col1=col1+0, col2=col2+0, col3='1111-11-11 11:11:11', col5=col5+10, col6=col6+10.0, col7=col7+10.0, col8=col8+10.0 where id1=0 and id2=1 and id3='1000-10-10 10:10:10' and id4='aaa' and id5=true and id6=1.1 and id7=2.2 and id8='3.3' and id9=1;
+select * from t3;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+9	10	1111-11-11 11:11:11	aaa	1	11.1	12.2	13.3	11	2	3	1111-11-11 11:11:11	bbb	1	11.1	12.2	13.3
+replace into t4 values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t4 values (1, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t4 values (2, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t4 set id1=id1+9, id2=id2+9, id3='1111-11-11 11:11:11', id5=id5+10, id6=id6+10.0, id7=id7+10.0, id8=id8+10.0, id9=id9+10, col1=col1+0, col2=col2+0, col3='1111-11-11 11:11:11', col5=col5+10, col6=col6+10.0, col7=col7+10.0, col8=col8+10.0 where id1>=0;
+select * from t4;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+9	10	1111-11-11 11:11:11	aaa	1	11.1	12.2	13.3	11	2	3	1111-11-11 11:11:11	bbb	1	11.1	12.2	13.3
+10	10	1111-11-11 11:11:11	aaa	1	11.1	12.2	13.3	11	2	3	1111-11-11 11:11:11	bbb	1	11.1	12.2	13.3
+11	10	1111-11-11 11:11:11	aaa	1	11.1	12.2	13.3	11	2	3	1111-11-11 11:11:11	bbb	1	11.1	12.2	13.3
+replace into t5 values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t5 set id1=id1+9, id2=id2+9, id3='1111-11-11 11:11:11', id4='ccc', id5=id5+10, id6=id6+10.0, id7=id7+10.0, id8=id8+10.0, id9=id9+10 where  id1=0 and id2=1 and id3='1000-10-10 10:10:10' and id4='aaa' and id5=true and id6=1.1 and id7=2.2 and id8='3.3' and id9=1;
+select * from t5;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+9	10	1111-11-11 11:11:11	ccc	1	11.1	12.2	13.3	11	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+replace into t6 values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t6 values (1, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t6 values (2, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t6 set id1=id1+9, id2=id2+9, id3='1111-11-11 11:11:11', id4='ccc', id5=id5+10, id6=id6+10.0, id7=id7+10.0, id8=id8+10.0, id9=id9+10 where id1>=0;
+select * from t6;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+9	10	1111-11-11 11:11:11	ccc	1	11.1	12.2	13.3	11	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+10	10	1111-11-11 11:11:11	ccc	1	11.1	12.2	13.3	11	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+11	10	1111-11-11 11:11:11	ccc	1	11.1	12.2	13.3	11	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+replace into t7 values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t7 set id1=9, id3='1111-11-11 11:11:11', id5=0, id7=0.0, id9=0, col2=0, col4='000', col6=0.0, col8=0.0 where id1=0 and id2=1 and id3='1000-10-10 10:10:10' and id4='aaa' and id5=true and id6=1.1 and id7=2.2 and id8='3.3' and id9=1;
+select * from t7;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+9	1	1111-11-11 11:11:11	aaa	0	1.1	0	3.3	0	2	0	1000-10-10 10:10:10	000	1	0.0	2.2	0
+replace into t8 values (0, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t8 values (1, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+replace into t8 values (2, 1, '1000-10-10 10:10:10', 'aaa', true, 1.1, 2.2, 3.3, 1, 2, 3, '1000-10-10 10:10:10', 'bbb', true, 1.1, 2.2, 3.3);
+update t8 set id1=9, id3='1111-11-11 11:11:11', id5=0, id7=0.0, id9=0, col2=0, col4='000', col6=0.0, col8=0.0 where id1>=0;
+ERROR 23000: Duplicate entry ' <3036.16>=int32:9 <3036.17>=int:1 <3036.18>=precisedatetime:-27080340881000000 <3036.19>=varchar:aaa <3036.20>=bool:N <3036.21>=decimal:1.1 <3036.22>=double:0.000000000000 <3036.23>=float:3.300000 <3036.24>=int32:0 <3036.25>=int32:2 <3036.26>=int:3 <3036.27>=precisedatetime:-30585851742000000 <3036.28>=varchar:bbb <3036.29>=bool:Y <3036.30>=decimal:1.1 <3036.31>=double:2.200000000000 <3036.32>=float:3.300000' for key 'PRIMARY'
+select * from t8;
+id1	id2	id3	id4	id5	id6	id7	id8	id9	col1	col2	col3	col4	col5	col6	col7	col8
+0	1	1000-10-10 10:10:10	aaa	1	1.1	2.2	3.3	1	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+1	1	1000-10-10 10:10:10	aaa	1	1.1	2.2	3.3	1	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+2	1	1000-10-10 10:10:10	aaa	1	1.1	2.2	3.3	1	2	3	1000-10-10 10:10:10	bbb	1	1.1	2.2	3.3
+replace into t9 values (0, 0);
+replace into t9 values (1, 0);
+update t9 set id1=0, col1=1 where id1=0;
+select * from t9;
+id1	col1
+0	1
+1	0
+replace into t10 values (0, 0);
+replace into t10 values (1, 0);
+replace into t10 values (2, 0);
+update t10 set id1=col1 where id1>=0;
+ERROR 23000: Duplicate entry ' <3038.16>=int32:0 <3038.17>=int32:0' for key 'PRIMARY'
+select * from t10;
+id1	col1
+0	0
+1	0
+2	0
+replace into t11 values (0, 0);
+update t11 set id1=id1+1, id1=2, col1=1 where id1=0;
+ERROR HY000: OB-145: Duplicated column
+select * from t11;
+id1	col1
+0	0
+replace into t12 values (0, 0);
+replace into t12 values (1, 0);
+replace into t12 values (2, 0);
+update t12 set id1=id1+10, id1=10 where id1>=0;
+ERROR HY000: OB-145: Duplicated column
+select * from t12;
+id1	col1
+0	0
+1	0
+2	0
+replace into t13 values (0, 0, 0, 0);
+replace into t13 values (1, 0, 0, 0);
+replace into t13 values (2, 0, 0, 0);
+update t13 set id1=id1+0, col1=1 where id1>=0;
+select * from t13;
+id1	id2	col1	col2
+0	0	1	0
+1	0	1	0
+2	0	1	0
+create sequence seq;
+replace into t14 values (0, 0);
+replace into t14 values (1, 0);
+replace into t14 values (2, 0);
+update t14 set id1=col1+nextval for seq where id1>=0;
+ERROR 23000: Duplicate entry ' <3042.16>=int32:1 <3042.17>=int32:0' for key 'PRIMARY'
+select * from t14;
+id1	col1
+0	0
+1	0
+2	0
+drop sequence seq;
+create sequence seq;
+replace into t15 values (0, 0);
+update t15 set id1=id1+1, id1=2, col1=nextval for seq where id1=0;
+ERROR HY000: OB-145: Duplicated column
+select * from t15;
+id1	col1
+0	0
+drop sequence seq;
+create sequence seq;
+replace into t16 values (0, 0);
+replace into t16 values (1, 0);
+replace into t16 values (2, 0);
+update t16 set id1=nextval for seq where id1>=0;
+ERROR 23000: Duplicate entry ' <3044.16>=int32:1 <3044.17>=int32:0' for key 'PRIMARY'
+select * from t16;
+id1	col1
+0	0
+1	0
+2	0
+drop sequence seq;
+create sequence seq;
+replace into t17 values (0, 0, 0, 0);
+replace into t17 values (1, 0, 0, 0);
+replace into t17 values (2, 0, 0, 0);
+update t17 set id1=id1+0, col1=nextval for seq where id1>=0;
+select * from t17;
+id1	id2	col1	col2
+0	0	1	0
+1	0	2	0
+2	0	3	0
+drop sequence seq;
+create sequence seq;
+select nextval for seq;
+nextval for seq
+1
+replace into t18 values (1, 0);
+update t18 set col1=nextval for seq where id1=prevval for seq;
+select * from t18;
+id1	col1
+1	2
+drop sequence seq;
+create sequence seq;
+select nextval for seq;
+nextval for seq
+1
+replace into t19 values (1, 1);
+update t19 set id1=nextval for seq where col1=prevval for seq;
+select * from t19;
+id1	col1
+2	1
+drop sequence seq;
+create sequence seq;
+select nextval for seq;
+nextval for seq
+1
+replace into t20 values (1, 1);
+update t20 set col1=nextval for seq where id1=prevval for seq;
+select * from t20;
+id1	col1
+1	2
+drop sequence seq;
+drop table t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t20;

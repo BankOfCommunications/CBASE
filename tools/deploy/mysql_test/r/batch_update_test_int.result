@@ -1,0 +1,5242 @@
+drop table if exists test1,test2;
+create table test1(c1 int primary key,c2 int,c3 int,c4 int);
+insert into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+create index idx1 on test1(c1);
+create index idx2 on test1(c2);
+create index idx3 on test1(c3);
+create index idx4 on test1(c4);
+create table test2(c1 int,c2 int,c3 int,c4 int,c5 int,c6 int,c7 int,c8 int,primary key(c1,c2,c3));
+insert into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+create index idx1 on test2(c2);
+create index idx2 on test2(c5) storing(c6,c4);
+create index idx3 on test2(c6,c3) storing(c4,c7);
+create index idx4 on test2(c8,c7,c5) storing(c4,c6);
+create index idx5 on test2(c5,c4) storing(c6,c7,c8);
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+alter system set merge_delay_interval='10s' server_type=chunkserver;
+merge
+[major_freeze] err=0
+show index on test1;
+index_name	status
+__3001__idx__idx1	1
+__3001__idx__idx2	1
+__3001__idx__idx3	1
+__3001__idx__idx4	1
+show index on test2;
+index_name	status
+__3006__idx__idx1	1
+__3006__idx__idx2	1
+__3006__idx__idx3	1
+__3006__idx__idx4	1
+__3006__idx__idx5	1
+__3001__idx__idx1
+__3001__idx__idx2
+__3001__idx__idx3
+__3001__idx__idx4
+__3006__idx__idx1
+__3006__idx__idx2
+__3006__idx__idx3
+__3006__idx__idx4
+__3006__idx__idx5
+__3006__idx__idx5
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c1 = 2  where c1 = 1;
+ERROR 23000: Duplicate entry ' <3001.16>=int32:2' for key 'PRIMARY'
+update test1 set c1 = 2  where c1 > 1;
+ERROR 23000: Duplicate entry ' <3001.16>=int32:2' for key 'PRIMARY'
+update test1 set c3 = 2 ;
+update test1 set c2 = 10 where c1 > 100;
+select * from test1;
+c1	c2	c3	c4
+1	1	2	1
+2	2	2	2
+3	3	2	3
+4	4	2	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	2	NULL
+2	2	NULL
+3	2	NULL
+4	2	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 10 where c1 = 1;
+select * from test1;
+c1	c2	c3	c4
+1	10	2	1
+2	2	2	2
+3	3	2	3
+4	4	2	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	10	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	2	NULL
+2	2	NULL
+3	2	NULL
+4	2	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 10 where c1 > 1;
+select * from test1;
+c1	c2	c3	c4
+1	10	2	1
+2	10	2	2
+3	10	2	3
+4	10	2	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	10	NULL
+2	10	NULL
+3	10	NULL
+4	10	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	2	NULL
+2	2	NULL
+3	2	NULL
+4	2	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c3 = 5,c4 = 7 where c1 = 1 OR c1 = 2 OR c1 = 3 OR c1 = 4 OR c1 = 5;
+select * from test1;
+c1	c2	c3	c4
+1	10	5	7
+2	10	5	7
+3	10	5	7
+4	10	5	7
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	10	NULL
+2	10	NULL
+3	10	NULL
+4	10	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	5	NULL
+2	5	NULL
+3	5	NULL
+4	5	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	7	NULL
+2	7	NULL
+3	7	NULL
+4	7	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 11 ,c2 = 12,c3 = 13 where c1 = 1 and c1 = 1 and c1 = 1 and c1 = 1 and c1 = 1;
+ERROR HY000: Failed to add column desc, err=-145
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 11 ,c2 = 12,c3 = 13 where c1 = 1 and c1 = 1 and c1 = 1 and c1 = 1 and c1 = 1;
+ERROR HY000: Failed to add column desc, err=-145
+update test1 set c2 = 10 where c1 = 1 and c1 = 2 and c1 = 3 and c1 = 4 and c1 = 5;
+ERROR HY000: Failed to add column desc, err=-145
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c3 = 10 where c1 = 1 or c1 = 2 and c1 = 3 or c1 = 4 and c1 = 5;
+select * from test1;
+c1	c2	c3	c4
+1	1	10	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	10	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c4 = 5,c3 = 444444444 where c1 between 1 and 1;
+select * from test1;
+c1	c2	c3	c4
+1	1	444444444	5
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	444444444	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	5	NULL
+update test1 set c2 = 10 where c1 between 2 and 2;
+select * from test1;
+c1	c2	c3	c4
+1	1	444444444	5
+2	10	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+3	3	NULL
+4	4	NULL
+2	10	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	444444444	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	5	NULL
+update test1 set c2 = 10 where c1 between 3 and 4;
+select * from test1;
+c1	c2	c3	c4
+1	1	444444444	5
+2	10	2	2
+3	10	3	3
+4	10	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	10	NULL
+3	10	NULL
+4	10	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	444444444	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	5	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 12 where c1 IN (10,11,12,13,14,15);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c3 = 10 where c1 IN (1);
+select * from test1;
+c1	c2	c3	c4
+1	1	10	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	10	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 10 where c1 IN (2);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	10	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+3	3	NULL
+4	4	NULL
+2	10	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c4 = 9.99 where c1 IN (1,2,3,4,5,6,7,8,9,10);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	9
+2	2	2	9
+3	3	3	9
+4	4	4	9
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	9	NULL
+2	9	NULL
+3	9	NULL
+4	9	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 123 where c1 * 2 + 1 > 3;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	123	2	2
+3	123	3	3
+4	123	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	123	NULL
+3	123	NULL
+4	123	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 10 where c1 / 2 - 1 > 1;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 10 where c1 * 2 / 3 * 5 % 4 + 1 > 1;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	10	2	2
+3	10	3	3
+4	10	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	10	NULL
+3	10	NULL
+4	10	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 32 where (c1 * 2 / 3 * 5) MOD 3 + 1 > 2;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	32	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+3	3	NULL
+4	4	NULL
+2	32	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 10 where c2 > 100;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c3 = 10 where c2 = 1;
+select * from test1;
+c1	c2	c3	c4
+1	1	10	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	10	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c4 = 10 where c2 > 1;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	10
+3	3	3	10
+4	4	4	10
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	10	NULL
+3	10	NULL
+4	10	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 10 where c2 = 1 OR c2 = 2 OR c2 = 3 OR c2 = 4 OR c2 = 5;
+select * from test1;
+c1	c2	c3	c4
+1	10	1	1
+2	10	2	2
+3	10	3	3
+4	10	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	10	NULL
+2	10	NULL
+3	10	NULL
+4	10	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c4 = 10 where c2 = 1 and c2 = 1 and c2 = 1 and c2 = 1 and c2 = 1;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	10
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	10	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c3 = 10 where c2 = 1 and c2 = 2 and c2 = 3 and c2 = 4 and c2 = 5;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c3 = 10 where c2 = 1 or c2 = 2 and c2 = 3 or c2 = 4 and c2 = 5;
+select * from test1;
+c1	c2	c3	c4
+1	1	10	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	10	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c4 = 10 where c2 between 1 and 1;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	10
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	10	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 10 where c2 between 3 and 4;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	10	3	3
+4	10	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	10	NULL
+4	10	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 10 where c2 IN (10,11,12,13,14,15);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c3 = 10 where c2 IN (1);
+select * from test1;
+c1	c2	c3	c4
+1	1	10	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	10	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c4 = 10 where c2 IN (2);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	10
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+3	3	NULL
+4	4	NULL
+2	10	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c4 = 10 where c2 IN (1,2,3,4,5,6,7,8,9,10);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	10
+2	2	2	10
+3	3	3	10
+4	4	4	10
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	10	NULL
+2	10	NULL
+3	10	NULL
+4	10	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c3 = 10 where c2 * 2 + 1 > 3;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	10	2
+3	3	10	3
+4	4	10	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	10	NULL
+3	10	NULL
+4	10	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 10 where c2 / 2 - 1 > 0;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	10	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	10	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 10 where c2 * 2 / 3 * 5 % 4 + 1 > 1;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	10	2	2
+3	10	3	3
+4	10	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	10	NULL
+3	10	NULL
+4	10	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 10 where (c2 * 2 / 3 * 5) MOD 3 + 1 > 2;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	10	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+3	3	NULL
+4	4	NULL
+2	10	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c4 = 51;
+update test1 set c4 = 51,c4 = 51 where c1 = 1 OR c2 = 2 OR c3 = 3 OR c4 = 4 OR c2 = 5;
+ERROR HY000: OB-145: Duplicated column
+update test1 set c4 = 51,c4 = 52 where c1 = 1 OR c2 = 2 OR c3 = 3 OR c4 = 4 OR c2 = 5;
+ERROR HY000: OB-145: Duplicated column
+update test1 set c2 = 9 where c1 = 1 OR c2 = 2 OR c3 = 3 OR c4 = 4 OR c2 = 5;
+select * from test1;
+c1	c2	c3	c4
+1	9	1	51
+2	9	2	51
+3	9	3	51
+4	4	4	51
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+4	4	NULL
+1	9	NULL
+2	9	NULL
+3	9	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	51	NULL
+2	51	NULL
+3	51	NULL
+4	51	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 8 where c1 = 1 and c2 = 2 and c3 = 3 and c4 = 1;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 7 where c1 = 1 and c2 = 1 and c3 = 1 and c4 = 1;
+select * from test1;
+c1	c2	c3	c4
+1	7	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	7	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 6 where c2 = 1 and c3 = 1 and c4 = 1;
+select * from test1;
+c1	c2	c3	c4
+1	6	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	6	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 5 where c1 = 1 or c2 = 2 and c4 = 3 or c2 = 4 and c2 = 5;
+select * from test1;
+c1	c2	c3	c4
+1	5	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+2	2	NULL
+3	3	NULL
+4	4	NULL
+1	5	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 4 where c3 between 1 and 4 and c4 between 3 and 4;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	4	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	4	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 3 where c2 * 2 + c3 > 3;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	3	2	2
+3	3	3	3
+4	3	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	3	NULL
+3	3	NULL
+4	3	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 2 where c2 * c3 - 1 > 1;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	2	3	3
+4	2	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	2	NULL
+4	2	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 10 where c2 * 2 / c3 * 5 % c3 + 1 > 1;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	10	3	3
+4	10	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	10	NULL
+4	10	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c2 = 222 where (c2 * 2 / 3 * 5) MOD c1 + 1 > 1;
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	222	2	2
+3	222	3	3
+4	222	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	222	NULL
+3	222	NULL
+4	222	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+replace into test1 values(1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,4,4);
+select * from test1;
+c1	c2	c3	c4
+1	1	1	1
+2	2	2	2
+3	3	3	3
+4	4	4	4
+select  * from __3001__idx__idx1;
+c1	ob_virtual_col
+1	NULL
+2	NULL
+3	NULL
+4	NULL
+select  * from __3001__idx__idx2;
+c1	c2	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx3;
+c1	c3	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+select  * from __3001__idx__idx4;
+c1	c4	ob_virtual_col
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	NULL
+update test1 set c1 = 2  where c1 = 1;
+ERROR 23000: Duplicate entry ' <3001.16>=int32:2' for key 'PRIMARY'
+update test1 set c2 = 2  where c1 > 1;
+update test1 set c3 = 2  where c1 > 100;
+update test1 set c4 = 51,c4 = 51 where c2 = 4;
+update test1 set c4 = 51,c4 = 52 where c6 = 3;
+ERROR 42S22: Unkown column name c6
+update test2 set c8 = 10 where c1 = 1 and c2 = 1 and c3 = 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	10
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+1	1	1	1	1	1	1	10
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	10
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c7 = 10 where c1 > 1 and c2 > 1 and c3 > 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	10	2
+3	3	3	3	3	3	10	3
+4	4	4	4	4	4	10	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	10
+3	3	3	3	3	10
+4	4	4	4	4	10
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	10	2
+3	3	3	3	3	3	10	3
+4	4	4	4	4	4	10	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	10	2
+3	3	3	3	3	3	10	3
+4	4	4	4	4	4	10	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c6 = 10 where c1 > 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	10	2	2
+3	3	3	3	3	10	3	3
+4	4	4	4	4	10	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	10
+3	3	3	3	3	10
+4	4	4	4	4	10
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	10	2
+3	3	3	3	10	3
+4	4	4	4	10	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	10	2	2
+3	3	3	3	3	10	3	3
+4	4	4	4	4	10	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	10	2	2
+3	3	3	3	3	10	3	3
+4	4	4	4	4	10	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c5 = 10 where c2 > 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	10	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	10	2
+3	3	3	3	10	3
+4	4	4	4	10	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	10	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	10	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c4 = 10 where c3 > 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	10	2	2	2	2
+3	3	3	10	3	3	3	3
+4	4	4	10	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	10	2	2
+3	3	3	10	3	3
+4	4	4	10	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	10	2	2
+3	3	3	10	3	3
+4	4	4	10	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	10	2	2	2	2
+3	3	3	10	3	3	3	3
+4	4	4	10	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	10	2	2	2	2
+3	3	3	10	3	3	3	3
+4	4	4	10	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c8 = 10 where c1 = 1 OR c2 = 2 OR c3 = 3;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	10
+2	2	2	2	2	2	2	10
+3	3	3	3	3	3	3	10
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+4	4	4	4	4	4	4	4
+1	1	1	1	1	1	1	10
+2	2	2	2	2	2	2	10
+3	3	3	3	3	3	3	10
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	10
+2	2	2	2	2	2	2	10
+3	3	3	3	3	3	3	10
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c7 = 10 where c1 = 1 and c2 = 1 and c3 = 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	10	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	10
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	10	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	10	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c6 = 10 where c1 = 1 and c2 = 2 and c3 = 3;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c5 = 10 where c1 = 1 or c2 = 2 and c3 = 3;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	10	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+1	1	1	1	10	1
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	10	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+1	1	1	1	10	1	1	1
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c4 = 10 where c1 between 1 and 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	10	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	10	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	10	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	10	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	10	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c5 = 10 where c2 between 3 and 4;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	10	3
+4	4	4	4	10	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c7 = 10 where c3 between 4 and 7;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	10	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	10
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	10	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	10	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c4 = 10 where c1 IN (10,11,12,13,14,15);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c6 = 10 where c2 IN (1);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	10	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	10
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+1	1	1	1	10	1
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	10	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	10	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c7 = 10 where c3 IN (2);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	10	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	10
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	10	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	10	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c8 = 10 where c1 IN (1,2,3,4,5,6,7,8,9,10);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	10
+2	2	2	2	2	2	2	10
+3	3	3	3	3	3	3	10
+4	4	4	4	4	4	4	10
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	10
+2	2	2	2	2	2	2	10
+3	3	3	3	3	3	3	10
+4	4	4	4	4	4	4	10
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	10
+2	2	2	2	2	2	2	10
+3	3	3	3	3	3	3	10
+4	4	4	4	4	4	4	10
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c7 = 10 where c1 * c2 + 1 > 3;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	10	2
+3	3	3	3	3	3	10	3
+4	4	4	4	4	4	10	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	10
+3	3	3	3	3	10
+4	4	4	4	4	10
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	10	2
+3	3	3	3	3	3	10	3
+4	4	4	4	4	4	10	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	10	2
+3	3	3	3	3	3	10	3
+4	4	4	4	4	4	10	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c6 = 10 where c1 / c3 - 1 > 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c5 = 10 where c1 * 2 / c2 * 5 % 4 + 1 > 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	10	1	1	1
+2	2	2	2	10	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	10	1
+2	2	2	2	10	2
+3	3	3	3	10	3
+4	4	4	4	10	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	10	1	1	1
+2	2	2	2	10	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	10	1	1	1
+2	2	2	2	10	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c4 = 10 where (c1 * 2 / 3 * 5) MOD 3 + 1 > 2;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	10	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	10	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	10	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	10	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	10	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c8 = 10 where c4 > 100;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c7 = 10 where c5 = 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	10	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	10
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	10	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	10	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c6 = 10 where c6 > 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	10	2	2
+3	3	3	3	3	10	3	3
+4	4	4	4	4	10	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	10
+3	3	3	3	3	10
+4	4	4	4	4	10
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	10	2
+3	3	3	3	10	3
+4	4	4	4	10	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	10	2	2
+3	3	3	3	3	10	3	3
+4	4	4	4	4	10	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	10	2	2
+3	3	3	3	3	10	3	3
+4	4	4	4	4	10	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c5 = 10 where c1 = 1 OR c2 = 2 OR c4 = 3 OR c5 = 4 OR c6 = 5;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	10	1	1	1
+2	2	2	2	10	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	10	1
+2	2	2	2	10	2
+3	3	3	3	10	3
+4	4	4	4	10	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	10	1	1	1
+2	2	2	2	10	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	10	1	1	1
+2	2	2	2	10	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c4 = 10 where c2 = 1 and c3 = 1 and c4 = 1 and c5 = 1 and c6 = 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	10	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	10	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	10	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	10	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	10	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c5 = 10 where c1 = 1 and c2 = 2 and c3 = 3 and c4 = 4 and c6 = 5;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c6 = 10 where c2 = 1 or c4 = 2 and c5 = 3 or c7 = 4 and c6 = 5;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	10	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	10
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+1	1	1	1	10	1
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	10	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	10	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c7 = 10 where c4 between 1 and 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	10	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	10
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	10	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	10	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c8 = 10 where c5 between 3 and 4;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	10
+4	4	4	4	4	4	4	10
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	10
+4	4	4	4	4	4	4	10
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	10
+4	4	4	4	4	4	4	10
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c8 = 10 where c6 IN (10,11,12,13,14,15);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c7 = 10 where c7 IN (1);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	10	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	10
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	10	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	10	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c6 = 10 where c8 IN (2);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	10	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	10
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+3	3	3	3	3	3
+4	4	4	4	4	4
+2	2	2	2	10	2
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	10	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	10	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c5 = 10 where c5 IN (1,2,3,4,5,6,7,8,9,10);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	10	1	1	1
+2	2	2	2	10	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	10	1
+2	2	2	2	10	2
+3	3	3	3	10	3
+4	4	4	4	10	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	10	1	1	1
+2	2	2	2	10	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	10	1	1	1
+2	2	2	2	10	2	2	2
+3	3	3	3	10	3	3	3
+4	4	4	4	10	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c4 = 10 where c4 * 2 + 1 > 3;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	10	2	2	2	2
+3	3	3	10	3	3	3	3
+4	4	4	10	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	10	2	2
+3	3	3	10	3	3
+4	4	4	10	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	10	2	2
+3	3	3	10	3	3
+4	4	4	10	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	10	2	2	2	2
+3	3	3	10	3	3	3	3
+4	4	4	10	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	10	2	2	2	2
+3	3	3	10	3	3	3	3
+4	4	4	10	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c8 = 10 where c5 / 2 - 1 > 1;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c8 = 10 where c7 * 2 / 3 * c6 % 4 + 1 > 2;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	10
+3	3	3	3	3	3	3	10
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+4	4	4	4	4	4	4	4
+2	2	2	2	2	2	2	10
+3	3	3	3	3	3	3	10
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	10
+3	3	3	3	3	3	3	10
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+update test2 set c8 = 10 where (c8 * c4 / 3 * 5) MOD 3 + 1 > 2;
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	10
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+2	2	2	2	2	2	2	10
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	10
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+replace into test2 values(1,1,1,1,1,1,1,1),(2,2,2,2,2,2,2,2),(3,3,3,3,3,3,3,3),(4,4,4,4,4,4,4,4);
+select * from test2;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx1;
+c1	c2	c3	ob_virtual_col
+1	1	1	NULL
+2	2	2	NULL
+3	3	3	NULL
+4	4	4	NULL
+select  * from __3006__idx__idx2;
+c1	c2	c3	c4	c5	c6
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx3;
+c1	c2	c3	c4	c6	c7
+1	1	1	1	1	1
+2	2	2	2	2	2
+3	3	3	3	3	3
+4	4	4	4	4	4
+select  * from __3006__idx__idx4;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4
+select  * from __3006__idx__idx5;
+c1	c2	c3	c4	c5	c6	c7	c8
+1	1	1	1	1	1	1	1
+2	2	2	2	2	2	2	2
+3	3	3	3	3	3	3	3
+4	4	4	4	4	4	4	4

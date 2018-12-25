@@ -1,0 +1,19 @@
+ob1=OBI(cluster=1221,ct_num=3)
+ob1.reboot
+ob1.mysql create table t1(c1 int primary key, c2 int)
+ob1.register
+ob1.set_diamond initialSize:0
+ob1.ct0.sh rm -rf ~/.obdatasource/*
+ob1.ct0.reboot
+1
+1
+ob1.set_diamond initialSize:5
+ob1.ct1.sh rm -rf ~/.obdatasource/*
+ob1.ct1.reboot
+6
+6
+ob1.set_diamond initialSize:3
+ob1.ct2.sh rm -rf ~/.obdatasource/*
+ob1.ct2.reboot
+9
+9

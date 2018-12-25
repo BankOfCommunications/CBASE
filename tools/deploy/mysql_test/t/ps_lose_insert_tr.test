@@ -1,0 +1,328 @@
+--disable_abort_on_error
+--disable_warnings
+drop table if exists t1, t2;
+--enable_warnings
+
+create table t1( a int primary key,b varchar(255),c int);
+#insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+#-------------------transaction prepare-----------------
+
+#add a new column
+
+prepare stmt1 from insert into t1 values (?,'d',3),(?,'f',6);
+set @x=1;
+set @y=2;
+execute stmt1 using @x,@y;
+alter table t1 add d int;
+--real_sleep 3
+set autocommit=0;
+set @x=3;
+set @y=4;
+execute stmt1 using @x,@y;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt1;
+
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3);
+
+#drop a no exist column
+
+prepare stmt2 from insert into t1 values (?,'d',3),(?,'f',2);
+set @x=3;
+set @y=4;
+execute stmt2 using @x,@y;
+alter table t1 drop q;
+set autocommit=0;
+set @x=5;
+set @y=6;
+execute stmt2 using @x,@y;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt2;
+
+
+#drop a exist column
+prepare stmt3 from insert into t1 values (?,'d',3),(?,'f',2);
+set @x=7;
+set @y=8;
+execute stmt3 using @x,@y;
+alter table t1 drop c;
+set autocommit=0;
+set @x=9;
+set @y=10;
+execute stmt3 using @x,@y;
+rollback;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt3;
+
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+
+#add a new column and drop it
+
+prepare stmt4 from insert into t1 values (?,'d',2),(?,'a',2);
+set @x=11;
+set @y=12;
+execute stmt4 using @x,@y;
+alter table t1 add d int;
+alter table t1 drop d;
+set autocommit=0;
+set @x=13;
+set @y=14;
+execute stmt4 using @x,@y;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt4;
+
+
+
+drop table t1;
+
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+#drop a exist column,and add it which have same type with before
+
+prepare stmt5 from insert into t1 values (?,'d',2),(?,'f',2);
+set @x=5;
+set @y=4;
+execute stmt5 using @x,@y;
+alter table t1 drop b;
+alter table t1 add b varchar(255);
+set autocommit=0;
+set @x=6;
+set @y=7;
+execute stmt5 using @x,@y;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt5;
+
+
+#drop a exist column,add it which have different type with before
+
+prepare stmt6 from insert into t1 values (?,'d',2),(?,'f',2);
+set @x=8;
+set @y=9;
+execute stmt6 using @x,@y;
+alter table t1 drop b;
+alter table t1 add b int;
+set autocommit=0;
+set @x=10;
+set @y=11;
+execute stmt6 using @x,@y;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt6;
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt7 from insert into t1 values (?,2,1);
+set @x=4;
+set autocommit=0;
+execute stmt7 using @x;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt7;
+
+
+
+#drop table and create it again
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+
+prepare stmt8 from insert into t1 values (?,2,2);
+set @x=4;
+execute stmt8 using @x;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+set autocommit=0;
+set @x=6;
+execute stmt8 using @x;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt8;
+
+
+#drop table and create it with diff shecma
+
+prepare stmt9 from insert into t1 values (?,2,1),(?,5,1);
+set @x=8;
+set @y=9;
+execute stmt9 using @x,@y;
+drop table t1;
+create table t1( a int primary key,b varchar(255));
+set autocommit=0;
+set @x=10;
+set @y=11;
+execute stmt9 using @x,@y;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt9;
+
+
+
+#add column
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+
+prepare stmt10 from insert into t1(a,b,c) values (?,'d',2),(?,'f',6);
+set @x=1;
+set @y=2;
+execute stmt10 using @x,@y;
+alter table t1 add d int;
+set autocommit=0;
+set @x=3;
+set @y=4;
+execute stmt10 using @x,@y;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt10;
+
+
+
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,2);
+
+
+#drop no use column
+
+prepare stmt11 from insert into t1(a,b,c) values (?,'d',2);
+set @x=2;
+execute stmt11 using @x;
+alter table t1 drop d;
+set autocommit=0;
+set @x=3;
+execute stmt11 using @x;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt11;
+
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+alter table t1 add d int;
+
+#drop no use column
+
+prepare stmt12 from insert into t1(a,b,c) values (?,'d',4);
+set @x=4;
+execute stmt12 using @x;
+alter table t1 drop c;
+set autocommit=0;
+set @x=4;
+execute stmt12 using @x;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt12;
+
+
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+#have problem
+
+prepare stmt13 from insert into t1(a,b) values (?,'d');
+set @x=4;
+execute stmt13 using @x;
+alter table t1 drop c;
+set autocommit=0;
+set @x=5;
+execute stmt13 using @x;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt13;
+
+
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+
+#drop column add it again with same type
+
+prepare stmt14 from insert into t1(a,b,c) values (?,'d',1);
+set @x=1;
+execute stmt14 using @x;
+alter table t1 drop c;
+alter table t1 add c int;
+set autocommit=0;
+set @x=2;
+execute stmt14 using @x;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt14;
+
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+
+#drop column add it again with diff type
+
+prepare stmt15 from insert into t1(a,b,c) values (?,'d',1);
+set @x=5;
+execute stmt15 using @x;
+alter table t1 drop b;
+alter table t1 add b int;
+set autocommit=0;
+set @x=6;
+execute stmt15 using @x;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt15;
+
+
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+#add column drop it again 
+
+prepare stmt16 from insert into t1(a,b,c) values (?,'d',1);
+set @x=4;
+execute stmt16 using @x;
+alter table t1 add d int;
+alter table t1 drop d;
+set autocommit=0;
+set @x=5;
+execute stmt16 using @x;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt16;
+
+
+
+
+

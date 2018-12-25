@@ -1,0 +1,35 @@
+deploy ob1=OBI(cluster=1244);
+
+deploy ob1.ms1.set status=disable;
+deploy ob1.ms2.set status=disable;
+deploy ob1.ms3.set status=disable;
+
+deploy ob1.reboot;
+sleep 20;
+
+deploy ob1.prepare;
+deploy ob1.start_check;
+
+#unit s
+deploy ob1.set updateconfPeriod=15;
+deploy ob1.create_client;
+ 
+create table t1(a int primary key,b int);
+insert into t1 values(1,1),(2,-2),(0,0);
+select * from t1;
+
+sleep 14;
+
+#start ms
+deploy ob1.ms1.set status=enable;
+deploy ob1.ms2.set status=enable;
+deploy ob1.ms3.set status=enable;
+
+deploy ob1.ms1.start;
+sleep 14;
+deploy ob1.ms2.start;
+sleep 12;
+deploy ob1.ms3.start;
+sleep 10;
+
+deploy ob1.stop_check;

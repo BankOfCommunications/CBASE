@@ -1,0 +1,86 @@
+-- ok
+<<Part 1 : SQL STRING>>
+select user_name, id, qty from user, order_list where user.user_id > order_list.user_id and user_age > 20 and item_id between 0 and 100;
+
+<<Part 2 : PARSE TREE>>
+[2012-07-17 15:19:16] DEBUG ../../src/common/hash/ob_hashutils.h:1106 [47123780730880] new succ block=0x20ad5790 block_size=57368 node_size=56 type=[N9oceanbase6common4list4NodeIPNS_3sql13ObPhyOperatorEEE]
+[2012-07-17 15:19:16] DEBUG ../../src/common/hash/ob_hashutils.h:1106 [47123780730880] new succ block=0x1dcbe7f0 block_size=90136 node_size=88 type=[N9oceanbase6common4list4NodeINS_3sql8ObBitSetEEE]
+[2012-07-17 15:19:16] DEBUG ../../src/common/hash/ob_hashutils.h:1106 [47123780730880] new succ block=0x21001d50 block_size=57368 node_size=56 type=[N9oceanbase6common4list4NodeIPNS_3sql12ObSqlRawExprEEE]
+
+<<Part 3 : LOGICAL PLAN>>
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1002, TableName:user, AliasName:NULL, Type:BASE_TABLE, RefId: 1002}
+            {Num 1, TableId:1003, TableName:order_list, AliasName:NULL, Type:BASE_TABLE, RefId: 1003}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:3, ColumnName:user_name, TableRef:1002}
+            {Num 1, ColumnId:2, ColumnName:id, TableRef:1003}
+            {Num 2, ColumnId:5, ColumnName:qty, TableRef:1003}
+            {Num 3, ColumnId:2, ColumnName:user_id, TableRef:1002}
+            {Num 4, ColumnId:3, ColumnName:user_id, TableRef:1003}
+            {Num 5, ColumnId:4, ColumnName:user_age, TableRef:1002}
+            {Num 6, ColumnId:4, ColumnName:item_id, TableRef:1003}
+        <ColumnItemList End>
+        WHERE ::= <4> <5> <6>
+        SELECT ::= <1, user_name>, <2, id>, <3, qty>
+        FROM ::= <1002>, <1003>
+        ObSelectStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (1002 : 3)
+        T_REF_COLUMN : [table_id, column_id] = [1002, 3]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (1003 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 2]
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (1003 : 5)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+        ObSqlRawExpr 2 End
+        ObSqlRawExpr 3 Begin
+        expr_id = 4
+        (table_id : column_id) = (NULL : 18446744073709551614)
+        T_OP_GT
+            T_REF_COLUMN : [table_id, column_id] = [1002, 2]
+            T_REF_COLUMN : [table_id, column_id] = [1003, 3]
+        ObSqlRawExpr 3 End
+        ObSqlRawExpr 4 Begin
+        expr_id = 5
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_OP_GT
+            T_REF_COLUMN : [table_id, column_id] = [1002, 4]
+            T_INT : 20
+        ObSqlRawExpr 4 End
+        ObSqlRawExpr 5 Begin
+        expr_id = 6
+        (table_id : column_id) = (NULL : 18446744073709551612)
+        T_OP_BTW
+            T_REF_COLUMN : [table_id, column_id] = [1003, 4]
+            T_INT : 0
+            T_INT : 100
+        ObSqlRawExpr 5 End
+    <ExprList End>
+<logical_plan End>
+
+
+<<Part 4 : PHYSICAL PLAN>>
+
+ObPhysicalPlan Begin
+Main Query:
+Project(columns=[expr<1002,3>=COL<1002,3>|,expr<1003,2>=COL<1003,2>|,expr<1003,5>=COL<1003,5>|])
+Merge Join(Join Type: INNER JOIN
+(equal_join_conds=[], other_join_conds=[expr<18446744073709551615,18446744073709551614>=COL<1002,2>|COL<1003,3>|OP<114,2>|])
+Left Join Table:
+TableRpcScanright Join Table:
+TableRpcScanObPhysicalPlan End
+
+
+

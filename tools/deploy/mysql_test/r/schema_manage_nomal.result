@@ -1,0 +1,31 @@
+select table_id,operation_type from __all_ddl_operation ;
+table_id	operation_type
+5	1
+4	1
+11	1
+10	1
+6	1
+7	1
+8	1
+9	1
+13	1
+18	1
+17	1
+511	1
+512	1
+12	1
+513	1
+15	1
+16	1
+802	1
+801	1
+0	4
+create table t1 (c1 int primary key ,c2 int );
+"create table right ,operation_type=1"
+alter table t1 add c3 int ;
+"alter table right ,operation_type=3"
+alter table t1 drop c2;
+"alter table right ,operation_type=3"
+drop table t1 ;
+"drop table right ,operation_type=2"
+"drop table right ,operation_type=4"

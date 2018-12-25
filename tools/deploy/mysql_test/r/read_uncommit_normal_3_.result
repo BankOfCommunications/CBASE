@@ -1,0 +1,24 @@
+drop table if exists c;
+create table c (c1 int primary key, c2 varchar(8));
+set autocommit= 1 ;
+begin;
+insert into c values(1,1);
+select * from c where c1 = 1;
+c1	c2
+1	1
+select * from c where c2 = 1;
+c1	c2
+1	1
+select * from c ;
+c1	c2
+1	1
+set autocommit= 1 ;
+begin;
+select * from c where c1 = 1;
+c1	c2
+select * from c where c2 = 1;
+c1	c2
+select * from c ;
+c1	c2
+commit;
+commit;

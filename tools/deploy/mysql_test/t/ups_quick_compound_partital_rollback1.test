@@ -1,0 +1,21 @@
+drop table if exists t1;
+
+create table t1(pk int primary key, c1 int);
+insert into t1 values(1,1);
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+connection conn1;
+begin;
+--error 5024
+insert into t1 values (1,1) when row_count(insert into t1 values(11,11))=1;
+commit;
+
+let $i=0;
+while($i < 1000) 
+{
+    eval select * from t1;
+    inc $i;
+}
+commit;
+

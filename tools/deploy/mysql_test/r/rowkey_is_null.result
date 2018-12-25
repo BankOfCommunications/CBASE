@@ -1,0 +1,87 @@
+drop table if exists t1,t2,t3;
+create table t1(a int primary key, c int);
+insert into t1(a) values(NULL);
+insert into t1(a) values(1);
+insert into t1(a) values(0);
+insert into t1(a) values(NULL);
+ERROR 23000: Duplicate entry ' <3001.16>=null:' for key 'PRIMARY'
+select * from t1;
+a	c
+0	NULL
+1	NULL
+NULL	NULL
+drop table t1;
+create table t1(a int, b int, primary key(a,b),c int);
+insert into t1(a,b) values(NULL,NULL);
+insert into t1(a,b) values(NULL,1);
+insert into t1(a,b) values(1,NULL);
+insert into t1(a,b) values(1,1);
+insert into t1(a,b) values(NULL,NULL);
+ERROR 23000: Duplicate entry ' <3002.16>=null: <3002.17>=null:' for key 'PRIMARY'
+insert into t1(a,b) values(NULL,1);
+ERROR 23000: Duplicate entry ' <3002.16>=null: <3002.17>=int32:1' for key 'PRIMARY'
+insert into t1(a,b) values(1,NULL);
+ERROR 23000: Duplicate entry ' <3002.16>=int32:1 <3002.17>=null:' for key 'PRIMARY'
+select * from t1;
+a	b	c
+1	1	NULL
+1	NULL	NULL
+NULL	1	NULL
+NULL	NULL	NULL
+drop table t1;
+create table t1(a varchar(20) primary key,b varchar);
+insert into t1(a) values(NULL);
+insert into t1(a) values('1');
+insert into t1(a) values(NULL);
+ERROR 23000: Duplicate entry ' <3003.16>=null:' for key 'PRIMARY'
+select * from t1;
+a	b
+1	NULL
+NULL	NULL
+drop table t1;
+create table t1(a varchar(20), b varchar(20), primary key(a,b),c varchar);
+insert into t1(a,b) values(NULL,NULL);
+insert into t1(a,b) values(NULL,'1');
+insert into t1(a,b) values('1',NULL);
+insert into t1(a,b) values('1','1');
+insert into t1(a,b) values(NULL,NULL);
+ERROR 23000: Duplicate entry ' <3004.16>=null: <3004.17>=null:' for key 'PRIMARY'
+insert into t1(a,b) values(NULL,'1');
+ERROR 23000: Duplicate entry ' <3004.16>=null: <3004.17>=varchar:1' for key 'PRIMARY'
+insert into t1(a,b) values('1',NULL);
+ERROR 23000: Duplicate entry ' <3004.16>=varchar:1 <3004.17>=null:' for key 'PRIMARY'
+select * from t1;
+a	b	c
+1	1	NULL
+1	NULL	NULL
+NULL	1	NULL
+NULL	NULL	NULL
+drop table t1;
+create table t1(a datetime primary key,b datetime);
+insert into t1(a) values(NULL);
+insert into t1(a) values('2010-01-01 12:00:00');
+insert into t1(a) values(NULL);
+ERROR 23000: Duplicate entry ' <3005.16>=null:' for key 'PRIMARY'
+select * from t1;
+a	b
+2010-01-01 12:00:00	NULL
+NULL	NULL
+drop table t1;
+create table t1(a datetime, b datetime, primary key(a,b), c datetime);
+insert into t1(a,b) values(NULL,NULL);
+insert into t1(a,b) values(NULL,'2010-01-01 12:00:00');
+insert into t1(a,b) values('2010-01-01 12:00:00',NULL);
+insert into t1(a,b) values('2010-01-01 12:00:00','2010-01-01 12:00:00');
+insert into t1(a,b) values(NULL,NULL);
+ERROR 23000: Duplicate entry ' <3006.16>=null: <3006.17>=null:' for key 'PRIMARY'
+insert into t1(a,b) values(NULL,'2010-01-01 12:00:00');
+ERROR 23000: Duplicate entry ' <3006.16>=null: <3006.17>=precisedatetime:1262318400000000' for key 'PRIMARY'
+insert into t1(a,b) values('2010-01-01 12:00:00',NULL);
+ERROR 23000: Duplicate entry ' <3006.16>=precisedatetime:1262318400000000 <3006.17>=null:' for key 'PRIMARY'
+select * from t1;
+a	b	c
+2010-01-01 12:00:00	2010-01-01 12:00:00	NULL
+2010-01-01 12:00:00	NULL	NULL
+NULL	2010-01-01 12:00:00	NULL
+NULL	NULL	NULL
+drop table t1;

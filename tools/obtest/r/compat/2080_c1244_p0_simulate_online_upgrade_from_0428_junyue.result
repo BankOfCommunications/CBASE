@@ -1,0 +1,77 @@
+ob1=OBI(cluster=1244,version=0.4.2.8);
+ob2=OBI(cluster=1244,version=0.4.2.8);
+ob2.rs0.set master=ob1.rs0;
+ob1.reboot;
+ob2.reboot;
+ob1.create_client ob1,ob2;
+check current consistency level
+ob1.mysql_p show variables like 'ob_read_consistency';
+variable_name	value
+ob_read_consistency	4
+check current cluster percent
+ob1.mysql_p select cluster_id,cluster_role,cluster_flow_percent from __all_cluster;
+cluster_id	cluster_role	cluster_flow_percent
+1	1	100
+2	2	0
+fill data and query
+ob1.prepare;
+ob1.start_check;
+ob1.source include/merge.inc;
+ob1.major_freeze;
+ob1.check_cs_version 2;
+ob2.check_cs_version 2;
+ob1.stop_check;
+stop slave cluster
+ob2.force_stop;
+upgrade slave cluster
+ob2.rs0.clean_commit_log;
+ob2.upgrade;
+ob2.nstart;
+ob2.rs0.set_obi_role OBI_SLAVE;
+ob1.start_check;
+ob1.stop_check;
+ob1.mysql delete from __all_sys_config_stat where cluster_id=0 and svr_type='rootserver' and svr_ip='$rs0ip' and svr_port=$rs0pt and name='master_root_server_ip';
+ob1.mysql delete from __all_sys_config_stat where cluster_id=0 and svr_type='rootserver' and svr_ip='$rs0ip' and svr_port=$rs0pt and name='master_root_server_port';
+switch start
+ob1.switch_cluster ob2;
+ob1.mysql_p select cluster_id,cluster_role,cluster_flow_percent from __all_cluster;
+cluster_id	cluster_role	cluster_flow_percent
+1	2	0
+2	1	100
+create table t_created_when_ob2_is_master(c1 int primary key,c2 int);
+insert into t_created_when_ob2_is_master values(1,1),(2,2);
+select * from t_created_when_ob2_is_master;
+c1	c2
+1	1
+2	2
+ob1.start_check;
+ob1.stop_check;
+stop new slave cluster ob1
+ob1.force_stop;
+upgrade new slave cluster ob1
+ob1.rs0.clean_commit_log;
+ob1.upgrade;
+ob1.nstart;
+ob1.rs0.set_obi_role OBI_SLAVE;
+ob1.start_check;
+freeze
+ob2.major_freeze;
+ob2.check_cs_version 3;
+ob1.check_cs_version 3;
+ob1.stop_check;
+ob2.mysql delete from __all_sys_config_stat where cluster_id=0 and svr_type='rootserver' and svr_ip='$rs0ip' and svr_port=$rs0pt and name='master_root_server_ip';
+ob2.mysql delete from __all_sys_config_stat where cluster_id=0 and svr_type='rootserver' and svr_ip='$rs0ip' and svr_port=$rs0pt and name='master_root_server_port';
+switch  back
+ob2.switch_cluster ob1;
+ob1.start_check;
+ob1.stop_check;
+create table t_created_when_ob1_is_master(c1 int primary key,c2 int);
+insert into t_created_when_ob1_is_master values(1,1),(2,2);
+select * from t_created_when_ob1_is_master;
+c1	c2
+1	1
+2	2
+select * from t_created_when_ob2_is_master;
+c1	c2
+1	1
+2	2

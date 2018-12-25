@@ -1,0 +1,62 @@
+ob1=OBI(cluster=1222);
+ob2=OBI(cluster=1222);
+ob2.rs0.set master = ob1.rs0;
+
+ob1.reboot;
+ob2.reboot;
+sleep 60;
+
+ob1.create_client;
+
+let $ip = deploy_get_value(ob1.cs0.ip);
+let $port = deploy_get_value(ob1.cs0.port);
+
+deploy ob1.mysql alter system set merge_delay_interval='1s' server_type=chunkserver server_ip='$ip' server_port=$port;
+sleep 10;
+
+let $cnt=1;
+while($cnt>=0)
+{
+    let $csip1 = deploy_get_value(ob1.cs$cnt.ip);
+    let $csport1 = deploy_get_value(ob1.cs$cnt.port);
+    let $csip2 = deploy_get_value(ob2.cs$cnt.ip);
+    let $csport2 = deploy_get_value(ob2.cs$cnt.port);
+    deploy ob1.mysql_p select value from __all_sys_config_stat where name='merge_delay_interval' and svr_ip='$csip1' and svr_port=$csport1;
+    deploy ob1.mysql_p select value from __all_sys_config_stat where name='merge_delay_interval' and svr_ip='$csip2' and svr_port=$csport2;
+    dec $cnt;
+}
+
+alter system set merge_delay_interval='10s' server_type=chunkserver;
+sleep 10;
+select value from __all_sys_config_stat where svr_type='chunkserver' and name='merge_delay_interval';
+
+alter system set merge_delay_interval='5s' server_type=chunkserver cluster=1;
+sleep 10;
+select value from __all_sys_config_stat where cluster_id=1 and name='merge_delay_interval';
+select value from __all_sys_config_stat where cluster_id=2 and name='merge_delay_interval';
+
+alter system set merge_delay_interval='7s' server_type=chunkserver cluster=0;
+sleep 10;
+select value from __all_sys_config_stat where svr_type='chunkserver' and name='merge_delay_interval';
+
+alter system set merge_delay_interval='500s' server_type=chunkserver cluster=2;
+sleep 10;
+select value from __all_sys_config_stat where cluster_id=1 and name='merge_delay_interval';
+select value from __all_sys_config_stat where cluster_id=2 and name='merge_delay_interval';
+
+let $ip = deploy_get_value(ob2.cs0.ip);
+let $port = deploy_get_value(ob2.cs0.port);
+deploy ob1.mysql alter system set merge_delay_interval='1s' server_type=chunkserver server_ip='$ip' server_port=$port;
+sleep 10;
+
+let $cnt=1;
+while($cnt>=0)
+{
+    let $csip1 = deploy_get_value(ob1.cs$cnt.ip);
+    let $csport1 = deploy_get_value(ob1.cs$cnt.port);
+    let $csip2 = deploy_get_value(ob2.cs$cnt.ip);
+    let $csport2 = deploy_get_value(ob2.cs$cnt.port);
+    deploy ob1.mysql_p select value from __all_sys_config_stat where name='merge_delay_interval' and svr_ip='$csip1' and svr_port=$csport1;
+    deploy ob1.mysql_p select value from __all_sys_config_stat where name='merge_delay_interval' and svr_ip='$csip2' and svr_port=$csport2;
+    dec $cnt;
+}

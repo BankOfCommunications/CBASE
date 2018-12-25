@@ -1,0 +1,236 @@
+ob1=OBI(cluster=1211);
+ob1.reboot;
+
+ob1.mysql set global ob_read_consistency=3;
+sleep 10;
+
+
+ob1.mysql alter system set minor_num_limit=10 server_type=updateserver;
+ob1.source include/merge.inc;
+sleep 10;
+
+ob1.mysql_p show variables like 'ob_read_consistency';
+
+ob1.mysql_p select name,value from __all_sys_config_stat where name = 'read_master_master_ups_percent' or name = 'read_slave_master_ups_percent';
+ob1.mysql_p select name,value from __all_sys_config_stat where name = 'minor_num_limit';
+
+let $m_ups=deploy_get_value(ob1.get_master_ups);
+let $s_ups=deploy_get_value(ob1.get_slave_ups);
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+
+ob1.create_client;
+
+create table t1(c1 int primary key, c2 int);
+insert into t1 values(0,100);
+ob1.major_freeze;
+ob1.check_cs_version 2;
+
+--echo case 1 froze will kill trx
+ob1.connect conn1;
+set autocommit=0;
+insert into t1 values(1,99);
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+insert into t1 values(2,98);
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=2;
+ob1.minor_freeze;
+sleep 3;
+--error 119
+insert into t1 values(3,97);
+#--error 119
+commit;
+
+ob1.ups0.check_memtable_status 3_1-1 dumped;
+ob1.ups1.check_memtable_status 3_1-1 dumped;
+
+--repeat 10
+select * from t1;
+--repeat 10
+select * from t1 where c1=1;
+--repeat 10
+select * from t1 where c1=2;
+--repeat 10
+select * from t1 where c1=3;
+commit;
+
+sleep 10;
+
+insert into t1 values(1,99);
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+insert into t1 values(2,98);
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=2;
+ob1.minor_freeze;
+sleep 3;
+--error 119
+commit;
+
+ob1.ups0.check_memtable_status 3_2-2 dumped;
+ob1.ups1.check_memtable_status 3_2-2 dumped;
+
+--repeat 10
+select * from t1;
+--repeat 10
+select * from t1 where c1=1;
+--repeat 10
+select * from t1 where c1=2;
+--repeat 10
+select * from t1 where c1=3;
+commit;
+
+sleep 10;
+
+insert into t1 values(1,99);
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+update t1 set c2=c2+1 where c1=1;
+insert into t1 values(2,98);
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=2;
+update t1 set c2=c2+1 where c1=2;
+ob1.minor_freeze;
+sleep 3;
+rollback;
+ob1.ups0.check_memtable_status 3_3-3 dumped;
+ob1.ups1.check_memtable_status 3_3-3 dumped;
+--repeat 10
+select * from t1;
+--repeat 10
+select * from t1 where c1=1;
+--repeat 10
+select * from t1 where c1=2;
+--repeat 10
+select * from t1 where c1=3;
+commit;
+
+--echo case 2 strong read  after freeze
+connection conn1;
+set autocommit=0;
+# prepare row
+insert into t1 values(-1,101);
+commit;
+ob1.minor_freeze;
+sleep 3;
+
+set autocommit=1;
+--repeat 10
+select * from t1;
+ob1.ups0.check_memtable_status 3_4-4 dumped;
+ob1.ups1.check_memtable_status 3_4-4 dumped;
+
+
+--echo case 3.0 strong read  after drop
+ob1.ups_admin -t drop;
+set autocommit=1;
+--repeat 10
+select * from t1;
+
+
+--echo case 3.1 strong read  after major freeze
+--repeat 2
+select * from t1;
+ob1.major_freeze;
+ob1.check_cs_version 2;
+set autocommit=1;
+#--error 119
+--repeat 10
+select * from t1;
+ob1.ups0.check_memtable_status 3_5-5 dumped;
+ob1.ups1.check_memtable_status 3_5-5 dumped;
+
+--echo case 3.2 strong read after drop
+
+connection conn1;
+set autocommit=1;
+
+insert into t1 values(3,97);
+update t1 set c2=c2+1 where c1=3;
+update t1 set c2=c2+1 where c1=3;
+update t1 set c2=c2+1 where c1=3;
+delete from t1 where c1=3;
+insert into t1 values(3,97);
+update t1 set c2=c2+1 where c1=3;
+update t1 set c2=c2+1 where c1=3;
+update t1 set c2=c2+1 where c1=3;
+ob1.minor_freeze;
+sleep 3;
+--repeat 10
+select * from t1;
+--repeat 10
+select * from t1 where c1=3;
+ob1.ups0.check_memtable_status 4_1-1 dumped;
+ob1.ups1.check_memtable_status 4_1-1 dumped;
+ob1.ups_admin -t drop;
+sleep 3;
+--repeat 100
+select * from t1;
+--repeat 100
+select * from t1 where c1=3;
+
+
+--echo case 4 innertable delete
+connection conn1;
+set autocommit=1;
+#__all_client;
+let $local=deploy_get_value(ob1.ip);
+let $version=deploy_get_value(config.core);
+select count(*) from __all_client;
+--disable_query_log
+eval delete from __all_client where client_ip='$local' and version='$version';
+--enable_query_log
+sleep 3;
+select count(*) from __all_client;
+ob1.minor_freeze;
+sleep 3;
+--repeat 100
+select count(*) from __all_client;
+ob1.ups_admin -t drop;
+sleep 3;
+--repeat 100
+select count(*) from __all_client;
+ob1.ups0.check_memtable_status 4_2-2 dumped;
+ob1.ups1.check_memtable_status 4_2-2 dumped;
+
+
+--echo case 5 innertable delete/insert
+
+connection conn1;
+set autocommit=1;
+select count(*) from __all_client;
+insert into __all_client(client_ip,version) values('testip','testversion');
+sleep 3;
+let $ctime1=query_get_value(select * from __all_client,gm_create,1);
+select count(*) from __all_client;
+delete from __all_client where client_ip='testip' and version='testversion';
+sleep 3;
+select count(*) from __all_client;
+insert into __all_client(client_ip,version) values('testip','testversion');
+sleep 3;
+select count(*) from __all_client;
+let $ctime2=query_get_value(select * from __all_client,gm_create,1);
+if($ctime2 == $ctime1)
+{
+    --echo bug !!! this row has been deleted then inserted, gmt_create should change!!!
+}
+
+ob1.minor_freeze;
+select count(*) from __all_client;
+sleep 3;
+--repeat 100
+select count(*) from __all_client;
+ob1.ups_admin -t drop;
+sleep 3;
+--repeat 100
+select count(*) from __all_client;
+ob1.ups0.check_memtable_status 4_3-3 dumped;
+ob1.ups1.check_memtable_status 4_3-3 dumped;
+
+ob1.$m_ups.status;
+ob1.$s_ups.status;

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE dbmonster-schema PUBLIC "-//kernelpanic.pl//DBMonster Database Schema DTD 1.1//EN" "http://dbmonster.kernelpanic.pl/dtd/dbmonster-schema-1.1.dtd">
+<dbmonster-test>
+	<name>prejoin</name>
+	<query num="1" name="range_query">
+		<sql>select * from collect where user_id between ? and ?</sql>
+		<param name="min_id" type="int">
+			<generator type="com.etao.monster.generator.NumberGenerator">
+				<property name="maxValue" value="${cs_rows}" />
+				<property name="minValue" value="0" />
+				<property name="nulls" value="0" />
+				<property name="returnedType" value="long" />
+				<property name="scale" value="0" />
+			</generator>
+		</param>
+		<param name="max_id" type="int">
+			<generator type="com.etao.monster.generator.DependGenerator">
+				<property name="queryName" value="range_query" />
+				<property name="paramName" value="min_id" />
+				<property name="relation" value="100">
+			</generator>
+		</param>
+	</query>
+</dbmonster-test>

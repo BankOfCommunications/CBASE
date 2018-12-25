@@ -1,0 +1,30 @@
+ob1=OBI(cluster=1244)
+ob1.reboot
+ob1.start_diamond localhost
+ob1.set unloadDelaytime=10
+ob1.create_client
+ob1.prepare
+ob1.start_check
+create table t1(a int primary key,b int);
+insert into t1 values(-1,-1),(-2,-2),(0,0),(1,1);
+select * from t1;
+a	b
+-2	-2
+-1	-1
+0	0
+1	1
+ob1.set_diamond coreJarVersion=9.0.1,enableUpdate=true,percentage=100,MD5=87a6a137f05b4e730f99dd02ae891908
+count(*)=2
+1
+count(*)=1
+1
+ob1.sh ls ~/.obdatasource/9.0.1
+update t1 set b=2 where a=1;
+delete from t1 where a=0;
+select * from t1;
+a	b
+-2	-2
+-1	-1
+1	2
+drop table t1;
+ob1.stop_check

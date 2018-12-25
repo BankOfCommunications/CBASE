@@ -1,0 +1,12 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\client\java\src\main\java\com\taobao\oceanbase\network
+2
+8
+7:handler|2|0|0|0|0a3a9bc268ac11e8a8030002c8c1274c|0
+c:Session.java|1|166f774b875|d6|5bab4520|581a9fbe68ac11e8a8030002c8c1274c|0
+b:Server.java|1|166f774b7f1|a8b|3bce8a9f|32ba9dce68ac11e8a8030002c8c1274c|0
+6:packet|2|0|0|0|117a9c2668ac11e8a8030002c8c1274c|0
+5:codec|2|0|0|0|35ea9df668ac11e8a8030002c8c1274c|0
+9:exception|2|0|0|0|4daa9f2e68ac11e8a8030002c8c1274c|0
+4:mina|2|0|0|0|3f5a9e7668ac11e8a8030002c8c1274c|0
+13:SessionFactory.java|1|166f774b82a|462|1e67896|3c5a9e4e68ac11e8a8030002c8c1274c|0

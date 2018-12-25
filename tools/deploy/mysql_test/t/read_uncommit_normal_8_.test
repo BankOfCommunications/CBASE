@@ -1,0 +1,10 @@
+drop table if exists c;
+create table c (c1 int primary key, c2 varchar(8));
+set autocommit= 0 ;							
+insert into c values(1,1);
+update c set c1 = 2 where c1 = 1;
+update c set c1 = 3 where c1 = 2;
+update c set c1 = 4 where c1 = 3;
+update c set c1 = 5 where c1 = 4;
+update c set c1 = 6 where c1 = 5;
+commit;

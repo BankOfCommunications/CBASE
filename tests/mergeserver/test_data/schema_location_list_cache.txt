@@ -1,0 +1,34 @@
+[tablet_location_cache]
+
+# tablet range <-> location 
+
+table_id_0 = 1001
+range_start_0 = MIN
+range_end_0  =  MAX
+server_list_0 = 10.10.10.1,10.10.10.2
+
+
+#table_id_1 = 1001
+#range_start_1 = 001
+#range_end_1   = 002
+#server_list_1= 10.10.10.1,10.10.10.2
+
+
+#table_id_2 = 1001
+#range_start_2 = 002
+#range_end_2   = 003
+#server_list_2= 10.10.10.2,10.10.10.3
+
+
+#table_id_3 = 1001
+#range_start_3 = 003
+#range_end_3   = 004
+#server_list_3= 10.10.10.2,10.10.10.3
+
+
+#table_id_4 = 1001
+#range_start_4 = 004
+#range_end_4   = 005
+#server_list_4= 10.10.10.2,10.10.10.3
+
+

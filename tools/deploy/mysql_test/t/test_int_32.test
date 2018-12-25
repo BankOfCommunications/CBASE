@@ -1,0 +1,490 @@
+#--disable_warnings
+#drop table if exists test_key1,test_key2,test_key3;
+#--enable_warnings
+#
+#create table test_key1(co1 int primary key,co2 bigint,co3 decimal(10,5),co4 varchar(256),co5 bool,co6 date);
+#create table test_key2(co1 bigint primary key,co2 int,co3 decimal(10,5),co4 varchar(256),co5 bool,co6 date);
+#create table test_key3(co1 bigint,co2 int,co3 decimal(10,5),co4 varchar(256),co5 bool,co6 date,primary key(co1,co2,co3));
+##  test int_32 as primary key
+##  1
+#desc test_key1;
+##  2
+#desc test_key1;
+##  3
+#insert into test_key1 values(NULL,1,2.88,'int32 test',false,'2015-10-13');
+##  4
+#insert into test_key1 values(1,1,2.88,'int32 test',false,'2015-10-13');
+##  5
+#insert into test_key1 values(2.2,1,2.88,'int32 test',false,'2015-10-13');
+##  6
+#--error 5024
+#insert into test_key1 values(1.55687,1,2.88,'int32 test',false,'2015-10-13');
+##  7
+#--error 5001
+#insert into test_key1 values(datetime '1990-01-01 10:10:10',1,2.88,'int32 test',false,'2015-10-13');
+##  8
+#insert into test_key1 values('1990-01-01 10:10:10',1,2.88,'int32 test',false,'2015-10-13');
+##  9
+#--error 5047
+#insert into test_key1 values('hello!',1,2.88,'int32 test',false,'2015-10-13');
+##  10
+#insert into test_key1 values('596',1,2.88,'int32 test',false,'2015-10-13');
+##  11
+#--error 5024
+#insert into test_key1 values(true,1,2.88,'int32 test',false,'2015-10-13');
+##  12
+#insert into test_key1 values(5.882,1,2.88,'int32 test',false,'2015-10-13');
+##  13
+#--error 5047
+#insert into test_key1 values(date '2000-01-01',1,2.88,'int32 test',false,'2015-10-13');
+##  14
+#--error 5047
+#insert into test_key1 values(time '10:11:12',1,2.88,'int32 test',false,'2015-10-13');
+##  test int_32 as data_column
+##  15
+#desc test_key2;
+#
+#desc test_key2;
+##  17
+#insert into test_key2 values(NULL,1,2.88,'int32 test',false,'2015-10-13');
+##  18
+#insert into test_key2 values(1,1,2.88,'int32 test',false,'2015-10-13');
+##  19
+#insert into test_key2 values(2.2,1,2.88,'int32 test',false,'2015-10-13');
+##  20
+#--error 5024
+#insert into test_key2 values(1.55687,1,2.88,'int32 test',false,'2015-10-13');
+##  21
+#--error 5001
+#insert into test_key2 values(datetime '1990-01-01 10:10:10',1,2.88,'int32 test',false,'2015-10-13');
+##  22
+#insert into test_key2 values('1990-01-01 10:10:10',1,2.88,'int32 test',false,'2015-10-13');
+##  23
+#insert into test_key2 values('hello!',1,2.88,'int32 test',false,'2015-10-13');
+##  24
+#insert into test_key2 values('596',1,2.88,'int32 test',false,'2015-10-13');
+##  25
+#--error 5024
+#insert into test_key2 values(true,1,2.88,'int32 test',false,'2015-10-13');
+##  26
+#insert into test_key2 values(5.882,1,2.88,'int32 test',false,'2015-10-13');
+##  27
+#insert into test_key2 values(date '2000-01-01',1,2.88,'int32 test',false,'2015-10-13');
+##  28
+#insert into test_key2 values(time '10:11:12',1,2.88,'int32 test',false,'2015-10-13');
+##  test int_32 as one part of primary key
+##  29
+#desc test_key3;
+##  30
+#
+#desc test_key2;
+##  31
+#insert into test_key3 values(NULL,1,2.88,'int32 test',false,'2015-10-13');
+##  32
+#insert into test_key3 values(1,1,2.88,'int32 test',false,'2015-10-13');
+##  33
+#insert into test_key3 values(2.2,1,2.88,'int32 test',false,'2015-10-13');
+##  34
+#--error 5024
+#insert into test_key3 values(1.55687,1,2.88,'int32 test',false,'2015-10-13');
+##  35
+#--error 5001
+#insert into test_key3 values(datetime '1990-01-01 10:10:10',1,2.88,'int32 test',false,'2015-10-13');
+##  36
+#insert into test_key3 values('1990-01-01 10:10:10',1,2.88,'int32 test',false,'2015-10-13');
+##  37
+#insert into test_key3 values('hello!',1,2.88,'int32 test',false,'2015-10-13');
+##  38
+#insert into test_key3 values('596',1,2.88,'int32 test',false,'2015-10-13');
+##  39
+#--error 5024
+#insert into test_key3 values(true,1,2.88,'int32 test',false,'2015-10-13');
+##  40
+#insert into test_key3 values(5.882,1,2.88,'int32 test',false,'2015-10-13');
+##  41
+#insert into test_key3 values(date '2000-01-01',1,2.88,'int32 test',false,'2015-10-13');
+##  42
+#insert into test_key3 values(time '10:11:12',1,2.88,'int32 test',false,'2015-10-13');
+#
+#--disable_warnings
+#drop table if exists test_airthemetic;
+#--enable_warnings
+#
+#create table test_airthemetic(co1 int primary key,c_int int,c_bigint bigint,c_float float,c_double double,c_datetime datetime,c_timestamp timestamp,c_varchar varchar(256),c_ctime createtime, c_mtime modifytime,c_bool bool,c_decimal decimal(10,5),c_date date,c_time time);
+#insert into test_airthemetic(co1) values (1);
+##  test int_32 airthemetic with NULL
+##  1
+#select co1+c_int from test_airthemetic;
+##  2
+#select co1-c_int from test_airthemetic;
+##  3
+#select co1*c_int from test_airthemetic;
+##  4
+#select co1/c_int from test_airthemetic;
+##  5
+#select c_int+c_bigint from test_airthemetic;
+##  6
+#select c_int-c_bigint from test_airthemetic;
+##  7
+#select c_int*c_bigint from test_airthemetic;
+##  8
+#select c_int/c_bigint from test_airthemetic;
+##  9
+#select c_int+c_float from test_airthemetic;
+##  10
+#select c_int-c_float from test_airthemetic;
+##  11
+#select c_int*c_float from test_airthemetic;
+##  12
+#select c_int/c_float from test_airthemetic;
+##  13
+#select c_int+c_double from test_airthemetic;
+##  14
+#select c_int-c_double from test_airthemetic;
+##  15
+#select c_int*c_double from test_airthemetic;
+##  16
+#select c_int/c_double from test_airthemetic;
+##  17
+#
+#--error 5023
+#select c_int+c_datetime from test_airthemetic;
+##  18
+#--error 5023
+#select c_int-c_datetime from test_airthemetic;
+##  19
+#--error 5023
+#select c_int*c_datetime from test_airthemetic;
+##  20
+#--error 5023
+#select c_int/c_datetime from test_airthemetic;
+##  21
+#--error 5023
+#select c_int+c_timestamp from test_airthemetic;
+##  22
+#--error 5023
+#select c_int-c_timestamp from test_airthemetic;
+##  23
+#--error 5023
+#select c_int*c_timestamp from test_airthemetic;
+##  24
+#--error 5023
+#select c_int/c_timestamp from test_airthemetic;
+##  25
+#select c_int+c_varchar from test_airthemetic;
+##  26
+#select c_int-c_varchar from test_airthemetic;
+##  27
+#select c_int*c_varchar from test_airthemetic;
+##  28
+#select c_int/c_varchar from test_airthemetic;
+##  29
+#select c_int+c_bool from test_airthemetic;
+##  30
+#select c_int-c_bool from test_airthemetic;
+##  31
+#select c_int*c_bool from test_airthemetic;
+##  32
+#select c_int/c_bool from test_airthemetic;
+##  33
+#select c_int+c_decimal from test_airthemetic;
+##  34
+#select c_int-c_decimal from test_airthemetic;
+##  35
+#select c_int*c_decimal from test_airthemetic;
+##  36
+#select c_int/c_decimal from test_airthemetic;
+##  37
+#--error 5023
+#select c_int+c_date from test_airthemetic;
+##  38
+#--error 5023
+#select c_int-c_date from test_airthemetic;
+##  39
+#--error 5023
+#select c_int*c_date from test_airthemetic;
+##  40
+#--error 5023
+#select c_int/c_date from test_airthemetic;
+##  41
+#--error 5023
+#select c_int+c_time from test_airthemetic;
+##  42
+#--error 5023
+#select c_int-c_time from test_airthemetic;
+##  43
+#--error 5023
+#select c_int*c_time from test_airthemetic;
+##  44
+#--error 5023
+#select c_int/c_time from test_airthemetic;
+#
+#drop table test_airthemetic;
+#create table test_airthemetic(co1 int primary key,c_int int,c_bigint bigint,c_float float,c_double double,c_datetime datetime,c_timestamp timestamp,c_varchar varchar(256),c_ctime createtime, c_mtime modifytime,c_bool bool,c_decimal decimal(10,5),c_date date,c_time time);
+#insert into test_airthemetic(co1, c_int, c_bigint,c_float, c_double, c_datetime, c_timestamp,  c_varchar, c_bool, c_decimal, c_date, c_time) values(1, 1, 5, 1.1, 1.1234567, '1970-01-01 08:00:00', '2015-10-09 10:24:32.123456', 'test int32' ,true, 1256.668, '1998-10-24', '09:44:11');
+#insert into test_airthemetic(co1, c_int, c_bigint,c_float, c_double, c_datetime, c_timestamp,  c_varchar, c_bool, c_decimal, c_date, c_time) values(2, 2, 5, 1.1, 1.1234567, '1970-01-01 08:00:00', '2015-10-09 10:24:32.123456', '1258' ,true, 1256.668, '1998-10-24', '09:44:11');
+#insert into test_airthemetic(co1, c_int) values(3, 0);
+##  test int_32 airthemetic with other data_type
+##  1
+#select co1+c_int from test_airthemetic where co1 = 1;
+##  2
+#select co1-c_int from test_airthemetic where co1 = 1;
+##  3
+#select co1*c_int from test_airthemetic where co1 = 1;
+##  4
+#select co1/c_int from test_airthemetic where co1 = 1;
+##  5
+#--error 78
+#select co1/c_int from test_airthemetic where co1 = 3;
+##  6
+#select c_int+c_bigint from test_airthemetic where co1 = 1;
+##  7
+#select c_int-c_bigint from test_airthemetic where co1 = 1;
+##  8
+#select c_int*c_bigint from test_airthemetic where co1 = 1;
+##  9
+#select c_int/c_bigint from test_airthemetic where co1 = 1;
+##  10
+#select c_int+c_float from test_airthemetic where co1 = 1;
+##  11
+#select c_int-c_float from test_airthemetic where co1 = 1;
+##  12
+#select c_int*c_float from test_airthemetic where co1 = 1;
+##  13
+#select c_int/c_float from test_airthemetic where co1 = 1;
+##  14
+#select c_int+c_double from test_airthemetic where co1 = 1;
+##  15
+#select c_int-c_double from test_airthemetic where co1 = 1;
+##  16
+#select c_int*c_double from test_airthemetic where co1 = 1;
+##  17
+#select c_int/c_double from test_airthemetic where co1 = 1;
+##  18
+#--error 5023
+#select c_int+c_datetime from test_airthemetic where co1 = 1;
+##  19
+#--error 5023
+#select c_int-c_datetime from test_airthemetic where co1 = 1;
+##  20
+#--error 5023
+#select c_int*c_datetime from test_airthemetic where co1 = 1;
+##  21
+#--error 5023
+#select c_int/c_datetime from test_airthemetic where co1 = 1;
+##  22
+#--error 5023
+#select c_int+c_timestamp from test_airthemetic where co1 = 1;
+##  23
+#--error 5023
+#select c_int-c_timestamp from test_airthemetic where co1 = 1;
+##  24
+#--error 5023
+#select c_int*c_timestamp from test_airthemetic where co1 = 1;
+##  25
+#--error 5023
+#select c_int/c_timestamp from test_airthemetic where co1 = 1;
+##  26
+#--error 7
+#select c_int+c_varchar from test_airthemetic where co1 = 1;
+##  27
+#--error 7
+#select c_int-c_varchar from test_airthemetic where co1 = 1;
+##  28
+#--error 7
+#select c_int*c_varchar from test_airthemetic where co1 = 1;
+##  29
+#select c_int/c_varchar from test_airthemetic where co1 = 1;
+##  30
+#select c_int+c_varchar from test_airthemetic where co1 = 2;
+##  31
+#select c_int-c_varchar from test_airthemetic where co1 = 2;
+##  32
+#select c_int*c_varchar from test_airthemetic where co1 = 2;
+##  33
+#select c_int/c_varchar from test_airthemetic where co1 = 2;
+##  34
+#--error 5023
+#select c_int+c_ctime from test_airthemetic;
+##  35
+#--error 5023
+#select c_int-c_ctime from test_airthemetic;
+##  36
+#--error 5023
+#select c_int*c_ctime from test_airthemetic;
+##  37
+#--error 5023
+#select c_int/c_ctime from test_airthemetic;
+##  38
+#--error 5023
+#select c_int+c_mtime from test_airthemetic;
+##  39
+#--error 5023
+#select c_int-c_mtime from test_airthemetic;
+##  40
+#--error 5023
+#select c_int*c_mtime from test_airthemetic;
+##  41
+#--error 5023
+#select c_int/c_mtime from test_airthemetic;
+##  42
+#select c_int+c_bool from test_airthemetic;
+##  43
+#select c_int-c_bool from test_airthemetic;
+##  44
+#select c_int*c_bool from test_airthemetic;
+##  45
+#select c_int/c_bool from test_airthemetic;
+##  46
+#select c_int+c_decimal from test_airthemetic;
+##  47
+#select c_int-c_decimal from test_airthemetic;
+##  48
+#select c_int*c_decimal from test_airthemetic;
+##  49
+#select c_int/c_decimal from test_airthemetic;
+##  50
+#--error 5023
+#select c_int+c_date from test_airthemetic;
+##  51
+#--error 5023
+#select c_int-c_date from test_airthemetic;
+##  52
+#--error 5023
+#select c_int*c_date from test_airthemetic;
+##  53
+#--error 5023
+#select c_int/c_date from test_airthemetic;
+##  54
+#--error 5023
+#select c_int+c_time from test_airthemetic;
+##  55
+#--error 5023
+#select c_int-c_time from test_airthemetic;
+##  56
+#--error 5023
+#select c_int*c_time from test_airthemetic;
+##  57
+#--error 5023
+#select c_int/c_time from test_airthemetic;
+
+drop table if exists test_bound;
+create table test_bound(id int primary key,co1 int);
+#  test int_32 bound
+#  1
+insert into test_bound values(1,2147483647);
+#  2
+--error 79
+insert into test_bound values(2,2147483648);
+#  3
+insert into test_bound values(3,-2147483648);
+#  4
+--error 79
+insert into test_bound values(4,-2147483649);
+
+drop table if exists test_update;
+create table test_update(co1 bigint primary key,co2 int);
+create or replace sequence seq;
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+#  update
+#  1
+update test_update set co2= null where co1 = 1;
+select * from test_update;
+#  2
+update test_update set co2= 12345 where co1 = 1;
+select * from test_update;
+#  3
+--error 79
+update test_update set co2= 12345678910 where co1 = 1;
+select * from test_update;
+#  4
+ update test_update set co2= 123.0 where co1 = 1;
+ select * from test_update;
+#  5
+ update test_update set co2= 123.0 where co1 = 1;
+ select * from test_update;
+#  6
+update test_update set co2= 123.0000000000000001 where co1 = 1;
+ select * from test_update;
+#  7
+--error 79
+update test_update set co2= 12345678919.0000000000001 where co1 = 1;
+select * from test_update;
+#  8
+update test_update set co2= '1345.' where co1 = 1;
+select * from test_update;
+#  9
+update test_update set co2= '1345.' where co1 = 1;
+select * from test_update;
+#  10
+update test_update set co2= '321' where co1 = 1;
+select * from test_update;
+#  11
+--error 19
+update test_update set co2= '98765432112345' where co1 = 1;
+select * from test_update;
+#  12
+--error 7
+update test_update set co2= 'abc' where co1 = 1;
+select * from test_update;
+#  13
+update test_update set co2=true where co1 = 2;
+select * from test_update;
+#  14
+update test_update set co2=false where co1 = 2;
+select * from test_update;
+#  15
+update test_update set co2='2015-12-12 12:21:16.1234' where co1 = 2;
+select * from test_update;
+#  16
+update test_update set co2='2015-12-12' where co1 = 2;
+select * from test_update;
+#  17
+update test_update set co2='12:21:32' where co1 = 2;
+select * from test_update;
+
+#  delete
+drop table if exists test_delete;
+create table test_delete(co1 bigint primary key,co2 int);
+create or replace sequence seq;
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+#  1
+delete from test_delete where co1 =1;
+select * from test_delete;
+#  2
+delete from test_delete where co1 >9;
+select * from test_delete;
+#  3
+delete from test_delete where co1 <3;
+select * from test_delete;
+#  4
+delete from test_delete where co1 >=9;
+select * from test_delete;
+#  5
+delete from test_delete where co1 <=3;
+select * from test_delete;
+#  6
+delete from test_delete where co1 between 4 and 5;
+select * from test_delete;
+#  7
+delete from test_delete where co1 in(7,8);
+select * from test_delete;
+

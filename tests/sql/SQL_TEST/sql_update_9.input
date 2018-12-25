@@ -1,0 +1,40 @@
+-- ok
+update item set item_cost= item_name like '%jing%' where item_id=100;
+<logical_plan Begin>
+    <StmtList Begin>
+        ObUpdateStmt 0 Begin
+            <TableItemList Begin>
+                {Num 0, TableId:1001, TableName:item, AliasName:NULL, Type:BASE_TABLE, RefId: 1001}
+            <TableItemList End>
+            <ColumnItemList Begin>
+                {Num 0, ColumnId:4, ColumnName:item_cost, TableRef:1001}
+                {Num 1, ColumnId:3, ColumnName:item_name, TableRef:1001}
+                {Num 2, ColumnId:2, ColumnName:item_id, TableRef:1001}
+            <ColumnItemList End>
+            WHERE ::= <2>
+            UPDATE ::= <1001>
+            SET ::= <4, 1>
+        ObUpdateStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_OP_LIKE
+            T_REF_COLUMN : [table_id, column_id] = [1001, 3]
+            T_STRING : %jing%
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (NULL : 18446744073709551612)
+        T_OP_EQ
+            T_REF_COLUMN : [table_id, column_id] = [1001, 2]
+            T_INT : 100
+        ObSqlRawExpr 1 End
+    <ExprList End>
+<logical_plan End>
+
+
+
+
+

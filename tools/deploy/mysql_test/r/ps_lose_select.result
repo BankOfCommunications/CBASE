@@ -1,0 +1,1393 @@
+drop table if exists t1, t2;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,2),(2,'b',3,4),(3,'c',4,5);
+prepare stmt2 from select b from t1 where a=2 group by b;
+execute stmt2;
+b
+b
+alter table t1 drop x;
+ERROR 42S22: Column 'x' doesn't exist
+execute stmt2;
+b
+b
+select * from t1;
+a	b	c	d
+1	a	2	2
+2	b	3	4
+3	c	4	5
+deallocate prepare stmt2;
+prepare stmt3 from select b from t1 where a=3 group by b;
+execute stmt3;
+b
+c
+alter table t1 drop d;
+execute stmt3;
+b
+c
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt3;
+alter table t1 add d int;
+prepare stmt4 from select d from t1 where a=2;
+execute stmt4;
+d
+NULL
+alter table t1 drop d;
+execute stmt4;
+ERROR 42S22: Unkown column name d
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt4;
+alter table t1 add d int;
+prepare stmt5 from select d from t1 where a=?;
+set @a=1;
+execute stmt5 using @a;
+d
+NULL
+alter table t1 drop d;
+execute stmt5 using @a;
+ERROR 42S22: Unkown column name d
+deallocate prepare stmt5;
+alter table t1 add d int;
+prepare stmt6 from select a,d from t1 where a=?;
+set @a=1;
+execute stmt6 using @a;
+a	d
+1	NULL
+alter table t1 drop d;
+execute stmt6 using @a;
+ERROR 42S22: Unkown column name d
+deallocate prepare stmt6;
+alter table t1 add d int;
+prepare stmt7 from select a,b from t1 where d=?;
+set @d=1;
+execute stmt7 using @d;
+a	b
+alter table t1 drop d;
+execute stmt7 using @d;
+ERROR 42S22: Unkown column name d
+deallocate prepare stmt7;
+alter table t1 add d int;
+prepare stmt8 from select a,b from t1 where d between 4 and 1;
+execute stmt8;
+a	b
+alter table t1 drop d;
+execute stmt8;
+ERROR 42S22: Unkown column name d
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt8;
+alter table t1 add d int;
+prepare stmt9 from select a,b from t1 where d in (1,2,3,4);
+execute stmt9;
+a	b
+alter table t1 drop d;
+execute stmt9;
+ERROR 42S22: Unkown column name d
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt9;
+alter table t1 add d int;
+prepare stmt10 from select a,b from t1 where d not in (1,2,3,4);
+execute stmt10;
+a	b
+alter table t1 drop d;
+execute stmt10;
+ERROR 42S22: Unkown column name d
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt10;
+alter table t1 add d int;
+prepare stmt11 from select a,b from t1 order by d;
+execute stmt11;
+a	b
+1	a
+2	b
+3	c
+alter table t1 drop d;
+execute stmt11;
+ERROR 42S22: Unkown column name d
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt11;
+alter table t1 add d int;
+prepare stmt12 from select a,b from t1 group by d;
+execute stmt12;
+a	b
+1	a
+alter table t1 drop d;
+execute stmt12;
+ERROR 42S22: Unkown column name d
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt12;
+alter table t1 add d int;
+prepare stmt13 from select a,max(d) from t1 group by a;
+execute stmt13;
+a	max(d)
+1	NULL
+2	NULL
+3	NULL
+alter table t1 drop d;
+execute stmt13;
+ERROR 42S22: Unkown column name d
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt13;
+alter table t1 add d int;
+prepare stmt14 from select a,min(d) from t1 group by a;
+execute stmt14;
+a	min(d)
+1	NULL
+2	NULL
+3	NULL
+alter table t1 drop d;
+execute stmt14;
+ERROR 42S22: Unkown column name d
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt14;
+alter table t1 add d int;
+prepare stmt15 from select a,avg(d) from t1 group by a;
+execute stmt15;
+a	avg(d)
+1	NULL
+2	NULL
+3	NULL
+alter table t1 drop d;
+execute stmt15;
+ERROR 42S22: Unkown column name d
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt15;
+alter table t1 add d int;
+prepare stmt16 from select a,count(d) from t1 group by a;
+execute stmt16;
+a	count(d)
+1	0
+2	0
+3	0
+alter table t1 drop d;
+execute stmt16;
+ERROR 42S22: Unkown column name d
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt16;
+alter table t1 add d int;
+prepare stmt17 from select a,sum(d) from t1 group by a;
+execute stmt17;
+a	sum(d)
+1	NULL
+2	NULL
+3	NULL
+alter table t1 drop d;
+execute stmt17;
+ERROR 42S22: Unkown column name d
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt17;
+alter table t1 add d int;
+prepare stmt18 from select a from t1 group by a having sum(d)=4;
+execute stmt18;
+a
+alter table t1 drop d;
+execute stmt18;
+ERROR 42S22: Unkown column name d
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt18;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt19 from select b from t1 where a=2 group by b;
+execute stmt19;
+b
+b
+alter table t1 drop x;
+ERROR 42S22: Column 'x' doesn't exist
+alter table t1 add  x int;
+execute stmt19;
+b
+b
+select * from t1;
+a	b	c	d	x
+1	a	2	3	NULL
+2	b	3	2	NULL
+3	c	4	1	NULL
+deallocate prepare stmt19;
+prepare stmt20 from select b from t1 where a=2 group by b;
+execute stmt20;
+b
+b
+alter table t1 drop d;
+alter table t1 add  d int;
+execute stmt20;
+b
+b
+select * from t1;
+a	b	c	x	d
+1	a	2	NULL	NULL
+2	b	3	NULL	NULL
+3	c	4	NULL	NULL
+deallocate prepare stmt20;
+prepare stmt21 from select d from t1 where a=2;
+execute stmt21;
+d
+NULL
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt21;
+d
+NULL
+select * from t1;
+a	b	c	x	d
+1	a	2	NULL	NULL
+2	b	3	NULL	NULL
+3	c	4	NULL	NULL
+deallocate prepare stmt21;
+prepare stmt22 from select d from t1 where a=?;
+set @a=1;
+execute stmt22 using @a;
+d
+NULL
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt22 using @a;
+d
+NULL
+deallocate prepare stmt22;
+prepare stmt23 from select a,d from t1 where a=?;
+set @a=1;
+execute stmt23 using @a;
+a	d
+1	NULL
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt23 using @a;
+a	d
+1	NULL
+deallocate prepare stmt23;
+prepare stmt24 from select a,b from t1 where d=?;
+set @d=1;
+execute stmt24 using @d;
+a	b
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt24 using @d;
+a	b
+deallocate prepare stmt24;
+prepare stmt25 from select a,b from t1 where d between 4 and 1;
+execute stmt25;
+a	b
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt25;
+a	b
+select * from t1;
+a	b	c	x	d
+1	a	2	NULL	NULL
+2	b	3	NULL	NULL
+3	c	4	NULL	NULL
+deallocate prepare stmt25;
+prepare stmt26 from select a,b from t1 where d in (1,2,3,4);
+execute stmt26;
+a	b
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt26;
+a	b
+select * from t1;
+a	b	c	x	d
+1	a	2	NULL	NULL
+2	b	3	NULL	NULL
+3	c	4	NULL	NULL
+deallocate prepare stmt26;
+prepare stmt27 from select a,b from t1 where d not in (1,2,3,4);
+execute stmt27;
+a	b
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt27;
+a	b
+select * from t1;
+a	b	c	x	d
+1	a	2	NULL	NULL
+2	b	3	NULL	NULL
+3	c	4	NULL	NULL
+deallocate prepare stmt27;
+prepare stmt28 from select a,b from t1 order by d;
+execute stmt28;
+a	b
+1	a
+2	b
+3	c
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt28;
+a	b
+1	a
+2	b
+3	c
+select * from t1;
+a	b	c	x	d
+1	a	2	NULL	NULL
+2	b	3	NULL	NULL
+3	c	4	NULL	NULL
+deallocate prepare stmt28;
+prepare stmt29 from select a,b from t1 group by d;
+execute stmt29;
+a	b
+1	a
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt29;
+a	b
+1	a
+select * from t1;
+a	b	c	x	d
+1	a	2	NULL	NULL
+2	b	3	NULL	NULL
+3	c	4	NULL	NULL
+deallocate prepare stmt29;
+prepare stmt30 from select a,max(d) from t1 group by a;
+execute stmt30;
+a	max(d)
+1	NULL
+2	NULL
+3	NULL
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt30;
+a	max(d)
+1	NULL
+2	NULL
+3	NULL
+select * from t1;
+a	b	c	x	d
+1	a	2	NULL	NULL
+2	b	3	NULL	NULL
+3	c	4	NULL	NULL
+deallocate prepare stmt30;
+prepare stmt31 from select a,min(d) from t1 group by a;
+execute stmt31;
+a	min(d)
+1	NULL
+2	NULL
+3	NULL
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt31;
+a	min(d)
+1	NULL
+2	NULL
+3	NULL
+select * from t1;
+a	b	c	x	d
+1	a	2	NULL	NULL
+2	b	3	NULL	NULL
+3	c	4	NULL	NULL
+deallocate prepare stmt31;
+prepare stmt32 from select a,avg(d) from t1 group by a;
+execute stmt32;
+a	avg(d)
+1	NULL
+2	NULL
+3	NULL
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt32;
+a	avg(d)
+1	NULL
+2	NULL
+3	NULL
+select * from t1;
+a	b	c	x	d
+1	a	2	NULL	NULL
+2	b	3	NULL	NULL
+3	c	4	NULL	NULL
+deallocate prepare stmt32;
+prepare stmt33 from select a,count(d) from t1 group by a;
+execute stmt33;
+a	count(d)
+1	0
+2	0
+3	0
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt33;
+a	count(d)
+1	0
+2	0
+3	0
+select * from t1;
+a	b	c	x	d
+1	a	2	NULL	NULL
+2	b	3	NULL	NULL
+3	c	4	NULL	NULL
+deallocate prepare stmt33;
+prepare stmt34 from select a,sum(d) from t1 group by a;
+execute stmt34;
+a	sum(d)
+1	NULL
+2	NULL
+3	NULL
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt34;
+a	sum(d)
+1	NULL
+2	NULL
+3	NULL
+select * from t1;
+a	b	c	x	d
+1	a	2	NULL	NULL
+2	b	3	NULL	NULL
+3	c	4	NULL	NULL
+deallocate prepare stmt34;
+prepare stmt35 from select a from t1 group by a having sum(d)=4;
+execute stmt35;
+a
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt35;
+a
+select * from t1;
+a	b	c	x	d
+1	a	2	NULL	NULL
+2	b	3	NULL	NULL
+3	c	4	NULL	NULL
+deallocate prepare stmt35;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt36 from select b from t1 where a=2 group by b;
+execute stmt36;
+b
+b
+alter table t1 drop d;
+alter table t1 add  d varchar(255);
+execute stmt36;
+b
+b
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt36;
+prepare stmt37 from select d from t1 where a=2;
+execute stmt37;
+d
+NULL
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt37;
+d
+NULL
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt37;
+prepare stmt38 from select d from t1 where a=?;
+set @a=1;
+execute stmt38 using @a;
+d
+NULL
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+execute stmt38 using @a;
+d
+NULL
+deallocate prepare stmt38;
+prepare stmt39 from select a,d from t1 where a=?;
+set @a=1;
+execute stmt39 using @a;
+a	d
+1	NULL
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt39 using @a;
+a	d
+1	NULL
+deallocate prepare stmt39;
+prepare stmt40 from select a,b from t1 where d=?;
+set @d=1;
+execute stmt40 using @d;
+a	b
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+execute stmt40 using @d;
+a	b
+deallocate prepare stmt40;
+prepare stmt41 from select a,b from t1 where d between 4 and 1;
+execute stmt41;
+a	b
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt41;
+a	b
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt41;
+prepare stmt42 from select a,b from t1 where d in (1,2,3,4);
+execute stmt42;
+a	b
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+execute stmt42;
+a	b
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt42;
+prepare stmt43 from select a,b from t1 where d not in (1,2,3,4);
+execute stmt43;
+a	b
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt43;
+a	b
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt43;
+prepare stmt44 from select a,b from t1 order by d;
+execute stmt44;
+a	b
+1	a
+2	b
+3	c
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+execute stmt44;
+a	b
+1	a
+2	b
+3	c
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt44;
+prepare stmt45 from select a,b from t1 group by d;
+execute stmt45;
+a	b
+1	a
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt45;
+a	b
+1	a
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt45;
+prepare stmt46 from select a,max(d) from t1 group by a;
+execute stmt46;
+a	max(d)
+1	NULL
+2	NULL
+3	NULL
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+execute stmt46;
+a	max(d)
+1	NULL
+2	NULL
+3	NULL
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt46;
+prepare stmt47 from select a,min(d) from t1 group by a;
+execute stmt47;
+a	min(d)
+1	NULL
+2	NULL
+3	NULL
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt47;
+a	min(d)
+1	NULL
+2	NULL
+3	NULL
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt47;
+prepare stmt48 from select a,avg(d) from t1 group by a;
+execute stmt48;
+a	avg(d)
+1	NULL
+2	NULL
+3	NULL
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+execute stmt48;
+a	avg(d)
+1	NULL
+2	NULL
+3	NULL
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt48;
+prepare stmt49 from select a,count(d) from t1 group by a;
+execute stmt49;
+a	count(d)
+1	0
+2	0
+3	0
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt49;
+a	count(d)
+1	0
+2	0
+3	0
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt49;
+prepare stmt50 from select a,sum(d) from t1 group by a;
+execute stmt50;
+a	sum(d)
+1	NULL
+2	NULL
+3	NULL
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+execute stmt50;
+a	sum(d)
+1	NULL
+2	NULL
+3	NULL
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt50;
+prepare stmt51 from select a from t1 group by a having sum(d)=4;
+execute stmt51;
+a
+alter table t1 drop d;
+alter table t1 add d int;
+execute stmt51;
+a
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt51;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt52 from select d from t1 where a=2;
+execute stmt52;
+d
+2
+drop table t1;
+execute stmt52;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt52;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt53 from select d from t1 where a=?;
+set @a=1;
+execute stmt53 using @a;
+d
+3
+drop table t1;
+execute stmt53 using @a;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt53;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt54 from select a,b from t1 where d between 4 and 1;
+execute stmt54;
+a	b
+drop table t1;
+execute stmt54;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt54;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt55 from select a,b from t1 where d in (1,2,3,4);
+execute stmt55;
+a	b
+1	a
+2	b
+3	c
+drop table t1;
+execute stmt55;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt55;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt56 from select a,b from t1 where d not in (1,2,3,4);
+execute stmt56;
+a	b
+drop table t1;
+execute stmt56;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt56;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt57 from select a,b from t1 order by d;
+execute stmt57;
+a	b
+3	c
+2	b
+1	a
+drop table t1;
+execute stmt57;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt57;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt58 from select a,b from t1 group by d;
+execute stmt58;
+a	b
+3	c
+2	b
+1	a
+drop table t1;
+execute stmt58;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt58;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt59 from select a,max(d) from t1 group by a;
+execute stmt59;
+a	max(d)
+1	3
+2	2
+3	1
+drop table t1;
+execute stmt59;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt59;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt60 from select a,min(d) from t1 group by a;
+execute stmt60;
+a	min(d)
+1	3
+2	2
+3	1
+drop table t1;
+execute stmt60;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt60;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt61 from select a,avg(d) from t1 group by a;
+execute stmt61;
+a	avg(d)
+1	3
+2	2
+3	1
+drop table t1;
+execute stmt61;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt61;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt62 from select a,count(d) from t1 group by a;
+execute stmt62;
+a	count(d)
+1	1
+2	1
+3	1
+drop table t1;
+execute stmt62;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt62;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt63 from select a,sum(d) from t1 group by a;
+execute stmt63;
+a	sum(d)
+1	3
+2	2
+3	1
+drop table t1;
+execute stmt63;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt63;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt64 from select a from t1 group by a having sum(d)=4;
+execute stmt64;
+a
+drop table t1;
+execute stmt64;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt64;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt65 from select d from t1 where a=2;
+execute stmt65;
+d
+2
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+execute stmt65;
+d
+2
+select * from t1;
+a	b	c	d
+1	a	2	3
+2	b	3	2
+3	c	4	1
+deallocate prepare stmt65;
+prepare stmt66 from select d from t1 where a=?;
+set @a=1;
+execute stmt66 using @a;
+d
+3
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+execute stmt66 using @a;
+d
+3
+deallocate prepare stmt66;
+prepare stmt67 from select a,b from t1 where a between 4 and 1;
+execute stmt67;
+a	b
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+execute stmt67;
+a	b
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt67;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt68 from select a,b from t1 where c between 4 and 1;
+execute stmt68;
+a	b
+drop table t1;
+create table t1( a int primary key,b varchar(255));
+insert into t1 values(1,'a'),(2,'b'),(3,'c');
+execute stmt68;
+ERROR 42S22: Unkown column name c
+select * from t1;
+a	b
+1	a
+2	b
+3	c
+deallocate prepare stmt68;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+prepare stmt69 from select a,b from t1 where c between 4 and 1;
+execute stmt69;
+a	b
+drop table t1;
+create table t1( a int primary key,c int);
+insert into t1 values(1,2),(2,4),(3,5);
+execute stmt69;
+ERROR 42S22: Unkown column name b
+select * from t1;
+a	c
+1	2
+2	4
+3	5
+deallocate prepare stmt69;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+create table t2( a int primary key,b varchar(255),c int);
+insert into t2 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt70 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+execute stmt70;
+b	b
+a	a
+alter table t1 add d int;
+execute stmt70;
+b	b
+a	a
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt70;
+prepare stmt71 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+execute stmt71;
+b	b
+a	a
+alter table t1 drop d;
+execute stmt71;
+b	b
+a	a
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt71;
+prepare stmt72 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+execute stmt72;
+b	b
+a	a
+alter table t1 drop b;
+execute stmt72;
+ERROR 42S22: Unknown column
+select * from t1;
+a	c
+1	2
+2	3
+3	4
+deallocate prepare stmt72;
+alter table t1 add b varchar(255);
+prepare stmt73 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+execute stmt73;
+b	b
+NULL	a
+drop table t1;
+execute stmt73;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt73;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt74 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+execute stmt74;
+b	b
+a	a
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+execute stmt74;
+b	b
+a	a
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt74;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt75 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+execute stmt75;
+b	b
+a	a
+drop table t1;
+create table t1( a int primary key,c int);
+insert into t1 values(1,2),(2,3),(3,4);
+execute stmt75;
+ERROR 42S22: Unknown column
+select * from t1;
+a	c
+1	2
+2	3
+3	4
+deallocate prepare stmt75;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+drop table t2;
+create table t2( a int primary key,b varchar(255),c int);
+insert into t2 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt76 from select t1.b,t2.b from t1 inner join t2 on t1.a=t2.a where t1.a=1;
+execute stmt76;
+b	b
+a	a
+alter table t1 add d int;
+execute stmt76;
+b	b
+a	a
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt76;
+prepare stmt77 from select t1.b,t2.b from t1 inner join t2 on t1.a=t2.a where t1.a=1;
+execute stmt77;
+b	b
+a	a
+alter table t1 drop d;
+execute stmt77;
+b	b
+a	a
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt77;
+prepare stmt78 from select t1.b,t2.b from t1 inner join t2 on t1.a=t2.a where t1.a=1;
+execute stmt78;
+b	b
+a	a
+alter table t1 drop b;
+execute stmt78;
+ERROR 42S22: Unknown column
+select * from t1;
+a	c
+1	2
+2	3
+3	4
+deallocate prepare stmt78;
+alter table t1 add b varchar(255);
+prepare stmt79 from select t1.b,t2.b from t1 inner join t2 on t1.a=t2.a where t1.a=1;
+execute stmt79;
+b	b
+NULL	a
+drop table t1;
+execute stmt79;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt79;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt80 from select t1.b,t2.b from t1 inner join t2 on t1.a=t2.a where t1.a=1;
+execute stmt80;
+b	b
+a	a
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+execute stmt80;
+b	b
+a	a
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt80;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt81 from select t1.b,t2.b from t1 inner join t2 on t1.a=t2.a where t1.a=1;
+execute stmt81;
+b	b
+a	a
+drop table t1;
+create table t1( a int primary key,c int);
+insert into t1 values(1,2),(2,3),(3,4);
+execute stmt81;
+ERROR 42S22: Unknown column
+select * from t1;
+a	c
+1	2
+2	3
+3	4
+deallocate prepare stmt81;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+drop table t2;
+create table t2( a int primary key,b varchar(255),c int);
+insert into t2 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt82 from select t1.b,t2.b from t1 left join t2 on t1.a=t2.a where t1.a=1;
+execute stmt82;
+b	b
+a	a
+alter table t1 add d int;
+execute stmt82;
+b	b
+a	a
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt82;
+prepare stmt83 from select t1.b,t2.b from t1 left join t2 on t1.a=t2.a where t1.a=1;
+execute stmt83;
+b	b
+a	a
+alter table t1 drop d;
+execute stmt83;
+b	b
+a	a
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt83;
+prepare stmt84 from select t1.b,t2.b from t1 left join t2 on t1.a=t2.a where t1.a=1;
+execute stmt84;
+b	b
+a	a
+alter table t1 drop b;
+execute stmt84;
+ERROR 42S22: Unknown column
+select * from t1;
+a	c
+1	2
+2	3
+3	4
+deallocate prepare stmt84;
+alter table t1 add b varchar(255);
+prepare stmt85 from select t1.b,t2.b from t1 left join t2 on t1.a=t2.a where t1.a=1;
+execute stmt85;
+b	b
+NULL	a
+drop table t1;
+execute stmt85;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt85;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt86 from select t1.b,t2.b from t1 left join t2 on t1.a=t2.a where t1.a=1;
+execute stmt86;
+b	b
+a	a
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+execute stmt86;
+b	b
+a	a
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt86;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt87 from select t1.b,t2.b from t1 left join t2 on t1.a=t2.a where t1.a=1;
+execute stmt87;
+b	b
+a	a
+drop table t1;
+create table t1( a int primary key,c int);
+insert into t1 values(1,2),(2,3),(3,4);
+execute stmt87;
+ERROR 42S22: Unknown column
+select * from t1;
+a	c
+1	2
+2	3
+3	4
+deallocate prepare stmt87;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+drop table t2;
+create table t2( a int primary key,b varchar(255),c int);
+insert into t2 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt88 from select t1.b,t2.b from t1 right join t2 on t1.a=t2.a where t1.a=1;
+execute stmt88;
+b	b
+a	a
+NULL	b
+NULL	c
+alter table t1 add d int;
+execute stmt88;
+b	b
+a	a
+NULL	b
+NULL	c
+select * from t1;
+a	b	c	d
+1	a	2	NULL
+2	b	3	NULL
+3	c	4	NULL
+deallocate prepare stmt88;
+prepare stmt89 from select t1.b,t2.b from t1 right join t2 on t1.a=t2.a where t1.a=1;
+execute stmt89;
+b	b
+a	a
+NULL	b
+NULL	c
+alter table t1 drop d;
+execute stmt89;
+b	b
+a	a
+NULL	b
+NULL	c
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt89;
+prepare stmt90 from select t1.b,t2.b from t1 right join t2 on t1.a=t2.a where t1.a=1;
+execute stmt90;
+b	b
+a	a
+NULL	b
+NULL	c
+alter table t1 drop b;
+execute stmt90;
+ERROR 42S22: Unknown column
+select * from t1;
+a	c
+1	2
+2	3
+3	4
+deallocate prepare stmt90;
+alter table t1 add b varchar(255);
+prepare stmt91 from select t1.b,t2.b from t1 right join t2 on t1.a=t2.a where t1.a=1;
+execute stmt91;
+b	b
+NULL	a
+NULL	b
+NULL	c
+drop table t1;
+execute stmt91;
+ERROR 42S02: table 't1' does not exist
+deallocate prepare stmt91;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt92 from select t1.b,t2.b from t1 right join t2 on t1.a=t2.a where t1.a=1;
+execute stmt92;
+b	b
+a	a
+NULL	b
+NULL	c
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+execute stmt92;
+b	b
+a	a
+NULL	b
+NULL	c
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4
+deallocate prepare stmt92;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt93 from select t1.b,t2.b from t1 right join t2 on t1.a=t2.a where t1.a=1;
+execute stmt93;
+b	b
+a	a
+NULL	b
+NULL	c
+drop table t1;
+create table t1( a int primary key,c int);
+insert into t1 values(1,2),(2,3),(3,4);
+execute stmt93;
+ERROR 42S22: Unknown column
+select * from t1;
+a	c
+1	2
+2	3
+3	4
+deallocate prepare stmt93;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+drop table t2;
+create table t2( a int primary key,b varchar(255),c int);
+insert into t2 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt94 from (select t1.a from t1) union (select t2.a from t2);
+execute stmt94;
+a
+1
+2
+3
+drop table t1;
+execute stmt94;
+ERROR 42S02: table 't1' does not exist
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt95 from (select t1.a from t1) union (select t2.a from t2);
+execute stmt95;
+a
+1
+2
+3
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+execute stmt95;
+a
+1
+2
+3
+select * from t1;
+a	b	c
+1	a	2
+2	b	3
+3	c	4

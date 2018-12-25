@@ -1,0 +1,14 @@
+ob1=OBI(cluster=1222, use_fms=0)
+ob1.reboot
+ob1.create_client
+create table rongxuan(c int, c2 int, primary key(c));
+3001
+drop table rongxuan;
+count(*)
+0
+count(*)
+0
+count(*)
+0
+count(*)
+0

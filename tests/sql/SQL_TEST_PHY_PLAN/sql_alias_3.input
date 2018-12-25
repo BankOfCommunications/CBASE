@@ -1,0 +1,157 @@
+-- ok
+<<Part 1 : SQL STRING>>
+select * from user u, order_list as o, item;
+
+<<Part 2 : PARSE TREE>>
+
+<<Part 3 : LOGICAL PLAN>>
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:18446744073709551614, TableName:user, AliasName:u, Type:ALIAS_TABLE, RefId: 1002}
+            {Num 1, TableId:18446744073709551613, TableName:order_list, AliasName:o, Type:ALIAS_TABLE, RefId: 1003}
+            {Num 2, TableId:1001, TableName:item, AliasName:NULL, Type:BASE_TABLE, RefId: 1001}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:2, ColumnName:user_id, TableRef:18446744073709551614}
+            {Num 1, ColumnId:3, ColumnName:user_name, TableRef:18446744073709551614}
+            {Num 2, ColumnId:4, ColumnName:user_age, TableRef:18446744073709551614}
+            {Num 3, ColumnId:5, ColumnName:user_desc, TableRef:18446744073709551614}
+            {Num 4, ColumnId:2, ColumnName:id, TableRef:18446744073709551613}
+            {Num 5, ColumnId:3, ColumnName:user_id, TableRef:18446744073709551613}
+            {Num 6, ColumnId:4, ColumnName:item_id, TableRef:18446744073709551613}
+            {Num 7, ColumnId:5, ColumnName:qty, TableRef:18446744073709551613}
+            {Num 8, ColumnId:6, ColumnName:order_time, TableRef:18446744073709551613}
+            {Num 9, ColumnId:7, ColumnName:order_desc, TableRef:18446744073709551613}
+            {Num 10, ColumnId:2, ColumnName:item_id, TableRef:1001}
+            {Num 11, ColumnId:3, ColumnName:item_name, TableRef:1001}
+            {Num 12, ColumnId:4, ColumnName:item_cost, TableRef:1001}
+            {Num 13, ColumnId:5, ColumnName:item_price, TableRef:1001}
+            {Num 14, ColumnId:6, ColumnName:item_color, TableRef:1001}
+        <ColumnItemList End>
+        SELECT ::= <1, user_id>, <2, user_name>, <3, user_age>, <4, user_desc>, <5, id>, <6, user_id>, <7, item_id>, <8, qty>, <9, order_time>, <10, order_desc>, <11, item_id>, <12, item_name>, <13, item_cost>, <14, item_price>, <15, item_color>
+        FROM ::= <18446744073709551614>, <18446744073709551613>, <1001>
+        ObSelectStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (18446744073709551614 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551614, 2]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (18446744073709551614 : 3)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551614, 3]
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (18446744073709551614 : 4)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551614, 4]
+        ObSqlRawExpr 2 End
+        ObSqlRawExpr 3 Begin
+        expr_id = 4
+        (table_id : column_id) = (18446744073709551614 : 5)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551614, 5]
+        ObSqlRawExpr 3 End
+        ObSqlRawExpr 4 Begin
+        expr_id = 5
+        (table_id : column_id) = (18446744073709551613 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551613, 2]
+        ObSqlRawExpr 4 End
+        ObSqlRawExpr 5 Begin
+        expr_id = 6
+        (table_id : column_id) = (18446744073709551613 : 3)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551613, 3]
+        ObSqlRawExpr 5 End
+        ObSqlRawExpr 6 Begin
+        expr_id = 7
+        (table_id : column_id) = (18446744073709551613 : 4)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551613, 4]
+        ObSqlRawExpr 6 End
+        ObSqlRawExpr 7 Begin
+        expr_id = 8
+        (table_id : column_id) = (18446744073709551613 : 5)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551613, 5]
+        ObSqlRawExpr 7 End
+        ObSqlRawExpr 8 Begin
+        expr_id = 9
+        (table_id : column_id) = (18446744073709551613 : 6)
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551613, 6]
+        ObSqlRawExpr 8 End
+        ObSqlRawExpr 9 Begin
+        expr_id = 10
+        (table_id : column_id) = (18446744073709551613 : 7)
+[2012-07-17 15:19:16] WARN  add_output_column (ob_rpc_scan.cpp:188) [47123780730880] must call set_table() first. or table_id not identical with expr.table_id. table_id_=1002, expr.table_id_=18446744073709551614
+[2012-07-17 15:19:16] WARN  add_output_column (ob_table_rpc_scan.cpp:136) [47123780730880] fail to add column to rpc scan operator. ret=-6
+[2012-07-17 15:19:16] WARN  add_output_column (ob_rpc_scan.cpp:188) [47123780730880] must call set_table() first. or table_id not identical with expr.table_id. table_id_=1002, expr.table_id_=18446744073709551614
+[2012-07-17 15:19:16] WARN  add_output_column (ob_table_rpc_scan.cpp:136) [47123780730880] fail to add column to rpc scan operator. ret=-6
+[2012-07-17 15:19:16] WARN  add_output_column (ob_rpc_scan.cpp:188) [47123780730880] must call set_table() first. or table_id not identical with expr.table_id. table_id_=1002, expr.table_id_=18446744073709551614
+[2012-07-17 15:19:16] WARN  add_output_column (ob_table_rpc_scan.cpp:136) [47123780730880] fail to add column to rpc scan operator. ret=-6
+[2012-07-17 15:19:16] WARN  add_output_column (ob_rpc_scan.cpp:188) [47123780730880] must call set_table() first. or table_id not identical with expr.table_id. table_id_=1002, expr.table_id_=18446744073709551614
+[2012-07-17 15:19:16] WARN  add_output_column (ob_table_rpc_scan.cpp:136) [47123780730880] fail to add column to rpc scan operator. ret=-6
+[2012-07-17 15:19:16] DEBUG ../../src/common/hash/ob_hashutils.h:1106 [47123780730880] new succ block=0x2c436070 block_size=57368 node_size=56 type=[N9oceanbase6common4list4NodeIPNS_3sql13ObPhyOperatorEEE]
+[2012-07-17 15:19:16] DEBUG ../../src/common/hash/ob_hashutils.h:1106 [47123780730880] new succ block=0x2e662990 block_size=90136 node_size=88 type=[N9oceanbase6common4list4NodeINS_3sql8ObBitSetEEE]
+[2012-07-17 15:19:16] WARN  add_output_column (ob_rpc_scan.cpp:188) [47123780730880] must call set_table() first. or table_id not identical with expr.table_id. table_id_=1003, expr.table_id_=18446744073709551613
+[2012-07-17 15:19:16] WARN  add_output_column (ob_table_rpc_scan.cpp:136) [47123780730880] fail to add column to rpc scan operator. ret=-6
+[2012-07-17 15:19:16] WARN  add_output_column (ob_rpc_scan.cpp:188) [47123780730880] must call set_table() first. or table_id not identical with expr.table_id. table_id_=1003, expr.table_id_=18446744073709551613
+[2012-07-17 15:19:16] WARN  add_output_column (ob_table_rpc_scan.cpp:136) [47123780730880] fail to add column to rpc scan operator. ret=-6
+[2012-07-17 15:19:16] WARN  add_output_column (ob_rpc_scan.cpp:188) [47123780730880] must call set_table() first. or table_id not identical with expr.table_id. table_id_=1003, expr.table_id_=18446744073709551613
+[2012-07-17 15:19:16] WARN  add_output_column (ob_table_rpc_scan.cpp:136) [47123780730880] fail to add column to rpc scan operator. ret=-6
+[2012-07-17 15:19:16] WARN  add_output_column (ob_rpc_scan.cpp:188) [47123780730880] must call set_table() first. or table_id not identical with expr.table_id. table_id_=1003, expr.table_id_=18446744073709551613
+[2012-07-17 15:19:16] WARN  add_output_column (ob_table_rpc_scan.cpp:136) [47123780730880] fail to add column to rpc scan operator. ret=-6
+[2012-07-17 15:19:16] WARN  add_output_column (ob_rpc_scan.cpp:188) [47123780730880] must call set_table() first. or table_id not identical with expr.table_id. table_id_=1003, expr.table_id_=18446744073709551613
+[2012-07-17 15:19:16] WARN  add_output_column (ob_table_rpc_scan.cpp:136) [47123780730880] fail to add column to rpc scan operator. ret=-6
+[2012-07-17 15:19:16] WARN  add_output_column (ob_rpc_scan.cpp:188) [47123780730880] must call set_table() first. or table_id not identical with expr.table_id. table_id_=1003, expr.table_id_=18446744073709551613
+[2012-07-17 15:19:16] WARN  add_output_column (ob_table_rpc_scan.cpp:136) [47123780730880] fail to add column to rpc scan operator. ret=-6
+        T_REF_COLUMN : [table_id, column_id] = [18446744073709551613, 7]
+        ObSqlRawExpr 9 End
+        ObSqlRawExpr 10 Begin
+        expr_id = 11
+        (table_id : column_id) = (1001 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [1001, 2]
+        ObSqlRawExpr 10 End
+        ObSqlRawExpr 11 Begin
+        expr_id = 12
+        (table_id : column_id) = (1001 : 3)
+        T_REF_COLUMN : [table_id, column_id] = [1001, 3]
+        ObSqlRawExpr 11 End
+        ObSqlRawExpr 12 Begin
+        expr_id = 13
+        (table_id : column_id) = (1001 : 4)
+        T_REF_COLUMN : [table_id, column_id] = [1001, 4]
+        ObSqlRawExpr 12 End
+        ObSqlRawExpr 13 Begin
+        expr_id = 14
+        (table_id : column_id) = (1001 : 5)
+        T_REF_COLUMN : [table_id, column_id] = [1001, 5]
+        ObSqlRawExpr 13 End
+        ObSqlRawExpr 14 Begin
+        expr_id = 15
+        (table_id : column_id) = (1001 : 6)
+        T_REF_COLUMN : [table_id, column_id] = [1001, 6]
+        ObSqlRawExpr 14 End
+    <ExprList End>
+<logical_plan End>
+
+
+<<Part 4 : PHYSICAL PLAN>>
+
+ObPhysicalPlan Begin
+Main Query:
+Project(columns=[expr<18446744073709551614,2>=COL<18446744073709551614,2>|,expr<18446744073709551614,3>=COL<18446744073709551614,3>|,expr<18446744073709551614,4>=COL<18446744073709551614,4>|,expr<18446744073709551614,5>=COL<18446744073709551614,5>|,expr<18446744073709551613,2>=COL<18446744073709551613,2>|,expr<18446744073709551613,3>=COL<18446744073709551613,3>|,expr<18446744073709551613,4>=COL<18446744073709551613,4>|,expr<18446744073709551613,5>=COL<18446744073709551613,5>|,expr<18446744073709551613,6>=COL<18446744073709551613,6>|,expr<18446744073709551613,7>=COL<18446744073709551613,7>|,expr<1001,2>=COL<1001,2>|,expr<1001,3>=COL<1001,3>|,expr<1001,4>=COL<1001,4>|,expr<1001,5>=COL<1001,5>|,expr<1001,6>=COL<1001,6>|])
+Merge Join(Join Type: INNER JOIN
+(equal_join_conds=[], other_join_conds=[])
+Left Join Table:
+TableRpcScanright Join Table:
+Merge Join(Join Type: INNER JOIN
+(equal_join_conds=[], other_join_conds=[])
+Left Join Table:
+TableRpcScanright Join Table:
+TableRpcScanObPhysicalPlan End
+
+
+
+
+

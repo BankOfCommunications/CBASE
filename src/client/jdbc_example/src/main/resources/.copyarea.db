@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\client\jdbc_example\src\main\resources
+2
+4
+6:sqlmap|2|0|0|0|89caaf7268ad11e8a8030002c8c1274c|0
+16:applicationContext.xml|1|166f774d58a|74b|299586d4|86aaaf4a68ad11e8a8030002c8c1274c|0
+10:log4j.properties|1|166f774d5f8|15f|b2017a79|912aafca68ad11e8a8030002c8c1274c|0
+10:create_table.sql|1|166f774d628|67|8ff31e72|941aafe668ad11e8a8030002c8c1274c|0

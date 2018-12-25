@@ -1,0 +1,26 @@
+-- ok
+delete from user where user_name='zhang wu ji';
+<logical_plan Begin>
+    <StmtList Begin>
+        ObDeleteStmt 0 Begin
+            <TableItemList Begin>
+                {Num 0, TableId:1002, TableName:user, AliasName:NULL, Type:BASE_TABLE, RefId: 1002}
+            <TableItemList End>
+            <ColumnItemList Begin>
+                {Num 0, ColumnId:3, ColumnName:user_name, TableRef:1002}
+            <ColumnItemList End>
+            WHERE ::= <1>
+            FROM ::= <1002>
+        ObDeleteStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_OP_EQ
+            T_REF_COLUMN : [table_id, column_id] = [1002, 3]
+            T_STRING : zhang wu ji
+        ObSqlRawExpr 0 End
+    <ExprList End>
+<logical_plan End>
+

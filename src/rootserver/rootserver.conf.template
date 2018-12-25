@@ -1,0 +1,126 @@
+[ob_instances]
+# 多集群部署时，配置所有RS的VIP以及读流量分配
+obi_count=2
+obi0_rs_vip=10.1.1.1
+obi0_rs_port=2500
+# client非一致性读时，读取本集群的百分比
+obi0_read_percentage=30
+# client读取本集群时，是否随机选择MS
+obi0_random_ms = 1
+obi1_rs_vip=10.1.2.1
+obi1_rs_port=2500
+obi1_read_percentage=70
+obi1_random_ms = 1
+
+[client]
+# BNL*是client黑名单策略相关参数
+BNL_alpha=9999
+BNL_alpha_denominator=10000
+BNL_threshold=4763
+BNL_threshold_denominator=100
+
+[root_server]
+pid_file=./log/rootserver.pid
+log_file=./log/rootserver.log
+data_dir=./
+log_level=info
+dev_name=bond0
+vip=10.1.1.1
+port=2500
+
+# libeasy处理io的线程个数
+io_thread_count=1
+# 处理线程池大小
+thread_count=20
+# 读任务队列大小
+read_queue_size=200000
+# 写任务队列大小
+write_queue_size=50
+# 主备同步日志任务队列大小
+log_queue_size=50
+
+# 向其他server发送同步请求时的超时时间，单位：微秒
+network_timeout=1000000
+
+# commit日志存放路径
+log_dir_path=/home/admin/oceanbase/root_commitlog
+# 单个commit日志文件最大大小，单位MB
+log_size_mb=64
+
+# RS主备日志同步相关
+state_check_period_us=500000
+replay_wait_time_us=5000
+log_sync_limit_kb=51200
+log_sync_type=1
+register_times=10
+register_timeout_us=2000000
+
+# 以下三个参数与RS主备之间lease相关
+lease_on=1
+lease_interval_us=15000000
+lease_reserved_time_us=10000000
+
+# 不同CS开始合并的时间间隔，单位：微秒
+cs_command_interval_us=120000000
+
+# 初始化时，或者每日合并后每个tablet的复本数必须达到这个值，否则合并未完成
+# __safe_copy_count_in_init=2
+# tablet复本数
+tablet_replicas_num=3
+# 估计处理一个请求的最短时间，用于丢包策略，default 10ms
+expected_process_us=10000
+# 启动时新建不存在的表格
+# __create_table_in_init=1
+# 负载均衡开关，默认1
+# __enable_balance=1
+# 缺失副本复制开关，默认1
+# __enable_rereplication=1
+# 负载均衡线程在上次扫描没有迁移或复制时进入空闲状态，空闲时的睡眠时间，默认30s
+# balance_worker_idle_sleep_sec=300
+# 进程启动后，启动负载均衡和缺失复本复制前的等待时间，单位秒
+migrate_wait_seconds=90
+#rs是否缓存schema_manager
+__enable_cache_schema=1
+# 是否是数据导入型应用
+is_import=0
+
+[update_server]
+# 注意：请勿随意修改UPS lease相关的以下三个参数，参考《UPS lease时间分析》
+# UPS lease时间，default 9s
+lease_us=9000000
+# 距lease时间这么长时，发送lease授权，default 8.5s
+lease_reserved_us=8500000
+# 距lease到期这么长时，UPS重发renew消息，default 7.77s
+ups_renew_reserved_us=7770000
+# 第一个UPS注册后等待这段时间之后才选主，default 10s
+waiting_reigster_duration_us=10000000
+#是否需要解析主主UPS和备主UPS的流量配置值
+is_ups_flow_control=0
+#主主UPS的流量分配
+read_master_master_ups_percent=0
+#备主UPS的流量分配
+read_slave_master_ups_percent=0
+[schema]
+file_name=/home/admin/oceanbase/etc/schema.ini
+
+[chunk_server]
+# CS的lease有效时间，单位微秒
+lease=10000000
+# tablet只丢失一个复本时允许延迟复制的延时时间，单位秒
+safe_lost_one_duration=28800
+# 系统初始化时等待CS汇报完所有复本的时间，单位秒
+wait_init_duration=60
+# 最大合并时间，超出这个时间则报警，单位秒
+max_merge_duration=14400
+# CS注册后禁止迁移入sstable的时间，单位秒
+cs_probation_period=30
+# 每个表的sstable在任意CS上的数目最多允许偏离均值的个数
+balance_tolerance=10
+# 每个CS最大同时进行的迁入或迁出数。谨慎修改
+max_concurrent_migrate_per_cs=1
+# 每次扫描迁移任务，每个CS最多保存多少个迁出任务
+max_batch_migrate_out_per_cs=20
+# 每批次迁移允许的最长超时时间，单位秒。谨慎修改
+max_batch_migrate_timeout=600
+# 一个tablet发生迁移后的一段时期内不再迁移，单位微秒
+tablet_migrate_disabling_period_us=60000000

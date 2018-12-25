@@ -1,0 +1,10 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\importserver\lib_5u
+2
+6
+d:liblzo_1.0.so|1|166f774deb3|2280|9e029ff0|051ab5be68ae11e8a8030002c8c1274c|0
+c:libsnappy.so|1|166f774dea0|216e3|ca2e5da7|031ab5a268ae11e8a8030002c8c1274c|0
+a:liblzo2.so|1|166f774ded5|7e012|6be343ec|071ab5da68ae11e8a8030002c8c1274c|0
+a:libnone.so|1|166f774def4|1c78|76df17f3|091ab5f668ae11e8a8030002c8c1274c|0
+f:libmrsstable.so|1|166f774e359|621223|1072c2a4|0c1ab61268ae11e8a8030002c8c1274c|0
+10:libsnappy_1.0.so|1|166f774e378|1fb8|4c0725bc|0f4ab62e68ae11e8a8030002c8c1274c|0

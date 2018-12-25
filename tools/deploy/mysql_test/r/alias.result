@@ -1,0 +1,96 @@
+DROP TABLE IF EXISTS a1,a2;
+create table a1(rowkey_suffix int primary key, price int);
+insert into a1 (rowkey_suffix, price) values (1334555, 1000);
+insert into a1 (rowkey_suffix, price) values (1334556, 1001);
+insert into a1 (rowkey_suffix, price) values (1334557, 1002);
+insert into a1 (rowkey_suffix, price) values (1334558, 1003);
+create table a2(rowkey_suffix2 int primary key, price2 int);
+insert into a2 (rowkey_suffix2, price2) values (1334558, 1003);
+replace into a2 (rowkey_suffix2, price2) values (1334558, 1003);
+replace into a2 (rowkey_suffix2, price2) values (1334558, 1003);
+replace into a2 (rowkey_suffix2, price2) values (1334558, 1003);
+select a1.* as 'with_alias' from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias' from a1' at line 1
+select a1.*, a1.* as 'with_alias' from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias' from a1' at line 1
+select a1.* as 'with_alias', a1.* from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias', a1.* from a1' at line 1
+select a1.* as 'with_alias', a1.* as 'alias2' from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias', a1.* as 'alias2' from a1' at line 1
+select a1.* as 'with_alias', price, a1.* as 'alias2' from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias', price, a1.* as 'alias2' from a1' at line 1
+select price, a1.* as 'with_alias' from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias' from a1' at line 1
+select a1.* as 'with_alias', price from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias', price from a1' at line 1
+select price, a1.* as 'with_alias', rowkey_suffix from t1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias', rowkey_suffix from t1' at line 1
+select (select price2 from a2 where 1000 > price2), a1.* as 'with_alias' from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias' from a1' at line 1
+select a1.* as 'with_alias', (select price2 from a2 where 1000 > price2) from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias', (select price2 from a2 where 1000 > price2) from a1' at line 1
+select price as 'x', a1.* as 'with_alias' from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''x', a1.* as 'with_alias' from a1' at line 1
+select a1.* as 'with_alias', price as 'x' from t1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias', price as 'x' from t1' at line 1
+select price as 'x', a1.* as 'with_alias', rowkey_suffix as 'x' from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''x', a1.* as 'with_alias', rowkey_suffix as 'x' from a1' at line 1
+select (select price from a2 where 1000 > price) as 'x', a1.* as 'with_alias' from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''x', a1.* as 'with_alias' from a1' at line 1
+select a1.* as 'with_alias', (select price2 from a2 where 1000 > price2) as 'x' from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias', (select price2 from a2 where 1000 > price2) as 'x' from a1' at line 1
+select (select a2.* as 'x' from a2) from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''x' from a2) from a1' at line 1
+select price, (select a2.* as 'x' from a2) from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''x' from a2) from a1' at line 1
+select a1.*, (select a2.* as 'x' from a2) from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''x' from a2) from a1' at line 1
+insert into a2 select a1.* as 'with_alias' from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias' from a1' at line 1
+insert into a2 select a1.* as 'with_alias', rowkey_suffix as 'x', price as 'z' from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias', rowkey_suffix as 'x', price as 'z' from a1' at line 1
+insert into a2 select a1.* as 'with_alias' from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''with_alias' from a1' at line 1
+select a1.* from a1;
+rowkey_suffix	price
+1334555	1000
+1334556	1001
+1334557	1002
+1334558	1003
+select a2.* from a2;
+rowkey_suffix2	price2
+1334558	1003
+select a1.*, a1.* from a1;
+rowkey_suffix	price	rowkey_suffix	price
+1334555	1000	1334555	1000
+1334556	1001	1334556	1001
+1334557	1002	1334557	1002
+1334558	1003	1334558	1003
+select a1.*, price, a1.* from a1;
+rowkey_suffix	price	price	rowkey_suffix	price
+1334555	1000	1000	1334555	1000
+1334556	1001	1001	1334556	1001
+1334557	1002	1002	1334557	1002
+1334558	1003	1003	1334558	1003
+select price, a1.* from a1;
+price	rowkey_suffix	price
+1000	1334555	1000
+1001	1334556	1001
+1002	1334557	1002
+1003	1334558	1003
+select a1.*, price from a1;
+rowkey_suffix	price	price
+1334555	1000	1000
+1334556	1001	1001
+1334557	1002	1002
+1334558	1003	1003
+select price, a1.*, rowkey_suffix from a1;
+price	rowkey_suffix	price	rowkey_suffix
+1000	1334555	1000	1334555
+1001	1334556	1001	1334556
+1002	1334557	1002	1334557
+1003	1334558	1003	1334558
+select price as 'x', a1.* from a1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ''x', a1.* from a1' at line 1
+drop table a1;
+drop table a2;

@@ -1,0 +1,29 @@
+### table single_row_table
+
+create table single_row_table(
+id            int,
+number        int,
+primary key(id)
+);
+
+insert into single_row_table values(1, 1);
+insert into single_row_table values(2, 1);
+insert into single_row_table values(3, 1);
+insert into single_row_table values(4, 1);
+insert into single_row_table values(5, 1);
+insert into single_row_table values(6, 1);
+insert into single_row_table values(7, 1);
+insert into single_row_table values(8, 1);
+insert into single_row_table values(9, 1);
+insert into single_row_table values(10, 1);
+insert into single_row_table values(11, 1);
+insert into single_row_table values(12, 1);
+insert into single_row_table values(13, 1);
+insert into single_row_table values(14, 1);
+insert into single_row_table values(15, 1);
+insert into single_row_table values(16, 1);
+insert into single_row_table values(17, 1);
+insert into single_row_table values(18, 1);
+insert into single_row_table values(19, 1);
+insert into single_row_table values(20, 1);
+

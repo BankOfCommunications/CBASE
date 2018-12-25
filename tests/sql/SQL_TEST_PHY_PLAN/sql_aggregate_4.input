@@ -1,0 +1,117 @@
+-- ok
+<<Part 1 : SQL STRING>>
+select sum(distinct qty), max(distinct qty), min(distinct qty), count(*), count(distinct qty), avg(distinct qty) from order_list group by user_id;
+
+<<Part 2 : PARSE TREE>>
+[2012-07-17 15:19:16] DEBUG ../../src/common/hash/ob_hashutils.h:1106 [47123780730880] new succ block=0x22c9b510 block_size=57368 node_size=56 type=[N9oceanbase6common4list4NodeIPNS_3sql13ObPhyOperatorEEE]
+[2012-07-17 15:19:16] DEBUG ../../src/common/hash/ob_hashutils.h:1106 [47123780730880] new succ block=0x23696360 block_size=90136 node_size=88 type=[N9oceanbase6common4list4NodeINS_3sql8ObBitSetEEE]
+
+<<Part 3 : LOGICAL PLAN>>
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1003, TableName:order_list, AliasName:NULL, Type:BASE_TABLE, RefId: 1003}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:5, ColumnName:qty, TableRef:1003}
+            {Num 1, ColumnId:3, ColumnName:user_id, TableRef:1003}
+        <ColumnItemList End>
+        SELECT ::= <1>, <3>, <5>, <7>, <9>, <11>
+        FROM ::= <1003>
+        GROUP BY ::= <13>
+        ObSelectStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (NULL : 18446744073709551614)
+        T_REF_COLUMN : [table_id, column_id] = [NULL, 18446744073709551614]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (NULL : 18446744073709551614)
+        T_FUN_SUM
+        DISTINCT
+            T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_REF_COLUMN : [table_id, column_id] = [NULL, 18446744073709551613]
+        ObSqlRawExpr 2 End
+        ObSqlRawExpr 3 Begin
+        expr_id = 4
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_FUN_MAX
+        DISTINCT
+            T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+        ObSqlRawExpr 3 End
+        ObSqlRawExpr 4 Begin
+        expr_id = 5
+        (table_id : column_id) = (NULL : 18446744073709551612)
+        T_REF_COLUMN : [table_id, column_id] = [NULL, 18446744073709551612]
+        ObSqlRawExpr 4 End
+        ObSqlRawExpr 5 Begin
+        expr_id = 6
+        (table_id : column_id) = (NULL : 18446744073709551612)
+        T_FUN_MIN
+        DISTINCT
+            T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+        ObSqlRawExpr 5 End
+        ObSqlRawExpr 6 Begin
+        expr_id = 7
+        (table_id : column_id) = (NULL : 18446744073709551611)
+        T_REF_COLUMN : [table_id, column_id] = [NULL, 18446744073709551611]
+        ObSqlRawExpr 6 End
+        ObSqlRawExpr 7 Begin
+        expr_id = 8
+        (table_id : column_id) = (NULL : 18446744073709551611)
+        T_FUN_COUNT
+        ObSqlRawExpr 7 End
+        ObSqlRawExpr 8 Begin
+        expr_id = 9
+        (table_id : column_id) = (NULL : 18446744073709551610)
+        T_REF_COLUMN : [table_id, column_id] = [NULL, 18446744073709551610]
+        ObSqlRawExpr 8 End
+        ObSqlRawExpr 9 Begin
+        expr_id = 10
+        (table_id : column_id) = (NULL : 18446744073709551610)
+        T_FUN_COUNT
+        DISTINCT
+            T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+        ObSqlRawExpr 9 End
+        ObSqlRawExpr 10 Begin
+        expr_id = 11
+        (table_id : column_id) = (NULL : 18446744073709551609)
+        T_REF_COLUMN : [table_id, column_id] = [NULL, 18446744073709551609]
+        ObSqlRawExpr 10 End
+        ObSqlRawExpr 11 Begin
+        expr_id = 12
+        (table_id : column_id) = (NULL : 18446744073709551609)
+        T_FUN_AVG
+        DISTINCT
+            T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+        ObSqlRawExpr 11 End
+        ObSqlRawExpr 12 Begin
+        expr_id = 13
+        (table_id : column_id) = (1003 : 3)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 3]
+        ObSqlRawExpr 12 End
+    <ExprList End>
+<logical_plan End>
+
+
+<<Part 4 : PHYSICAL PLAN>>
+
+ObPhysicalPlan Begin
+Main Query:
+Project(columns=[expr<18446744073709551615,18446744073709551614>=COL<18446744073709551615,18446744073709551614>|,expr<18446744073709551615,18446744073709551613>=COL<18446744073709551615,18446744073709551613>|,expr<18446744073709551615,18446744073709551612>=COL<18446744073709551615,18446744073709551612>|,expr<18446744073709551615,18446744073709551611>=COL<18446744073709551615,18446744073709551611>|,expr<18446744073709551615,18446744073709551610>=COL<18446744073709551615,18446744073709551610>|,expr<18446744073709551615,18446744073709551609>=COL<18446744073709551615,18446744073709551609>|])
+GroupBy(group_cols=[<1003,3>], aggr_cols=[expr<18446744073709551615,18446744073709551614>=AGGR136(DISTINCT COL<1003,5>|),expr<18446744073709551615,18446744073709551613>=AGGR134(DISTINCT COL<1003,5>|),expr<18446744073709551615,18446744073709551612>=AGGR135(DISTINCT COL<1003,5>|),expr<18446744073709551615,18446744073709551611>=AGGR137(),expr<18446744073709551615,18446744073709551610>=AGGR137(DISTINCT COL<1003,5>|),expr<18446744073709551615,18446744073709551609>=AGGR138(DISTINCT COL<1003,5>|)])
+Sort(columns=[<1003,3,ASC>])
+TableRpcScanObPhysicalPlan End
+
+
+
+
+

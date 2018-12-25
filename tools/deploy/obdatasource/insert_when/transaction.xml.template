@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE dbmonster-schema PUBLIC "-//kernelpanic.pl//DBMonster Database Schema DTD 1.1//EN" "http://dbmonster.kernelpanic.pl/dtd/dbmonster-schema-1.1.dtd">
+<dbmonster-test>
+	<name>app1</name>
+	<query num="1" name="insert_when">
+		<sql>insert into sbtest values(?,?,?,?) when row_count(delete from sbtest where id=?)=1</sql>
+		<param name="id" type="int">
+			<generator type="com.etao.monster.generator.NumberGenerator">
+				<property name="maxValue" value="${total_rows}" />
+				<property name="minValue" value="0" />
+				<property name="nulls" value="0" />
+				<property name="returnedType" value="long" />
+				<property name="scale" value="0" />
+			</generator>
+		</param>
+		<param name="k" type="int">
+			<generator type="com.etao.monster.generator.NumberGenerator">
+				<property name="maxValue" value="${total_rows}" />
+				<property name="minValue" value="0" />
+				<property name="nulls" value="0" />
+				<property name="returnedType" value="long" />
+				<property name="scale" value="0" />
+			</generator>
+		</param>
+		<param name="c" type="varchar">
+			<generator type="com.etao.monster.generator.StringGenerator">
+				<property name="allowSpaces" value="true" />
+				<property name="excludeChars" value="" />
+				<property name="maxLength" value="120" />
+				<property name="minLength" value="10" />
+				<property name="nulls" value="50" />
+			</generator>
+		</param>
+		<param name="pad" type="varchar">
+			<generator type="com.etao.monster.generator.StringGenerator">
+				<property name="allowSpaces" value="true" />
+				<property name="excludeChars" value="" />
+				<property name="maxLength" value="60" />
+				<property name="minLength" value="10" />
+				<property name="nulls" value="50" />
+			</generator>
+		</param>
+		<param name="nid" type="int">
+			<generator type="com.etao.monster.generator.DependGenerator">
+				<property name="queryName" value="insert_when" />
+				<property name="paramName" value="id" />
+			</generator>
+		</param>
+	</query>
+</dbmonster-test>

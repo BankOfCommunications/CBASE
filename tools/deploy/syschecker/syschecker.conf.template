@@ -1,0 +1,38 @@
+[public]
+pid_file = ./log/syschecker.$ip.pid
+log_file = ./log/syschecker.$ip.log
+log_level = $log_level
+
+[root_server]
+vip = ${rs0.ip}
+port= ${rs0.port}
+
+[update_server]
+vip = ${ups0.ip}
+port = ${ups0.port}
+
+[merge_server]
+${{
+ms_list = get_match_child(find_attr(locals(), 'obi'), "mergeserver")
+ms_list_count = len(ms_list)
+ms_list_str = ','.join('${%s.ip}:${%s.port}'%(k, k) for k in ms_list.keys())
+}}
+merge_server_count = $ms_list_count
+merge_server_str = $ms_list_str
+
+[syschecker]
+write_thread_count = ${write_thread_count}
+read_thread_count = ${read_thread_count}
+network_timeout=10000000
+syschecker_count = 2
+syschecker_no = 0
+specified_read_param = 0
+operate_full_row = 0
+stat_dump_interval = 5000000
+perf_test = 0 
+check_result = 1 
+read_table_type = 1 
+write_table_type = 0 
+get_row_cnt = 0 
+scan_row_cnt = 5 
+update_row_cnt = 0

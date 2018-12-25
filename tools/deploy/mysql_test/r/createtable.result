@@ -1,0 +1,1206 @@
+create table t200(pk int primary key, c1 int);
+insert into t200 values(1,1);
+create table t199(pk int primary key, c1 int);
+insert into t199 values(1,1);
+create table t198(pk int primary key, c1 int);
+insert into t198 values(1,1);
+create table t197(pk int primary key, c1 int);
+insert into t197 values(1,1);
+create table t196(pk int primary key, c1 int);
+insert into t196 values(1,1);
+create table t195(pk int primary key, c1 int);
+insert into t195 values(1,1);
+create table t194(pk int primary key, c1 int);
+insert into t194 values(1,1);
+create table t193(pk int primary key, c1 int);
+insert into t193 values(1,1);
+create table t192(pk int primary key, c1 int);
+insert into t192 values(1,1);
+create table t191(pk int primary key, c1 int);
+insert into t191 values(1,1);
+create table t190(pk int primary key, c1 int);
+insert into t190 values(1,1);
+create table t189(pk int primary key, c1 int);
+insert into t189 values(1,1);
+create table t188(pk int primary key, c1 int);
+insert into t188 values(1,1);
+create table t187(pk int primary key, c1 int);
+insert into t187 values(1,1);
+create table t186(pk int primary key, c1 int);
+insert into t186 values(1,1);
+create table t185(pk int primary key, c1 int);
+insert into t185 values(1,1);
+create table t184(pk int primary key, c1 int);
+insert into t184 values(1,1);
+create table t183(pk int primary key, c1 int);
+insert into t183 values(1,1);
+create table t182(pk int primary key, c1 int);
+insert into t182 values(1,1);
+create table t181(pk int primary key, c1 int);
+insert into t181 values(1,1);
+create table t180(pk int primary key, c1 int);
+insert into t180 values(1,1);
+create table t179(pk int primary key, c1 int);
+insert into t179 values(1,1);
+create table t178(pk int primary key, c1 int);
+insert into t178 values(1,1);
+create table t177(pk int primary key, c1 int);
+insert into t177 values(1,1);
+create table t176(pk int primary key, c1 int);
+insert into t176 values(1,1);
+create table t175(pk int primary key, c1 int);
+insert into t175 values(1,1);
+create table t174(pk int primary key, c1 int);
+insert into t174 values(1,1);
+create table t173(pk int primary key, c1 int);
+insert into t173 values(1,1);
+create table t172(pk int primary key, c1 int);
+insert into t172 values(1,1);
+create table t171(pk int primary key, c1 int);
+insert into t171 values(1,1);
+create table t170(pk int primary key, c1 int);
+insert into t170 values(1,1);
+create table t169(pk int primary key, c1 int);
+insert into t169 values(1,1);
+create table t168(pk int primary key, c1 int);
+insert into t168 values(1,1);
+create table t167(pk int primary key, c1 int);
+insert into t167 values(1,1);
+create table t166(pk int primary key, c1 int);
+insert into t166 values(1,1);
+create table t165(pk int primary key, c1 int);
+insert into t165 values(1,1);
+create table t164(pk int primary key, c1 int);
+insert into t164 values(1,1);
+create table t163(pk int primary key, c1 int);
+insert into t163 values(1,1);
+create table t162(pk int primary key, c1 int);
+insert into t162 values(1,1);
+create table t161(pk int primary key, c1 int);
+insert into t161 values(1,1);
+create table t160(pk int primary key, c1 int);
+insert into t160 values(1,1);
+create table t159(pk int primary key, c1 int);
+insert into t159 values(1,1);
+create table t158(pk int primary key, c1 int);
+insert into t158 values(1,1);
+create table t157(pk int primary key, c1 int);
+insert into t157 values(1,1);
+create table t156(pk int primary key, c1 int);
+insert into t156 values(1,1);
+create table t155(pk int primary key, c1 int);
+insert into t155 values(1,1);
+create table t154(pk int primary key, c1 int);
+insert into t154 values(1,1);
+create table t153(pk int primary key, c1 int);
+insert into t153 values(1,1);
+create table t152(pk int primary key, c1 int);
+insert into t152 values(1,1);
+create table t151(pk int primary key, c1 int);
+insert into t151 values(1,1);
+create table t150(pk int primary key, c1 int);
+insert into t150 values(1,1);
+create table t149(pk int primary key, c1 int);
+insert into t149 values(1,1);
+create table t148(pk int primary key, c1 int);
+insert into t148 values(1,1);
+create table t147(pk int primary key, c1 int);
+insert into t147 values(1,1);
+create table t146(pk int primary key, c1 int);
+insert into t146 values(1,1);
+create table t145(pk int primary key, c1 int);
+insert into t145 values(1,1);
+create table t144(pk int primary key, c1 int);
+insert into t144 values(1,1);
+create table t143(pk int primary key, c1 int);
+insert into t143 values(1,1);
+create table t142(pk int primary key, c1 int);
+insert into t142 values(1,1);
+create table t141(pk int primary key, c1 int);
+insert into t141 values(1,1);
+create table t140(pk int primary key, c1 int);
+insert into t140 values(1,1);
+create table t139(pk int primary key, c1 int);
+insert into t139 values(1,1);
+create table t138(pk int primary key, c1 int);
+insert into t138 values(1,1);
+create table t137(pk int primary key, c1 int);
+insert into t137 values(1,1);
+create table t136(pk int primary key, c1 int);
+insert into t136 values(1,1);
+create table t135(pk int primary key, c1 int);
+insert into t135 values(1,1);
+create table t134(pk int primary key, c1 int);
+insert into t134 values(1,1);
+create table t133(pk int primary key, c1 int);
+insert into t133 values(1,1);
+create table t132(pk int primary key, c1 int);
+insert into t132 values(1,1);
+create table t131(pk int primary key, c1 int);
+insert into t131 values(1,1);
+create table t130(pk int primary key, c1 int);
+insert into t130 values(1,1);
+create table t129(pk int primary key, c1 int);
+insert into t129 values(1,1);
+create table t128(pk int primary key, c1 int);
+insert into t128 values(1,1);
+create table t127(pk int primary key, c1 int);
+insert into t127 values(1,1);
+create table t126(pk int primary key, c1 int);
+insert into t126 values(1,1);
+create table t125(pk int primary key, c1 int);
+insert into t125 values(1,1);
+create table t124(pk int primary key, c1 int);
+insert into t124 values(1,1);
+create table t123(pk int primary key, c1 int);
+insert into t123 values(1,1);
+create table t122(pk int primary key, c1 int);
+insert into t122 values(1,1);
+create table t121(pk int primary key, c1 int);
+insert into t121 values(1,1);
+create table t120(pk int primary key, c1 int);
+insert into t120 values(1,1);
+create table t119(pk int primary key, c1 int);
+insert into t119 values(1,1);
+create table t118(pk int primary key, c1 int);
+insert into t118 values(1,1);
+create table t117(pk int primary key, c1 int);
+insert into t117 values(1,1);
+create table t116(pk int primary key, c1 int);
+insert into t116 values(1,1);
+create table t115(pk int primary key, c1 int);
+insert into t115 values(1,1);
+create table t114(pk int primary key, c1 int);
+insert into t114 values(1,1);
+create table t113(pk int primary key, c1 int);
+insert into t113 values(1,1);
+create table t112(pk int primary key, c1 int);
+insert into t112 values(1,1);
+create table t111(pk int primary key, c1 int);
+insert into t111 values(1,1);
+create table t110(pk int primary key, c1 int);
+insert into t110 values(1,1);
+create table t109(pk int primary key, c1 int);
+insert into t109 values(1,1);
+create table t108(pk int primary key, c1 int);
+insert into t108 values(1,1);
+create table t107(pk int primary key, c1 int);
+insert into t107 values(1,1);
+create table t106(pk int primary key, c1 int);
+insert into t106 values(1,1);
+create table t105(pk int primary key, c1 int);
+insert into t105 values(1,1);
+create table t104(pk int primary key, c1 int);
+insert into t104 values(1,1);
+create table t103(pk int primary key, c1 int);
+insert into t103 values(1,1);
+create table t102(pk int primary key, c1 int);
+insert into t102 values(1,1);
+create table t101(pk int primary key, c1 int);
+insert into t101 values(1,1);
+create table t100(pk int primary key, c1 int);
+insert into t100 values(1,1);
+create table t99(pk int primary key, c1 int);
+insert into t99 values(1,1);
+create table t98(pk int primary key, c1 int);
+insert into t98 values(1,1);
+create table t97(pk int primary key, c1 int);
+insert into t97 values(1,1);
+create table t96(pk int primary key, c1 int);
+insert into t96 values(1,1);
+create table t95(pk int primary key, c1 int);
+insert into t95 values(1,1);
+create table t94(pk int primary key, c1 int);
+insert into t94 values(1,1);
+create table t93(pk int primary key, c1 int);
+insert into t93 values(1,1);
+create table t92(pk int primary key, c1 int);
+insert into t92 values(1,1);
+create table t91(pk int primary key, c1 int);
+insert into t91 values(1,1);
+create table t90(pk int primary key, c1 int);
+insert into t90 values(1,1);
+create table t89(pk int primary key, c1 int);
+insert into t89 values(1,1);
+create table t88(pk int primary key, c1 int);
+insert into t88 values(1,1);
+create table t87(pk int primary key, c1 int);
+insert into t87 values(1,1);
+create table t86(pk int primary key, c1 int);
+insert into t86 values(1,1);
+create table t85(pk int primary key, c1 int);
+insert into t85 values(1,1);
+create table t84(pk int primary key, c1 int);
+insert into t84 values(1,1);
+create table t83(pk int primary key, c1 int);
+insert into t83 values(1,1);
+create table t82(pk int primary key, c1 int);
+insert into t82 values(1,1);
+create table t81(pk int primary key, c1 int);
+insert into t81 values(1,1);
+create table t80(pk int primary key, c1 int);
+insert into t80 values(1,1);
+create table t79(pk int primary key, c1 int);
+insert into t79 values(1,1);
+create table t78(pk int primary key, c1 int);
+insert into t78 values(1,1);
+create table t77(pk int primary key, c1 int);
+insert into t77 values(1,1);
+create table t76(pk int primary key, c1 int);
+insert into t76 values(1,1);
+create table t75(pk int primary key, c1 int);
+insert into t75 values(1,1);
+create table t74(pk int primary key, c1 int);
+insert into t74 values(1,1);
+create table t73(pk int primary key, c1 int);
+insert into t73 values(1,1);
+create table t72(pk int primary key, c1 int);
+insert into t72 values(1,1);
+create table t71(pk int primary key, c1 int);
+insert into t71 values(1,1);
+create table t70(pk int primary key, c1 int);
+insert into t70 values(1,1);
+create table t69(pk int primary key, c1 int);
+insert into t69 values(1,1);
+create table t68(pk int primary key, c1 int);
+insert into t68 values(1,1);
+create table t67(pk int primary key, c1 int);
+insert into t67 values(1,1);
+create table t66(pk int primary key, c1 int);
+insert into t66 values(1,1);
+create table t65(pk int primary key, c1 int);
+insert into t65 values(1,1);
+create table t64(pk int primary key, c1 int);
+insert into t64 values(1,1);
+create table t63(pk int primary key, c1 int);
+insert into t63 values(1,1);
+create table t62(pk int primary key, c1 int);
+insert into t62 values(1,1);
+create table t61(pk int primary key, c1 int);
+insert into t61 values(1,1);
+create table t60(pk int primary key, c1 int);
+insert into t60 values(1,1);
+create table t59(pk int primary key, c1 int);
+insert into t59 values(1,1);
+create table t58(pk int primary key, c1 int);
+insert into t58 values(1,1);
+create table t57(pk int primary key, c1 int);
+insert into t57 values(1,1);
+create table t56(pk int primary key, c1 int);
+insert into t56 values(1,1);
+create table t55(pk int primary key, c1 int);
+insert into t55 values(1,1);
+create table t54(pk int primary key, c1 int);
+insert into t54 values(1,1);
+create table t53(pk int primary key, c1 int);
+insert into t53 values(1,1);
+create table t52(pk int primary key, c1 int);
+insert into t52 values(1,1);
+create table t51(pk int primary key, c1 int);
+insert into t51 values(1,1);
+create table t50(pk int primary key, c1 int);
+insert into t50 values(1,1);
+create table t49(pk int primary key, c1 int);
+insert into t49 values(1,1);
+create table t48(pk int primary key, c1 int);
+insert into t48 values(1,1);
+create table t47(pk int primary key, c1 int);
+insert into t47 values(1,1);
+create table t46(pk int primary key, c1 int);
+insert into t46 values(1,1);
+create table t45(pk int primary key, c1 int);
+insert into t45 values(1,1);
+create table t44(pk int primary key, c1 int);
+insert into t44 values(1,1);
+create table t43(pk int primary key, c1 int);
+insert into t43 values(1,1);
+create table t42(pk int primary key, c1 int);
+insert into t42 values(1,1);
+create table t41(pk int primary key, c1 int);
+insert into t41 values(1,1);
+create table t40(pk int primary key, c1 int);
+insert into t40 values(1,1);
+create table t39(pk int primary key, c1 int);
+insert into t39 values(1,1);
+create table t38(pk int primary key, c1 int);
+insert into t38 values(1,1);
+create table t37(pk int primary key, c1 int);
+insert into t37 values(1,1);
+create table t36(pk int primary key, c1 int);
+insert into t36 values(1,1);
+create table t35(pk int primary key, c1 int);
+insert into t35 values(1,1);
+create table t34(pk int primary key, c1 int);
+insert into t34 values(1,1);
+create table t33(pk int primary key, c1 int);
+insert into t33 values(1,1);
+create table t32(pk int primary key, c1 int);
+insert into t32 values(1,1);
+create table t31(pk int primary key, c1 int);
+insert into t31 values(1,1);
+create table t30(pk int primary key, c1 int);
+insert into t30 values(1,1);
+create table t29(pk int primary key, c1 int);
+insert into t29 values(1,1);
+create table t28(pk int primary key, c1 int);
+insert into t28 values(1,1);
+create table t27(pk int primary key, c1 int);
+insert into t27 values(1,1);
+create table t26(pk int primary key, c1 int);
+insert into t26 values(1,1);
+create table t25(pk int primary key, c1 int);
+insert into t25 values(1,1);
+create table t24(pk int primary key, c1 int);
+insert into t24 values(1,1);
+create table t23(pk int primary key, c1 int);
+insert into t23 values(1,1);
+create table t22(pk int primary key, c1 int);
+insert into t22 values(1,1);
+create table t21(pk int primary key, c1 int);
+insert into t21 values(1,1);
+create table t20(pk int primary key, c1 int);
+insert into t20 values(1,1);
+create table t19(pk int primary key, c1 int);
+insert into t19 values(1,1);
+create table t18(pk int primary key, c1 int);
+insert into t18 values(1,1);
+create table t17(pk int primary key, c1 int);
+insert into t17 values(1,1);
+create table t16(pk int primary key, c1 int);
+insert into t16 values(1,1);
+create table t15(pk int primary key, c1 int);
+insert into t15 values(1,1);
+create table t14(pk int primary key, c1 int);
+insert into t14 values(1,1);
+create table t13(pk int primary key, c1 int);
+insert into t13 values(1,1);
+create table t12(pk int primary key, c1 int);
+insert into t12 values(1,1);
+create table t11(pk int primary key, c1 int);
+insert into t11 values(1,1);
+create table t10(pk int primary key, c1 int);
+insert into t10 values(1,1);
+create table t9(pk int primary key, c1 int);
+insert into t9 values(1,1);
+create table t8(pk int primary key, c1 int);
+insert into t8 values(1,1);
+create table t7(pk int primary key, c1 int);
+insert into t7 values(1,1);
+create table t6(pk int primary key, c1 int);
+insert into t6 values(1,1);
+create table t5(pk int primary key, c1 int);
+insert into t5 values(1,1);
+create table t4(pk int primary key, c1 int);
+insert into t4 values(1,1);
+create table t3(pk int primary key, c1 int);
+insert into t3 values(1,1);
+create table t2(pk int primary key, c1 int);
+insert into t2 values(1,1);
+create table t1(pk int primary key, c1 int);
+insert into t1 values(1,1);
+show tables;
+table_name
+t200
+t199
+t198
+t197
+t196
+t195
+t194
+t193
+t192
+t191
+t190
+t189
+t188
+t187
+t186
+t185
+t184
+t183
+t182
+t181
+t180
+t179
+t178
+t177
+t176
+t175
+t174
+t173
+t172
+t171
+t170
+t169
+t168
+t167
+t166
+t165
+t164
+t163
+t162
+t161
+t160
+t159
+t158
+t157
+t156
+t155
+t154
+t153
+t152
+t151
+t150
+t149
+t148
+t147
+t146
+t145
+t144
+t143
+t142
+t141
+t140
+t139
+t138
+t137
+t136
+t135
+t134
+t133
+t132
+t131
+t130
+t129
+t128
+t127
+t126
+t125
+t124
+t123
+t122
+t121
+t120
+t119
+t118
+t117
+t116
+t115
+t114
+t113
+t112
+t111
+t110
+t109
+t108
+t107
+t106
+t105
+t104
+t103
+t102
+t101
+t100
+t99
+t98
+t97
+t96
+t95
+t94
+t93
+t92
+t91
+t90
+t89
+t88
+t87
+t86
+t85
+t84
+t83
+t82
+t81
+t80
+t79
+t78
+t77
+t76
+t75
+t74
+t73
+t72
+t71
+t70
+t69
+t68
+t67
+t66
+t65
+t64
+t63
+t62
+t61
+t60
+t59
+t58
+t57
+t56
+t55
+t54
+t53
+t52
+t51
+t50
+t49
+t48
+t47
+t46
+t45
+t44
+t43
+t42
+t41
+t40
+t39
+t38
+t37
+t36
+t35
+t34
+t33
+t32
+t31
+t30
+t29
+t28
+t27
+t26
+t25
+t24
+t23
+t22
+t21
+t20
+t19
+t18
+t17
+t16
+t15
+t14
+t13
+t12
+t11
+t10
+t9
+t8
+t7
+t6
+t5
+t4
+t3
+t2
+t1
+drop table t200;
+select * from t200;
+ERROR 42S02: table 'test.t200' does not exist
+drop table t199;
+select * from t199;
+ERROR 42S02: table 'test.t199' does not exist
+drop table t198;
+select * from t198;
+ERROR 42S02: table 'test.t198' does not exist
+drop table t197;
+select * from t197;
+ERROR 42S02: table 'test.t197' does not exist
+drop table t196;
+select * from t196;
+ERROR 42S02: table 'test.t196' does not exist
+drop table t195;
+select * from t195;
+ERROR 42S02: table 'test.t195' does not exist
+drop table t194;
+select * from t194;
+ERROR 42S02: table 'test.t194' does not exist
+drop table t193;
+select * from t193;
+ERROR 42S02: table 'test.t193' does not exist
+drop table t192;
+select * from t192;
+ERROR 42S02: table 'test.t192' does not exist
+drop table t191;
+select * from t191;
+ERROR 42S02: table 'test.t191' does not exist
+drop table t190;
+select * from t190;
+ERROR 42S02: table 'test.t190' does not exist
+drop table t189;
+select * from t189;
+ERROR 42S02: table 'test.t189' does not exist
+drop table t188;
+select * from t188;
+ERROR 42S02: table 'test.t188' does not exist
+drop table t187;
+select * from t187;
+ERROR 42S02: table 'test.t187' does not exist
+drop table t186;
+select * from t186;
+ERROR 42S02: table 'test.t186' does not exist
+drop table t185;
+select * from t185;
+ERROR 42S02: table 'test.t185' does not exist
+drop table t184;
+select * from t184;
+ERROR 42S02: table 'test.t184' does not exist
+drop table t183;
+select * from t183;
+ERROR 42S02: table 'test.t183' does not exist
+drop table t182;
+select * from t182;
+ERROR 42S02: table 'test.t182' does not exist
+drop table t181;
+select * from t181;
+ERROR 42S02: table 'test.t181' does not exist
+drop table t180;
+select * from t180;
+ERROR 42S02: table 'test.t180' does not exist
+drop table t179;
+select * from t179;
+ERROR 42S02: table 'test.t179' does not exist
+drop table t178;
+select * from t178;
+ERROR 42S02: table 'test.t178' does not exist
+drop table t177;
+select * from t177;
+ERROR 42S02: table 'test.t177' does not exist
+drop table t176;
+select * from t176;
+ERROR 42S02: table 'test.t176' does not exist
+drop table t175;
+select * from t175;
+ERROR 42S02: table 'test.t175' does not exist
+drop table t174;
+select * from t174;
+ERROR 42S02: table 'test.t174' does not exist
+drop table t173;
+select * from t173;
+ERROR 42S02: table 'test.t173' does not exist
+drop table t172;
+select * from t172;
+ERROR 42S02: table 'test.t172' does not exist
+drop table t171;
+select * from t171;
+ERROR 42S02: table 'test.t171' does not exist
+drop table t170;
+select * from t170;
+ERROR 42S02: table 'test.t170' does not exist
+drop table t169;
+select * from t169;
+ERROR 42S02: table 'test.t169' does not exist
+drop table t168;
+select * from t168;
+ERROR 42S02: table 'test.t168' does not exist
+drop table t167;
+select * from t167;
+ERROR 42S02: table 'test.t167' does not exist
+drop table t166;
+select * from t166;
+ERROR 42S02: table 'test.t166' does not exist
+drop table t165;
+select * from t165;
+ERROR 42S02: table 'test.t165' does not exist
+drop table t164;
+select * from t164;
+ERROR 42S02: table 'test.t164' does not exist
+drop table t163;
+select * from t163;
+ERROR 42S02: table 'test.t163' does not exist
+drop table t162;
+select * from t162;
+ERROR 42S02: table 'test.t162' does not exist
+drop table t161;
+select * from t161;
+ERROR 42S02: table 'test.t161' does not exist
+drop table t160;
+select * from t160;
+ERROR 42S02: table 'test.t160' does not exist
+drop table t159;
+select * from t159;
+ERROR 42S02: table 'test.t159' does not exist
+drop table t158;
+select * from t158;
+ERROR 42S02: table 'test.t158' does not exist
+drop table t157;
+select * from t157;
+ERROR 42S02: table 'test.t157' does not exist
+drop table t156;
+select * from t156;
+ERROR 42S02: table 'test.t156' does not exist
+drop table t155;
+select * from t155;
+ERROR 42S02: table 'test.t155' does not exist
+drop table t154;
+select * from t154;
+ERROR 42S02: table 'test.t154' does not exist
+drop table t153;
+select * from t153;
+ERROR 42S02: table 'test.t153' does not exist
+drop table t152;
+select * from t152;
+ERROR 42S02: table 'test.t152' does not exist
+drop table t151;
+select * from t151;
+ERROR 42S02: table 'test.t151' does not exist
+drop table t150;
+select * from t150;
+ERROR 42S02: table 'test.t150' does not exist
+drop table t149;
+select * from t149;
+ERROR 42S02: table 'test.t149' does not exist
+drop table t148;
+select * from t148;
+ERROR 42S02: table 'test.t148' does not exist
+drop table t147;
+select * from t147;
+ERROR 42S02: table 'test.t147' does not exist
+drop table t146;
+select * from t146;
+ERROR 42S02: table 'test.t146' does not exist
+drop table t145;
+select * from t145;
+ERROR 42S02: table 'test.t145' does not exist
+drop table t144;
+select * from t144;
+ERROR 42S02: table 'test.t144' does not exist
+drop table t143;
+select * from t143;
+ERROR 42S02: table 'test.t143' does not exist
+drop table t142;
+select * from t142;
+ERROR 42S02: table 'test.t142' does not exist
+drop table t141;
+select * from t141;
+ERROR 42S02: table 'test.t141' does not exist
+drop table t140;
+select * from t140;
+ERROR 42S02: table 'test.t140' does not exist
+drop table t139;
+select * from t139;
+ERROR 42S02: table 'test.t139' does not exist
+drop table t138;
+select * from t138;
+ERROR 42S02: table 'test.t138' does not exist
+drop table t137;
+select * from t137;
+ERROR 42S02: table 'test.t137' does not exist
+drop table t136;
+select * from t136;
+ERROR 42S02: table 'test.t136' does not exist
+drop table t135;
+select * from t135;
+ERROR 42S02: table 'test.t135' does not exist
+drop table t134;
+select * from t134;
+ERROR 42S02: table 'test.t134' does not exist
+drop table t133;
+select * from t133;
+ERROR 42S02: table 'test.t133' does not exist
+drop table t132;
+select * from t132;
+ERROR 42S02: table 'test.t132' does not exist
+drop table t131;
+select * from t131;
+ERROR 42S02: table 'test.t131' does not exist
+drop table t130;
+select * from t130;
+ERROR 42S02: table 'test.t130' does not exist
+drop table t129;
+select * from t129;
+ERROR 42S02: table 'test.t129' does not exist
+drop table t128;
+select * from t128;
+ERROR 42S02: table 'test.t128' does not exist
+drop table t127;
+select * from t127;
+ERROR 42S02: table 'test.t127' does not exist
+drop table t126;
+select * from t126;
+ERROR 42S02: table 'test.t126' does not exist
+drop table t125;
+select * from t125;
+ERROR 42S02: table 'test.t125' does not exist
+drop table t124;
+select * from t124;
+ERROR 42S02: table 'test.t124' does not exist
+drop table t123;
+select * from t123;
+ERROR 42S02: table 'test.t123' does not exist
+drop table t122;
+select * from t122;
+ERROR 42S02: table 'test.t122' does not exist
+drop table t121;
+select * from t121;
+ERROR 42S02: table 'test.t121' does not exist
+drop table t120;
+select * from t120;
+ERROR 42S02: table 'test.t120' does not exist
+drop table t119;
+select * from t119;
+ERROR 42S02: table 'test.t119' does not exist
+drop table t118;
+select * from t118;
+ERROR 42S02: table 'test.t118' does not exist
+drop table t117;
+select * from t117;
+ERROR 42S02: table 'test.t117' does not exist
+drop table t116;
+select * from t116;
+ERROR 42S02: table 'test.t116' does not exist
+drop table t115;
+select * from t115;
+ERROR 42S02: table 'test.t115' does not exist
+drop table t114;
+select * from t114;
+ERROR 42S02: table 'test.t114' does not exist
+drop table t113;
+select * from t113;
+ERROR 42S02: table 'test.t113' does not exist
+drop table t112;
+select * from t112;
+ERROR 42S02: table 'test.t112' does not exist
+drop table t111;
+select * from t111;
+ERROR 42S02: table 'test.t111' does not exist
+drop table t110;
+select * from t110;
+ERROR 42S02: table 'test.t110' does not exist
+drop table t109;
+select * from t109;
+ERROR 42S02: table 'test.t109' does not exist
+drop table t108;
+select * from t108;
+ERROR 42S02: table 'test.t108' does not exist
+drop table t107;
+select * from t107;
+ERROR 42S02: table 'test.t107' does not exist
+drop table t106;
+select * from t106;
+ERROR 42S02: table 'test.t106' does not exist
+drop table t105;
+select * from t105;
+ERROR 42S02: table 'test.t105' does not exist
+drop table t104;
+select * from t104;
+ERROR 42S02: table 'test.t104' does not exist
+drop table t103;
+select * from t103;
+ERROR 42S02: table 'test.t103' does not exist
+drop table t102;
+select * from t102;
+ERROR 42S02: table 'test.t102' does not exist
+drop table t101;
+select * from t101;
+ERROR 42S02: table 'test.t101' does not exist
+drop table t100;
+select * from t100;
+ERROR 42S02: table 'test.t100' does not exist
+drop table t99;
+select * from t99;
+ERROR 42S02: table 'test.t99' does not exist
+drop table t98;
+select * from t98;
+ERROR 42S02: table 'test.t98' does not exist
+drop table t97;
+select * from t97;
+ERROR 42S02: table 'test.t97' does not exist
+drop table t96;
+select * from t96;
+ERROR 42S02: table 'test.t96' does not exist
+drop table t95;
+select * from t95;
+ERROR 42S02: table 'test.t95' does not exist
+drop table t94;
+select * from t94;
+ERROR 42S02: table 'test.t94' does not exist
+drop table t93;
+select * from t93;
+ERROR 42S02: table 'test.t93' does not exist
+drop table t92;
+select * from t92;
+ERROR 42S02: table 'test.t92' does not exist
+drop table t91;
+select * from t91;
+ERROR 42S02: table 'test.t91' does not exist
+drop table t90;
+select * from t90;
+ERROR 42S02: table 'test.t90' does not exist
+drop table t89;
+select * from t89;
+ERROR 42S02: table 'test.t89' does not exist
+drop table t88;
+select * from t88;
+ERROR 42S02: table 'test.t88' does not exist
+drop table t87;
+select * from t87;
+ERROR 42S02: table 'test.t87' does not exist
+drop table t86;
+select * from t86;
+ERROR 42S02: table 'test.t86' does not exist
+drop table t85;
+select * from t85;
+ERROR 42S02: table 'test.t85' does not exist
+drop table t84;
+select * from t84;
+ERROR 42S02: table 'test.t84' does not exist
+drop table t83;
+select * from t83;
+ERROR 42S02: table 'test.t83' does not exist
+drop table t82;
+select * from t82;
+ERROR 42S02: table 'test.t82' does not exist
+drop table t81;
+select * from t81;
+ERROR 42S02: table 'test.t81' does not exist
+drop table t80;
+select * from t80;
+ERROR 42S02: table 'test.t80' does not exist
+drop table t79;
+select * from t79;
+ERROR 42S02: table 'test.t79' does not exist
+drop table t78;
+select * from t78;
+ERROR 42S02: table 'test.t78' does not exist
+drop table t77;
+select * from t77;
+ERROR 42S02: table 'test.t77' does not exist
+drop table t76;
+select * from t76;
+ERROR 42S02: table 'test.t76' does not exist
+drop table t75;
+select * from t75;
+ERROR 42S02: table 'test.t75' does not exist
+drop table t74;
+select * from t74;
+ERROR 42S02: table 'test.t74' does not exist
+drop table t73;
+select * from t73;
+ERROR 42S02: table 'test.t73' does not exist
+drop table t72;
+select * from t72;
+ERROR 42S02: table 'test.t72' does not exist
+drop table t71;
+select * from t71;
+ERROR 42S02: table 'test.t71' does not exist
+drop table t70;
+select * from t70;
+ERROR 42S02: table 'test.t70' does not exist
+drop table t69;
+select * from t69;
+ERROR 42S02: table 'test.t69' does not exist
+drop table t68;
+select * from t68;
+ERROR 42S02: table 'test.t68' does not exist
+drop table t67;
+select * from t67;
+ERROR 42S02: table 'test.t67' does not exist
+drop table t66;
+select * from t66;
+ERROR 42S02: table 'test.t66' does not exist
+drop table t65;
+select * from t65;
+ERROR 42S02: table 'test.t65' does not exist
+drop table t64;
+select * from t64;
+ERROR 42S02: table 'test.t64' does not exist
+drop table t63;
+select * from t63;
+ERROR 42S02: table 'test.t63' does not exist
+drop table t62;
+select * from t62;
+ERROR 42S02: table 'test.t62' does not exist
+drop table t61;
+select * from t61;
+ERROR 42S02: table 'test.t61' does not exist
+drop table t60;
+select * from t60;
+ERROR 42S02: table 'test.t60' does not exist
+drop table t59;
+select * from t59;
+ERROR 42S02: table 'test.t59' does not exist
+drop table t58;
+select * from t58;
+ERROR 42S02: table 'test.t58' does not exist
+drop table t57;
+select * from t57;
+ERROR 42S02: table 'test.t57' does not exist
+drop table t56;
+select * from t56;
+ERROR 42S02: table 'test.t56' does not exist
+drop table t55;
+select * from t55;
+ERROR 42S02: table 'test.t55' does not exist
+drop table t54;
+select * from t54;
+ERROR 42S02: table 'test.t54' does not exist
+drop table t53;
+select * from t53;
+ERROR 42S02: table 'test.t53' does not exist
+drop table t52;
+select * from t52;
+ERROR 42S02: table 'test.t52' does not exist
+drop table t51;
+select * from t51;
+ERROR 42S02: table 'test.t51' does not exist
+drop table t50;
+select * from t50;
+ERROR 42S02: table 'test.t50' does not exist
+drop table t49;
+select * from t49;
+ERROR 42S02: table 'test.t49' does not exist
+drop table t48;
+select * from t48;
+ERROR 42S02: table 'test.t48' does not exist
+drop table t47;
+select * from t47;
+ERROR 42S02: table 'test.t47' does not exist
+drop table t46;
+select * from t46;
+ERROR 42S02: table 'test.t46' does not exist
+drop table t45;
+select * from t45;
+ERROR 42S02: table 'test.t45' does not exist
+drop table t44;
+select * from t44;
+ERROR 42S02: table 'test.t44' does not exist
+drop table t43;
+select * from t43;
+ERROR 42S02: table 'test.t43' does not exist
+drop table t42;
+select * from t42;
+ERROR 42S02: table 'test.t42' does not exist
+drop table t41;
+select * from t41;
+ERROR 42S02: table 'test.t41' does not exist
+drop table t40;
+select * from t40;
+ERROR 42S02: table 'test.t40' does not exist
+drop table t39;
+select * from t39;
+ERROR 42S02: table 'test.t39' does not exist
+drop table t38;
+select * from t38;
+ERROR 42S02: table 'test.t38' does not exist
+drop table t37;
+select * from t37;
+ERROR 42S02: table 'test.t37' does not exist
+drop table t36;
+select * from t36;
+ERROR 42S02: table 'test.t36' does not exist
+drop table t35;
+select * from t35;
+ERROR 42S02: table 'test.t35' does not exist
+drop table t34;
+select * from t34;
+ERROR 42S02: table 'test.t34' does not exist
+drop table t33;
+select * from t33;
+ERROR 42S02: table 'test.t33' does not exist
+drop table t32;
+select * from t32;
+ERROR 42S02: table 'test.t32' does not exist
+drop table t31;
+select * from t31;
+ERROR 42S02: table 'test.t31' does not exist
+drop table t30;
+select * from t30;
+ERROR 42S02: table 'test.t30' does not exist
+drop table t29;
+select * from t29;
+ERROR 42S02: table 'test.t29' does not exist
+drop table t28;
+select * from t28;
+ERROR 42S02: table 'test.t28' does not exist
+drop table t27;
+select * from t27;
+ERROR 42S02: table 'test.t27' does not exist
+drop table t26;
+select * from t26;
+ERROR 42S02: table 'test.t26' does not exist
+drop table t25;
+select * from t25;
+ERROR 42S02: table 'test.t25' does not exist
+drop table t24;
+select * from t24;
+ERROR 42S02: table 'test.t24' does not exist
+drop table t23;
+select * from t23;
+ERROR 42S02: table 'test.t23' does not exist
+drop table t22;
+select * from t22;
+ERROR 42S02: table 'test.t22' does not exist
+drop table t21;
+select * from t21;
+ERROR 42S02: table 'test.t21' does not exist
+drop table t20;
+select * from t20;
+ERROR 42S02: table 'test.t20' does not exist
+drop table t19;
+select * from t19;
+ERROR 42S02: table 'test.t19' does not exist
+drop table t18;
+select * from t18;
+ERROR 42S02: table 'test.t18' does not exist
+drop table t17;
+select * from t17;
+ERROR 42S02: table 'test.t17' does not exist
+drop table t16;
+select * from t16;
+ERROR 42S02: table 'test.t16' does not exist
+drop table t15;
+select * from t15;
+ERROR 42S02: table 'test.t15' does not exist
+drop table t14;
+select * from t14;
+ERROR 42S02: table 'test.t14' does not exist
+drop table t13;
+select * from t13;
+ERROR 42S02: table 'test.t13' does not exist
+drop table t12;
+select * from t12;
+ERROR 42S02: table 'test.t12' does not exist
+drop table t11;
+select * from t11;
+ERROR 42S02: table 'test.t11' does not exist
+drop table t10;
+select * from t10;
+ERROR 42S02: table 'test.t10' does not exist
+drop table t9;
+select * from t9;
+ERROR 42S02: table 'test.t9' does not exist
+drop table t8;
+select * from t8;
+ERROR 42S02: table 'test.t8' does not exist
+drop table t7;
+select * from t7;
+ERROR 42S02: table 'test.t7' does not exist
+drop table t6;
+select * from t6;
+ERROR 42S02: table 'test.t6' does not exist
+drop table t5;
+select * from t5;
+ERROR 42S02: table 'test.t5' does not exist
+drop table t4;
+select * from t4;
+ERROR 42S02: table 'test.t4' does not exist
+drop table t3;
+select * from t3;
+ERROR 42S02: table 'test.t3' does not exist
+drop table t2;
+select * from t2;
+ERROR 42S02: table 'test.t2' does not exist
+drop table t1;
+select * from t1;
+ERROR 42S02: table 'test.t1' does not exist
+show tables;
+table_name
+show tables;
+table_name

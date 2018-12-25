@@ -1,0 +1,85 @@
+ob1=OBI(cluster=1222);
+ob2=OBI(cluster=1222);
+ob1.reboot;
+ob2.reboot;
+
+let $cnt=10;
+while($cnt>0)
+{
+	let $a = math($cnt % 2);
+	if($a == 0)
+	{
+		ob1.create_datasource test$cnt;
+	}
+	if($a == 1)
+	{
+		ob2.create_datasource test$cnt;
+	}
+	dec $cnt;
+}
+
+sleep 5;
+
+let $cnt = 10;
+while($cnt > 0)
+{
+	let $a = math($cnt % 2);
+	if($a == 0)
+	{
+		ob1.use_datasource test$cnt;
+		eval create table t$cnt (a int primary key,b int);
+		eval insert into t$cnt values($cnt,$cnt);
+	}
+	if($a == 1)
+	{
+		ob2.use_datasource test$cnt;
+		eval create table t$cnt(a int primary key,b int);
+		eval insert into t$cnt values($cnt,$cnt);
+	}
+	dec $cnt;
+}
+
+ob1.use_datasource test2;
+select table_name from __first_tablet_entry where table_id > 3000;
+
+ob2.use_datasource test9;
+select table_name from __first_tablet_entry where table_id > 3000;
+
+ob1.use_datasource test4;
+select * from t4;
+ob2.use_datasource test5;
+select * from t5;
+
+ob1.ms0.stop;
+ob2.ms1.stop;
+
+let $cnt = 10;
+while($cnt > 0)
+{
+    let $a = math($cnt % 2);
+    if($a == 0)
+    {
+        ob1.use_datasource test$cnt;
+		let $k = 5;
+		while($k>0)
+		{
+			eval replace into t$cnt values($k,$k);
+			eval select * from t$cnt;
+			dec $k;
+		}
+    }
+    if($a == 1)
+    {
+        ob2.use_datasource test$cnt;
+		let $k = 5;
+		while($k>0)
+        {
+            eval replace into t$cnt values($k,$k);
+            eval select * from t$cnt;
+            dec $k;
+        }
+    }
+    dec $cnt;
+}
+
+

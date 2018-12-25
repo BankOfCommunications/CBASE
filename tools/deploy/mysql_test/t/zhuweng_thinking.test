@@ -1,0 +1,37 @@
+#--disable_parsing
+--disable_warnings
+drop table if exists sbtest;
+--enable_warnings
+
+alter system set merge_delay_interval='1s' server_type=chunkserver,min_major_freeze_interval='1s' server_type=updateserver;
+alter system set merge_delay_for_lsync='1s' server_type=chunkserver;
+alter system set min_drop_cache_wait_time='10s' server_type=chunkserver;
+alter system set merge_thread_per_disk=10 server_type=chunkserver;
+alter system set each_tablet_sync_meta=False server_type=chunkserver;
+--real_sleep 10 
+
+CREATE TABLE sbtest (id INTEGER  NOT NULL , k integer  DEFAULT '0' NOT NULL, c char(120) DEFAULT '' NOT NULL, pad char(60) DEFAULT '' NOT NULL, PRIMARY KEY  (id) ) ;
+
+--echo insert 100 rows to ups
+--let $count=1
+while($count < 101)
+{ 
+    --let $stmt=INSERT INTO sbtest(id, k, c, pad) VALUES($count,0,' ','qqqqqqqqqqwwwwwwwwwweeeeeeeeeerrrrrrrrrrtttttttttt')
+    eval $stmt;
+    inc $count; 
+}
+
+--echo merge
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+
+--real_sleep 120
+delete from sbtest where id=1;
+
+#--error 5024
+#INSERT INTO sbtest(id, k, c, pad) VALUES(105,0,' ','usp'),(101,0,' ','usp'),(101,0,' ','usp1'),(100,0,' ','uuu'),(99,0,' ','us');
+INSERT INTO sbtest(id, k, c, pad) VALUES(105,0,' ','usp'),(1,0,' ','usp');
+#INSERT INTO sbtest(id, k, c, pad) VALUES(105,0,' ','usp'),(101,0,' ','usp'),(101,0,' ','usp1'),(102,0,' ',' '),(108, 0 , ' ', ' '),(105, 0, ' ', ' ');
+
+select * from sbtest where id >= 98;
+
+drop table sbtest;

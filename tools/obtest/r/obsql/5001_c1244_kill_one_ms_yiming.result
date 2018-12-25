@@ -1,0 +1,11 @@
+ob1=OBI(cluster=1244,ct=obsqlclient)
+ob1.reboot
+ob1.register obsql
+ob1.mysql create table t1(c1 int primary key, c2 int)
+ob1.ct0.sync
+ob1.ct0.stop
+ob1.ct0.start query.test
+running
+ob1.ms0.stop
+running
+ob1.ct0.stop

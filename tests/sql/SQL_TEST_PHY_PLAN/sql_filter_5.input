@@ -1,0 +1,9 @@
+-- fail, Invalid use of group function
+<<Part 1 : SQL STRING>>
+select user_id, sum(qty) as total from order_list where user_id < 1000 and max(qty) >100;
+[2012-07-17 15:19:16] ERROR resolve_expr (build_plan.cpp:1083) [47123780730880] Invalid use of group function
+
+<<Part 2 : PARSE TREE>>
+Resolve error!
+
+

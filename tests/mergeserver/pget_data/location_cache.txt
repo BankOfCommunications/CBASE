@@ -1,0 +1,62 @@
+[tablet_location_cache]
+
+table_id_0 = 1001
+range_start_0 = MIN
+range_end_0 = MAX
+server_list_0 = 10.232.35.1,10.232.35.2,10.232.35.3
+
+
+table_id_1 = 1002
+range_start_1 = MIN
+range_end_1 = MAX
+server_list_1 = 10.232.35.4,10.232.35.5,10.232.35.6
+
+
+table_id_2 = 1003
+range_start_2 = MIN
+range_end_2 = MAX
+server_list_2 = 10.232.35.7,10.232.35.8,10.232.35.9
+
+
+table_id_3 = 1004
+range_start_3 = MIN
+range_end_3 = MAX
+server_list_3 = 10.232.35.10,10.232.35.11,10.232.35.12
+
+
+table_id_4 = 1005
+range_start_4 = MIN
+range_end_4 = MAX
+server_list_4 = 10.232.35.1,10.232.35.2,10.232.35.3
+
+
+table_id_5 = 1006
+range_start_5 = MIN
+range_end_5 = MAX
+server_list_5 = 10.232.35.4,10.232.35.5,10.232.35.6
+
+
+table_id_6 = 1007
+range_start_6 = MIN
+range_end_6 = MAX
+server_list_6 = 10.232.35.7,10.232.35.8,10.232.35.9
+
+
+table_id_7 = 1008
+range_start_7 = MIN
+range_end_7 = MAX
+server_list_7 = 10.232.35.10,10.232.35.11,10.232.35.12
+
+
+table_id_8 = 1009
+range_start_8 = MIN
+range_end_8 = MAX
+server_list_8 = 10.232.35.1,10.232.35.2,10.232.35.3
+
+
+table_id_9 = 1010
+range_start_9 = MIN
+range_end_9 = MAX
+server_list_9 = 10.232.35.4,10.232.35.5,10.232.35.6
+
+

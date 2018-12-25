@@ -1,0 +1,24 @@
+deploy ob1=OBI(cluster=1111);
+deploy ob2=OBI(cluster=1111);
+deploy ob2.rs0.set master=ob1.rs0;
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 30;
+
+
+ob1.prepare;
+
+sleep 60;
+
+
+ob1.ups0.force_stop;
+
+sleep 10;
+
+ob2.ms0.restart;
+
+sleep 30;
+
+ob2.ms0.mysql show tables;
+
+

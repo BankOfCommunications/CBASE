@@ -1,0 +1,26 @@
+### table fin_influx_payer
+
+create table fin_influx_payer(
+
+influx_id       varchar(64) ,
+payer_account_no        varchar(32),
+payer_name      varchar(32),
+inst_account_no varchar(32),
+inst_account_name       varchar(128),
+
+card_type       varchar(16),
+card_index      varchar(32),
+issuer  varchar(32),
+agreement_no    varchar(100),
+certificate_type        varchar(64),
+certificate_no  varchar(32),
+mobile_phone    varchar(16),
+pay_tool        varchar(16),
+bill_no varchar(32),
+bill_type       varchar(8),
+gmt_create      datetime,
+gmt_modified    datetime,
+primary key(influx_id)
+);
+
+

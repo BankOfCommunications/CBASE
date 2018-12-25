@@ -1,0 +1,153 @@
+deploy ob1=OBI(cluster=1244,app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable,version=0.4.1);
+deploy ob2=OBI(cluster=1244,app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable,version=0.4.1);
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+
+deploy ob1.create_client ob1,ob2;
+
+let $a=deploy_get_value(ob1.mysql_p show variables like 'ob_read_consistency');
+--echo check current consistency level
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select cluster_id,cluster_role,cluster_flow_percent from __all_cluster);
+--echo check current cluster percent
+--echo $a
+
+--echo fill data and query
+deploy ob1.prepare;
+sleep 60;
+deploy ob1.start_check;
+
+deploy ob1.source include/merge.inc;
+sleep 10;
+
+deploy ob1.major_freeze;
+sleep 90;
+deploy ob1.check_cs_version 2;
+deploy ob2.check_cs_version 2;
+
+--echo step1.1 modify some parameters
+deploy ob1.mysql alter system set balance_max_migrate_out_per_cs=2 server_type=rootserver;
+
+--echo step1.2 turn off updateserver's checksum
+deploy ob1.mysql alter system set replay_checksum_flag='False'  server_type=updateserver;
+
+--echo step1.3 add five system variables;
+deploy ob1.mysql replace into __all_sys_param (cluster_id, name, data_type, value, info) values(0, 'wait_timeout', 1, 0, 'The number of seconds the server waits for activity on a noninteractive connection before closing it.'),(0, 'interactive_timeout', 1, 0, 'The number of seconds the server waits for activity on an interactive connection before closing it.'),(0, 'ob_query_timeout', 1, 3000000, 'Query timeout in microsecond(us)'),(0,'ob_read_consistency',1,4,'read consistency level:4=STRONG, 3=WEAK, 2=FROZEN, 1=STATIC, 0=NONE'),(0, 'ob_charset', 6, 'gbk', 'ob charset');
+
+--echo step1.4 add schema for __all_server_session and __all_statement
+deploy ob1.mysql replace into __first_tablet_entry (table_name,create_time_column_id,modify_time_column_id,table_id,table_type,load_type,table_def_type,rowkey_column_num,column_num,max_used_column_id,replica_num,create_mem_version,tablet_max_size,max_rowkey_length,compress_func_name,is_use_bloomfilter,merge_write_sstable_version,is_pure_update_table,rowkey_split,expire_condition,tablet_block_size,is_read_static) values('__all_server_session',2,3,510,1,1,1,1,NULL,26,3,1,268435456,64,'none',0,2,0,0,'',16384,0),('__all_statement',2,3,511,1,1,1,3,NULL,25,3,1,268435456,64,'none',0,2,0,0,'',16384, 0);
+
+deploy ob1.mysql replace into __all_all_column (table_id,column_name,table_name,column_id,column_group_id,rowkey_id,length_in_rowkey,order_in_rowkey,join_table_id,join_column_id,data_type,data_length,data_precision,data_scale,nullable) values(510,'command',NULL,20,0,0,1024,1,-1,-1,6,1024,0,0,0),(510,'db',NULL,19,0,0,128,1,-1,-1,6,128,0,0,0),(510,'host',NULL,18,0,0,128,1,-1,-1,6,128,0,0,0),(510,'id',NULL,16,0,1,8,1,-1,-1,1,8,0,0,0),(510,'index',NULL,25,0,0,8,1,-1,-1,1,8,0,0,0),(510,'info',NULL,23,0,0,128,1,-1,-1,6,128,0,0,0),(510,'mergeserver',NULL,24,0,0,128,1,-1,-1,6,128,0,0,0),(510,'state',NULL,22,0,0,128,1,-1,-1,6,128,0,0,0),(510,'timeelapse',NULL,21,0,0,8,1,-1,-1,1,8,0,0,0),(510,'username',NULL,17,0,0,512,1,-1,-1,6,512,0,0,0),(511,'avg_execute_usec',NULL,22,0,0,8,1,-1,-1,1,8,0,0,0),(511,'create_time',NULL,24,0,0,4,1,-1,-1,5,4,0,0,0),(511,'execute_count',NULL,21,0,0,8,1,-1,-1,1,8,0,0,0),(511,'id',NULL,19,0,0,8,1,-1,-1,1,8,0,0,0),(511,'last_active_time',NULL,25,0,0,4,1,-1,-1,5,4,0,0,0),(511,'prepare_count',NULL,20,0,0,8,1,-1,-1,1,8,0,0,0),(511,'slow_count',NULL,23,0,0,8,1,-1,-1,1,8,0,0,0),(511,'statement',NULL,18,0,3,1024,1,-1,-1,6,1024,0,0,0),(511,'svr_ip',NULL,16,0,1,32,1,-1,-1,6,32,0,0,0),(511,'svr_port',NULL,17,0,2,8,1,-1,-1,1,8,0,0,0);
+
+--echo step1.5 add column `rootserver_port' for __all_cluster
+deploy ob1.connect conn1 fs0 admin admin test;
+connection conn1;
+
+set ob_disable_create_sys_table = false;
+sleep 10;
+let $rs0=deploy_get_value(ob1.rs0.port);
+let $rs1=deploy_get_value(ob2.rs0.port);
+alter table __all_cluster add rootserver_port int;
+
+--disable_query_log
+eval update __all_cluster set rootserver_port=$rs0 where cluster_id=1;
+eval update __all_cluster set rootserver_port=$rs1 where cluster_id=2;
+sleep 20;
+--enable_query_log
+
+--echo step2. refresh_schema
+deploy ob1.rs_admin refresh_schema;
+
+--echo step3. add tablet 510,511
+deploy ob1.cs_admin create_tablet 510 [MIN;MAX] 1 2;
+deploy ob1.cs_admin create_tablet 511 [MIN;MAX] 1 2;
+deploy ob1.cs0.restart;
+sleep 20;
+
+deploy ob2.cs_admin create_tablet 510 [MIN;MAX] 1 2;
+deploy ob2.cs_admin create_tablet 511 [MIN;MAX] 1 2;
+deploy ob2.cs0.restart;
+sleep 20;
+
+--echo step3. stop slave cluster
+deploy ob2.stop;
+sleep 10;
+
+--echo step4. upgrade slave cluster
+deploy ob2.upgrade;
+
+--echo step5. clean rs commit log
+deploy ob2.rs0.clean_commit_log;
+
+deploy ob2.nstart;
+deploy ob2.rs0.set_obi_role OBI_SLAVE;
+
+sleep 60;
+
+deploy ob1.stop_check;
+disconnect conn1;
+
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=0 where cluster_id=1;
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=100 where cluster_id=2;
+sleep 10;
+
+--echo step6. switch start
+#switch cluster
+deploy ob1.oswitch_cluster ob2;
+
+--echo step7. check current cluster flow
+let $a=deploy_get_value(ob1.mysql_p select cluster_id,cluster_role,cluster_flow_percent from __all_cluster);
+--echo $a
+
+
+#upgrade ob1 
+--echo step8. stop new slave cluster ob1
+deploy ob1.stop;
+sleep 30;
+
+--echo step9. upgrade new slave cluster ob1
+deploy ob1.upgrade;
+
+--echo step10. clean rs commit log
+deploy ob1.rs0.clean_commit_log;
+
+deploy ob1.nstart;
+deploy ob1.rs0.set_obi_role OBI_SLAVE;
+sleep 60;
+
+deploy ob1.connect conn2 fs0 admin admin test;
+connection conn2;
+
+--echo send ddl andd dml to the new cluster
+deploy ob1.mysql show tables;
+create table t1(c1 int primary key, c2 int);
+sleep 60;
+replace into t1 values(1,1),(2,2);
+select *from t1;
+
+disconnect conn2;
+
+--echo freeze
+deploy ob2.major_freeze;
+
+sleep 90;
+
+deploy ob2.check_cs_version 3;
+
+--echo step11. open check sum flag of ups
+deploy ob2.mysql alter system set replay_checksum_flag='True'  server_type=updateserver;
+
+--echo step9. switch again
+#switch again
+deploy ob2.oswitch_cluster ob1;
+
+deploy ob1.connect conn3 fs0 admin admin test;
+connection conn3;
+
+select * from t1;
+
+disconnect conn3;

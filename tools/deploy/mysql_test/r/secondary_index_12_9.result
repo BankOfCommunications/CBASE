@@ -1,0 +1,43 @@
+drop table if exists t1,t2;
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1 (c1 int ,c2 int ,c3 int ,c4 int ,c5 int ,c6 int ,c7 int ,c8 int ,c9 int ,
+c10 int , c11 int ,c12 int ,c13 int ,c14 int ,c15 int ,c16 int,c17 int,c18 int,
+primary key (c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15) );
+create index il on t1(c1)storing (c16);
+create index il1 on t1(c16)storing (c17);
+create index il2 on t1(c16,c17)storing (c18);
+ERROR HY000: index's rowkey column num cannot be greater than 16
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+__3001__idx__il	1
+__3001__idx__il1	1
+drop table t1;
+create table t1 (c1 int ,c2 int ,c3 int ,c4 int ,c5 int ,c6 int ,c7 int ,c8 int ,c9 int ,
+c10 int , c11 int ,c12 int ,c13 int ,c14 int ,c15 int ,c16 int,c17 int,c18 int,
+primary key(c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16) );
+create index il on t1(c17)storing (c18);
+ERROR HY000: index's rowkey column num cannot be greater than 16
+create index il1 on t1(c1)storing (c17);
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+__3004__idx__il1	1
+drop table t1;
+create table t1 (c1 int primary key,c2 int ,c3 int ,c4 int ,c5 int ,c6 int ,c7 int ,c8 int ,c9 int ,
+c10 int , c11 int ,c12 int ,c13 int ,c14 int ,c15 int ,c16 int,c17 int,c18 int);
+create index il on t1(c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16)storing (c17);
+create index il1 on t1(c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c1)storing (c16);
+create index il2 on t1(c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17)storing (c18);
+ERROR HY000: index's rowkey column num cannot be greater than 16
+create index il3 on t1(c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c1)storing (c17);
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+__3006__idx__il	1
+__3006__idx__il1	1
+__3006__idx__il3	1

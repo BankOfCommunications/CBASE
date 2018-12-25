@@ -1,0 +1,53 @@
+## public conf for all server
+[public]
+app_name =
+
+ob_user = load_data_monitor
+ob_password = import_password
+ob_port = 2828
+load_table_timeout = 3600
+# 30s per retry, start_load_table_retry for each table
+start_load_table_retry = 60
+
+#sstable_block_size=65536
+
+# all paths of importserver
+# base_dir must be defined manually
+# default:
+#  conf_dir = $base_dir/etc/
+#  bin_dir = $base_dir/bin/
+#  log_dir = $base_dir/log/
+base_dir = /home/admin/oceanbase/
+
+# hadoop env
+#   default:
+#     hadoop_bin_dir = $hadoop_home/bin
+java_home = /home/yunti/java-current
+hadoop_home = /home/yunti/hadoop-current
+hadoop_conf_dir = /home/admin/config
+keep_hadoop_data_days = 3
+
+# hdfs path
+#   hdfs_name is the name of hdfs server
+#   hdfs_data_dir is the path on hdfs to store work data
+hdfs_name = hdfs://hdpnn:9000
+hdfs_data_dir = /group/oceanbase/mrsstable_data/app_name/
+
+# dispatch_time_range format is: start_time,hours
+#dispatch_time_range=01:00,8
+
+[import_server]
+port = 2900
+log_level = debug
+# default pid_file = $log_dir/import_server.pid
+# default log_file = $log_dir/import_server.log
+# keep_task_state_count = 128
+
+## list the master rs of each cluster
+# gateway format is ip1 ip2 ip3, sample: gateway=10.232.36.100 10.232.36.101
+[ob_instances]
+obi_count=0
+obi0_rs_vip=
+obi0_rs_port=
+obi1_rs_vip=
+obi1_rs_port=

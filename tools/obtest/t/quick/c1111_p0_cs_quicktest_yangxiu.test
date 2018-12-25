@@ -1,0 +1,166 @@
+ob1=OBI(cluster=1111,use_fms=0);
+
+ob1.reboot;
+
+ob1.source include/merge.inc;
+sleep 10;
+
+#major freeze,no data freeze
+ob1.major_freeze;
+ob1.check_cs_version 2;
+
+sleep 2;
+#get/scan cs and ups no data
+ob1.mysql create table t1(pk1 int , pk2 varchar, pk3 datetime, a int, b varchar, c datetime, primary key(pk1,pk2,pk3));
+ob1.mysql create table t2(pk1 int , pk2 varchar, pk3 timestamp, pk4 int, b varchar, c datetime, primary key(pk1,pk2,pk3,pk4)) TABLET_MAX_SIZE=500,EXPIRE_INFO='b=''Test''';
+ob1.mysql select * from t1;
+ob1.mysql select * from t1 where pk1=1 and pk2=2 and pk3=3;
+
+ob1.create_client;
+ob1.prepare;
+
+#get/scan ups has data and cs no data
+--disable_query_log
+--disable_result_log
+let $cnt = 100;
+while ($cnt >0)
+{
+    eval insert into t1 values($cnt,'test$cnt','2012-12-12 12:00:00',100, 'test$cnt','2013-12-12 12:00:00');
+    eval replace into t2 values($cnt,'test$cnt','2012-12-12 12:00:00',$cnt, 'test$cnt','2013-12-12 12:00:00');
+    dec $cnt;
+}
+--enable_query_log
+--enable_result_log
+
+#sql
+select * from t1 where pk2 like '%test%' order by pk1 desc limit 10;
+
+select count(*) from t1;
+select count(*) from t2;
+
+#major freeze,get/scan ups and cs has data 
+alter system set unmerge_if_unchanged='False' server_type=chunkserver;
+sleep 10;
+
+ob1.start_check;       
+ob1.major_freeze;
+sleep 10;
+ob1.check_cs_version 3;
+ob1.stop_check;
+
+select count(*) from t1;
+select count(*) from t2;
+
+--disable_query_log
+--disable_result_log
+let $cnt =50;
+while ($cnt > 0)
+{
+   eval update t1 set b='Test' where pk1=$cnt and pk2='test$cnt' and pk3='2012-12-12 12:00:00' ;
+   eval update t2 set b='Test' where pk1=$cnt and pk2='test$cnt' and pk3='2012-12-12 12:00:00' and pk4=$cnt;
+   dec $cnt;
+}
+--enable_query_log
+--enable_result_log
+
+#major freeze
+alter system set unmerge_if_unchanged='True' server_type=chunkserver;
+sleep 10;
+
+ob1.major_freeze;
+sleep 2;
+ob1.cs0.restart;
+sleep 15;
+ob1.check_cs_version 4;
+
+#check data
+#select sum(a) from t1 group by b having pk1 < 60 order by pk2;
+
+#scan inner table 
+select count(*) from __all_server;
+
+#ups has lots of minor freeze
+alter system set minor_num_limit=8 server_type=updateserver;
+let $cnt = 5;
+while($cnt > 0)
+{
+
+   --disable_query_log
+   --disable_result_log	
+   let $cnt1 = 120;
+   while($cnt1 > 100)
+   { 
+      eval replace into t1 values($cnt1,'test$cnt','2012-12-12 12:00:00',$cnt,'test$cnt','2013-12-12 12:00:00'); 
+      dec $cnt1;
+   }
+   --enable_query_log
+   --enable_result_log
+   ob1.minor_freeze;
+   dec $cnt;
+}
+
+#major freeze
+ob1.major_freeze;
+sleep 10;
+ob1.check_cs_version 5;
+
+let $a = deploy_get_value(ob1.cs0.monitor old_ver_tablets_num);
+
+select count(*) from t1;
+
+--disable_query_log
+--disable_result_log 
+#merge with split
+let $cnt = 5000;
+while ($cnt >0)
+{
+   eval replace into t2 values ($cnt,'aaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbcccccccccccccccccccccccdddddddddddddddddddddddddddeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeefffffffffffffffffffffffffffffffffffffffffffffffffffffffff','2012-1-1 11:11:11',$cnt,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbccccccccccccccccccccccccddddddddddddddddddddddeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeefffffffffffffffffffffffffffffffffffffffffffffffffffffff','2013-12-12 12:00:00');
+   dec $cnt;
+}
+--enable_query_log
+--enable_result_log
+ob1.major_freeze;
+sleep 10;
+ob1.check_cs_version 6;
+
+let $b = deploy_get_value(ob1.cs0.monitor new_ver_tablets_num);
+let $c = math($b-$a);
+if( $c < 1)
+{
+        --echo tablet split fail
+}
+
+--disable_query_log
+--disable_result_log 
+let $cnt = 1000;
+while ($cnt >0)
+{
+   eval replace into t1 values ($cnt,'aaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbcccccccccccccccccccccccddddddddddddddddddddddddddd','2012-1-1 11:11:11',$cnt,'test$cnt','2013-12-12 12:00:00');
+   dec $cnt;
+}
+--enable_query_log
+--enable_result_log
+
+#modify active_mem_limit
+let $ups = deploy_get_value(ob1.get_master_ups);
+let $memused=deploy_get_value(ob1.$ups.monitor memtable_used);
+let $mem=math($memused-500000);
+let $unit=B;
+ob1.mysql alter system set active_mem_limit='$mem$unit' server_type=updateserver;
+sleep 10;
+
+ob1.ups_admin -t store_memtable;
+
+ob1.major_freeze;
+sleep 10;
+ob1.check_cs_version 7;
+
+sleep 5;
+drop table t1;
+drop table t2;
+
+ob1.major_freeze;
+sleep 10;
+ob1.check_cs_version 8;
+
+

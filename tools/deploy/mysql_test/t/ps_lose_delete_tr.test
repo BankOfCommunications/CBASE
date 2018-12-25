@@ -1,0 +1,94 @@
+--disable_warnings
+drop table if exists t1, t2;
+--enable_warnings
+
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4),(4,'a',2);
+
+#add new column
+
+prepare stmt1 from delete from  t1 where a=?;
+set @a=1;
+execute stmt1 using @a;
+alter table t1 add d int;
+set autocommit=0;
+execute stmt1 using @a;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt1;
+
+#drop column
+
+prepare stmt2 from delete from  t1 where a=?;
+set @a=2;
+execute stmt2 using @a;
+alter table t1 drop d;
+set autocommit=0;
+execute stmt2 using @a;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt2;
+
+#drop column used
+
+prepare stmt3 from delete from  t1 where a=?;
+set @a=3;
+execute stmt3 using @a;
+--error 5002
+alter table t1 drop a;
+set autocommit=0;
+execute stmt3 using @a;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt3;
+
+#drop table
+
+prepare stmt4 from delete from  t1 where a=?;
+set @a=4;
+execute stmt4 using @a;
+drop table t1;
+set autocommit=0;
+--error 5019
+execute stmt4 using @a;
+commit;
+set autocommit=1;
+deallocate prepare stmt4;
+
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4),(4,'a',2);
+
+#drop table and create again 
+
+prepare stmt5 from delete from  t1 where a=?;
+set @a=4;
+execute stmt5 using @a;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4),(4,'a',2);
+set autocommit=0;
+execute stmt5 using @a;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt5;
+
+#drop table and create with diff name
+
+prepare stmt6 from delete from  t1 where a=?;
+set @a=4;
+execute stmt6 using @a;
+drop table t1;
+create table t2( a int primary key,b varchar(255));
+set autocommit=0;
+--error 5019
+execute stmt6 using @a;
+commit;
+set autocommit=1;
+deallocate prepare stmt6;
+
+
+

@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\dependency
+2
+4
+1a:libaio_0.3.107.orig.tar.gz|1|166f7777743|c954|447b5e76|1b6baaea68c111e8a8030002c8c1274c|0
+14:numactl-2.0.7.tar.gz|1|166f77777e1|434e6|98c1de87|1d7bab0668c111e8a8030002c8c1274c|0
+13:snappy-1.0.3.tar.gz|1|166f7777918|1a3233|839547df|1fbbab2268c111e8a8030002c8c1274c|0
+10:lzo-2.0.3.tar.gz|1|166f7777e29|9bc86|893cff8|21dbab3e68c111e8a8030002c8c1274c|0

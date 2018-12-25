@@ -1,0 +1,457 @@
+create database floor_ceil;
+using database floor_ceil;
+drop table if exists t_float,t_double,t_int,t_int64,t_varchar,t_decimal,table1,table2;
+creat table
+create table t_float(i1 int primary key,f float );
+create table t_double(i1 int primary key,d double );
+create table t_int(i1 int primary key,i2 int );
+create table t_int64(i1 int primary key,i2 bigint);
+create table t_varchar(i1 int primary key, var varchar(20));
+create table t_decimal (i1 int primary key,dd decimal(38,5));
+create table table1(i1 int primary key,i2 bigint,f float,d double,var varchar(30),dd decimal(38,5));
+create table table2(i1 int primary key,i2 bigint,f float,d double,var varchar(30),dd decimal(38,5));
+create table t_date (i1 int primary key,dat date);
+insert data
+insert into table1 values(1,20,1.23,12.345678900123456,'-12.456','15.888');
+insert into table1 values(2147483647,9223372036854775807,3.4e38,1.7e308,'1234.5678','987654321001234567890123456789012.12345');
+insert into table1 values(-2147483648,-9223372036854775808,-3.4e38,-1.7e308,'1234.45565','-987654321001234567890123456789012.12345');
+insert into table1 values(123,3456,0.123456,0.7894561230123456,'-456789','1258746');
+insert into table1 values(68,656,1.33,7.8945613456,'+6789','+1258746.89878');
+insert into table1 values(2,33,34.0,7.0,'-67.1','746.0');
+insert into table1 values(5,23,4.125,8.5,'55.5','46.66');
+insert into table2 values(1,2,4.15,8.5,'55.5','46.66');
+insert into table2 values(2,3,5.13,4.5555555,'-5.489','123.478');
+insert into table2 values(3,44,133.45,0.456876845,'4.89','37831');
+insert into t_DOUBLE values(1,123.456789);
+insert into t_DOUBLE values(2,0.123456789);
+insert into t_DOUBLE values(3,0.1234567890123456789123456);
+insert into t_DOUBLE values(4,0);
+insert into t_DOUBLE values(5,2.3e-308);
+insert into t_DOUBLE values(6,1.7e308);
+insert into t_DOUBLE values(7,-1.7e308);
+insert into t_double values(8,-2.3e-308);
+insert into t_float values(1,0);
+insert into t_float values(2,1.2e-38);
+insert into t_float values(3,3.4e38);
+insert into t_float values(4,-1.2e-38);
+insert into t_float values(5,-3.4e38);
+insert into t_float values(6,1.23456);
+insert into t_float values(7,123456);
+insert into t_float values(8,123456.0);
+insert into t_int values(1,0);
+insert into t_int values(2,2147483647);
+insert into t_int values(3,-2147483648);
+insert into t_int values(4,-112);
+insert into t_int values(5,112);
+insert into t_int64 values(1,0);
+insert into t_int64 values(2,9223372036854775807);
+insert into t_int64 values(3,-9223372036854775807);
+insert into t_int64 values(4,2233);
+insert into t_int64 values(5,-2233);
+insert into t_decimal values(1,0);
+insert into t_decimal values(2,'987654321001234567890123456789012');
+insert into t_decimal values(3,'-987654321001234567890123456789012');
+insert into t_decimal values(4,'-987654321001234567890123456789012.12345');
+insert into t_decimal values(5,'987654321001234567890123456789012.12345');
+insert into t_decimal values(6,12.33);
+insert into t_decimal values(7,-12.33);
+insert into t_varchar values(1,'123');
+insert into t_varchar values(2,'-123');
+insert into t_varchar values(3,'-123.0');
+insert into t_varchar values(4,'123.0');
+insert into t_varchar values(5,'123.123');
+insert into t_varchar values(6,'-123.123');
+insert into t_date values(1,'2015-12-12');
+start floor
+select floor(i2) from t_int;
+floor(i2)
+0
+2147483647
+-2147483648
+-112
+112
+select floor(i2) from t_int64;
+floor(i2)
+0
+9223372036854775807
+-9223372036854775807
+2233
+-2233
+select floor(f) from t_float;
+floor(f)
+0
+0
+3.4e38
+-1
+-3.4e38
+1
+123456
+123456
+select floor(d) from t_double;
+floor(d)
+123
+0
+0
+0
+0
+1.7e308
+-1.7e308
+-1
+select floor(var) from t_varchar;
+floor(var)
+123
+-123
+-123
+123
+123
+-124
+select floor(dd) from t_decimal;
+floor(dd)
+0
+987654321001234567890123456789012
+-987654321001234567890123456789012
+-987654321001234567890123456789013
+987654321001234567890123456789012
+12
+-13
+select floor(i1 + i2) from table1;
+floor(i1 + i2)
+9223372034707292161
+21
+35
+28
+724
+3579
+-9223372034707292162
+select floor(i1 + f) from table1;
+floor(i1 + f)
+-3.4e38
+2
+36
+9
+69
+123
+3.4e38
+select floor(i1 + d) from table1;
+floor(i1 + d)
+-1.7e308
+13
+9
+13
+75
+123
+1.7e308
+select floor(i1 + var) from table1;
+floor(i1 + var)
+-2147482414
+-11
+-65
+60
+6857
+-456666
+-2147482415
+select floor(i1 + dd) from table1;
+floor(i1 + dd)
+-987654321001234567890125604272661
+16
+748
+51
+1258814
+1258869
+987654321001234567890125604272659
+select floor(i2 + f) from table1;
+floor(i2 + f)
+-3.4e38
+21
+67
+27
+657
+3456
+3.4e38
+select floor(i2 + d) from table1;
+floor(i2 + d)
+-1.7e308
+32
+40
+31
+663
+3456
+1.7e308
+select floor(i2 + var) from table1;
+floor(i2 + var)
+-9223372036854774573
+8
+-34
+78
+7445
+-453333
+-9223372036854774575
+select floor(i2 + dd) from table1;
+floor(i2 + dd)
+-987654321001243791262160311564820
+35
+779
+69
+1259402
+1262202
+987654321001243791262160311564819
+select floor(f+d) from table1;
+floor(f+d)
+-1.7e308
+13
+41
+12
+9
+0
+1.7e308
+select floor(f + var) from table2;
+floor(f + var)
+59
+-1
+138
+select floor(f+dd) from table1;
+floor(f+dd)
+-3.4000098286875744e38
+17
+780
+50
+1258748
+1258746
+3.4000098286875744e38
+select floor(d + var) from table2;
+floor(d + var)
+64
+-1
+5
+select floor(d + dd) from table1;
+floor(d + dd)
+-1.7e308
+28
+753
+55
+1258754
+1258746
+1.7e308
+select floor(var + dd) from table1;
+floor(var + dd)
+-987654321001234567890123456787778
+3
+678
+102
+1265535
+801957
+987654321001234567890123456790246
+select floor(i1+i2*f + d +var+dd/2.3) from table2;
+floor(i1+i2*f + d +var+dd/2.3)
+93
+70
+22328
+select floor(i1 +(i2*f + d) * var+dd/2.3) from table2;
+floor(i1 +(i2*f + d) * var+dd/2.3)
+953
+-54
+45166
+select floor('-1.2a');
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select floor(dat) from t_date;
+ERROR HY000: No authorized routine named FLOOR of type FUNCTION having compatible arguments was found type is 13
+select floor(NULL);
+floor(NULL)
+NULL
+start ceil
+select ceil(i2) from t_int;
+ceil(i2)
+0
+2147483647
+-2147483648
+-112
+112
+select ceil(i2) from t_int64;
+ceil(i2)
+0
+9223372036854775807
+-9223372036854775807
+2233
+-2233
+select ceil(f) from t_float;
+ceil(f)
+0
+1
+3.4e38
+-0
+-3.4e38
+2
+123456
+123456
+select ceil(d) from t_double;
+ceil(d)
+124
+1
+1
+0
+1
+1.7e308
+-1.7e308
+-0
+select ceil(var) from t_varchar;
+ceil(var)
+123
+-123
+-123
+123
+124
+-123
+select ceil(dd) from t_decimal;
+ceil(dd)
+0
+987654321001234567890123456789012
+-987654321001234567890123456789012
+-987654321001234567890123456789012
+987654321001234567890123456789013
+13
+-12
+select ceil(i1 + i2) from table1;
+ceil(i1 + i2)
+9223372034707292161
+21
+35
+28
+724
+3579
+-9223372034707292162
+select ceil(i1 + f) from table1;
+ceil(i1 + f)
+-3.4e38
+3
+36
+10
+70
+124
+3.4e38
+select ceil(i1 + d) from table1;
+ceil(i1 + d)
+-1.7e308
+14
+9
+14
+76
+124
+1.7e308
+select ceil(i1 + var) from table1;
+ceil(i1 + var)
+-2147482414
+-11
+-65
+60
+6857
+-456666
+-2147482415
+select ceil(i1 + dd) from table1;
+ceil(i1 + dd)
+-987654321001234567890125604272660
+17
+748
+52
+1258815
+1258869
+987654321001234567890125604272660
+select ceil(i2 + f) from table1;
+ceil(i2 + f)
+-3.4e38
+22
+67
+28
+658
+3457
+3.4e38
+select ceil(i2 + d) from table1;
+ceil(i2 + d)
+-1.7e308
+33
+40
+32
+664
+3457
+1.7e308
+select ceil(i2 + var) from table1;
+ceil(i2 + var)
+-9223372036854774573
+8
+-34
+78
+7445
+-453333
+-9223372036854774575
+select ceil(i2 + dd) from table1;
+ceil(i2 + dd)
+-987654321001243791262160311564819
+36
+779
+70
+1259403
+1262202
+987654321001243791262160311564820
+select ceil(f+d) from table1;
+ceil(f+d)
+-1.7e308
+14
+41
+13
+10
+1
+1.7e308
+select ceil(f+var) from table2;
+ceil(f+var)
+60
+-0
+139
+select ceil(f+dd) from table1;
+ceil(f+dd)
+-3.4000098286875744e38
+18
+780
+51
+1258749
+1258747
+3.4000098286875744e38
+select ceil(d+var) from table2;
+ceil(d+var)
+64
+-0
+6
+select ceil(d+dd) from table1;
+ceil(d+dd)
+-1.7e308
+29
+753
+56
+1258755
+1258747
+1.7e308
+select ceil(var+dd) from table1;
+ceil(var+dd)
+-987654321001234567890123456787777
+4
+679
+103
+1265536
+801957
+987654321001234567890123456790247
+select ceil(i1+i2*f + d +var+dd/2.3) from table2;
+ceil(i1+i2*f + d +var+dd/2.3)
+94
+71
+22329
+select ceil(i1 +(i2*f + d) * var+dd/2.3) from table2;
+ceil(i1 +(i2*f + d) * var+dd/2.3)
+954
+-53
+45167
+select ceil('-1.2a');
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select ceil(dat) from t_date;
+ERROR HY000: No authorized routine named CEIL of type FUNCTION having compatible arguments was found type is 13
+select ceil(NULL);
+ceil(NULL)
+NULL
+drop table t_float,t_double,t_int,t_int64,t_varchar,t_decimal,table1,table2;

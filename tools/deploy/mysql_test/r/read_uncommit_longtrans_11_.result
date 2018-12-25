@@ -1,0 +1,30 @@
+drop table if exists c,d;
+create table c (c1 int primary key, c2 varchar(8));
+create table d (d1 int primary key, d2 varchar(8));
+begin;
+insert into c values(1,1);
+insert into d values(1,1);
+select * from c,d where c.c1 = d.d1;
+c1	c2	d1	d2
+1	1	1	1
+select * from c 
+left join d on c.c1 = d.d1;
+c1	c2	d1	d2
+1	1	1	1
+select * from c 
+right join d on c.c1 = d.d1;
+c1	c2	d1	d2
+1	1	1	1
+select * from c 
+inner join d on c.c1 = d.d1;
+c1	c2	d1	d2
+1	1	1	1
+select/*+join(si)*/ * from c 
+left join d on c.c1 = d.d1;
+c1	c2	d1	d2
+1	1	1	1
+select/*+join(bloomfilter_join)*/ * from c 
+left join d on c.c1 = d.d1;
+c1	c2	d1	d2
+1	1	1	1
+commit;

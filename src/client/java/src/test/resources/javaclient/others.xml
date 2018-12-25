@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<!-- Java Client -->
+	<bean id="obClient" class="com.taobao.oceanbase.ClientImpl"
+		init-method="init">
+		<property name="ip" value="10.232.23.12"></property>
+		<property name="port" value="2600"></property>
+		<property name="timeout" value="2000"></property>
+	</bean>
+</beans>

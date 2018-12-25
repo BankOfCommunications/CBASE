@@ -1,0 +1,105 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+
+deploy ob1.create_client;
+deploy ob1.prepare;
+create table t1(c1 int primary key,c2 int);
+sleep 60;
+
+
+############# change flow ##########
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=0 where cluster_id=1;
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=100 where cluster_id=2;
+sleep 10;
+
+--disable_query_log
+--disable_result_log
+########## to master ###########
+let $cnt = 100;
+while($cnt > 0)
+{
+        eval insert into t1 values($cnt,$cnt);
+        eval select /*+read_cluster(master)*/ * from t1 where c1=$cnt;
+        eval delete from t1 where c1=$cnt;
+	dec $cnt;
+}
+--enable_query_log
+--enable_result_log
+
+######## check the result ##########
+let $a = deploy_get_value(ob1.ms0.monitor sql_select_count);
+let $b = deploy_get_value(ob1.ms1.monitor sql_select_count);
+let $c = deploy_get_value(ob1.ms2.monitor sql_select_count);
+let $d = deploy_get_value(ob1.ms3.monitor sql_select_count);
+let $sum = math($a+$b+$c+$d);
+if($sum < 100)
+{
+	--echo read_cluster(master) false
+}
+
+######## to slave ###############
+--disable_query_log
+--disable_result_log
+let $cnt = 100;
+while($cnt > 0)
+{
+        eval insert into t1 values($cnt,$cnt);
+        eval select /*+read_cluster(slave)*/ * from t1 where c1=$cnt;
+        eval delete from t1 where c1=$cnt;
+	dec $cnt;
+}
+--enable_query_log
+--enable_result_log
+
+######## check the result ##########
+let $a = deploy_get_value(ob2.ms0.monitor sql_select_count);
+let $b = deploy_get_value(ob2.ms1.monitor sql_select_count);
+let $c = deploy_get_value(ob2.ms2.monitor sql_select_count);
+let $d = deploy_get_value(ob2.ms3.monitor sql_select_count);
+let $sum = math($a+$b+$c+$d);
+if($sum < 100)
+{
+        --echo read_cluster(slave) false
+}
+
+########### ps ################
+deploy ob1.connect conn1 fs0 admin admin test;
+connection conn1;
+
+--disable_query_log
+--disable_result_log
+let $cnt =100;
+while($cnt>0)
+{
+	eval insert into t1 values($cnt,$cnt);
+
+	prepare stmt_select from  select /*+read_cluster(slave)*/ * from t1 where c1=?;
+
+	eval set @a=$cnt;
+	
+        execute stmt_select using @a;
+
+	dec $cnt;
+
+}
+--enable_query_log
+--enable_result_log
+disconnect conn1;
+
+######## check the result ##########
+let $a = deploy_get_value(ob2.ms0.monitor sql_select_count);
+let $b = deploy_get_value(ob2.ms1.monitor sql_select_count);
+let $c = deploy_get_value(ob2.ms2.monitor sql_select_count);
+let $d = deploy_get_value(ob2.ms3.monitor sql_select_count);
+let $sum = math($a+$b+$c+$d);
+if($sum < 200)
+{
+        --echo read_cluster(slave) and ps false
+}
+
+

@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\client\java\src\main\java\com\taobao\oceanbase\network\exception
+2
+4
+15:TimeOutException.java|1|166f774be4d|115|a6e75e3c|4f6a9f4a68ac11e8a8030002c8c1274c|0
+1b:NoMergeServerException.java|1|166f774be84|12a|3f365a1|516a9f6668ac11e8a8030002c8c1274c|0
+14:EagainException.java|1|166f774bebf|112|c8105cb6|536a9f8268ac11e8a8030002c8c1274c|0
+15:ConnectException.java|1|166f774befb|116|bd135e7c|556a9f9e68ac11e8a8030002c8c1274c|0

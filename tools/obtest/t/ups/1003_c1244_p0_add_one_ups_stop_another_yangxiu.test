@@ -1,0 +1,32 @@
+deploy ob1=OBI(cluster=1244);
+
+deploy ob1.ups1.set status=disable;
+
+deploy ob1.reboot;
+
+sleep 10;
+
+deploy ob1.prepare;
+
+#new data
+deploy ob1.create_client;
+create table t1(pk int primary key, c1 varchar);
+insert into t1 values(-1,'s1'),(-2,'s2');
+select * from t1;
+
+#start ups1
+deploy ob1.ups1.set status=enable;
+deploy ob1.ups1.start;
+sleep 20;
+
+select * from t1;
+replace into t1 values(1,'d1'),(2,'d2');
+
+#stop ups0
+deploy ob1.ups0.stop;
+sleep 20;
+
+let $master_ups = deploy_get_value(ob1.get_master_ups);
+--echo $master_ups
+
+select * from t1;

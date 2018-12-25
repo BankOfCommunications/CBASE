@@ -1,0 +1,276 @@
+drop table if exists t1,t2,t3;
+CREATE TABLE t1 (
+spID int,
+userID int,
+score int,
+lsg char(40),
+date1 datetime,
+primary key(spID,userID)
+);
+INSERT INTO t1 VALUES (1,1,1,'','0001-01-01');
+INSERT INTO t1 VALUES (2,2,2,'','0001-01-01');
+INSERT INTO t1 VALUES (2,1,1,'','0001-01-01');
+INSERT INTO t1 VALUES (3,3,3,'','0001-01-01');
+CREATE TABLE t2 (
+userID int ,
+niName char(15),
+passwd char(8),
+mail char(50),
+isAukt char(1),
+vName char(30),
+nName char(40),
+adr char(60),
+plz char(5),
+ort char(35),
+land char(20),
+PRIMARY KEY (userID)
+);
+INSERT INTO t2 VALUES (1,'name','pass','mail','Y','v','n','adr','1','1','1');
+INSERT INTO t2 VALUES (2,'name','pass','mail','Y','v','n','adr','1','1','1');
+INSERT INTO t2 VALUES (3,'name','pass','mail','Y','v','n','adr','1','1','1');
+INSERT INTO t2 VALUES (4,'name','pass','mail','Y','v','n','adr','1','1','1');
+INSERT INTO t2 VALUES (5,'name','pass','mail','Y','v','n','adr','1','1','1');
+SELECT t2.userID, MIN(t1.score) FROM t1, t2 WHERE t1.userID=t2.userID GROUP BY t2.userID;
+userID	MIN(t1.score)
+1	1
+2	2
+3	3
+SELECT t2.userID, min(t1.score) FROM t1, t2 WHERE t1.userID=t2.userID GROUP BY t2.userID;
+userID	min(t1.score)
+1	1
+2	2
+3	3
+SELECT t2.userID, min(t1.score) FROM t1, t2 WHERE t1.userID=t2.userID GROUP BY t2.userID ORDER BY NULL;
+userID	min(t1.score)
+1	1
+2	2
+3	3
+SELECT t2.userID, min(t1.score) FROM t1, t2 WHERE t1.userID=t2.userID AND t1.spID=2  GROUP BY t2.userID;
+userID	min(t1.score)
+1	1
+2	2
+SELECT t2.userID, min(t1.score+0.0) FROM t1, t2 WHERE t1.userID=t2.userID AND t1.spID=2  GROUP BY t2.userID;
+userID	min(t1.score+0.0)
+1	1.0
+2	2.0
+SELECT t2.userID, min(t1.score+0.0) FROM t1, t2 WHERE t1.userID=t2.userID AND t1.spID=2  GROUP BY t2.userID ORDER BY NULL;
+userID	min(t1.score+0.0)
+1	1.0
+2	2.0
+SELECT t2.userID, min(t1.score+0) FROM t1, t2 WHERE t1.userID=t2.userID AND t1.spID=2  GROUP BY t2.userID;
+userID	min(t1.score+0)
+1	1
+2	2
+SELECT t2.userID, min(t1.score+0) FROM t1, t2 WHERE t1.userID=t2.userID AND t1.spID=2  GROUP BY t2.userID ORDER BY NULL;
+userID	min(t1.score+0)
+1	1
+2	2
+drop table t1,t2;
+create table t1 (One int , Two int , Three int , Four int , primary key(One,Two,Three));
+insert into t1 values (1,2,1,4),(1,2,2,4),(1,2,3,4),(1,2,4,4),(1,1,1,4),(1,1,2,4),(1,1,3,4),(1,1,4,4),(1,3,1,4),(1,3,2,4),(1,3,3,4),(1,3,4,4);
+select One, Two, sum(Four) from t1 group by One,Two;
+One	Two	sum(Four)
+1	1	16
+1	2	16
+1	3	16
+drop table t1;
+create table t1 (id int primary key , gender char(1));
+insert into t1 values (1, 'M'), (2, 'F'),(3, 'F'),(4, 'F');
+create table t2 (pk int primary key, user_id int not null, date1  datetime);
+insert into t2 values (1, 1, '2002-06-09'),(2, 2, '2002-06-09'),(3, 1, '2002-06-09'),(4, 3, '2002-06-09'),(5, 4, '2002-06-09'),(6, 4, '2002-06-09');
+select u.gender as gender, count(distinct  u.id) as dist_count, (count(distinct u.id)/5*100) as percentage from t1 u, t2 l where l.user_id = u.id group by u.gender;
+gender	dist_count	percentage
+F	3	0
+M	1	0
+select u.gender as  gender, count(distinct  u.id) as dist_count, (count(distinct u.id)/5*100) as percentage from t1 u, t2 l where l.user_id = u.id group by u.gender  order by percentage;
+gender	dist_count	percentage
+F	3	0
+M	1	0
+drop table t1,t2;
+CREATE TABLE t1 (ID1 int, ID2 int, ID int ,PRIMARY KEY(ID));
+insert into t1 values (1,244,1),(2,243,2),(134,223,3),(185,186,4);
+drop table t1;
+CREATE TABLE t1 (
+pid int,
+c1id int,
+c2id int,
+value int,
+primary key(value)
+) ;
+INSERT INTO t1 VALUES (1, 1, NULL, 1),(1, 2, NULL, 2),(1, NULL, 3, 3),(1, 4, NULL, 4),(1, 5, NULL, 5);
+CREATE TABLE t2 (
+id int,
+active varchar(3), 
+PRIMARY KEY (id)
+) ;
+INSERT INTO t2 VALUES (1, 'Yes'),(2, 'No'),(4, 'Yes'),(5, 'No');
+CREATE TABLE t3 (
+id int,
+active varchar(3),
+PRIMARY KEY  (id)
+);
+INSERT INTO t3 VALUES (3, 'Yes');
+drop table t1,t2,t3;
+create table t1(a int ,b int, primary key(a,b), c int);
+insert into t1(a,b) values(1,1),(1,2),(2,1),(2,2);
+select * from t1;
+a	b	c
+1	1	NULL
+1	2	NULL
+2	1	NULL
+2	2	NULL
+drop table t1;
+create table t1 (pk int primary key, a int not null, b int not null);
+insert into t1 values (1, 1,1),(2, 1,2),(3, 3,1),(4, 3,2),(5, 2,2),(6, 2,1);
+create table t2 (pk int primary key, a int not null, b int not null);
+insert into t2 values (1,1,3),(2,3,1),(3,2,2),(4,1,1);
+select t1.a,t2.b from t1,t2 where t1.a=t2.a group by t1.a,t2.b;
+a	b
+1	1
+1	3
+2	2
+3	1
+drop table t1,t2;
+create table t1 (pk int primary key, a int, b int);
+insert into t1 values (1,1, 4),(2,10, 40),(3,1, 4),(4,10, 43),(5,1, 4),(6,10, 41),(7,1, 4),(8,10, 43),(9,1, 4);
+select a, max(b), CASE max(b) when 4 then 4 when 43 then 43 else 0 end from t1 group by a;
+a	max(b)	CASE max(b) when 4 then 4 when 43 then 43 else 0 end
+1	4	4
+10	43	43
+drop table t1;
+create table t1 (id int not null, qty int not null, primary key(id,qty), extra int);
+insert into t1(id,qty) values (1,2),(1,3),(2,4),(2,5);
+select id, sum(qty) as sqty, count(qty) as cqty from t1 group by id having sum(qty)>2 and cqty>1;
+id	sqty	cqty
+1	5	2
+2	9	2
+select id, sum(qty) as sqty from t1 group by id having sqty>2 and count(qty)>1;
+id	sqty
+1	5
+2	9
+select id, sum(qty) as sqty, count(qty) as cqty from t1 group by id having sqty>2 and cqty>1;
+id	sqty	cqty
+1	5	2
+2	9	2
+select id, sum(qty) as sqty, count(qty) as cqty from t1 group by id having sum(qty)>2 and count(qty)>1;
+id	sqty	cqty
+1	5	2
+2	9	2
+drop table t1;
+create table t1 (a integer, b integer, c integer, primary key(a,b));
+insert into t1 (a,b) values (1,2),(1,3),(2,5);
+select a, 0.1*0+1 r2, sum(1) r1 from t1 where a = 1 group by a having r1>1 and r2=1;
+a	r2	r1
+1	1.0	2
+select a,sum(b) from t1 where a=1 group by c;
+a	sum(b)
+1	5
+select a*sum(b) from t1 where a=1 group by c;
+a*sum(b)
+5
+select sum(a)*sum(b) from t1 where a=1 group by c;
+sum(a)*sum(b)
+10
+select a,sum(b) from t1 where a=1 group by c having a=1;
+a	sum(b)
+1	5
+select a as d,sum(b) from t1 where a=1 group by c having d=1;
+d	sum(b)
+1	5
+select sum(a)*sum(b) as d from t1 where a=1 group by c having d > 0;
+d
+10
+drop table t1;
+CREATE TABLE t1 (a  int, b int, primary key(a,b),c int);
+INSERT INTO t1(a,b) VALUES (1,2), (1,3);
+SELECT a, b FROM t1 GROUP BY 'const';
+a	b
+1	2
+SELECT DISTINCT a, b FROM t1 GROUP BY 'const';
+a	b
+1	2
+DROP TABLE t1;
+CREATE TABLE t1 (n int primary key, m int);
+INSERT INTO t1(n) VALUES (1);
+SELECT n+1 AS n FROM t1 GROUP BY n;
+n
+2
+DROP TABLE t1;
+create table t1 (c1 char(3), c2 char(3), primary key(c1,c2),c3 int);
+create table t2 (c3 char(3), c4 char(3), primary key(c3,c4),c1 int);
+insert into t1(c1,c2) values ('aaa', 'bb1'), ('aaa', 'bb2');
+insert into t2(c3,c4) values ('aaa', 'bb1'), ('aaa', 'bb2');
+select t1.c1 as c2 from t1, t2 where t1.c2 = t2.c4
+group by c2;
+c2
+aaa
+aaa
+select t1.c1 as c2 from t1, t2 where t1.c2 = t2.c4
+group by t1.c1;
+c2
+aaa
+drop table t1, t2;
+CREATE TABLE t1(
+id INT PRIMARY KEY, 
+c1 INT NOT NULL, 
+c2 INT NOT NULL
+);
+INSERT INTO t1(id,c1,c2) VALUES (1,5,1), (2,4,1), (3,3,5), (4,2,3), (5,1,3);
+SELECT * FROM t1 ORDER BY c1;
+id	c1	c2
+5	1	3
+4	2	3
+3	3	5
+2	4	1
+1	5	1
+SELECT * FROM t1 GROUP BY id ORDER BY c1;
+id	c1	c2
+5	1	3
+4	2	3
+3	3	5
+2	4	1
+1	5	1
+SELECT * FROM t1 GROUP BY id ORDER BY id DESC;
+id	c1	c2
+5	1	3
+4	2	3
+3	3	5
+2	4	1
+1	5	1
+SELECT * FROM t1 GROUP BY c2 ,c1, id ORDER BY c2, c1;
+id	c1	c2
+2	4	1
+1	5	1
+5	1	3
+4	2	3
+3	3	5
+SELECT * FROM t1 GROUP BY c2, c1, id ORDER BY c2 DESC, c1;
+id	c1	c2
+3	3	5
+5	1	3
+4	2	3
+2	4	1
+1	5	1
+SELECT * FROM t1 GROUP BY c2, c1, id ORDER BY c2 DESC, c1 DESC;
+id	c1	c2
+3	3	5
+4	2	3
+5	1	3
+1	5	1
+2	4	1
+SELECT * FROM t1 GROUP BY c2  ORDER BY c2, c1;
+id	c1	c2
+1	5	1
+4	2	3
+3	3	5
+SELECT * FROM t1 GROUP BY c2  ORDER BY c2 DESC, c1;
+id	c1	c2
+3	3	5
+4	2	3
+1	5	1
+SELECT * FROM t1 GROUP BY c2  ORDER BY c2 DESC, c1 DESC;
+id	c1	c2
+3	3	5
+4	2	3
+1	5	1
+DROP TABLE t1;

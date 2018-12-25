@@ -1,0 +1,22 @@
+deploy ob1=OBI(cluster=1111,use_fms=0);
+
+deploy ob1.reboot;
+
+deploy ob1.source include/merge.inc;
+sleep 10;
+
+deploy ob1.create_client;
+
+create table t1 (a int primary key,b int);
+create table t2 (a int primary key,b int);
+insert into t1 values(1,1),(-1,-1),(0,0);
+select * from t1;
+drop table t2;
+
+#merge
+deploy ob1.major_freeze;
+deploy ob1.check_cs_version 2;
+
+select * from t1;
+
+drop table t1;

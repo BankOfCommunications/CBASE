@@ -1,0 +1,51 @@
+#+Title:  Deploy之mysqltest使用说明
+#+Author: 符风
+#+Email:  fufeng.syd@taobao.com
+
+* 更新
+  <2012-10-11 Thu>
+  - 增加命令行直接调用Record方法的功能
+  - 终端显示输出Record或者Test模式
+  - 增加"exclude"选项，指定不需要执行的case
+  
+  <2012-10-08 Mon> 
+  - 命令行选择case的支持
+  - 优化终端输出格式，显示当前执行的case的编号
+  
+  <2012-09-28 Fri>
+  - 优化终端输出格式，类似与GTest
+* 说明
+  此文件夹存放的是mysqltest的控制脚本，用于批量启动mysqltest。是deploy框架的一部分。
+  #+begin_example
+  deploy是元启写的包含ob部署，控制，测试的框架。
+  #+end_example
+
+* 主要功能
+- 匹配特定文件夹文件夹中的相关case（见test-pattern, test-dir选项）
+- 控制记录case输出还是与result做diff（见record, record-dir选项）
+- 日志记录功能（log-dir为日志输出文件夹的位置）
+- 其它小工能：如which查找mysqltest执行文件，日志输出文件格式。。。
+- 终端输出格式已gtest化，观察输出更加方便。 update: <2012-09-28 Fri>
+- 命令行指定需要执行的case（包括set或者pattern） update: <2012-10-08 Mon>
+   
+* 使用方法
+  提供的接口:
+  #+begin_src sh
+    ./deploy ob1.mysqltest [_quiet_=True] ['testset=test1[,test2[,...]]'] ['testpat=rowkey_*'] [record|test]
+  #+end_src
+  说明：
+  + 运行请加上_quiet_=True，为了更清晰地观察case运行结果。
+  + testset会覆盖testpat，所以当你想使用testpat的时候，请不要指定testset。
+  + 在命令行中指定了testset或者testpat都会覆盖配置文件中的test-set和test-pattern选项，
+    也就是说你只要指定了其中一个，就会无视配置文件中的关于test-set和test-pattern的选项。
+  + record和test选项用来指定运行模式，如果不指定，则使用配置文件中的运行模式。
+
+  #+begin_src sh
+    ./deploy ob1.snapshot [_quiet_=True]
+  #+end_src
+  snapshot用于保存现场环境，默认会将压缩文件打包到 ~/ob1/snapshot 文件夹中。
+
+  deploy提供了许多有用的运维功能，结合起来使用测试很方便。
+
+* 其它补充
+- 正在考虑增加配置文件选择功能，能够通过命令行指定特定的配置文件执行mysqltest。

@@ -1,0 +1,87 @@
+drop table if exists t1,t2,t3,t4;
+create table t1 (id int, c1 int, c2 int, c3 int, c4 int, primary key(id,c1,c2));
+insert into t1 values(1,2,3,4,5);
+insert into t1 values(2,5,6,2,1);
+insert into t1 values(3,4,8,2,3);
+insert into t1 values(4,1,2,6,8);
+create table t2 (id int primary key, c1 int, c2 int, c3 int, c4 int);
+insert into t2 values(2,5,2,4,4);
+insert into t2 values(5,5,2,5,4);
+insert into t2 values(6,5,2,5,9);
+create table t3 (id int primary key, c1 int, c2 int, c3 int, c4 int, c5 int, c6 int);
+insert into t3 values(1,5,2,4,4,3,22);
+insert into t3 values(2,5,2,4,4,9,13);
+create table t4 (id int primary key, c1 int, c2 int);
+insert into t4 values(3,5,2);
+insert into t4 values(7,4,5);
+select /*+ join(si) */ * from t1 left join t2 on t1.id=t2.c2 and t1.c4<t2.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4
+1	2	3	4	5	NULL	NULL	NULL	NULL	NULL
+2	5	6	2	1	2	5	2	4	4
+2	5	6	2	1	5	5	2	5	4
+2	5	6	2	1	6	5	2	5	9
+3	4	8	2	3	NULL	NULL	NULL	NULL	NULL
+4	1	2	6	8	NULL	NULL	NULL	NULL	NULL
+select /*+ join(si) */ * from t1 right join t2 on t1.id=t2.c2 and t1.c4<t2.c2;
+ERROR HY000: OB-5205: semi join:function is on the way!
+select /*+ join(si) */ * from t1 inner join t2 on t1.id=t2.c2 and t1.c4<t2.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4
+2	5	6	2	1	2	5	2	4	4
+2	5	6	2	1	5	5	2	5	4
+2	5	6	2	1	6	5	2	5	9
+select /*+ join(si) */ * from t1 full join t2 on t1.id=t2.c2 and t1.c4<t2.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4
+2	5	6	2	1	2	5	2	4	4
+2	5	6	2	1	5	5	2	5	4
+2	5	6	2	1	6	5	2	5	9
+select /*+ join(si) */ * from t2 left join t3 on t2.id=t3.c3 and t2.c2>t3.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4	c5	c6
+2	5	2	4	4	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+5	5	2	5	4	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+6	5	2	5	9	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+select /*+ join(si) */ * from t2 right join t3 on t2.id=t3.c3 and t2.c2>t3.c2;
+ERROR HY000: OB-5205: semi join:function is on the way!
+select /*+ join(si) */ * from t2 inner join t3 on t2.id=t3.c3 and t2.c2>t3.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4	c5	c6
+select /*+ join(si) */ * from t2 full join t3 on t2.id=t3.c3 and t2.c2>t3.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4	c5	c6
+select /*+ join(si) */ * from t1,t2 where t1.id=t2.c3 and t1.c4>t2.c2 and t1.c4<t2.c4;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4
+select /*+ join(merge_join) */ * from t1,t2 where t1.id=t2.c3 and t1.c4>t2.c2 and t1.c4<t2.c4;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4
+select /*+ join(merge_join) */ * from t1 left join t2 on t1.id=t2.c2 and t1.c4<t2.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4
+1	2	3	4	5	NULL	NULL	NULL	NULL	NULL
+2	5	6	2	1	2	5	2	4	4
+2	5	6	2	1	5	5	2	5	4
+2	5	6	2	1	6	5	2	5	9
+3	4	8	2	3	NULL	NULL	NULL	NULL	NULL
+4	1	2	6	8	NULL	NULL	NULL	NULL	NULL
+select /*+ join(merge_join) */ * from t1 right join t2 on t1.id=t2.c2 and t1.c4<t2.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4
+2	5	6	2	1	2	5	2	4	4
+2	5	6	2	1	5	5	2	5	4
+2	5	6	2	1	6	5	2	5	9
+select /*+ join(merge_join) */ * from t1 inner join t2 on t1.id=t2.c2 and t1.c4<t2.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4
+2	5	6	2	1	2	5	2	4	4
+2	5	6	2	1	5	5	2	5	4
+2	5	6	2	1	6	5	2	5	9
+select /*+ join(merge_join) */ * from t1 full join t2 on t1.id=t2.c2 and t1.c4<t2.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4
+2	5	6	2	1	2	5	2	4	4
+2	5	6	2	1	5	5	2	5	4
+2	5	6	2	1	6	5	2	5	9
+select /*+ join(merge_join) */ * from t2 left join t3 on t2.id=t3.c3 and t2.c2>t3.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4	c5	c6
+2	5	2	4	4	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+5	5	2	5	4	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+6	5	2	5	9	NULL	NULL	NULL	NULL	NULL	NULL	NULL
+select /*+ join(merge_join) */ * from t2 right join t3 on t2.id=t3.c3 and t2.c2>t3.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4	c5	c6
+NULL	NULL	NULL	NULL	NULL	1	5	2	4	4	3	22
+NULL	NULL	NULL	NULL	NULL	2	5	2	4	4	9	13
+select /*+ join(merge_join) */ * from t2 inner join t3 on t2.id=t3.c3 and t2.c2>t3.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4	c5	c6
+select /*+ join(merge_join) */ * from t2 full join t3 on t2.id=t3.c3 and t2.c2>t3.c2;
+id	c1	c2	c3	c4	id	c1	c2	c3	c4	c5	c6

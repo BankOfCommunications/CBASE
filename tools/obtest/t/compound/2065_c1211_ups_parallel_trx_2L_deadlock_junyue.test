@@ -1,0 +1,255 @@
+ob1=OBI(cluster=1211);
+ob1.reboot;
+
+ob1.mysql set global ob_read_consistency=3;
+sleep 10;
+ob1.mysql_p show variables like 'ob_read_consistency';
+
+ob1.mysql_p select name,value from __all_sys_config_stat where name = 'read_master_master_ups_percent' or name = 'read_slave_master_ups_percent';
+
+let $m_ups=deploy_get_value(ob1.get_master_ups);
+let $s_ups=deploy_get_value(ob1.get_slave_ups);
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+
+
+ob1.create_client;
+create table t1(pk int primary key, c1 int);
+
+
+let $ms0=deploy_get_value(ob1.ms0.ip);
+let $mysql_port=deploy_get_value(ob1.ms0.mysql_port);
+
+# 这里必须用物理连接，保证使用的session varialbles是新值
+connect (conn1,$ms0,admin,admin,test,$mysql_port);
+set session ob_query_timeout=10000000;
+set autocommit=0;
+connect (conn2,$ms0,admin,admin,test,$mysql_port);
+set session ob_query_timeout=20000000;
+set autocommit=0;
+# 两个session的query timeout不同是为了确定先释放锁的事务
+
+ob1.connect checker;
+set autocommit=1;
+
+# case 1.0): 2L,cmpd, inner hang 
+connection conn1;
+insert into t1 values(1,1);
+
+connection conn2;
+insert into t1 values(2,2);
+
+connection conn1;
+send update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=2)=1;
+
+connection conn2;
+send update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=1)=1;
+
+connection conn1;
+--error 5049
+reap;
+commit;
+connection conn2;
+reap;
+commit;
+
+sleep 3;
+connection checker;
+--echo expect:1,2;2,3
+--repeat 20
+select * from t1;
+# clean
+delete from t1 where pk=1;
+delete from t1 where pk=2;
+
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+ob1.$m_ups.nfind_log "checksum_error";
+ob1.$s_ups.nfind_log "checksum_error";
+
+# case 1.1): 2L,cmpd, inner hang , rollback
+connection conn1;
+insert into t1 values(1,1);
+
+connection conn2;
+insert into t1 values(2,2);
+
+connection conn1;
+send update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=2)=1;
+
+connection conn2;
+send update t1 set c1=c1+1 where pk=2 when row_count(insert into t1 values(1,3))=1;
+
+connection conn1;
+--error 5049
+reap;
+rollback;
+connection conn2;
+reap;
+commit;
+
+sleep 3;
+connection checker;
+--echo expect:1,3;2,3
+--repeat 20
+select * from t1;
+# clean
+delete from t1 where pk=1;
+delete from t1 where pk=2;
+
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+ob1.$m_ups.nfind_log "checksum_error";
+ob1.$s_ups.nfind_log "checksum_error";
+
+
+
+# case 2.0): 2L,cmpd, outer hang 
+connection conn1;
+insert into t1 values(1,1);
+
+connection conn2;
+insert into t1 values(2,2);
+
+connection conn1;
+send update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=1)=1;
+
+connection conn2;
+send update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=2)=1;
+
+connection conn1;
+--error 5049
+reap;
+commit;
+connection conn2;
+reap;
+commit;
+
+sleep 3;
+connection checker;
+--echo expect:1,2;2,3
+--repeat 20
+select * from t1;
+# clean
+delete from t1 where pk=1;
+delete from t1 where pk=2;
+
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+ob1.$m_ups.nfind_log "checksum_error";
+ob1.$s_ups.nfind_log "checksum_error";
+
+# case 2.1): 2L,cmpd, outer hang 
+connection conn1;
+insert into t1 values(1,1);
+
+connection conn2;
+insert into t1 values(2,2);
+
+connection conn1;
+send update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=1)=1;
+
+connection conn2;
+send update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=2)=1;
+
+connection conn1;
+--error 5049
+reap;
+rollback;
+connection conn2;
+reap;
+commit;
+
+sleep 3;
+connection checker;
+--echo expect:2,3
+--repeat 20
+select * from t1;
+# clean
+delete from t1 where pk=2;
+
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+ob1.$m_ups.nfind_log "checksum_error";
+ob1.$s_ups.nfind_log "checksum_error";
+
+
+# case 3.0): 2L,cmpd lock
+
+connection conn1;
+insert into t1 values(1,1) when row_count(insert into t1 values(2,2))=1;
+connection conn2;
+insert into t1 values(3,3) when row_count(insert into t1 values(4,4))=1;
+
+connection conn1;
+send update t1 set c1=c1+1 where pk=4 when row_count(update t1 set c1=c1+1 where pk=3)=1;
+connection conn2;
+send update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=1)=1;
+
+connection conn1;
+--error 5049
+reap;
+commit;
+connection conn2;
+reap;
+commit;
+
+sleep 3;
+connection checker;
+--echo expect:,1,2;2,3;3,3;4,4
+--repeat 20
+select * from t1;
+# clean
+delete from t1 where pk=1;
+delete from t1 where pk=2;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+ob1.$m_ups.nfind_log "checksum_error";
+ob1.$s_ups.nfind_log "checksum_error";
+
+# case 3.1): 2L,cmpd lock
+connection checker;
+insert into t1 values(1,1),(2,2);
+
+connection conn1;
+update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=1)=1;
+connection conn2;
+--error 5049
+update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=2)=1;
+
+connection conn1;
+commit;
+connection conn2;
+update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=2)=1;
+commit;
+
+sleep 3;
+connection checker;
+--echo expect:,1,3;2,4
+--repeat 20
+select * from t1;
+# clean
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+
+ob1.$m_ups.status;
+ob1.$s_ups.status;
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+ob1.$m_ups.nfind_log "checksum_error";
+ob1.$s_ups.nfind_log "checksum_error";
+
+

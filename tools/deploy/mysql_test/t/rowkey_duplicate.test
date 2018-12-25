@@ -1,0 +1,75 @@
+#
+# duplicate insert the same primary key is allowd for ob
+#
+
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+
+
+#
+# int 
+#
+create table t1(pk int primary key,a int);
+insert into t1(pk) values(1);
+select * from t1;
+--error 5024
+insert into t1(pk) values(1);
+select * from t1;
+drop table t1;
+
+#
+# char
+#
+create table t1(pk varchar(128) primary key,a int);
+insert into t1(pk) values('c1');
+select * from t1;
+--error 5024
+insert into t1(pk) values('c1');
+select * from t1;
+drop table t1;
+
+#
+# datetime
+#
+create table t1(pk datetime primary key,a datetime);
+insert into t1(pk) values('2012-02-02 12:00:00');
+select * from t1;
+--error 5024
+insert into t1(pk) values('2012-02-02 12:00:00');
+select * from t1;
+drop table t1;
+
+#
+# createtime is not allowed to be pk
+#
+--error 2
+create table t1(pk createtime primary key, a int);
+--error 5019
+insert into t1(a) values(1);
+--error 5019
+insert into t1(a) values(2);
+--error 5019
+select * from t1;
+--error 5019
+drop table t1;
+
+#
+# modifytime is not allowed to be pk
+#
+--error 2
+create table t1(pk modifytime primary key, a int);
+--error 5019
+insert into t1(a) values(1);
+--error 5019
+insert into t1(a) values(2);
+--error 5019
+select * from t1;
+--error 5019
+insert into t1(a) values(1);
+--error 5019
+insert into t1(a) values(2);
+--error 5019
+select * from t1;
+--error 5019
+drop table t1;

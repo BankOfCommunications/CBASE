@@ -1,0 +1,70 @@
+create table stu(id int primary key, name char(9));
+insert into stu(id, name) values(1, 'zhang fei');
+insert into stu(id, name) values(2, 'zhao yun');
+insert into stu(id, name) values(3, 'zhen ji');
+insert into stu(id, name) values(4, 'zhou yu');
+insert into stu(id, name) values(5, 'zhu ge liang');
+insert into stu(id, name) values(6, 'ma chao');
+alter table stu add c1 int;
+alter table stu add column c2 char(90);
+insert into stu (id, name, c1) values (7, 'han mei mei', 18);
+insert into stu (id, name, c2) values (8, 'li lei', 'a boy');
+select * from stu;
+id	name	c1	c2
+1	zhang fei	NULL	NULL
+2	zhao yun	NULL	NULL
+3	zhen ji	NULL	NULL
+4	zhou yu	NULL	NULL
+5	zhu ge liang	NULL	NULL
+6	ma chao	NULL	NULL
+7	han mei mei	18	NULL
+8	li lei	NULL	a boy
+alter table stu add column c3 float, add column c4 varchar, add column c5 int default 10;
+insert into stu (id, c3, c4, c5) values (9, '3.1415926', 'pi', 10);
+select * from stu;
+id	name	c1	c2	c5	c4	c3
+1	zhang fei	NULL	NULL	NULL	NULL	NULL
+2	zhao yun	NULL	NULL	NULL	NULL	NULL
+3	zhen ji	NULL	NULL	NULL	NULL	NULL
+4	zhou yu	NULL	NULL	NULL	NULL	NULL
+5	zhu ge liang	NULL	NULL	NULL	NULL	NULL
+6	ma chao	NULL	NULL	NULL	NULL	NULL
+7	han mei mei	18	NULL	NULL	NULL	NULL
+8	li lei	NULL	a boy	NULL	NULL	NULL
+9	NULL	NULL	NULL	10	pi	3.14159
+alter table stu add column c1 int;
+ERROR 42S21: Column 'c1' already exists
+alter table stu add column c7 int primary key;
+ERROR HY000: New added column can not be primary key
+alter table stu add column c7 createtime;
+ERROR HY000: Add column 'c7' with type ObCreateTimeType/ObModifyTimeType is not allowed
+alter table stu add column c7 modifytime;
+ERROR HY000: Add column 'c7' with type ObCreateTimeType/ObModifyTimeType is not allowed
+alter table stu drop c5;
+alter table stu drop column c4, drop c3, drop column c2;
+select * from stu;
+id	name	c1
+1	zhang fei	NULL
+2	zhao yun	NULL
+3	zhen ji	NULL
+4	zhou yu	NULL
+5	zhu ge liang	NULL
+6	ma chao	NULL
+7	han mei mei	18
+8	li lei	NULL
+9	NULL	NULL
+alter table stu drop id;
+ERROR HY000: Primary key column can not be dropped, column name = 'id'
+create table stu_time(id int primary key, c_time createtime, m_time modifytime);
+insert into stu_time(id) values(1);
+alter table stu_time drop column c_time;
+ERROR HY000: Drop column 'c_time' with type ObCreateTimeType/ObModifyTimeType is not allowed
+alter table stu_time drop column m_time;
+ERROR HY000: Drop column 'm_time' with type ObCreateTimeType/ObModifyTimeType is not allowed
+drop table stu_time;
+alter table stu add column c8 int, add column c8 int;
+ERROR 42S21: Duplicate column name 'c8'
+alter table stu add column c8 int, drop column c8;
+ERROR 42S21: Duplicate column name 'c8'
+alter table stu drop column c1, add column c8 int;
+drop table stu;

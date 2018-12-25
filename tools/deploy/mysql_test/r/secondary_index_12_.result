@@ -1,0 +1,31 @@
+drop table if exists t1;
+create table t1 (c1 int primary key ,c2 int);
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create index il0 on t1(c1) storing (c2);
+create index il1 on t1(c1) storing (c2);
+create index il2 on t1(c1) storing (c2);
+create index il3 on t1(c1) storing (c2);
+create index il4 on t1(c1) storing (c2);
+create index il5 on t1(c1) storing (c2);
+create index il6 on t1(c1) storing (c2);
+create index il7 on t1(c1) storing (c2);
+create index il8 on t1(c1) storing (c2);
+create index i19 on t1(c1) storing (c2);
+create index i20 on t1(c1) storing (c2);
+ERROR HY000: the table  'test.t1' index num is full!
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+__3001__idx__il0	1
+__3001__idx__il1	1
+__3001__idx__il2	1
+__3001__idx__il3	1
+__3001__idx__il4	1
+__3001__idx__il5	1
+__3001__idx__il6	1
+__3001__idx__il7	1
+__3001__idx__il8	1
+__3001__idx__i19	1
+drop table t1;

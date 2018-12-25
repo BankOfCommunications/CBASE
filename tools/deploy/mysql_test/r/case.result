@@ -1,0 +1,46 @@
+drop table if exists a1, a2;
+create table a1 (rowkey_suffix int primary key, price int);
+insert into a1(rowkey_suffix, price) values(1,1);
+insert into a1(rowkey_suffix, price) values(2,2);
+insert into a1(rowkey_suffix, price) values(3,3);
+insert into a1(rowkey_suffix, price) values(4,4);
+select case price when 1 then 2 when 2 then 3 else 0 end as fcase, count(*) from a1 group by fcase;
+fcase	count(*)
+0	2
+2	1
+3	1
+select case price when 1 then 'one' when 2 then 'two' else 'nothing' end as fcase, count(*) from a1 group by fcase;
+fcase	count(*)
+nothing	2
+one	1
+two	1
+drop table a1;
+create table a1 (rowkey_suffix int primary key, price int);
+select max(case price when 1 then rowkey_suffix else null end) as color from a1 group by price;
+color
+drop table a1;
+create table t1(a float primary key, b int);
+insert into t1 (a) values (2), (11), (8);
+select min(a), min(case when 1=1 then a else NULL end),
+min(case when 1!=1 then NULL else a end) 
+from t1 where b=3 group by b;
+min(a)	min(case when 1=1 then a else NULL end)	min(case when 1!=1 then NULL else a end)
+drop table t1;
+create table t1 (a bigint primary key, b bigint);
+create table t2 (c bigint primary key, d bigint);
+insert into t1 (a, b) values (1,4572794622775114594), (2,18196094287899841997),
+(3,11120436154190595086);
+insert into t2 (c) values (1), (2), (3);
+select t1.a, (case t1.a when 0 then 0 else t1.b end) d from t1 
+join t2 on t1.a=t2.c order by d;
+a	d
+1	4572794622775114594
+2	9223372036854775807
+3	9223372036854775807
+select t1.a, (case t1.a when 0 then 0 else t1.b end) d from t1 
+join t2 on t1.a=t2.c where b=11120436154190595086 order by d;
+a	d
+2	9223372036854775807
+3	9223372036854775807
+drop table t1, t2;
+End of 5.0 tests

@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<simonConfig name="OBTrxTest" >
+    
+    <!-- BLURBS (AGGREGATOR INPUT -->
+    <blurbMessage name="TrxTestState" version="1" period="5" >
+        <blurb name="TrxTestPerHost">
+	  <tag name="Hostname" type="string"/>
+
+          <counter name="RequestCount" type="long"/>
+          <counter name="UpdateIntCount" type="long"/>
+          <counter name="UpdateStrCount" type="long"/>
+          <counter name="InsertCount" type="long"/>
+          <counter name="DeleteCount" type="long"/>
+          <counter name="NewInsertCount" type="long"/>
+          <counter name="SelectForUpdateCount" type="long"/>
+          <counter name="TrxCount" type="long"/>
+
+          <gauge name="RequestLatency" type="long"/>
+          <gauge name="UpdateIntLatency" type="long"/>
+          <gauge name="UpdateStrLatency" type="long"/>
+          <gauge name="InsertLatency" type="long"/>
+          <gauge name="DeleteLatency" type="long"/>
+          <gauge name="NewInsertLatency" type="long"/>
+          <gauge name="SelectForUpdateLatency" type="long"/>
+          <gauge name="TrxLatency" type="long"/>
+        </blurb>
+    </blurbMessage>
+    
+    <reportPeriod name="defaultPeriod" seconds="5"/>
+    
+    <!-- REPORTS (AGGREGATOR OUTPUT) -->
+    <report name="trxtest report" version="1" periods="defaultPeriod">
+
+        <reportItem name="TrxTest" blurb="TrxTestPerHost">
+            <key name="HostName" tag="Hostname"/>
+
+            <value name="Query_Per_Second">RequestCount/period</value>
+            <value name="Query_Latency">RequestLatency</value>
+
+            <value name="Trx_Per_Second">TrxCount/period</value>
+            <value name="Trx_Latency">TrxLatency</value>
+
+            <value name="Update_Int_Per_Second">UpdateIntCount/period</value>
+            <value name="Update_Int_Latency">UpdateIntLatency</value>
+
+            <value name="Update_Str_Per_Second">UpdateStrCount/period</value>
+            <value name="Update_Str_Latency">UpdateStrLatency</value>
+
+            <value name="Insert_Per_Second">InsertCount/period</value>
+            <value name="Insert_Latency">InsertLatency</value>
+
+            <value name="New_Insert_Per_Second">NewInsertCount/period</value>
+            <value name="New_Insert_Latency">NewInsertLatency</value>
+
+            <value name="Delete_Per_Second">DeleteCount/period</value>
+            <value name="Delete_Latency">DeleteLatency</value>
+           
+            <value name="Select_For_Update_Per_Second">SelectForUpdateCount/period</value>
+            <value name="Select_For_Update_Latency">SelectForUpdateLatency</value>
+
+        </reportItem>
+    </report>
+    
+</simonConfig>

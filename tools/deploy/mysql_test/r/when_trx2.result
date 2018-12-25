@@ -1,0 +1,179 @@
+drop table if exists t1,t2;
+create table t1(pk int primary key, i1 int, v1 varchar(20));
+create table t2(pk int primary key, i1 int, v1 varchar(20));
+insert into t1 values(1,1,'a'),(2,2,'b');
+insert into t2 values(1,1,'a'),(2,2,'b');
+begin;
+update t1 set v1='m1' where pk=3 when row_count(insert into t1 values(3,3,'c'))=1;
+rollback;
+select * from t1;
+pk	i1	v1
+1	1	a
+2	2	b
+begin;
+update t1 set v1='m1' where pk=3 when row_count(insert into t1 values(3,3,'c'))=1;
+commit;
+select * from t1;
+pk	i1	v1
+1	1	a
+2	2	b
+3	3	m1
+begin;
+insert into t1 values(4,4,'d');
+update t1 set v1='m1' where pk=4 when row_count(update t2 set v1='m2' where pk=1)=1;
+rollback;
+select * from t1;
+pk	i1	v1
+1	1	a
+2	2	b
+3	3	m1
+select * from t2;
+pk	i1	v1
+1	1	a
+2	2	b
+begin;
+update t1 set v1='m1' where pk=3 when row_count(delete from t2 where pk=2)=1;
+update t1 set v1='m2' where pk=3 when row_count(delete from t2 where pk=2)=1;
+ERROR HY000: Number 1 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+commit;
+select * from t1;
+pk	i1	v1
+1	1	a
+2	2	b
+3	3	m1
+select * from t2;
+pk	i1	v1
+1	1	a
+begin;
+update t1 set v1='m3' where pk=1 when row_count(insert into t1 values(1,1,'a'))=1;
+ERROR 23000: Duplicate entry ' <3001.16>=int32:1' for key 'PRIMARY'
+delete from t1 where pk=1;
+rollback;
+select * from t1;
+pk	i1	v1
+1	1	a
+2	2	b
+3	3	m1
+begin;
+update t1 set v1='m1' where pk=1 when row_count(insert into t1 values(1,1,'c') when row_count(delete from t1 where pk=1)=1)=1;
+commit;
+select * from t1;
+pk	i1	v1
+1	1	m1
+2	2	b
+3	3	m1
+begin;
+update t1 set v1='m1' where pk=1 when row_count(insert into t1 values(1,1,'c') when row_count(delete from t1 where pk=1)=1)=1;
+rollback;
+select * from t1;
+pk	i1	v1
+1	1	m1
+2	2	b
+3	3	m1
+begin;
+update t1 set v1='m1' where pk=1 when row_count(insert into t2 values(1,1,'c') when row_count(delete from t1 where pk=2)=1)=1;
+ERROR 23000: Duplicate entry ' <3002.16>=int32:1' for key 'PRIMARY'
+commit;
+select * from t1;
+pk	i1	v1
+1	1	m1
+2	2	b
+3	3	m1
+begin;
+update t1 set v1='m1' where pk=1 when row_count(insert into t1 values(1,1,'c') when row_count(delete from t1 where pk=1)=0)=1;
+ERROR HY000: Number 1 When filter failed, ret=-5064, func 1: ROW_COUNT()=1
+commit;
+select * from t1;
+pk	i1	v1
+1	1	m1
+2	2	b
+3	3	m1
+drop table if exists t1,t2;
+create table t1(pk int primary key, i1 int, v1 varchar(20));
+create table t2(pk int primary key, i1 int, v1 varchar(20));
+insert into t1 values(1,1,'a'),(2,2,'b');
+insert into t2 values(1,1,'a'),(2,2,'b');
+begin;
+delete from t1 where pk=2 when row_count(insert into t1 values(3,3,'c'))=1;
+rollback;
+select * from t1;
+pk	i1	v1
+1	1	a
+2	2	b
+begin;
+delete from t1 where pk=3 when row_count(insert into t1 values(3,3,'c'))=1;
+commit;
+select * from t1;
+pk	i1	v1
+1	1	a
+2	2	b
+begin;
+insert into t1 values(4,4,'d');
+delete from t2 where pk=1 when row_count(update t1 set v1='m2' where pk=4)=1;
+rollback;
+select * from t1;
+pk	i1	v1
+1	1	a
+2	2	b
+select * from t2;
+pk	i1	v1
+1	1	a
+2	2	b
+begin;
+delete from t2 where pk=3 when row_count(update t1 set v1='m1' where pk=2)=1;
+delete from t1 where pk=3 when row_count(delete from t2 where pk=2)=0;
+ERROR HY000: Number 1 When filter failed, ret=-5064, func 1: ROW_COUNT()=1
+commit;
+select * from t1;
+pk	i1	v1
+1	1	a
+2	2	m1
+select * from t2;
+pk	i1	v1
+1	1	a
+2	2	b
+begin;
+delete from t1 where pk=1 when row_count(insert into t1 values(1,1,'a'))=1;
+ERROR 23000: Duplicate entry ' <3003.16>=int32:1' for key 'PRIMARY'
+delete from t1 where pk=1;
+rollback;
+select * from t1;
+pk	i1	v1
+1	1	a
+2	2	m1
+begin;
+delete from t1 where pk=1 when row_count(insert into t1 values(1,1,'c') when row_count(delete from t1 where pk=1)=1)=1;
+commit;
+select * from t1;
+pk	i1	v1
+2	2	m1
+begin;
+delete from t1 where pk=1 when row_count(insert into t1 values(1,1,'c') when row_count(delete from t1 where pk=2)=1)=1;
+rollback;
+select * from t1;
+pk	i1	v1
+2	2	m1
+begin;
+delete from t1 where pk=1 when row_count(insert into t2 values(1,1,'c') when row_count(delete from t1 where pk=2)=1)=1;
+ERROR 23000: Duplicate entry ' <3004.16>=int32:1' for key 'PRIMARY'
+commit;
+select * from t1;
+pk	i1	v1
+2	2	m1
+begin;
+delete from t1 where pk=1 when row_count(insert into t1 values(1,1,'c') when row_count(delete from t1 where pk=1)=1)=1;
+ERROR HY000: Number 1 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+commit;
+select * from t1;
+pk	i1	v1
+2	2	m1
+set autocommit=0;
+insert into t1 values(3,3,'c');
+insert into t1 values(3,3,'c') when row_count(update t1 set i1=5 where pk=3 when row_count(update t1 set i1=4 where pk=3)=1)=1;
+ERROR 23000: Duplicate entry ' <3003.16>=int32:3' for key 'PRIMARY'
+commit;
+set autocommit=1;
+select * from t1;
+pk	i1	v1
+2	2	m1
+3	3	c

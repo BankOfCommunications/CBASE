@@ -1,0 +1,18 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\client\java\src\main\java\com\taobao\oceanbase\network\packet
+2
+e
+e:GetPacket.java|1|166f774b937|211|1553ae7a|138a9c4268ac11e8a8030002c8c1274c|0
+12:ObScanRequest.java|1|166f774b989|2fb|d26a0255|17ba9c7a68ac11e8a8030002c8c1274c|0
+1a:OBIConfigResponseInfo.java|1|166f774b9c8|377|6ea32b55|19fa9c9668ac11e8a8030002c8c1274c|0
+12:CommandPacket.java|1|166f774bc0a|209|30ffa6c1|274a9d3e68ac11e8a8030002c8c1274c|0
+22:ObGetUpdateServerInfoResponse.java|1|166f774b9e9|331|1cd81448|1bfa9cb268ac11e8a8030002c8c1274c|0
+f:BasePacket.java|1|166f774bc38|706|70c6387a|2bca9d7668ac11e8a8030002c8c1274c|0
+17:BaseResponsePacket.java|1|166f774bbc3|5b6|366ae1e9|206a9cea68ac11e8a8030002c8c1274c|0
+1c:GetSchemaResponsePacket.java|1|166f774bc58|315|33a9094e|2dca9d9268ac11e8a8030002c8c1274c|0
+10:WritePacket.java|1|166f774ba10|218|931bb3e6|1e2a9cce68ac11e8a8030002c8c1274c|0
+13:ResponsePacket.java|1|166f774b961|3bb|f38b41d0|158a9c5e68ac11e8a8030002c8c1274c|0
+12:WriteResponse.java|1|166f774bc78|202|1d08ae41|2fda9dae68ac11e8a8030002c8c1274c|0
+18:OBIRoleResponseInfo.java|1|166f774bbd9|2fd|2210150|227a9d0668ac11e8a8030002c8c1274c|0
+14:GetSchemaPacket.java|1|166f774bbf5|189|d4b47fc0|24fa9d2268ac11e8a8030002c8c1274c|0
+1a:GetUpdateServerPacket.java|1|166f774bc20|19f|9bd3881b|295a9d5a68ac11e8a8030002c8c1274c|0

@@ -1,0 +1,44 @@
+-- ok
+select id, item_id, case user_id when 1001 then 'number 1' when 1002 then 'number 3' when 1003 then 'number 3' end from order_list;
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1003, TableName:order_list, AliasName:NULL, Type:BASE_TABLE, RefId: 1003}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:2, ColumnName:id, TableRef:1003}
+            {Num 1, ColumnId:4, ColumnName:item_id, TableRef:1003}
+            {Num 2, ColumnId:3, ColumnName:user_id, TableRef:1003}
+        <ColumnItemList End>
+        SELECT ::= <1, id>, <2, item_id>, <3>
+        FROM ::= <1003>
+        ObSelectStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (1003 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 2]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (1003 : 4)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 4]
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_OP_ARG_CASE
+            T_REF_COLUMN : [table_id, column_id] = [1003, 3]
+            T_INT : 1001
+            T_STRING : number 1
+            T_INT : 1002
+            T_STRING : number 3
+            T_INT : 1003
+            T_STRING : number 3
+            T_NULL : NULL
+        ObSqlRawExpr 2 End
+    <ExprList End>
+<logical_plan End>
+

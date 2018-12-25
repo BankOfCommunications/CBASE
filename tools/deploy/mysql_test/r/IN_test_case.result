@@ -1,0 +1,1050 @@
+drop table if exists inbug_test1,inbug_test2,inbug_test3,inbug_test4;
+create table inbug_test1(c1 int primary key, c2 bigint, c3 timestamp, c4 varchar, c5 bool, c6 decimal(20,5), c7 date, c8 time);
+create table inbug_test2(c1 int primary key, c2 bigint, c3 timestamp, c4 varchar, c5 bool, c6 decimal(20,5), c7 date, c8 time);
+create table inbug_test3(c1 int primary key, c2 bigint, c3 timestamp, c4 varchar, c5 bool, c6 decimal(20,5), c7 date, c8 time);
+create table inbug_test4(c1 int primary key, c2 bigint, c3 timestamp, c4 varchar, c5 bool, c6 decimal(20,5), c7 date, c8 time);
+insert into inbug_test1 values 
+( 5, 105, '1905-01-01 20:20:20.999999', 'a5',  0,  5.0, '1905-01-01', '20:05:20'),
+( 6, 106, '1906-01-01 20:20:20.999999', 'a6',  0,  6.0, '1906-01-01', '20:06:20'),
+( 7, 107, '1907-01-01 20:20:20.999999', 'a7',  0,  7.0, '1907-01-01', '20:07:20'),
+( 8, 108, '1908-01-01 20:20:20.999999', 'a8',  0,  8.0, '1908-01-01', '20:08:20'),
+( 9, 109, '1909-01-01 20:20:20.999999', 'a9',  0,  9.0, '1909-01-01', '20:09:20'),
+(10, 110, '1910-01-01 20:20:20.999999', 'a10', 0, 10.0, '1910-01-01', '20:10:20'),
+(11, 111, '1911-01-01 20:20:20.999999', 'a11', 0, 11.0, '1911-01-01', '20:11:20'),
+(12, 112, '1912-01-01 20:20:20.999999', 'a12', 0, 12.0, '1912-01-01', '20:12:20'),
+(13, 113, '1913-01-01 20:20:20.999999', 'a13', 0, 13.0, '1913-01-01', '20:13:20'),
+(14, 114, '1914-01-01 20:20:20.999999', 'a14', 0, 14.0, '1914-01-01', '20:14:20'),
+(15, 115, '1915-01-01 20:20:20.999999', 'a15', 0, 15.0, '1915-01-01', '20:15:20'),
+(16, 116, '1916-01-01 20:20:20.999999', 'a16', 0, 16.0, '1916-01-01', '20:16:20'),
+(17, 117, '1917-01-01 20:20:20.999999', 'a17', 0, 17.0, '1917-01-01', '20:17:20'),
+(18, 118, '1918-01-01 20:20:20.999999', 'a18', 0, 18.0, '1918-01-01', '20:18:20'),
+(19, 119, '1919-01-01 20:20:20.999999', 'a19', 0, 19.0, '1919-01-01', '20:19:20'),
+(20, 120, '1920-01-01 20:20:20.999999', 'a20', 0, 20.0, '1920-01-01', '20:20:20'),
+(21, 121, '1921-01-01 20:20:20.999999', 'a21', 0, 21.0, '1921-01-01', '20:21:20'),
+(22, 122, '1922-01-01 20:20:20.999999', 'a22', 0, 22.0, '1922-01-01', '20:22:20'),
+(23, 123, '1923-01-01 20:20:20.999999', 'a23', 0, 23.0, '1923-01-01', '20:23:20'),
+(24, 124, '1924-01-01 20:20:20.999999', 'a24', 0, 24.0, '1924-01-01', '20:24:20'),
+(25, 125, '1925-01-01 20:20:20.999999', 'a25', 0, 25.0, '1925-01-01', '20:25:20'),
+(26, 126, '1926-01-01 20:20:20.999999', 'a26', 0, 26.0, '1926-01-01', '20:26:20'),
+(27, 127, '1927-01-01 20:20:20.999999', 'a27', 0, 27.0, '1927-01-01', '20:27:20'),
+(28, 128, '1928-01-01 20:20:20.999999', 'a28', 0, 28.0, '1928-01-01', '20:28:20'),
+(29, 129, '1929-01-01 20:20:20.999999', 'a29', 0, 29.0, '1929-01-01', '20:29:20'),
+(30, 130, '1930-01-01 20:20:20.999999', 'a30', 0, 30.0, '1930-01-01', '20:30:20'),
+(31, 131, '1931-01-01 20:20:20.999999', 'a31', 0, 31.0, '1931-01-01', '20:31:20'),
+(32, 132, '1932-01-01 20:20:20.999999', 'a32', 0, 32.0, '1932-01-01', '20:32:20'),
+(33, 133, '1933-01-01 20:20:20.999999', 'a33', 0, 33.0, '1933-01-01', '20:33:20'),
+(34, 134, '1934-01-01 20:20:20.999999', 'a34', 0, 34.0, '1934-01-01', '20:34:20'),
+(35, 135, '1935-01-01 20:20:20.999999', 'a35', 0, 35.0, '1935-01-01', '20:35:20'),
+(36, 136, '1936-01-01 20:20:20.999999', 'a36', 0, 36.0, '1936-01-01', '20:36:20'),
+(37, 137, '1937-01-01 20:20:20.999999', 'a37', 0, 37.0, '1937-01-01', '20:37:20'),
+(38, 138, '1938-01-01 20:20:20.999999', 'a38', 0, 38.0, '1938-01-01', '20:38:20'),
+(39, 139, '1939-01-01 20:20:20.999999', 'a39', 0, 39.0, '1939-01-01', '20:39:20'),
+(40, 140, '1940-01-01 20:20:20.999999', 'a40', 0, 40.0, '1940-01-01', '20:40:20'),
+(41, 141, '1941-01-01 20:20:20.999999', 'a41', 0, 41.0, '1941-01-01', '20:41:20'),
+(42, 142, '1942-01-01 20:20:20.999999', 'a42', 0, 42.0, '1942-01-01', '20:42:20'),
+(43, 143, '1943-01-01 20:20:20.999999', 'a43', 0, 43.0, '1943-01-01', '20:43:20'),
+(44, 144, '1944-01-01 20:20:20.999999', 'a44', 0, 44.0, '1944-01-01', '20:44:20'),
+(45, 145, '1945-01-01 20:20:20.999999', 'a45', 0, 45.0, '1945-01-01', '20:45:20'),
+(46, 146, '1946-01-01 20:20:20.999999', 'a46', 0, 46.0, '1946-01-01', '20:46:20'),
+(47, 147, '1947-01-01 20:20:20.999999', 'a47', 0, 47.0, '1947-01-01', '20:47:20'),
+(48, 148, '1948-01-01 20:20:20.999999', 'a48', 0, 48.0, '1948-01-01', '20:48:20'),
+(49, 149, '1949-01-01 20:20:20.999999', 'a49', 0, 49.0, '1949-01-01', '20:49:20'),
+(50, 150, '1950-01-01 20:20:20.999999', 'a50', 0, 50.0, '1950-01-01', '20:50:20'),
+(51, 151, '1951-01-01 20:20:20.999999', 'a51', 0, 51.0, '1951-01-01', '20:51:20'),
+(52, 152, '1952-01-01 20:20:20.999999', 'a52', 0, 52.0, '1952-01-01', '20:52:20'),
+(53, 153, '1953-01-01 20:20:20.999999', 'a53', 0, 53.0, '1953-01-01', '20:53:20'),
+(54, 154, '1954-01-01 20:20:20.999999', 'a54', 0, 54.0, '1954-01-01', '20:54:20'),
+(55, 155, '1955-01-01 20:20:20.999999', 'a55', 0, 55.0, '1955-01-01', '20:55:20'),
+(56, 156, '1956-01-01 20:20:20.999999', 'a56', 0, 56.0, '1956-01-01', '20:56:20'),
+(57, 157, '1957-01-01 20:20:20.999999', 'a57', 0, 57.0, '1957-01-01', '20:57:20'),
+(58, 158, '1958-01-01 20:20:20.999999', 'a58', 0, 58.0, '1958-01-01', '20:58:20'),
+(59, 159, '1959-01-01 20:20:20.999999', 'a59', 0, 59.0, '1959-01-01', '20:59:20');
+insert into inbug_test2 values
+( 5,  5, '1905-01-01 20:20:20.999999', '5', 0,  5.0, '1905-01-01', '20:05:20'),
+( 6,  6, '1906-01-01 20:20:20.999999', '6', 0,  6.0, '1906-01-01', '20:06:20'),
+( 7,  7, '1907-01-01 20:20:20.999999', '7', 0,  7.0, '1907-01-01', '20:07:20'),
+( 8,  8, '1908-01-01 20:20:20.999999', '8', 0,  8.0, '1908-01-01', '20:08:20'),
+( 9,  9, '1909-01-01 20:20:20.999999', '9', 0,  9.0, '1909-01-01', '20:09:20'),
+(10, 10, '1910-01-01 20:20:20.999999', '10', 0, 10.0, '1910-01-01', '20:10:20'),
+(11, 11, '1911-01-01 20:20:20.999999', '11', 0, 11.0, '1911-01-01', '20:11:20'),
+(12, 12, '1912-01-01 20:20:20.999999', '12', 0, 12.0, '1912-01-01', '20:12:20'),
+(13, 13, '1913-01-01 20:20:20.999999', '13', 0, 13.0, '1913-01-01', '20:13:20'),
+(14, 14, '1914-01-01 20:20:20.999999', '14', 0, 14.0, '1914-01-01', '20:14:20'),
+(15, 15, '1915-01-01 20:20:20.999999', '15', 0, 15.0, '1915-01-01', '20:15:20'),
+(16, 16, '1916-01-01 20:20:20.999999', '16', 0, 16.0, '1916-01-01', '20:16:20'),
+(17, 17, '1917-01-01 20:20:20.999999', '17', 0, 17.0, '1917-01-01', '20:17:20'),
+(18, 18, '1918-01-01 20:20:20.999999', '18', 0, 18.0, '1918-01-01', '20:18:20'),
+(19, 19, '1919-01-01 20:20:20.999999', '19', 0, 19.0, '1919-01-01', '20:19:20'),
+(20, 20, '1920-01-01 20:20:20.999999', '20', 0, 20.0, '1920-01-01', '20:20:20'),
+(21, 21, '1921-01-01 20:20:20.999999', '21', 0, 21.0, '1921-01-01', '20:21:20'),
+(22, 22, '1922-01-01 20:20:20.999999', '22', 0, 22.0, '1922-01-01', '20:22:20'),
+(23, 23, '1923-01-01 20:20:20.999999', '23', 0, 23.0, '1923-01-01', '20:23:20'),
+(24, 24, '1924-01-01 20:20:20.999999', '24', 0, 24.0, '1924-01-01', '20:24:20'),
+(25, 25, '1925-01-01 20:20:20.999999', '25', 0, 25.0, '1925-01-01', '20:25:20'),
+(26, 26, '1926-01-01 20:20:20.999999', '26', 0, 26.0, '1926-01-01', '20:26:20'),
+(27, 27, '1927-01-01 20:20:20.999999', '27', 0, 27.0, '1927-01-01', '20:27:20'),
+(28, 28, '1928-01-01 20:20:20.999999', '28', 0, 28.0, '1928-01-01', '20:28:20'),
+(29, 29, '1929-01-01 20:20:20.999999', '29', 0, 29.0, '1929-01-01', '20:29:20'),
+(30, 30, '1930-01-01 20:20:20.999999', '30', 0, 30.0, '1930-01-01', '20:30:20'),
+(31, 31, '1931-01-01 20:20:20.999999', '31', 0, 31.0, '1931-01-01', '20:31:20'),
+(32, 32, '1932-01-01 20:20:20.999999', '32', 0, 32.0, '1932-01-01', '20:32:20'),
+(33, 33, '1933-01-01 20:20:20.999999', '33', 0, 33.0, '1933-01-01', '20:33:20'),
+(34, 34, '1934-01-01 20:20:20.999999', '34', 0, 34.0, '1934-01-01', '20:34:20'),
+(35, 35, '1935-01-01 20:20:20.999999', '35', 0, 35.0, '1935-01-01', '20:35:20'),
+(36, 36, '1936-01-01 20:20:20.999999', '36', 0, 36.0, '1936-01-01', '20:36:20'),
+(37, 37, '1937-01-01 20:20:20.999999', '37', 0, 37.0, '1937-01-01', '20:37:20'),
+(38, 38, '1938-01-01 20:20:20.999999', '38', 0, 38.0, '1938-01-01', '20:38:20'),
+(39, 39, '1939-01-01 20:20:20.999999', '39', 0, 39.0, '1939-01-01', '20:39:20'),
+(40, 40, '1940-01-01 20:20:20.999999', '40', 0, 40.0, '1940-01-01', '20:40:20'),
+(41, 41, '1941-01-01 20:20:20.999999', '41', 0, 41.0, '1941-01-01', '20:41:20'),
+(42, 42, '1942-01-01 20:20:20.999999', '42', 0, 42.0, '1942-01-01', '20:42:20'),
+(43, 43, '1943-01-01 20:20:20.999999', '43', 0, 43.0, '1943-01-01', '20:43:20'),
+(44, 44, '1944-01-01 20:20:20.999999', '44', 0, 44.0, '1944-01-01', '20:44:20'),
+(45, 45, '1945-01-01 20:20:20.999999', '45', 0, 45.0, '1945-01-01', '20:45:20'),
+(46, 46, '1946-01-01 20:20:20.999999', '46', 0, 46.0, '1946-01-01', '20:46:20'),
+(47, 47, '1947-01-01 20:20:20.999999', '47', 0, 47.0, '1947-01-01', '20:47:20'),
+(48, 48, '1948-01-01 20:20:20.999999', '48', 0, 48.0, '1948-01-01', '20:48:20'),
+(49, 49, '1949-01-01 20:20:20.999999', '49', 0, 49.0, '1949-01-01', '20:49:20'),
+(50, 50, '1950-01-01 20:20:20.999999', '50', 0, 50.0, '1950-01-01', '20:50:20'),
+(51, 51, '1951-01-01 20:20:20.999999', '51', 0, 51.0, '1951-01-01', '20:51:20'),
+(52, 52, '1952-01-01 20:20:20.999999', '52', 0, 52.0, '1952-01-01', '20:52:20'),
+(53, 53, '1953-01-01 20:20:20.999999', '53', 0, 53.0, '1953-01-01', '20:53:20'),
+(54, 54, '1954-01-01 20:20:20.999999', '54', 0, 54.0, '1954-01-01', '20:54:20'),
+(55, 55, '1955-01-01 20:20:20.999999', '55', 0, 55.0, '1955-01-01', '20:55:20'),
+(56, 56, '1956-01-01 20:20:20.999999', '56', 0, 56.0, '1956-01-01', '20:56:20'),
+(57, 57, '1957-01-01 20:20:20.999999', '57', 0, 57.0, '1957-01-01', '20:57:20'),
+(58, 58, '1958-01-01 20:20:20.999999', '58', 0, 58.0, '1958-01-01', '20:58:20'),
+(59, 59, '1959-01-01 20:20:20.999999', '59', 0, 59.0, '1959-01-01', '20:59:20');
+insert into inbug_test3 values
+( 5,  5, '1905-01-01 20:20:20.999999', '1905-01-01 20:20:20.999999', 0,  5.0, '1905-01-01', '20:05:20'),
+( 6,  6, '1906-01-01 20:20:20.999999', '1906-01-01 20:20:20.999999', 0,  6.0, '1906-01-01', '20:06:20'),
+( 7,  7, '1907-01-01 20:20:20.999999', '1907-01-01 20:20:20.999999', 0,  7.0, '1907-01-01', '20:07:20'),
+( 8,  8, '1908-01-01 20:20:20.999999', '1908-01-01 20:20:20.999999', 0,  8.0, '1908-01-01', '20:08:20'),
+( 9,  9, '1909-01-01 20:20:20.999999', '1909-01-01 20:20:20.999999', 0,  9.0, '1909-01-01', '20:09:20'),
+(10, 10, '1910-01-01 20:20:20.999999', '1910-01-01 20:20:20.999999', 0, 10.0, '1910-01-01', '20:10:20'),
+(11, 11, '1911-01-01 20:20:20.999999', '1911-01-01 20:20:20.999999', 0, 11.0, '1911-01-01', '20:11:20'),
+(12, 12, '1912-01-01 20:20:20.999999', '1912-01-01 20:20:20.999999', 0, 12.0, '1912-01-01', '20:12:20'),
+(13, 13, '1913-01-01 20:20:20.999999', '1913-01-01 20:20:20.999999', 0, 13.0, '1913-01-01', '20:13:20'),
+(14, 14, '1914-01-01 20:20:20.999999', '1914-01-01 20:20:20.999999', 0, 14.0, '1914-01-01', '20:14:20'),
+(15, 15, '1915-01-01 20:20:20.999999', '1915-01-01 20:20:20.999999', 0, 15.0, '1915-01-01', '20:15:20'),
+(16, 16, '1916-01-01 20:20:20.999999', '1916-01-01 20:20:20.999999', 0, 16.0, '1916-01-01', '20:16:20'),
+(17, 17, '1917-01-01 20:20:20.999999', '1917-01-01 20:20:20.999999', 0, 17.0, '1917-01-01', '20:17:20'),
+(18, 18, '1918-01-01 20:20:20.999999', '1918-01-01 20:20:20.999999', 0, 18.0, '1918-01-01', '20:18:20'),
+(19, 19, '1919-01-01 20:20:20.999999', '1919-01-01 20:20:20.999999', 0, 19.0, '1919-01-01', '20:19:20'),
+(20, 20, '1920-01-01 20:20:20.999999', '1920-01-01 20:20:20.999999', 0, 20.0, '1920-01-01', '20:20:20'),
+(21, 21, '1921-01-01 20:20:20.999999', '1921-01-01 20:20:20.999999', 0, 21.0, '1921-01-01', '20:21:20'),
+(22, 22, '1922-01-01 20:20:20.999999', '1922-01-01 20:20:20.999999', 0, 22.0, '1922-01-01', '20:22:20'),
+(23, 23, '1923-01-01 20:20:20.999999', '1923-01-01 20:20:20.999999', 0, 23.0, '1923-01-01', '20:23:20'),
+(24, 24, '1924-01-01 20:20:20.999999', '1924-01-01 20:20:20.999999', 0, 24.0, '1924-01-01', '20:24:20'),
+(25, 25, '1925-01-01 20:20:20.999999', '1925-01-01 20:20:20.999999', 0, 25.0, '1925-01-01', '20:25:20'),
+(26, 26, '1926-01-01 20:20:20.999999', '1926-01-01 20:20:20.999999', 0, 26.0, '1926-01-01', '20:26:20'),
+(27, 27, '1927-01-01 20:20:20.999999', '1927-01-01 20:20:20.999999', 0, 27.0, '1927-01-01', '20:27:20'),
+(28, 28, '1928-01-01 20:20:20.999999', '1928-01-01 20:20:20.999999', 0, 28.0, '1928-01-01', '20:28:20'),
+(29, 29, '1929-01-01 20:20:20.999999', '1929-01-01 20:20:20.999999', 0, 29.0, '1929-01-01', '20:29:20'),
+(30, 30, '1930-01-01 20:20:20.999999', '1930-01-01 20:20:20.999999', 0, 30.0, '1930-01-01', '20:30:20'),
+(31, 31, '1931-01-01 20:20:20.999999', '1931-01-01 20:20:20.999999', 0, 31.0, '1931-01-01', '20:31:20'),
+(32, 32, '1932-01-01 20:20:20.999999', '1932-01-01 20:20:20.999999', 0, 32.0, '1932-01-01', '20:32:20'),
+(33, 33, '1933-01-01 20:20:20.999999', '1933-01-01 20:20:20.999999', 0, 33.0, '1933-01-01', '20:33:20'),
+(34, 34, '1934-01-01 20:20:20.999999', '1934-01-01 20:20:20.999999', 0, 34.0, '1934-01-01', '20:34:20'),
+(35, 35, '1935-01-01 20:20:20.999999', '1935-01-01 20:20:20.999999', 0, 35.0, '1935-01-01', '20:35:20'),
+(36, 36, '1936-01-01 20:20:20.999999', '1936-01-01 20:20:20.999999', 0, 36.0, '1936-01-01', '20:36:20'),
+(37, 37, '1937-01-01 20:20:20.999999', '1937-01-01 20:20:20.999999', 0, 37.0, '1937-01-01', '20:37:20'),
+(38, 38, '1938-01-01 20:20:20.999999', '1938-01-01 20:20:20.999999', 0, 38.0, '1938-01-01', '20:38:20'),
+(39, 39, '1939-01-01 20:20:20.999999', '1939-01-01 20:20:20.999999', 0, 39.0, '1939-01-01', '20:39:20'),
+(40, 40, '1940-01-01 20:20:20.999999', '1940-01-01 20:20:20.999999', 0, 40.0, '1940-01-01', '20:40:20'),
+(41, 41, '1941-01-01 20:20:20.999999', '1941-01-01 20:20:20.999999', 0, 41.0, '1941-01-01', '20:41:20'),
+(42, 42, '1942-01-01 20:20:20.999999', '1942-01-01 20:20:20.999999', 0, 42.0, '1942-01-01', '20:42:20'),
+(43, 43, '1943-01-01 20:20:20.999999', '1943-01-01 20:20:20.999999', 0, 43.0, '1943-01-01', '20:43:20'),
+(44, 44, '1944-01-01 20:20:20.999999', '1944-01-01 20:20:20.999999', 0, 44.0, '1944-01-01', '20:44:20'),
+(45, 45, '1945-01-01 20:20:20.999999', '1945-01-01 20:20:20.999999', 0, 45.0, '1945-01-01', '20:45:20'),
+(46, 46, '1946-01-01 20:20:20.999999', '1946-01-01 20:20:20.999999', 0, 46.0, '1946-01-01', '20:46:20'),
+(47, 47, '1947-01-01 20:20:20.999999', '1947-01-01 20:20:20.999999', 0, 47.0, '1947-01-01', '20:47:20'),
+(48, 48, '1948-01-01 20:20:20.999999', '1948-01-01 20:20:20.999999', 0, 48.0, '1948-01-01', '20:48:20'),
+(49, 49, '1949-01-01 20:20:20.999999', '1949-01-01 20:20:20.999999', 0, 49.0, '1949-01-01', '20:49:20'),
+(50, 50, '1950-01-01 20:20:20.999999', '1950-01-01 20:20:20.999999', 0, 50.0, '1950-01-01', '20:50:20'),
+(51, 51, '1951-01-01 20:20:20.999999', '1951-01-01 20:20:20.999999', 0, 51.0, '1951-01-01', '20:51:20'),
+(52, 52, '1952-01-01 20:20:20.999999', '1952-01-01 20:20:20.999999', 0, 52.0, '1952-01-01', '20:52:20'),
+(53, 53, '1953-01-01 20:20:20.999999', '1953-01-01 20:20:20.999999', 0, 53.0, '1953-01-01', '20:53:20'),
+(54, 54, '1954-01-01 20:20:20.999999', '1954-01-01 20:20:20.999999', 0, 54.0, '1954-01-01', '20:54:20'),
+(55, 55, '1955-01-01 20:20:20.999999', '1955-01-01 20:20:20.999999', 0, 55.0, '1955-01-01', '20:55:20'),
+(56, 56, '1956-01-01 20:20:20.999999', '1956-01-01 20:20:20.999999', 0, 56.0, '1956-01-01', '20:56:20'),
+(57, 57, '1957-01-01 20:20:20.999999', '1957-01-01 20:20:20.999999', 0, 57.0, '1957-01-01', '20:57:20'),
+(58, 58, '1958-01-01 20:20:20.999999', '1958-01-01 20:20:20.999999', 0, 58.0, '1958-01-01', '20:58:20'),
+(59, 59, '1959-01-01 20:20:20.999999', '1959-01-01 20:20:20.999999', 0, 59.0, '1959-01-01', '20:59:20');
+insert into inbug_test4 values
+( 5,  5, '1905-01-01 20:20:20.999999', '20:05:20', 0,  5.0, '1905-01-01', '20:05:20'),
+( 6,  6, '1906-01-01 20:20:20.999999', '20:06:20', 0,  6.0, '1906-01-01', '20:06:20'),
+( 7,  7, '1907-01-01 20:20:20.999999', '20:07:20', 0,  7.0, '1907-01-01', '20:07:20'),
+( 8,  8, '1908-01-01 20:20:20.999999', '20:08:20', 0,  8.0, '1908-01-01', '20:08:20'),
+( 9,  9, '1909-01-01 20:20:20.999999', '20:09:20', 0,  9.0, '1909-01-01', '20:09:20'),
+(10, 10, '1910-01-01 20:20:20.999999', '20:10:20', 0, 10.0, '1910-01-01', '20:10:20'),
+(11, 11, '1911-01-01 20:20:20.999999', '20:11:20', 0, 11.0, '1911-01-01', '20:11:20'),
+(12, 12, '1912-01-01 20:20:20.999999', '20:12:20', 0, 12.0, '1912-01-01', '20:12:20'),
+(13, 13, '1913-01-01 20:20:20.999999', '20:13:20', 0, 13.0, '1913-01-01', '20:13:20'),
+(14, 14, '1914-01-01 20:20:20.999999', '20:14:20', 0, 14.0, '1914-01-01', '20:14:20'),
+(15, 15, '1915-01-01 20:20:20.999999', '20:15:20', 0, 15.0, '1915-01-01', '20:15:20'),
+(16, 16, '1916-01-01 20:20:20.999999', '20:16:20', 0, 16.0, '1916-01-01', '20:16:20'),
+(17, 17, '1917-01-01 20:20:20.999999', '20:17:20', 0, 17.0, '1917-01-01', '20:17:20'),
+(18, 18, '1918-01-01 20:20:20.999999', '20:18:20', 0, 18.0, '1918-01-01', '20:18:20'),
+(19, 19, '1919-01-01 20:20:20.999999', '20:19:20', 0, 19.0, '1919-01-01', '20:19:20'),
+(20, 20, '1920-01-01 20:20:20.999999', '20:20:20', 0, 20.0, '1920-01-01', '20:20:20'),
+(21, 21, '1921-01-01 20:20:20.999999', '20:21:20', 0, 21.0, '1921-01-01', '20:21:20'),
+(22, 22, '1922-01-01 20:20:20.999999', '20:22:20', 0, 22.0, '1922-01-01', '20:22:20'),
+(23, 23, '1923-01-01 20:20:20.999999', '20:23:20', 0, 23.0, '1923-01-01', '20:23:20'),
+(24, 24, '1924-01-01 20:20:20.999999', '20:24:20', 0, 24.0, '1924-01-01', '20:24:20'),
+(25, 25, '1925-01-01 20:20:20.999999', '20:25:20', 0, 25.0, '1925-01-01', '20:25:20'),
+(26, 26, '1926-01-01 20:20:20.999999', '20:26:20', 0, 26.0, '1926-01-01', '20:26:20'),
+(27, 27, '1927-01-01 20:20:20.999999', '20:27:20', 0, 27.0, '1927-01-01', '20:27:20'),
+(28, 28, '1928-01-01 20:20:20.999999', '20:28:20', 0, 28.0, '1928-01-01', '20:28:20'),
+(29, 29, '1929-01-01 20:20:20.999999', '20:29:20', 0, 29.0, '1929-01-01', '20:29:20'),
+(30, 30, '1930-01-01 20:20:20.999999', '20:30:20', 0, 30.0, '1930-01-01', '20:30:20'),
+(31, 31, '1931-01-01 20:20:20.999999', '20:31:20', 0, 31.0, '1931-01-01', '20:31:20'),
+(32, 32, '1932-01-01 20:20:20.999999', '20:32:20', 0, 32.0, '1932-01-01', '20:32:20'),
+(33, 33, '1933-01-01 20:20:20.999999', '20:33:20', 0, 33.0, '1933-01-01', '20:33:20'),
+(34, 34, '1934-01-01 20:20:20.999999', '20:34:20', 0, 34.0, '1934-01-01', '20:34:20'),
+(35, 35, '1935-01-01 20:20:20.999999', '20:35:20', 0, 35.0, '1935-01-01', '20:35:20'),
+(36, 36, '1936-01-01 20:20:20.999999', '20:36:20', 0, 36.0, '1936-01-01', '20:36:20'),
+(37, 37, '1937-01-01 20:20:20.999999', '20:37:20', 0, 37.0, '1937-01-01', '20:37:20'),
+(38, 38, '1938-01-01 20:20:20.999999', '20:38:20', 0, 38.0, '1938-01-01', '20:38:20'),
+(39, 39, '1939-01-01 20:20:20.999999', '20:39:20', 0, 39.0, '1939-01-01', '20:39:20'),
+(40, 40, '1940-01-01 20:20:20.999999', '20:40:20', 0, 40.0, '1940-01-01', '20:40:20'),
+(41, 41, '1941-01-01 20:20:20.999999', '20:41:20', 0, 41.0, '1941-01-01', '20:41:20'),
+(42, 42, '1942-01-01 20:20:20.999999', '20:42:20', 0, 42.0, '1942-01-01', '20:42:20'),
+(43, 43, '1943-01-01 20:20:20.999999', '20:43:20', 0, 43.0, '1943-01-01', '20:43:20'),
+(44, 44, '1944-01-01 20:20:20.999999', '20:44:20', 0, 44.0, '1944-01-01', '20:44:20'),
+(45, 45, '1945-01-01 20:20:20.999999', '20:45:20', 0, 45.0, '1945-01-01', '20:45:20'),
+(46, 46, '1946-01-01 20:20:20.999999', '20:46:20', 0, 46.0, '1946-01-01', '20:46:20'),
+(47, 47, '1947-01-01 20:20:20.999999', '20:47:20', 0, 47.0, '1947-01-01', '20:47:20'),
+(48, 48, '1948-01-01 20:20:20.999999', '20:48:20', 0, 48.0, '1948-01-01', '20:48:20'),
+(49, 49, '1949-01-01 20:20:20.999999', '20:49:20', 0, 49.0, '1949-01-01', '20:49:20'),
+(50, 50, '1950-01-01 20:20:20.999999', '20:50:20', 0, 50.0, '1950-01-01', '20:50:20'),
+(51, 51, '1951-01-01 20:20:20.999999', '20:51:20', 0, 51.0, '1951-01-01', '20:51:20'),
+(52, 52, '1952-01-01 20:20:20.999999', '20:52:20', 0, 52.0, '1952-01-01', '20:52:20'),
+(53, 53, '1953-01-01 20:20:20.999999', '20:53:20', 0, 53.0, '1953-01-01', '20:53:20'),
+(54, 54, '1954-01-01 20:20:20.999999', '20:54:20', 0, 54.0, '1954-01-01', '20:54:20'),
+(55, 55, '1955-01-01 20:20:20.999999', '20:55:20', 0, 55.0, '1955-01-01', '20:55:20'),
+(56, 56, '1956-01-01 20:20:20.999999', '20:56:20', 0, 56.0, '1956-01-01', '20:56:20'),
+(57, 57, '1957-01-01 20:20:20.999999', '20:57:20', 0, 57.0, '1957-01-01', '20:57:20'),
+(58, 58, '1958-01-01 20:20:20.999999', '20:58:20', 0, 58.0, '1958-01-01', '20:58:20'),
+(59, 59, '1959-01-01 20:20:20.999999', '20:59:20', 0, 59.0, '1959-01-01', '20:59:20');
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c1 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c2 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c3 from inbug_test4 limit 50);
+ERROR 0A000: INT32 can not compare with DATETIME 
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c4 from inbug_test4 limit 50);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c5 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c6 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c7 from inbug_test4 limit 50);
+ERROR 0A000: INT32 can not compare with date 
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c8 from inbug_test4 limit 50);
+ERROR 0A000: INT32 can not compare with time 
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c1 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c2 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c3 from inbug_test4 limit 50);
+ERROR 0A000: INT can not compare with DATETIME 
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c4 from inbug_test4 limit 50);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c5 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c6 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c7 from inbug_test4 limit 50);
+ERROR 0A000: INT can not compare with date 
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c8 from inbug_test4 limit 50);
+ERROR 0A000: INT can not compare with time 
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c1 from inbug_test4 limit 50);
+ERROR 0A000: DATETIME can not compare with INT32 
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c2 from inbug_test4 limit 50);
+ERROR 0A000: DATETIME can not compare with INT 
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c3 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c4 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c5 from inbug_test4 limit 50);
+ERROR 0A000: DATETIME can not compare with BOOL 
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c6 from inbug_test4 limit 50);
+ERROR 0A000: DATETIME can not compare with DECIMAL 
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c7 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c8 from inbug_test4 limit 50);
+ERROR 0A000: DATETIME can not compare with time 
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c1 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c2 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c3 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c4 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c5 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c6 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c7 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c8 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c1 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c2 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c3 from inbug_test4 limit 50);
+ERROR 0A000: BOOL can not compare with DATETIME 
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c4 from inbug_test4 limit 50);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c5 from inbug_test4 limit 50);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c6 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c7 from inbug_test4 limit 50);
+ERROR 0A000: BOOL can not compare with date 
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c8 from inbug_test4 limit 50);
+ERROR 0A000: BOOL can not compare with time 
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c1 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c2 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c3 from inbug_test4 limit 50);
+ERROR 0A000: DECIMAL can not compare with DATETIME 
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c4 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c5 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c6 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c7 from inbug_test4 limit 50);
+ERROR 0A000: DECIMAL can not compare with date 
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c8 from inbug_test4 limit 50);
+ERROR 0A000: DECIMAL can not compare with time 
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c1 from inbug_test4 limit 50);
+ERROR 0A000: date can not compare with INT32 
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c2 from inbug_test4 limit 50);
+ERROR 0A000: date can not compare with INT 
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c3 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c4 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c5 from inbug_test4 limit 50);
+ERROR 0A000: date can not compare with BOOL 
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c6 from inbug_test4 limit 50);
+ERROR 0A000: date can not compare with DECIMAL 
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c7 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c8 from inbug_test4 limit 50);
+ERROR 0A000: date can not compare with time 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c1 from inbug_test4 limit 50);
+ERROR 0A000: time can not compare with INT32 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c2 from inbug_test4 limit 50);
+ERROR 0A000: time can not compare with INT 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c3 from inbug_test4 limit 50);
+ERROR 0A000: time can not compare with DATETIME 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c4 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c5 from inbug_test4 limit 50);
+ERROR 0A000: time can not compare with BOOL 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c6 from inbug_test4 limit 50);
+ERROR 0A000: time can not compare with DECIMAL 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c7 from inbug_test4 limit 50);
+ERROR 0A000: time can not compare with date 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c8 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c4 from inbug_test1 limit 50);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c4 from inbug_test2 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c4 from inbug_test2 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c4 from inbug_test2 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c4 from inbug_test2 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c4 from inbug_test2 limit 50);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c4 from inbug_test2 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c4 from inbug_test2 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c4 from inbug_test2 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c1 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c2 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c3 from inbug_test4 limit 50);
+ERROR 0A000: INT32 can not compare with DATETIME 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c4 from inbug_test4 limit 50);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c5 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c6 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c7 from inbug_test4 limit 50);
+ERROR 0A000: INT32 can not compare with date 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c8 from inbug_test4 limit 50);
+ERROR 0A000: INT32 can not compare with time 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c1 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c2 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c3 from inbug_test4 limit 50);
+ERROR 0A000: INT can not compare with DATETIME 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c4 from inbug_test4 limit 50);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c5 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c6 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c7 from inbug_test4 limit 50);
+ERROR 0A000: INT can not compare with date 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c8 from inbug_test4 limit 50);
+ERROR 0A000: INT can not compare with time 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c1 from inbug_test4 limit 50);
+ERROR 0A000: DATETIME can not compare with INT32 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c2 from inbug_test4 limit 50);
+ERROR 0A000: DATETIME can not compare with INT 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c3 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c4 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c5 from inbug_test4 limit 50);
+ERROR 0A000: DATETIME can not compare with BOOL 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c6 from inbug_test4 limit 50);
+ERROR 0A000: DATETIME can not compare with DECIMAL 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c7 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c8 from inbug_test4 limit 50);
+ERROR 0A000: DATETIME can not compare with time 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c1 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c2 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c3 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c4 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c5 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c6 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c7 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c8 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c1 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c2 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c3 from inbug_test4 limit 50);
+ERROR 0A000: BOOL can not compare with DATETIME 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c4 from inbug_test4 limit 50);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c5 from inbug_test4 limit 50);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c6 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c7 from inbug_test4 limit 50);
+ERROR 0A000: BOOL can not compare with date 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c8 from inbug_test4 limit 50);
+ERROR 0A000: BOOL can not compare with time 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c1 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c2 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c3 from inbug_test4 limit 50);
+ERROR 0A000: DECIMAL can not compare with DATETIME 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c4 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c5 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c6 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c7 from inbug_test4 limit 50);
+ERROR 0A000: DECIMAL can not compare with date 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c8 from inbug_test4 limit 50);
+ERROR 0A000: DECIMAL can not compare with time 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c1 from inbug_test4 limit 50);
+ERROR 0A000: date can not compare with INT32 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c2 from inbug_test4 limit 50);
+ERROR 0A000: date can not compare with INT 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c3 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c4 from inbug_test4 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c5 from inbug_test4 limit 50);
+ERROR 0A000: date can not compare with BOOL 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c6 from inbug_test4 limit 50);
+ERROR 0A000: date can not compare with DECIMAL 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c7 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c8 from inbug_test4 limit 50);
+ERROR 0A000: date can not compare with time 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c1 from inbug_test4 limit 50);
+ERROR 0A000: time can not compare with INT32 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c2 from inbug_test4 limit 50);
+ERROR 0A000: time can not compare with INT 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c3 from inbug_test4 limit 50);
+ERROR 0A000: time can not compare with DATETIME 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c4 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c5 from inbug_test4 limit 50);
+ERROR 0A000: time can not compare with BOOL 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c6 from inbug_test4 limit 50);
+ERROR 0A000: time can not compare with DECIMAL 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c7 from inbug_test4 limit 50);
+ERROR 0A000: time can not compare with date 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c8 from inbug_test4 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c4 from inbug_test1 limit 50);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c4 from inbug_test1 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c4 from inbug_test2 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c4 from inbug_test2 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c4 from inbug_test2 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c4 from inbug_test2 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c4 from inbug_test2 limit 50);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c4 from inbug_test2 limit 50);
+count(*)
+50
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c4 from inbug_test2 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c4 from inbug_test2 limit 50);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c1 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c2 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c3 from inbug_test4);
+ERROR 0A000: INT32 can not compare with DATETIME 
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c4 from inbug_test4);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c5 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c6 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c7 from inbug_test4);
+ERROR 0A000: INT32 can not compare with date 
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c8 from inbug_test4);
+ERROR 0A000: INT32 can not compare with time 
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c1 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c2 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c3 from inbug_test4);
+ERROR 0A000: INT can not compare with DATETIME 
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c4 from inbug_test4);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c5 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c6 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c7 from inbug_test4);
+ERROR 0A000: INT can not compare with date 
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c8 from inbug_test4);
+ERROR 0A000: INT can not compare with time 
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c1 from inbug_test4);
+ERROR 0A000: DATETIME can not compare with INT32 
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c2 from inbug_test4);
+ERROR 0A000: DATETIME can not compare with INT 
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c3 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c4 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c5 from inbug_test4);
+ERROR 0A000: DATETIME can not compare with BOOL 
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c6 from inbug_test4);
+ERROR 0A000: DATETIME can not compare with DECIMAL 
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c7 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c8 from inbug_test4);
+ERROR 0A000: DATETIME can not compare with time 
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c1 from inbug_test4);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c2 from inbug_test4);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c3 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c4 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c5 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c6 from inbug_test4);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c7 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c8 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c1 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c2 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c3 from inbug_test4);
+ERROR 0A000: BOOL can not compare with DATETIME 
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c4 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c5 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c6 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c7 from inbug_test4);
+ERROR 0A000: BOOL can not compare with date 
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c8 from inbug_test4);
+ERROR 0A000: BOOL can not compare with time 
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c1 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c2 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c3 from inbug_test4);
+ERROR 0A000: DECIMAL can not compare with DATETIME 
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c4 from inbug_test4);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c5 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c6 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c7 from inbug_test4);
+ERROR 0A000: DECIMAL can not compare with date 
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c8 from inbug_test4);
+ERROR 0A000: DECIMAL can not compare with time 
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c1 from inbug_test4);
+ERROR 0A000: date can not compare with INT32 
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c2 from inbug_test4);
+ERROR 0A000: date can not compare with INT 
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c3 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c4 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c5 from inbug_test4);
+ERROR 0A000: date can not compare with BOOL 
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c6 from inbug_test4);
+ERROR 0A000: date can not compare with DECIMAL 
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c7 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c8 from inbug_test4);
+ERROR 0A000: date can not compare with time 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c1 from inbug_test4);
+ERROR 0A000: time can not compare with INT32 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c2 from inbug_test4);
+ERROR 0A000: time can not compare with INT 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c3 from inbug_test4);
+ERROR 0A000: time can not compare with DATETIME 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c4 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c5 from inbug_test4);
+ERROR 0A000: time can not compare with BOOL 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c6 from inbug_test4);
+ERROR 0A000: time can not compare with DECIMAL 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c7 from inbug_test4);
+ERROR 0A000: time can not compare with date 
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c8 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c4 from inbug_test1);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c4 from inbug_test1);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c4 from inbug_test1);
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c4 from inbug_test1);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c4 from inbug_test1);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c4 from inbug_test1);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c4 from inbug_test1);
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c4 from inbug_test1);
+ERROR HY000: Format of TIME value is incorrect.
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c4 from inbug_test2);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c2 in (select c4 from inbug_test2);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c3 in (select c4 from inbug_test2);
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select count(*) from inbug_test4 where inbug_test4.c4 in (select c4 from inbug_test2);
+count(*)
+0
+select count(*) from inbug_test4 where inbug_test4.c5 in (select c4 from inbug_test2);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c6 in (select c4 from inbug_test2);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c7 in (select c4 from inbug_test2);
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select count(*) from inbug_test4 where inbug_test4.c8 in (select c4 from inbug_test2);
+ERROR HY000: Format of TIME value is incorrect.
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c1 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c2 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c3 from inbug_test4);
+ERROR 0A000: INT32 can not compare with DATETIME 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c4 from inbug_test4);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c5 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c6 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c7 from inbug_test4);
+ERROR 0A000: INT32 can not compare with date 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c8 from inbug_test4);
+ERROR 0A000: INT32 can not compare with time 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c1 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c2 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c3 from inbug_test4);
+ERROR 0A000: INT can not compare with DATETIME 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c4 from inbug_test4);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c5 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c6 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c7 from inbug_test4);
+ERROR 0A000: INT can not compare with date 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c8 from inbug_test4);
+ERROR 0A000: INT can not compare with time 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c1 from inbug_test4);
+ERROR 0A000: DATETIME can not compare with INT32 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c2 from inbug_test4);
+ERROR 0A000: DATETIME can not compare with INT 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c3 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c4 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c5 from inbug_test4);
+ERROR 0A000: DATETIME can not compare with BOOL 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c6 from inbug_test4);
+ERROR 0A000: DATETIME can not compare with DECIMAL 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c7 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c8 from inbug_test4);
+ERROR 0A000: DATETIME can not compare with time 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c1 from inbug_test4);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c2 from inbug_test4);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c3 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c4 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c5 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c6 from inbug_test4);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c7 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c8 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c1 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c2 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c3 from inbug_test4);
+ERROR 0A000: BOOL can not compare with DATETIME 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c4 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c5 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c6 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c7 from inbug_test4);
+ERROR 0A000: BOOL can not compare with date 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c8 from inbug_test4);
+ERROR 0A000: BOOL can not compare with time 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c1 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c2 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c3 from inbug_test4);
+ERROR 0A000: DECIMAL can not compare with DATETIME 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c4 from inbug_test4);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c5 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c6 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c7 from inbug_test4);
+ERROR 0A000: DECIMAL can not compare with date 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c8 from inbug_test4);
+ERROR 0A000: DECIMAL can not compare with time 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c1 from inbug_test4);
+ERROR 0A000: date can not compare with INT32 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c2 from inbug_test4);
+ERROR 0A000: date can not compare with INT 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c3 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c4 from inbug_test4);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c5 from inbug_test4);
+ERROR 0A000: date can not compare with BOOL 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c6 from inbug_test4);
+ERROR 0A000: date can not compare with DECIMAL 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c7 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c8 from inbug_test4);
+ERROR 0A000: date can not compare with time 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c1 from inbug_test4);
+ERROR 0A000: time can not compare with INT32 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c2 from inbug_test4);
+ERROR 0A000: time can not compare with INT 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c3 from inbug_test4);
+ERROR 0A000: time can not compare with DATETIME 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c4 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c5 from inbug_test4);
+ERROR 0A000: time can not compare with BOOL 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c6 from inbug_test4);
+ERROR 0A000: time can not compare with DECIMAL 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c7 from inbug_test4);
+ERROR 0A000: time can not compare with date 
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c8 from inbug_test4);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c4 from inbug_test1);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c4 from inbug_test1);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c4 from inbug_test1);
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c4 from inbug_test1);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c4 from inbug_test1);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c4 from inbug_test1);
+ERROR HY000: OB-153: VARCHAR cast to DECIMAL error
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c4 from inbug_test1);
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c4 from inbug_test1);
+ERROR HY000: Format of TIME value is incorrect.
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c1 in (select c4 from inbug_test2);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c2 in (select c4 from inbug_test2);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c3 in (select c4 from inbug_test2);
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c4 in (select c4 from inbug_test2);
+count(*)
+0
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c5 in (select c4 from inbug_test2);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c6 in (select c4 from inbug_test2);
+count(*)
+55
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c7 in (select c4 from inbug_test2);
+ERROR HY000: Format of TIMESTAMP value is incorrect.
+select count(*) from inbug_test4 join inbug_test3 on inbug_test4.c1 = inbug_test3.c1 where inbug_test4.c8 in (select c4 from inbug_test2);
+ERROR HY000: Format of TIME value is incorrect.
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c1 from inbug_test2 union select c2 from inbug_test2);
+count(*)
+55
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c1 from inbug_test2 union select c3 from inbug_test2);
+ERROR HY000: The data types of corresponding columns are not compatible
+select count(*) from inbug_test4 where inbug_test4.c1 in (select c1 from inbug_test2 union select c3 from inbug_test2);
+ERROR HY000: The data types of corresponding columns are not compatible

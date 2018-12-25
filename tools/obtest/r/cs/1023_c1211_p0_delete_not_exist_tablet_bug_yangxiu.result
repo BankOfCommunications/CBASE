@@ -1,0 +1,8 @@
+ob1=OBI(cluster=1211);
+ob1.reboot;
+ob1.source include/merge.inc;
+ob1.create_client;
+create table t1 (a int primary key,b varchar) TABLET_MAX_SIZE=50000;
+ob1.major_freeze;
+ob1.check_cs_version 2;
+ob1.cs0.restart;

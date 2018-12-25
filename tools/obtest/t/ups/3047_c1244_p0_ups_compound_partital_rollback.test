@@ -1,0 +1,39 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob1.reboot;
+
+deploy ob1.mysql set global ob_read_consistency=3;
+sleep 10;
+
+deploy ob1.connect conn1 fs0 admin admin test;
+deploy ob1.connect conn2 fs0 admin admin test;
+
+deploy ob1.create_client;
+create table t1(pk int primary key, c1 int);
+insert into t1 values(1,1);
+insert into t1 values(2,2);
+
+connection conn1;
+set autocommit=0;
+--error 5024
+insert into t1 values (1,1) when row_count(insert into t1 values(11,11))=1;
+
+connection conn2;
+set autocommit=0;
+update t1 set c1=c1+10 where pk=2;
+
+connection conn1;
+--error 5049
+update t1 set c1=c1+10 where pk=2;
+commit;
+
+connection conn2;
+commit;
+
+let $i=0;
+while($i < 1000)
+{
+    eval select * from t1;
+    inc $i;
+}
+commit;
+

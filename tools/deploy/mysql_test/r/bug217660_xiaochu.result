@@ -1,0 +1,18 @@
+select count(*) from collect_info where user_id = 3472328296227680313 and item_type<= 122 and item_id <= 3472328296328411449;
+count(*)
+6200
+select count(*) from collect_info where user_id = 3472328296227680313 and item_type<= 57 and item_id <= 3472328296328411449;
+count(*)
+1000
+select count(*) from collect_info where user_id = 3472328296227680313 and item_type> 57 and item_id <= 3472328296328411449;
+count(*)
+5200
+select count(*) from collect_info where user_id = 3472328296227680313  and item_id >= 3472328296328411449;
+count(*)
+1
+select count(*) from collect_info where user_id = 3472328296261694521 and item_type <=  122 and item_id <= 3472328296328411449;
+count(*)
+6200
+select count(*) from collect_info where user_id = 3472328296261694521 and item_type <=  122 and item_id <= 3472328296328411449;
+count(*)
+6200

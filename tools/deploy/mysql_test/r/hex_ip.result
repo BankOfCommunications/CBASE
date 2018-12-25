@@ -1,0 +1,168 @@
+drop table if exists table1;
+create table table1(id bigint, name varchar(20), d double, f float,primary key(id));
+insert into table1(id,name,d,f) values(1, '1G', 1.8, 1.8);
+insert into table1(id,name,d,f) values(100, '4D7953514C',2,16);
+insert into table1(id,name,d,f) values(256, '0.0.1.0', 0.5,0.5);
+insert into table1(id,name,d,f) values(9223372036854775807, 'abc',16.1,16.1);
+insert into table1(id,name,d,f) values(255, 'c_d', 255.0, 255.0);
+insert into table1(id,name,d,f) values(2,'256.0.0.0', 0.1, 0.1);
+insert into table1(id,name,d,f) values(3,'1.0.0', 0.1, 0.1 );
+insert into table1(id,name,d,f) values(4294967295,'255.255.255.255', 0.1, 0.1);
+insert into table1(id,name,d,f) values(4294967296,'0.0.0.0',0.1,0.1);
+select hex(id) from table1 where id = 1;
+hex(id)
+1
+select hex(id) from table1 where id = 100;
+hex(id)
+64
+select hex(id) from table1 where id = 256;
+hex(id)
+100
+select hex(id) from table1 where id = 9223372036854775807;
+hex(id)
+7fffffffffffffff
+select hex(id) from table1 where id = 255;
+hex(id)
+ff
+select hex(name) from table1 where id = 1;
+hex(name)
+3147
+select hex(name) from table1 where id = 100;
+hex(name)
+34443739353335313443
+select hex(name) from table1 where id = 256;
+hex(name)
+302e302e312e30
+select hex(name) from table1 where id = 9223372036854775807;
+hex(name)
+616263
+select hex(name) from table1 where id = 255;
+hex(name)
+635f64
+select hex(d) from table1 where id = 1;
+hex(d)
+NULL
+select hex(d) from table1 where id = 100;
+hex(d)
+NULL
+select hex(f) from table1 where id = 1;
+hex(f)
+NULL
+select hex(f) from table1 where id = 100;
+hex(f)
+NULL
+select unhex(id) from table1 where id = 1;
+unhex(id)
+NULL
+select unhex(name) from table1 where id = 1;
+unhex(name)
+NULL
+select unhex(name) from table1 where id = 100;
+unhex(name)
+MySQL
+select unhex(name) from table1 where id = 256;
+unhex(name)
+NULL
+select unhex(name) from table1 where id = 9223372036854775807;
+unhex(name)
+NULL
+select unhex(name) from table1 where id = 255;
+unhex(name)
+NULL
+select unhex(d) from table1 where id = 1;
+unhex(d)
+NULL
+select unhex(f) from table1 where id = 1;
+unhex(f)
+NULL
+select hex(unhex(id)) from table1 where id = 1;
+hex(unhex(id))
+NULL
+select hex(unhex(name)) from table1 where id = 1;
+hex(unhex(name))
+NULL
+select hex(unhex(name)) from table1 where id = 100;
+hex(unhex(name))
+4d7953514c
+select hex(unhex(name)) from table1 where id = 256;
+hex(unhex(name))
+NULL
+select hex(unhex(name)) from table1 where id = 9223372036854775807;
+hex(unhex(name))
+NULL
+select hex(unhex(name)) from table1 where id = 255;
+hex(unhex(name))
+NULL
+select hex(unhex(d)) from table1 where id = 1;
+hex(unhex(d))
+NULL
+select hex(unhex(f)) from table1 where id = 1;
+hex(unhex(f))
+NULL
+select unhex(hex(id)) from table1 where id = 1;
+unhex(hex(id))
+NULL
+select unhex(hex(id)) from table1 where id = 100;
+unhex(hex(id))
+d
+select unhex(hex(id)) from table1 where id = 256;
+unhex(hex(id))
+NULL
+select unhex(hex(name)) from table1 where id = 1;
+unhex(hex(name))
+1G
+select unhex(hex(name)) from table1 where id = 100;
+unhex(hex(name))
+4D7953514C
+select unhex(hex(name)) from table1 where id = 256;
+unhex(hex(name))
+0.0.1.0
+select unhex(hex(name)) from table1 where id = 9223372036854775807;
+unhex(hex(name))
+abc
+select unhex(hex(name)) from table1 where id = 255;
+unhex(hex(name))
+c_d
+select unhex(hex(d)) from table1 where id = 1;
+unhex(hex(d))
+NULL
+select unhex(hex(f)) from table1 where id = 1;
+unhex(hex(f))
+NULL
+select int2ip(id) from table1 where id = 256;
+int2ip(id)
+0.1.0.0
+select int2ip(id) from table1 where id = 4294967295;
+int2ip(id)
+255.255.255.255
+select int2ip(id) from table1 where id = 4294967296;
+int2ip(id)
+0.0.0.0
+select ip2int(name) from table1 where id = 256;
+ip2int(name)
+65536
+select ip2int(name) from table1 where id = 2;
+ip2int(name)
+NULL
+select ip2int(name) from table1 where id = 3;
+ip2int(name)
+NULL
+select ip2int(name) from table1 where id = 4294967295;
+ip2int(name)
+4294967295
+drop table table1;
+drop table if exists t1;
+create table t1 (c1 varchar(20) primary key, c2 int);
+insert into t1 values (0x02, NULL), (x'ab', 18);
+select hex(c1),length(c1),c2 from t1;
+hex(c1)	length(c1)	c2
+02	1	NULL
+ab	1	18
+select hex(c1),length(c1),c2 from t1 where c1 = X'02';
+hex(c1)	length(c1)	c2
+02	1	NULL
+delete from t1 where c1 = 0Xab;
+select hex(c1),length(c1),c2 from t1;
+hex(c1)	length(c1)	c2
+02	1	NULL
+drop table t1;

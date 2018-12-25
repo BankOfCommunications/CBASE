@@ -1,0 +1,319 @@
+drop table if exists test_bound;
+create table test_bound(id int primary key,co1 int);
+insert into test_bound values(1,2147483647);
+insert into test_bound values(2,2147483648);
+ERROR HY000: OB-79: Value out of range
+insert into test_bound values(3,-2147483648);
+insert into test_bound values(4,-2147483649);
+ERROR HY000: OB-79: Value out of range
+drop table if exists test_update;
+create table test_update(co1 bigint primary key,co2 int);
+create or replace sequence seq;
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+insert into test_update values(nextval for seq,nextval for seq);
+update test_update set co2= null where co1 = 1;
+select * from test_update;
+co1	co2
+1	NULL
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 12345 where co1 = 1;
+select * from test_update;
+co1	co2
+1	12345
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 12345678910 where co1 = 1;
+ERROR HY000: OB-79: Value out of range
+select * from test_update;
+co1	co2
+1	12345
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 123.0 where co1 = 1;
+select * from test_update;
+co1	co2
+1	123
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 123.0 where co1 = 1;
+select * from test_update;
+co1	co2
+1	123
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 123.0000000000000001 where co1 = 1;
+select * from test_update;
+co1	co2
+1	123
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 12345678919.0000000000001 where co1 = 1;
+ERROR HY000: OB-79: Value out of range
+select * from test_update;
+co1	co2
+1	123
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= '1345.' where co1 = 1;
+select * from test_update;
+co1	co2
+1	1345
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= '1345.' where co1 = 1;
+select * from test_update;
+co1	co2
+1	1345
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= '321' where co1 = 1;
+select * from test_update;
+co1	co2
+1	321
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= '98765432112345' where co1 = 1;
+ERROR HY000: OB-19: Size overflow
+select * from test_update;
+co1	co2
+1	321
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2= 'abc' where co1 = 1;
+ERROR 0A000: OB-7: Not supported feature or function
+select * from test_update;
+co1	co2
+1	321
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2=true where co1 = 2;
+select * from test_update;
+co1	co2
+1	321
+2	1
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2=false where co1 = 2;
+select * from test_update;
+co1	co2
+1	321
+2	0
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2='2015-12-12 12:21:16.1234' where co1 = 2;
+select * from test_update;
+co1	co2
+1	321
+2	2015
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2='2015-12-12' where co1 = 2;
+select * from test_update;
+co1	co2
+1	321
+2	2015
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+update test_update set co2='12:21:32' where co1 = 2;
+select * from test_update;
+co1	co2
+1	321
+2	12
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+drop table if exists test_delete;
+create table test_delete(co1 bigint primary key,co2 int);
+create or replace sequence seq;
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+insert into test_delete values(nextval for seq,nextval for seq);
+delete from test_delete where co1 =1;
+select * from test_delete;
+co1	co2
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+10	10
+delete from test_delete where co1 >9;
+select * from test_delete;
+co1	co2
+2	2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+delete from test_delete where co1 <3;
+select * from test_delete;
+co1	co2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+9	9
+delete from test_delete where co1 >=9;
+select * from test_delete;
+co1	co2
+3	3
+4	4
+5	5
+6	6
+7	7
+8	8
+delete from test_delete where co1 <=3;
+select * from test_delete;
+co1	co2
+4	4
+5	5
+6	6
+7	7
+8	8
+delete from test_delete where co1 between 4 and 5;
+select * from test_delete;
+co1	co2
+6	6
+7	7
+8	8
+delete from test_delete where co1 in(7,8);
+select * from test_delete;
+co1	co2
+6	6

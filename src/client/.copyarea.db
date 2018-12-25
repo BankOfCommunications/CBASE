@@ -1,0 +1,10 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\client
+2
+6
+b:Makefile.am|1|166f774951a|e|21710485|e08a8c8e68aa11e8a8030002c8c1274c|0
+4:java|2|0|0|0|68ca936a68ab11e8a8030002c8c1274c|0
+5:obsql|2|0|0|0|e3ba8cb668aa11e8a8030002c8c1274c|0
+10:libmysql_example|2|0|0|0|532aac7668ad11e8a8030002c8c1274c|0
+c:jdbc_example|2|0|0|0|5aaaacda68ad11e8a8030002c8c1274c|0
+3:cpp|2|0|0|0|a4bab0ba68ad11e8a8030002c8c1274c|0

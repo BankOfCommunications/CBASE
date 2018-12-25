@@ -1,0 +1,11 @@
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+--replace_column 1 ob_version_info
+select @@version_comment limit 1;
+SELECT @@session.auto_increment_increment;
+SHOW COLLATION;
+SHOW CHARACTER SET;
+SET NAMES latin1;
+SELECT @@session.tx_isolation;
+disconnect conn1;

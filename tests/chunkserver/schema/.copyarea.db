@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tests\chunkserver\schema
+2
+4
+19:schema_without_expire.ini|1|166f775b13f|1e0|78c3ac82|d1bb0daa68b411e8a8030002c8c1274c|0
+16:schema_with_expire.ini|1|166f775b116|b05|595d0275|cfbb0d8e68b411e8a8030002c8c1274c|0
+1c:schema_with_valid_expire.ini|1|166f775b0f3|29c|591deb4a|cd7b0d7268b411e8a8030002c8c1274c|0
+1e:schema_with_invalid_expire.ini|1|166f775b160|29e|fdc1eb76|d3eb0dc668b411e8a8030002c8c1274c|0

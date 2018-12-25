@@ -1,0 +1,31 @@
+deploy ob1=OBI(cluster=1244, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable);
+
+deploy ob1.reboot;
+sleep 10;
+
+deploy ob1.source include/merge.inc;
+
+#sleep for update config
+sleep 10;
+
+deploy ob1.prepare;
+deploy ob1.start_check;
+
+#stop two cs
+deploy ob1.cs0.stop;
+
+#merge
+deploy ob1.major_freeze;
+
+#wait for merge begin
+sleep 10;
+
+#start two cs
+deploy ob1.cs0.nstart;
+
+#wait for merge done
+sleep 150;
+deploy ob1.check_cs_version 2;
+
+deploy ob1.stop_check;
+

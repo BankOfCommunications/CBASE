@@ -1,0 +1,92 @@
+--disable_warnings
+drop table if exists table1;
+--enable_warnings
+#
+# Test of hex unhex ip2int int2ip
+#
+create table table1(id bigint, name varchar(20), d double, f float,primary key(id));
+insert into table1(id,name,d,f) values(1, '1G', 1.8, 1.8);
+insert into table1(id,name,d,f) values(100, '4D7953514C',2,16);
+insert into table1(id,name,d,f) values(256, '0.0.1.0', 0.5,0.5);
+insert into table1(id,name,d,f) values(9223372036854775807, 'abc',16.1,16.1);
+insert into table1(id,name,d,f) values(255, 'c_d', 255.0, 255.0);
+insert into table1(id,name,d,f) values(2,'256.0.0.0', 0.1, 0.1);
+insert into table1(id,name,d,f) values(3,'1.0.0', 0.1, 0.1 );
+insert into table1(id,name,d,f) values(4294967295,'255.255.255.255', 0.1, 0.1);
+insert into table1(id,name,d,f) values(4294967296,'0.0.0.0',0.1,0.1);
+
+select hex(id) from table1 where id = 1;
+select hex(id) from table1 where id = 100;
+select hex(id) from table1 where id = 256;
+select hex(id) from table1 where id = 9223372036854775807;
+select hex(id) from table1 where id = 255;
+
+select hex(name) from table1 where id = 1;
+select hex(name) from table1 where id = 100;
+select hex(name) from table1 where id = 256;
+select hex(name) from table1 where id = 9223372036854775807;
+select hex(name) from table1 where id = 255;
+
+select hex(d) from table1 where id = 1;
+select hex(d) from table1 where id = 100;
+select hex(f) from table1 where id = 1;
+select hex(f) from table1 where id = 100;
+
+select unhex(id) from table1 where id = 1;
+
+select unhex(name) from table1 where id = 1;
+select unhex(name) from table1 where id = 100;
+select unhex(name) from table1 where id = 256;
+select unhex(name) from table1 where id = 9223372036854775807;
+select unhex(name) from table1 where id = 255;
+
+select unhex(d) from table1 where id = 1;
+select unhex(f) from table1 where id = 1;
+
+select hex(unhex(id)) from table1 where id = 1;
+
+select hex(unhex(name)) from table1 where id = 1;
+select hex(unhex(name)) from table1 where id = 100;
+select hex(unhex(name)) from table1 where id = 256;
+select hex(unhex(name)) from table1 where id = 9223372036854775807;
+select hex(unhex(name)) from table1 where id = 255;
+
+select hex(unhex(d)) from table1 where id = 1;
+
+select hex(unhex(f)) from table1 where id = 1;
+
+select unhex(hex(id)) from table1 where id = 1;
+select unhex(hex(id)) from table1 where id = 100;
+select unhex(hex(id)) from table1 where id = 256;
+
+select unhex(hex(name)) from table1 where id = 1;
+select unhex(hex(name)) from table1 where id = 100;
+select unhex(hex(name)) from table1 where id = 256;
+select unhex(hex(name)) from table1 where id = 9223372036854775807;
+select unhex(hex(name)) from table1 where id = 255;
+
+select unhex(hex(d)) from table1 where id = 1;
+
+select unhex(hex(f)) from table1 where id = 1;
+
+select int2ip(id) from table1 where id = 256;
+select int2ip(id) from table1 where id = 4294967295;
+select int2ip(id) from table1 where id = 4294967296;
+select ip2int(name) from table1 where id = 256;
+select ip2int(name) from table1 where id = 2;
+select ip2int(name) from table1 where id = 3;
+select ip2int(name) from table1 where id = 4294967295;
+
+drop table table1;
+
+# test literal hex string
+drop table if exists t1;
+create table t1 (c1 varchar(20) primary key, c2 int);
+
+insert into t1 values (0x02, NULL), (x'ab', 18);
+select hex(c1),length(c1),c2 from t1;
+select hex(c1),length(c1),c2 from t1 where c1 = X'02';
+delete from t1 where c1 = 0Xab;
+select hex(c1),length(c1),c2 from t1;
+
+drop table t1;

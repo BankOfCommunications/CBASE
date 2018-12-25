@@ -1,0 +1,137 @@
+
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+
+
+
+#----------------------nomal transaction-----------
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+
+prepare stmt1 from select a,b from t1;
+execute stmt1;
+alter table t1 add d varchar(255);
+set autocommit=0;
+execute stmt1;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt1;
+
+
+prepare stmt2 from select a,b from t1;
+execute stmt2;
+alter table t1 drop d;
+set autocommit=0;
+execute stmt2;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt2;
+
+
+
+prepare stmt3 from select a,b from t1;
+execute stmt3;
+alter table t1 drop b;
+set autocommit=0;
+--error 5009
+execute stmt3;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt3;
+
+
+alter table t1 add b varchar(255);
+
+
+prepare stmt4 from select a,b from t1;
+execute stmt4;
+alter table t1 drop b;
+alter table t1 add b varchar(255);
+set autocommit=0;
+execute stmt4;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt4;
+
+
+
+
+prepare stmt5 from select a,b from t1;
+execute stmt5;
+alter table t1 drop b;
+alter table t1 add b int;
+set autocommit=0;
+execute stmt5;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt5;
+
+
+
+
+prepare stmt6 from select a,b from t1;
+execute stmt6;
+drop table t1;
+set autocommit=0;
+--error 5019
+execute stmt6;
+commit;
+set autocommit=1;
+deallocate prepare stmt6;
+
+
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt7 from select a,b from t1 where a=?;
+set @a=1;
+execute stmt7 using @a;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+set autocommit=0;
+execute stmt7 using @a;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt7;
+
+
+
+prepare stmt8 from select a,b from t1 where a=?;
+set @a=2;
+execute stmt8 using @a;
+drop table t1;
+create table t1( a int primary key,b varchar(255));
+insert into t1 values(1,'a'),(2,'b'),(3,'c');
+set autocommit=0;
+execute stmt8 using @a;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt8;
+
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt9 from select a,b from t1 where a=?;
+set @a=1;
+execute stmt9 using @a;
+drop table t1;
+create table t1( a int primary key,c int);
+insert into t1 values(1,2),(2,3),(3,4);
+set autocommit=0;
+--error 5009
+execute stmt9 using @a;
+commit;
+set autocommit=1;
+select * from t1;
+deallocate prepare stmt9;
+

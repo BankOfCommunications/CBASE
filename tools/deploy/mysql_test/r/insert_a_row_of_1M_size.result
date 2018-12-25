@@ -1,0 +1,4 @@
+drop table if exists t1;
+create table t1(pk int primary key , f12 varchar(65535) , f11 varchar(65535) , f10 varchar(65535) , f9 varchar(65535) , f8 varchar(65535) , f7 varchar(65535) , f6 varchar(65535) , f5 varchar(65535) , f4 varchar(65535) , f3 varchar(65535) , f2 varchar(65535) , f1 varchar(65535) );
+pk	substr(f12,0,5)	substr(f11,0,5)	substr(f10,0,5)	substr(f9,0,5)	substr(f8,0,5)	substr(f7,0,5)	substr(f6,0,5)	substr(f5,0,5)	substr(f4,0,5)	substr(f3,0,5)	substr(f2,0,5)	substr(f1,0,5)
+1	12211	12211	12211	12211	12211	12211	12211	12211	12211	12211	12211	12211

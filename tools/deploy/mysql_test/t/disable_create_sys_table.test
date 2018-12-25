@@ -1,0 +1,9 @@
+show variables like '%disable_create_sys_table%';
+--error 5036
+create table __x (c1 int primary key, c2 int);
+--error 5019
+drop table __all_client;
+set ob_disable_create_sys_table=false;
+show variables like '%disable_create_sys_table%';
+create table __x (c1 int primary key, c2 int);
+drop table __x;

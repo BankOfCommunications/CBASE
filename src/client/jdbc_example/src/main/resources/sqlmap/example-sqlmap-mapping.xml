@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="GB2312" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="obexample">
+
+    <resultMap id="OBEXAMPLE-EXAMPLE" class="com.alipay.oceanbase.ibatis.entity.Example">
+    	<result property="c1" column="c1" javaType="int" jdbcType="int"  />
+		<result property="c2" column="c2" javaType="int" jdbcType="int"  />
+		<result property="c3" column="c3" javaType="java.lang.String" jdbcType="varchar"  />
+		<result property="c4" column="c4" javaType="java.util.Date" jdbcType="datetime"  />
+		<result property="c5" column="c5" javaType="float" jdbcType="float"  />
+    </resultMap>
+    
+    <sql id="Texample.columns">
+    	c1, c2, c3, c4, c5
+	</sql>
+	
+	<insert id="example_insert">
+		INSERT INTO example (c1, c2, c3, c4, c5) VALUES (#c1# ,#c2# ,#c3# ,#c4# ,#c5#) 
+	</insert>
+
+	<delete id="example_delete">
+	    DELETE FROM example WHERE c1 = #c1#
+	</delete>
+	
+	<update id="example_update">
+		UPDATE example SET c2 = #c2#, c3 = #c3#, c4 = #c4#, c5 = #c5# WHERE c1 = #c1#
+	</update>
+
+	<select id="example_select_byid" resultMap="OBEXAMPLE-EXAMPLE">  
+	    SELECT <include refid="Texample.columns"/> FROM example  WHERE c1 = #c1#
+	</select>
+
+	<select id="example_select_bycondition" resultMap="OBEXAMPLE-EXAMPLE">
+		SELECT  <include refid="Texample.columns"/> FROM example order by c4 desc
+	</select>
+</sqlMap>

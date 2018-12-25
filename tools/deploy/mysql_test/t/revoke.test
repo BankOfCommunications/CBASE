@@ -1,0 +1,115 @@
+--disable_warnings
+drop table if exists t1,t2,t3,t4;
+--enable_warnings
+
+# admin user has all rights
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+create table t1(a int primary key, b int);
+create table t2(a int primary key, b int);
+
+create user 'u1' identified by 'pass1';
+create user 'u2' identified by 'pass1';
+GRANT SELECT ON test.t1 TO 'u1';
+--real_sleep 15
+connect (conn2,$OBMYSQL_MS0,u1,pass1,test,$OBMYSQL_PORT);
+
+connection conn2;
+# user u1 don't have grant privilege
+--error 5036
+grant SELECT, CREATE USER on * to 'nexist_user';
+
+
+# user u1 don't have grant privilege
+--error 5036
+grant SELECT, CREATE USER on * to 'nexist_user', 'u1';
+
+
+# normal grant
+connection conn1;
+
+# table not exist
+--error 5019
+grant ALL PRIVILEGES on t_nexist to 'u1';
+grant ALL PRIVILEGES on t1 to 'u1';
+show grants for 'u1';
+connection conn2;
+
+--real_sleep 15
+# no privilege
+--error 5036
+create table t3(a int primary key);
+--error 5036
+drop table t2;
+--error 5036
+select * from t2;
+--error 5036
+insert into t2 values(1,1);
+--error 5036
+update t2 set b=2 where a=1;
+--error 5036
+delete from t2 where a=1;
+--error 5036
+grant SELECT, CREATE USER on * to 'u2';
+--error 5036
+revoke ALL PRIVILEGES, GRANT OPTION from 'u2';
+--error 5036
+create user 'u1_cant' identified by 'pass1';
+--error 5036
+drop user 'u2';
+
+
+#have privilege
+select * from t1;
+insert into t1 values(1,1),(2,2);
+delete from t1 where a=1;
+update t1 set b=2 where a=1;
+
+# revoke all rights from u1
+connection conn1;
+revoke ALL PRIVILEGES, GRANT OPTION from 'u1';
+--real_sleep 15
+show grants for 'u1';
+--real_sleep 15
+connection conn2;
+--error 5036
+create user 'u1_cant' identified by 'pass1';
+--error 5036
+drop user 'u2';
+--error 5036
+select * from t1;
+--error 5036
+insert into t1 values(1,1),(2,2);
+--error 5036
+delete from t1 where a=1;
+--error 5036
+update t2 set b=2 where a=1;
+
+
+
+connection conn1;
+grant CREATE on t1 to 'u1';
+--real_sleep 15
+show grants for 'u1';
+grant DROP on t1 to 'u1';
+--real_sleep 15
+show grants for 'u1';
+grant CREATE USER on t1 to 'u1';
+--real_sleep 15
+show grants for 'u1';
+grant DELETE on t1 to 'u1';
+--real_sleep 15
+show grants for 'u1';
+grant INSERT on t1 to 'u1';
+--real_sleep 15
+show grants for 'u1';
+grant SELECT on t1 to 'u1';
+--real_sleep 15
+show grants for 'u1';
+grant UPDATE on t1 to 'u1';
+--real_sleep 15
+show grants for 'u1';
+grant GRANT OPTION on t1 to 'u1';
+--real_sleep 15
+show grants for 'u1';
+
+drop table t1,t2;

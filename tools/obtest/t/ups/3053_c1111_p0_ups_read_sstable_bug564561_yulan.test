@@ -1,0 +1,33 @@
+deploy ob1=OBI(cluster=1111);
+deploy ob1.reboot;
+
+deploy ob1.create_client;
+
+deploy ob1.source include/merge.inc;
+alter system set minor_num_limit=3 server_type=updateserver;
+alter system set sstable_block_size='1k' server_type=updateserver;
+sleep 10;
+
+create table t1(pk int primary key, c1 int);
+
+insert into t1 values(1,1),(2,2),(3,3),(4,4);
+
+deploy ob1.prepare s;
+
+deploy ob1.minor_freeze;
+
+replace into test(id,name,addr,birthday,money,score) values (11, '0_yulan', '0_bj', 0, 0, 0.5),(10, '0_yulan', '0_bj', 0, 0, 0.5),(9, '0_yulan', '0_bj', 0, 0, 0.5),(8, '0_yulan', '0_bj', 0, 0, 0.5),(7, '0_yulan', '0_bj', 0, 0, 0.5),(6, '0_yulan', '0_bj', 0, 0, 0.5),(5, '0_yulan', '0_bj', 0, 0, 0.5),(4, '0_yulan', '0_bj', 0, 0, 0.5),(3, '0_yulan', '0_bj', 0, 0, 0.5);
+
+deploy ob1.minor_freeze;
+
+sleep 20;
+
+deploy ob1.ups_admin -t drop;
+deploy ob1.ups_admin -t drop;
+
+sleep 5;
+#deploy ob1.cs0.nstart;
+
+deploy ob1.major_freeze;
+
+deploy ob1.check_cs_version 2;

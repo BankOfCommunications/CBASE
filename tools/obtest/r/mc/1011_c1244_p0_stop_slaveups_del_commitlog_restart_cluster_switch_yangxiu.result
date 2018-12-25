@@ -1,0 +1,51 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.prepare s
+ob1.create_client
+create table t1(c1 int primary key,c2 int);
+insert into t1 values(1,1),(2,2),(3,3),(4,4);
+select * from t1;
+c1	c2
+1	1
+2	2
+3	3
+4	4
+ob2.$master_ups.force_stop
+ob2.$master_ups.clean_commit_log
+insert into t1 values(5,1),(6,2),(7,3),(8,4);
+select * from t1;
+c1	c2
+1	1
+2	2
+3	3
+4	4
+5	1
+6	2
+7	3
+8	4
+create table t2(a int primary key,b varchar(10));
+insert into t2 values(1,'test1'),(2,'test2');
+select * from t2;
+a	b
+1	test1
+2	test2
+ob2.$master_ups.start
+ob1.switch_cluster ob2
+update t1 set c2=10 where c1=8;
+select * from t1;
+c1	c2
+1	1
+2	2
+3	3
+4	4
+5	1
+6	2
+7	3
+8	10
+select * from t2;
+a	b
+1	test1
+2	test2

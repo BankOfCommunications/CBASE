@@ -1,0 +1,23 @@
+ob1=OBI(cluster=1244)
+ob1.reboot
+ob1.start_diamond localhost
+ob1.create_client
+ob1.prepare
+ob1.start_check
+create table t1(a int primary key,b int);
+insert into t1 values(-1,-1),(-2,-2),(0,0),(1,1);
+select * from t1;
+a	b
+-2	-2
+-1	-1
+0	0
+1	1
+ob1.set_diamond coreJarPath=http://obconsole.test.alibaba-inc.com/yangxiu/get?version=
+update t1 set b=-10 where a=-2;
+select * from t1;
+a	b
+-2	-10
+-1	-1
+0	0
+1	1
+ob1.stop_check

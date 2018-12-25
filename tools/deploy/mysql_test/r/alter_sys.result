@@ -1,0 +1,18 @@
+SHOW PARAMETERS;
+show parameters like '%merge_timeout%';
+show parameters where server_type='chunkserver';
+show parameters where cluster_id=0 and server_type='rootserver';
+select distinct value from __all_sys_config_stat where name like '%merge_timeout%';
+value
+10s
+alter system set merge_timeout='1s'  comment 'junyue' server_type=chunkserver;
+select distinct value from __all_sys_config_stat where name like '%merge_timeout%';
+value
+1s
+select distinct value from __all_sys_config_stat where name like '%merge_delay_for_lsync%';
+value
+5s
+alter system set merge_delay_for_lsync='1s' server_type=chunkserver cluster=0;
+select distinct value from __all_sys_config_stat where name like '%merge_delay_for_lsync%';
+value
+1s

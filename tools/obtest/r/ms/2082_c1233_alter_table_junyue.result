@@ -1,0 +1,80 @@
+ob1=OBI(cluster=1222,use_fms=0)
+ob1.reboot
+ob1.update_cluster
+ob1.source include/merge.inc
+ob1.create_client
+create table t1(c1 int primary key, c2 int,c3 varchar(10));
+insert into t1 values(1,1,1);
+insert into t1 values(2,2,2);
+select * from t1;
+c1	c2	c3
+1	1	1
+2	2	2
+desc t1;
+field	type	nullable	key	default	extra
+c1	int	0	1	NULL	
+c2	int	0	0	NULL	
+c3	varchar(10)	0	0	NULL	
+alter table t1 drop c3;
+desc t1;
+field	type	nullable	key	default	extra
+c1	int	0	1	NULL	
+c2	int	0	0	NULL	
+select * from t1;
+c1	c2
+1	1
+2	2
+alter table t1 add c3 varchar(20);
+insert into t1 values(3,3,3);
+desc t1;
+field	type	nullable	key	default	extra
+c1	int	0	1	NULL	
+c2	int	0	0	NULL	
+c3	varchar(20)	0	0	NULL	
+select * from t1;
+c1	c2	c3
+1	1	NULL
+2	2	NULL
+3	3	3
+ob1.major_freeze
+ob1.check_cs_version 2
+desc t1;
+field	type	nullable	key	default	extra
+c1	int	0	1	NULL	
+c2	int	0	0	NULL	
+c3	varchar(20)	0	0	NULL	
+select * from t1;
+c1	c2	c3
+1	1	NULL
+2	2	NULL
+3	3	3
+alter table t1 drop c3;
+desc t1;
+field	type	nullable	key	default	extra
+c1	int	0	1	NULL	
+c2	int	0	0	NULL	
+select * from t1;
+c1	c2
+1	1
+2	2
+3	3
+alter table t1 add c3 varchar(30);
+insert into t1 values(4,4,4);
+desc t1;
+field	type	nullable	key	default	extra
+c1	int	0	1	NULL	
+c2	int	0	0	NULL	
+c3	varchar(30)	0	0	NULL	
+ob1.major_freeze
+ob1.check_cs_version 3
+desc t1;
+field	type	nullable	key	default	extra
+c1	int	0	1	NULL	
+c2	int	0	0	NULL	
+c3	varchar(30)	0	0	NULL	
+select * from t1;
+c1	c2	c3
+1	1	NULL
+2	2	NULL
+3	3	NULL
+4	4	4

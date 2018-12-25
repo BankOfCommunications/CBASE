@@ -1,0 +1,4 @@
+-- fail, just the column name no table name in the set query result
+select user_id, user_name from user union select item_id, item_name from item union  select item_id, item_name from item order by user.user_id;
+Unkown table name user
+Resolve error!

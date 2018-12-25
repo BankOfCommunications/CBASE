@@ -1,0 +1,44 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.mysql alter system set merge_delay_interval='1s' server_type=chunkserver
+ob1.mysql alter system set merge_delay_for_lsync='1s' server_type=chunkserver
+ob1.mysql alter system set min_drop_cache_wait_time='1s' server_type=chunkserver
+ob1.prepare s
+ob1.create_client
+create table t1(c1 int primary key,c2 int);
+insert into t1 values(1,1),(2,2),(3,3),(4,4);
+select * from t1;
+c1	c2
+1	1
+2	2
+3	3
+4	4
+ob1.major_freeze
+ob1.change_ups_master $master_slave_ups
+replace into t1 values(1,1),(2,2),(3,3),(4,4);
+insert into t1 values(5,1),(6,2),(7,3),(8,4);
+select * from t1;
+c1	c2
+1	1
+2	2
+3	3
+4	4
+5	1
+6	2
+7	3
+8	4
+ob1.check_cs_version 2
+ob2.check_cs_version 2
+select * from t1;
+c1	c2
+1	1
+2	2
+3	3
+4	4
+5	1
+6	2
+7	3
+8	4

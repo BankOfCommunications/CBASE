@@ -1,0 +1,20 @@
+ob1=OBI(cluster=1244)
+ob2=OBI(cluster=1244)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.source include/merge.inc
+ob1.prepare m
+ob1.start_check 1 1000000
+ob1.major_freeze
+ob1.check_cs_version 2
+ob2.check_cs_version 2
+ob1.prepare
+ob1.major_freeze
+ob1.check_cs_version 3
+ob2.check_cs_version 3
+ob1.prepare
+ob1.major_freeze
+ob1.check_cs_version 4
+ob2.check_cs_version 4
+ob1.stop_check

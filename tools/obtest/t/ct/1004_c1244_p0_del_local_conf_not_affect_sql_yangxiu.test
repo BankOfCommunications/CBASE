@@ -1,0 +1,34 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob1.reboot;
+
+deploy ob1.start_diamond localhost;
+sleep 5;
+deploy ob1.create_client;
+deploy ob1.prepare;
+deploy ob1.start_check;
+
+#sql
+create table t1(a int primary key,b int);
+insert into t1 values(-1,-1),(-2,-2),(0,0),(1,1);
+select * from t1;
+
+#delete local conf
+deploy ob1.sh rm -rf `grep -i "dataid" -rl ~/.obdatasource/*`;
+
+sleep 60;
+
+#check download success
+let $a =deploy_get_value(ob1.sh_p grep -i "dataid" -rl  ~/.obdatasource/* | wc -l );
+if($a != 1)
+{
+	--echo download conf fail
+}
+
+#sql
+update t1 set b=2 where a=1;
+delete from t1 where a=0;
+select * from t1;
+drop table t1;
+
+deploy ob1.stop_check;
+deploy ob1.stop_diamond;

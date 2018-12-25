@@ -1,0 +1,102 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=50 where cluster_id=1;
+deploy ob1.mysql update __all_cluster set cluster_flow_percent=50 where cluster_id=2;
+deploy ob1.mysql set global ob_read_consistency=3;
+sleep 10;
+
+deploy ob1.create_client;
+
+--disable_query_log
+--disable_result_log
+let $cnt=10;
+while($cnt>0)
+{
+    eval create table t$cnt(a int primary key, b int);
+    dec $cnt;
+}
+
+let $cnt=10;
+while($cnt>0)
+{
+    eval alter table t$cnt add c int;
+    dec $cnt;
+}
+
+let $cnt=10;
+while($cnt>0)
+{
+    eval insert into t$cnt values(1,1,1),(-1,-1,-1),(0,0,0) ;
+    dec $cnt;
+}
+
+let $cnt=10;
+while($cnt>0)
+{
+    eval update t$cnt set b=10 where a=0;
+    dec $cnt;
+}
+
+let $cnt=10;
+while($cnt>0)
+{
+    eval delete from  t$cnt where a=-1;
+    dec $cnt;
+}
+
+let $cnt=10;
+while($cnt>0)
+{
+    eval drop table  t$cnt;
+    dec $cnt;
+}
+
+--enable_query_log
+--enable_result_log
+
+#wait for slave cluster create tablet
+sleep 60;
+
+#check
+let $a=deploy_get_value(ob1.mysql_p select sum(value)=10 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name='sql_create_table_count');
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select sum(value)=10 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name='sql_drop_table_count');
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select sum(value)=10 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name='sql_insert_count');
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select sum(value)>=10 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name='sql_update_count');
+--echo $a
+
+let $a=deploy_get_value(ob1.mysql_p select sum(value)=10 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name='sql_delete_count');
+--echo $a
+
+#check select
+create table t1(a int primary key,b int);
+sleep 60;
+
+--disable_query_log
+--disable_result_log
+let $cnt=60;
+while($cnt >0)
+{
+	select * from t1;
+	dec $cnt;
+}
+--enable_query_log
+--enable_result_log
+
+let $lmsip=deploy_get_value(ob2.fs0.ip);
+let $lmsport=deploy_get_value(ob2.fs0.port);
+#check
+let $a=deploy_get_value(ob2.mysql_p select sum(value)>=60 from (select * from __all_server_stat) tt where svr_type='mergeserver' and name='sql_select_count' and svr_ip !='$lmsip' and svr_port != '$lmsport');
+--echo $a
+

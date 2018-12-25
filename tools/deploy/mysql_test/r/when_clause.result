@@ -1,0 +1,285 @@
+create table t_outer(c1 int primary key, c2 int);
+insert into t_outer values(1,2), (3,4);
+create table t_inner(c1 int primary key, c2 int);
+insert into t_inner values(1001,1002), (1003,1004);
+insert into t_outer values(4,5), (7,8) when row_count(update t_inner set c2=1005 where c1=1001)=1;
+select * from t_outer;
+c1	c2
+1	2
+3	4
+4	5
+7	8
+select * from t_inner;
+c1	c2
+1001	1005
+1003	1004
+insert into t_outer values(9,10) when row_count(insert into t_inner values(1002,1003), (1005,1006))=2;
+select * from t_outer;
+c1	c2
+1	2
+3	4
+4	5
+7	8
+9	10
+select * from t_inner;
+c1	c2
+1001	1005
+1002	1003
+1003	1004
+1005	1006
+insert into t_outer values(11,12) when row_count(delete from t_inner where c1=1)<=length('haha');
+select * from t_outer;
+c1	c2
+1	2
+3	4
+4	5
+7	8
+9	10
+11	12
+select * from t_inner;
+c1	c2
+1001	1005
+1002	1003
+1003	1004
+1005	1006
+update t_outer set c2=11 where c1=1 when row_count(insert into t_inner values(1007,1008))*100>0 and true;
+select * from t_outer;
+c1	c2
+1	11
+3	4
+4	5
+7	8
+9	10
+11	12
+select * from t_inner;
+c1	c2
+1001	1005
+1002	1003
+1003	1004
+1005	1006
+1007	1008
+update t_outer set c2=12 where c1=2 when row_count(update t_inner set c2=1001 where c1=1001) and 56*length('haha')>0;
+select * from t_outer;
+c1	c2
+1	11
+3	4
+4	5
+7	8
+9	10
+11	12
+select * from t_inner;
+c1	c2
+1001	1001
+1002	1003
+1003	1004
+1005	1006
+1007	1008
+update t_outer set c2=13 where c1=3 when row_count(delete from t_inner where c1=1005) and 56*length('haha') and true;
+select * from t_outer;
+c1	c2
+1	11
+3	13
+4	5
+7	8
+9	10
+11	12
+select * from t_inner;
+c1	c2
+1001	1001
+1002	1003
+1003	1004
+1007	1008
+delete from t_outer where c1=4 when row_count(insert into t_inner values(1009,1010))*100>0 and true;
+select * from t_outer;
+c1	c2
+1	11
+3	13
+7	8
+9	10
+11	12
+select * from t_inner;
+c1	c2
+1001	1001
+1002	1003
+1003	1004
+1007	1008
+1009	1010
+delete from t_outer where c1=11 when row_count(update t_inner set c2=1009 where c1=1009) and 56*length('haha')>0;
+select * from t_outer;
+c1	c2
+1	11
+3	13
+7	8
+9	10
+select * from t_inner;
+c1	c2
+1001	1001
+1002	1003
+1003	1004
+1007	1008
+1009	1009
+delete from t_outer where c1=100 when row_count(delete from t_inner where c1=1009)=1;
+select * from t_outer;
+c1	c2
+1	11
+3	13
+7	8
+9	10
+select * from t_inner;
+c1	c2
+1001	1001
+1002	1003
+1003	1004
+1007	1008
+insert into t_outer values(10,10) when row_count(update t_outer set c2=111 where c1=1 when row_count(delete from t_inner where c1=100)=0)>0;
+select * from t_outer;
+c1	c2
+1	111
+3	13
+7	8
+9	10
+10	10
+select * from t_inner;
+c1	c2
+1001	1001
+1002	1003
+1003	1004
+1007	1008
+update t_outer set c2=222 where c1=2 when row_count(update t_outer set c2=111 where c1=1 when row_count(delete from t_inner where c1=1001)=1)=1;
+select * from t_outer;
+c1	c2
+1	111
+3	13
+7	8
+9	10
+10	10
+select * from t_inner;
+c1	c2
+1002	1003
+1003	1004
+1007	1008
+insert into t_outer values(11,11) when row_count(delete from t_inner where c1=1011)=1;
+ERROR HY000: Number 1 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+select * from t_outer;
+c1	c2
+1	111
+3	13
+7	8
+9	10
+10	10
+select * from t_inner;
+c1	c2
+1002	1003
+1003	1004
+1007	1008
+insert into t_outer values(12,12) when row_count(delete from t_inner where c1=1013)=1 or row_count(insert into t_inner values(1012, 1012))=1;
+select * from t_outer;
+c1	c2
+1	111
+3	13
+7	8
+9	10
+10	10
+12	12
+select * from t_inner;
+c1	c2
+1002	1003
+1003	1004
+1007	1008
+1012	1012
+delete from t_outer where c1=12 when row_count(insert into t_inner values(1013, 1013)) + row_count(insert into t_inner values(1014, 1014)) > 1;
+select * from t_outer;
+c1	c2
+1	111
+3	13
+7	8
+9	10
+10	10
+select * from t_inner;
+c1	c2
+1002	1003
+1003	1004
+1007	1008
+1012	1012
+1013	1013
+1014	1014
+insert into t_outer values(1,2) when row_count(delete from t_inner where c1=1)>0;
+ERROR HY000: Number 1 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+insert into t_outer values(1,2) when row_count(delete from t_inner where c1=1)>=0;
+ERROR 23000: Duplicate entry ' <3001.16>=int32:1' for key 'PRIMARY'
+insert into t_outer values(1,2) when row_count(delete from t_outer where c1=1)>=0;
+select * from t_outer;
+c1	c2
+1	2
+3	13
+7	8
+9	10
+10	10
+select * from t_inner;
+c1	c2
+1002	1003
+1003	1004
+1007	1008
+1012	1012
+1013	1013
+1014	1014
+insert into t_outer values(55555,55555) when true;
+select * from t_outer;
+c1	c2
+1	2
+3	13
+7	8
+9	10
+10	10
+55555	55555
+select * from t_inner;
+c1	c2
+1002	1003
+1003	1004
+1007	1008
+1012	1012
+1013	1013
+1014	1014
+prepare stmt1 from insert into t_outer values(?, ?) when row_count(insert into t_inner values(?, ?))>0;
+set @a=234;
+set @b=456;
+execute stmt1 using @a,@b,@a,@b;
+select * from t_outer;
+c1	c2
+1	2
+3	13
+7	8
+9	10
+10	10
+234	456
+55555	55555
+select * from t_inner;
+c1	c2
+234	456
+1002	1003
+1003	1004
+1007	1008
+1012	1012
+1013	1013
+1014	1014
+drop table t_outer;
+drop table t_inner;
+create table t(c1 int, c2 int, c3 int, primary key(c1,c2));
+insert into t values(1,2,3),(2, NULL, 4),(3, 4, 5);
+select * from t where c1=1 and c2=2 
+when (
+row_count(update t set c3=33 where c1=1 and c2=2)>0 
+and row_count(update t set c3=44 where c1=2 and c2=3 
+when (row_count(update t set c3=55 where c1=3 and c2=4)>0)
+)=1
+);
+ERROR HY000: Number 2 When filter failed, ret=-5064, func 1: ROW_COUNT()=1, func 2: ROW_COUNT()=0
+select * from t where c1=1 and c2=2
+when (
+row_count(update t set c3=33 where c1=1 and c2=2)>0
+and row_count(update t set c3=44 where c1=2 and c2=3
+when (row_count(update t set c3=55 where c1=3 and c2=4)=0)
+)=1
+);
+ERROR HY000: Number 1 When filter failed, ret=-5064, func 1: ROW_COUNT()=1
+drop table t;

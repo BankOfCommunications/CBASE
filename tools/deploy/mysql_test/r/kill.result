@@ -1,0 +1,59 @@
+drop table if exists t1,t2;
+use default connection
+show processlist;
+Id	User	Host	db	Command	Time	State	Info	MergeServer	Index
+id	admin	client	oceanbase	show processlist	time	ACTIVE	NULL	ms	idx
+show processlist 100;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near '100' at line 1
+show processlist abc;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'abc' at line 1
+show process list;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'list' at line 1
+kill abc;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'abc' at line 1
+kill 123;
+ERROR HY000: Unknown thread id
+kill query abc;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'abc' at line 1
+kill query 123;
+ERROR HY000: Unknown thread id
+a new connection named by conn1
+show processlist;
+Id	User	Host	db	Command	Time	State	Info	MergeServer	Index
+id	admin	client	oceanbase	NULL	time	SLEEP	NULL	ms	idx
+id	admin	client	oceanbase	show processlist	time	ACTIVE	NULL	ms	idx
+a new connection named by conn2
+show processlist;
+Id	User	Host	db	Command	Time	State	Info	MergeServer	Index
+id	admin	client	oceanbase	NULL	time	SLEEP	NULL	ms	idx
+id	admin	client	oceanbase	NULL	time	SLEEP	NULL	ms	idx
+id	admin	client	oceanbase	show processlist	time	ACTIVE	NULL	ms	idx
+kill the default connection
+show processlist;
+Id	User	Host	db	Command	Time	State	Info	MergeServer	Index
+id	admin	client	oceanbase	NULL	time	SLEEP	NULL	ms	idx
+id	admin	client	oceanbase	show processlist	time	ACTIVE	NULL	ms	idx
+use conn1
+show processlist;
+Id	User	Host	db	Command	Time	State	Info	MergeServer	Index
+id	admin	client	oceanbase	show processlist	time	ACTIVE	NULL	ms	idx
+id	admin	client	oceanbase	NULL	time	SLEEP	NULL	ms	idx
+kill conn2
+show processlist;
+Id	User	Host	db	Command	Time	State	Info	MergeServer	Index
+id	admin	client	oceanbase	show processlist	time	ACTIVE	NULL	ms	idx
+try to kill conn2, which has been killed
+ERROR HY000: Unknown thread id
+show processlist;
+Id	User	Host	db	Command	Time	State	Info	MergeServer	Index
+id	admin	client	oceanbase	show processlist	time	ACTIVE	NULL	ms	idx
+try to use conn2, which has been killed
+show processlist;
+ERROR HY000: MySQL server has gone away
+use conn1, check conn2 disapear
+show processlist;
+Id	User	Host	db	Command	Time	State	Info	MergeServer	Index
+id	admin	client	oceanbase	show processlist	time	ACTIVE	NULL	ms	idx
+kill self,conn1
+show processlist;
+ERROR HY000: MySQL server has gone away

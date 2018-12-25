@@ -1,0 +1,10 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\deploy\benchmark
+2
+6
+c:benchmark.py|1|166f778bcd2|538|184ac0f1|f3fc0faa68c811e8a8030002c8c1274c|0
+a:sbtest.sql|1|166f778bd0f|1a0|2c0b8dd4|f5fc0fc668c811e8a8030002c8c1274c|0
+9:stress.sh|1|166f778bd42|15fc|9b0538b7|f7fc0fe268c811e8a8030002c8c1274c|0
+16:sbtest_read_static.sql|1|166f778bd7d|192|e5c68a6a|fa0c0ffe68c811e8a8030002c8c1274c|0
+17:benchmark.conf.template|1|166f778be1a|514|3d15ec12|fe1c103668c811e8a8030002c8c1274c|0
+8:oltp.sql|1|166f778bdd5|82b|feac6215|fc1c101a68c811e8a8030002c8c1274c|0

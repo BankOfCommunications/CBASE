@@ -1,0 +1,42 @@
+#--disable_warnings
+#drop table if exists t1;
+#--enable_warnings
+#drop table t1;
+select table_id,operation_type from __all_ddl_operation ; 
+create table t1 (c1 int primary key ,c2 int );
+#--let $table_id = query_get_value(select table_id from __first_tablet_entry where table_name = 't1',table_id ,1);
+--let $op_id = query_get_value(select operation_type from __all_ddl_operation where gm_modify in (select max(gm_modify) from __all_ddl_operation); ,operation_type,1)
+if($op_id==1)
+{
+echo "create table right ,operation_type=$op_id";
+} 
+alter table t1 add c3 int ;
+--let $op_id = query_get_value(select operation_type from __all_ddl_operation where gm_modify in (select max(gm_modify) from __all_ddl_operation); ,operation_type,1)
+if($op_id==3)
+{
+echo "alter table right ,operation_type=$op_id";
+} 
+
+alter table t1 drop c2;
+--let $op_id = query_get_value(select operation_type from __all_ddl_operation where gm_modify in (select max(gm_modify) from __all_ddl_operation); ,operation_type,1)
+if($op_id==3)
+{
+echo "alter table right ,operation_type=$op_id";
+} 
+ 
+ drop table t1 ;
+ 
+--let $op_id = query_get_value(select operation_type from __all_ddl_operation where gm_modify in (select max(gm_modify) from __all_ddl_operation); ,operation_type,1)
+if($op_id==2)
+{
+echo "drop table right ,operation_type=$op_id";
+} 
+--disable_result_log
+exec $LOCAL_DIR/tools/rs_admin -r $RS0_IP -p $RS0_PORT refresh_schema;
+--enable_result_log
+--let $op_id = query_get_value(select operation_type from __all_ddl_operation where gm_modify in (select max(gm_modify) from __all_ddl_operation); ,operation_type,1)
+if($op_id==4)
+{
+echo "drop table right ,operation_type=$op_id";
+} 
+

@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\cppclient
+2
+4
+d:libobapi.so.1|1|166f7779bfa|611269|989278bc|bb7bb30e68c111e8a8030002c8c1274c|0
+b:oceanbase.h|1|166f7779420|b21c|e9b3da47|b8abb2f268c111e8a8030002c8c1274c|0
+11:libobapi.so.1.1.0|1|166f777a2a7|611269|989278bc|beebb32a68c111e8a8030002c8c1274c|0
+b:libobapi.so|1|166f777aaa3|611269|989278bc|c24bb34668c111e8a8030002c8c1274c|0

@@ -1,0 +1,51 @@
+ob1=OBI(cluster=1233);
+
+ob1.reboot;
+
+ob1.source include/merge.inc;
+sleep 10;
+
+ob1.create_client;
+create table t1 (a int primary key,b varchar) TABLET_MAX_SIZE=50000;
+
+--disable_query_log
+--disable_result_log
+let $cnt = 1000;
+while($cnt>0)
+{
+    eval replace into t1 values($cnt,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeffffffffffffffffffffffffffffffffffffffffddddddddddddddddddddddddddddddddeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeffffffffffffffffffffffffffffffffffffffffffffggggggggggggggggggggggggggggggggggggggghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+    dec $cnt;
+}
+
+ob1.major_freeze;
+ob1.check_cs_version 2;
+
+#judge whether split
+let $a = deploy_get_value(ob1.cs0.monitor old_ver_tablets_num);
+let $b = deploy_get_value(ob1.cs0.monitor new_ver_tablets_num);
+let $c = math($b-$a);
+if($c == 0)
+{
+    --echo fail to cs tablet split
+}
+
+let $ip = deploy_get_value(ob1.cs0.ip);
+let $port = deploy_get_value(ob1.cs0.port);
+let $delete = deploy_get_value(ob1.cs0.sh_p ~/ob1/tools/cs_admin -s $ip -p $port -i "delete_tablet 3001 (int:301;int:334] 0 2 1");
+sleep 5;
+
+--enable_result_log
+--enable_query_log
+select * from t1 where a=300;
+sleep 1;
+
+--disable_query_log
+--disable_result_log
+
+let $cnt = 100;
+while($cnt>0)
+{
+   let $result = deploy_get_value(ob1.mysql_p select count(*) from t1 where a=302);
+   --echo $result;
+   dec $cnt;
+}

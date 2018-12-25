@@ -1,0 +1,117 @@
+drop table if exists t1;
+CREATE TABLE t1 (
+id int,
+count int ,
+qty int,
+phone char(1) ,
+stamp datetime ,
+PRIMARY KEY (id)
+);
+INSERT INTO t1 VALUES (24,3,5400,'y','1999-12-23 17:29:12');
+INSERT INTO t1 VALUES (25,4,6500,'y','1999-12-23 17:29:12');
+INSERT INTO t1 VALUES (27,3,6200,'b','1999-12-27 09:44:24');
+INSERT INTO t1 VALUES (28,3,5400,'y','1999-12-27 09:44:36');
+INSERT INTO t1 VALUES (29,4,17700,'b','1999-12-27 09:45:05');
+select /*+ join(si)*/ t1000.id from t1 as t1000 left join t1 as t2000 on t1000.id=t2000.id;
+id
+24
+25
+27
+28
+29
+select /*+ join(si)*/ t1000.id from t1 as t1000 right join t1 as t2000 on t1000.id=t2000.id;
+ERROR HY000: OB-5205: semi join:function is on the way!
+select /*+ join(si)*/ t1000.id from t1 as t1000 inner join t1 as t2000 on t1000.id=t2000.id;
+id
+24
+25
+27
+28
+29
+select /*+ join(si)*/ t1000.id from t1 as t1000 full join t1 as t2000 on t1000.id=t2000.id;
+id
+24
+25
+27
+28
+29
+select /*+ join(si)*/ t1000.count from t1 t1000 left join t1 t2000 on t1000.id=t2000.id;
+count
+3
+4
+3
+3
+4
+select /*+ join(si)*/ t1000.count from t1 t1000 right join t1 t2000 on t1000.id=t2000.id;
+ERROR HY000: OB-5205: semi join:function is on the way!
+select /*+ join(si)*/ t1000.count from t1 t1000 inner join t1 t2000 on t1000.id=t2000.id;
+count
+3
+4
+3
+3
+4
+select /*+ join(si)*/ t1000.count from t1 t1000 full join t1 t2000 on t1000.id=t2000.id;
+count
+3
+4
+3
+3
+4
+select /*+ join(merge_join)*/ t1000.id from t1 as t1000 left join t1 as t2000 on t1000.id=t2000.id;
+id
+24
+25
+27
+28
+29
+select /*+ join(merge_join)*/ t1000.id from t1 as t1000 right join t1 as t2000 on t1000.id=t2000.id;
+id
+24
+25
+27
+28
+29
+select /*+ join(merge_join)*/ t1000.id from t1 as t1000 inner join t1 as t2000 on t1000.id=t2000.id;
+id
+24
+25
+27
+28
+29
+select /*+ join(merge_join)*/ t1000.id from t1 as t1000 full join t1 as t2000 on t1000.id=t2000.id;
+id
+24
+25
+27
+28
+29
+select /*+ join(merge_join)*/ t1000.count from t1 t1000 left join t1 t2000 on t1000.id=t2000.id;
+count
+3
+4
+3
+3
+4
+select /*+ join(merge_join)*/ t1000.count from t1 t1000 right join t1 t2000 on t1000.id=t2000.id;
+count
+3
+4
+3
+3
+4
+select /*+ join(merge_join)*/ t1000.count from t1 t1000 inner join t1 t2000 on t1000.id=t2000.id;
+count
+3
+4
+3
+3
+4
+select /*+ join(merge_join)*/ t1000.count from t1 t1000 full join t1 t2000 on t1000.id=t2000.id;
+count
+3
+4
+3
+3
+4
+drop table t1;

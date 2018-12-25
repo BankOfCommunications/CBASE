@@ -1,0 +1,21 @@
+drop table if exists t1;
+create table t1 (id int primary key, n1 int, n2 int, s varchar(256), vs char(256), t varchar(256));
+let $1=20000;
+--disable_query_log
+while ($1)
+{
+ eval insert into t1 values($1, NULL, NULL, 'hoadgfdgfdgfdghfllkhlkhjkhlhjkhkdahgjfdkhgfdkjhgfdjhgdjfghfdjhgfdjhgfdjhgfdjhgfdgjooijoijoijojojojojoijojojojoijojoijojoijojoojojojojojzero', 'joiioijoijjoijoijoijoijoiojoijoiojooijoiojoioijojoijoijoijoijoijoijiojoigadfgjadfgafdgfdgadfgffzero', 'ojaiogjfdgfdgfdgjfdlkgjfdlkjgafdlkjgfdkjgadfkjgfdkjgkfdgjfdjojojoijojojoojojojojojoijojoijojojojojojzero');
+ dec $1;
+}
+--enable_query_log
+let $2=100;
+--disable_result_log
+--disable_query_log
+while ($2)
+{
+select * from t1;
+dec $2;
+}
+--enable_result_log
+--enable_query_log
+select * from t1 limit 20;

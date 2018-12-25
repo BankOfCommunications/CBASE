@@ -1,0 +1,43 @@
+ob1=OBI(cluster=1211);
+
+ob1.reboot;
+
+ob1.source include/merge.inc;
+sleep 10;
+
+ob1.create_client;
+create table t1 (a int primary key,b varchar) TABLET_MAX_SIZE=50000;
+
+--disable_query_log
+--disable_result_log
+let $cnt = 500;
+while($cnt>0)
+{
+    eval replace into t1 values($cnt,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeffffffffffffffffffffffffffffffffffffffffddddddddddddddddddddddddddddddddeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeffffffffffffffffffffffffffffffffffffffffffffggggggggggggggggggggggggggggggggggggggghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+    dec $cnt;
+}
+
+ob1.major_freeze;
+ob1.check_cs_version 2;
+
+#judge whether split
+let $a = deploy_get_value(ob1.cs0.monitor old_ver_tablets_num);
+let $b = deploy_get_value(ob1.cs0.monitor new_ver_tablets_num);
+let $c = math($b-$a);
+if($c == 0)
+{
+    --echo fail to cs tablet split
+}
+
+let $ip = deploy_get_value(ob1.cs0.ip);
+let $port = deploy_get_value(ob1.cs0.port);
+
+sleep 5;
+let $result = deploy_get_value(ob1.cs0.sh_p ~/ob1/tools/cs_admin -s $ip -p $port -i "delete_tablet 3001 (int:301;int:367] 0 2 1");
+sleep 10;
+
+ob1.cs0.restart;
+sleep 10;
+
+select count(*) from t1;
+

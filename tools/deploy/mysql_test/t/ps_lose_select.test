@@ -1,0 +1,1097 @@
+--disable_warnings
+drop table if exists t1, t2;
+--enable_warnings
+
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+#----------------------single table drop column----------------------
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,2),(2,'b',3,4),(3,'c',4,5);
+
+#drop no exist column
+prepare stmt2 from select b from t1 where a=2 group by b;
+execute stmt2;
+--error 5009
+alter table t1 drop x;
+execute stmt2;
+select * from t1;
+deallocate prepare stmt2;
+
+#drop no used column
+prepare stmt3 from select b from t1 where a=3 group by b;
+execute stmt3;
+alter table t1 drop d;
+execute stmt3;
+select * from t1;
+deallocate prepare stmt3;
+
+alter table t1 add d int;
+#drop select used column
+prepare stmt4 from select d from t1 where a=2;
+execute stmt4;
+alter table t1 drop d;
+--error 5009
+execute stmt4;
+select * from t1;
+deallocate prepare stmt4;
+
+alter table t1 add d int;
+#drop select used column
+prepare stmt5 from select d from t1 where a=?;
+set @a=1;
+execute stmt5 using @a;
+alter table t1 drop d;
+--error 5009
+execute stmt5 using @a;
+deallocate prepare stmt5;
+
+alter table t1 add d int;
+
+prepare stmt6 from select a,d from t1 where a=?;
+set @a=1;
+execute stmt6 using @a;
+alter table t1 drop d;
+--error 5009
+execute stmt6 using @a;
+deallocate prepare stmt6;
+
+alter table t1 add d int;
+#drop where used column
+prepare stmt7 from select a,b from t1 where d=?;
+set @d=1;
+execute stmt7 using @d;
+alter table t1 drop d;
+--error 5009
+execute stmt7 using @d;
+deallocate prepare stmt7;
+
+alter table t1 add d int;
+
+#drop between used column
+prepare stmt8 from select a,b from t1 where d between 4 and 1;
+execute stmt8;
+alter table t1 drop d;
+--error 5009
+execute stmt8;
+select * from t1;
+deallocate prepare stmt8;
+
+alter table t1 add d int;
+
+#drop in used column
+prepare stmt9 from select a,b from t1 where d in (1,2,3,4);
+execute stmt9;
+alter table t1 drop d;
+--error 5009
+execute stmt9;
+select * from t1;
+deallocate prepare stmt9;
+
+alter table t1 add d int;
+
+#drop not in used column
+prepare stmt10 from select a,b from t1 where d not in (1,2,3,4);
+execute stmt10;
+alter table t1 drop d;
+--error 5009
+execute stmt10;
+select * from t1;
+deallocate prepare stmt10;
+
+alter table t1 add d int;
+
+#drop order by used column
+prepare stmt11 from select a,b from t1 order by d;
+execute stmt11;
+alter table t1 drop d;
+--error 5009
+execute stmt11;
+select * from t1;
+deallocate prepare stmt11;
+
+alter table t1 add d int;
+
+#drop group by used column
+prepare stmt12 from select a,b from t1 group by d;
+execute stmt12;
+alter table t1 drop d;
+--error 5009
+execute stmt12;
+select * from t1;
+deallocate prepare stmt12;
+
+alter table t1 add d int;
+
+#drop max used column
+prepare stmt13 from select a,max(d) from t1 group by a;
+execute stmt13;
+alter table t1 drop d;
+--error 5009
+execute stmt13;
+select * from t1;
+deallocate prepare stmt13;
+
+alter table t1 add d int;
+
+#drop min used column
+prepare stmt14 from select a,min(d) from t1 group by a;
+execute stmt14;
+alter table t1 drop d;
+--error 5009
+execute stmt14;
+select * from t1;
+deallocate prepare stmt14;
+
+alter table t1 add d int;
+
+#drop avg used column
+prepare stmt15 from select a,avg(d) from t1 group by a;
+execute stmt15;
+alter table t1 drop d;
+--error 5009
+execute stmt15;
+select * from t1;
+deallocate prepare stmt15;
+
+alter table t1 add d int;
+
+#drop count used column
+prepare stmt16 from select a,count(d) from t1 group by a;
+execute stmt16;
+alter table t1 drop d;
+--error 5009
+execute stmt16;
+select * from t1;
+deallocate prepare stmt16;
+
+alter table t1 add d int;
+
+#drop sum used column
+prepare stmt17 from select a,sum(d) from t1 group by a;
+execute stmt17;
+alter table t1 drop d;
+--error 5009
+execute stmt17;
+select * from t1;
+deallocate prepare stmt17;
+
+alter table t1 add d int;
+
+#drop having used column
+
+prepare stmt18 from select a from t1 group by a having sum(d)=4;
+execute stmt18;
+alter table t1 drop d;
+--error 5009
+execute stmt18;
+select * from t1;
+deallocate prepare stmt18;
+
+#----------------drop a column and add it with same type----------------------
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+#drop no exist column and add it
+prepare stmt19 from select b from t1 where a=2 group by b;
+execute stmt19;
+
+--error 5009
+alter table t1 drop x;
+alter table t1 add  x int;
+execute stmt19;
+select * from t1;
+deallocate prepare stmt19;
+
+#drop no use column and add it
+
+prepare stmt20 from select b from t1 where a=2 group by b;
+execute stmt20;
+alter table t1 drop d;
+alter table t1 add  d int;
+execute stmt20;
+select * from t1;
+deallocate prepare stmt20;
+
+
+#drop  select used column and add it
+
+prepare stmt21 from select d from t1 where a=2;
+execute stmt21;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt21;
+select * from t1;
+deallocate prepare stmt21;
+
+
+#drop select used column and add it
+
+prepare stmt22 from select d from t1 where a=?;
+set @a=1;
+execute stmt22 using @a;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt22 using @a;
+deallocate prepare stmt22;
+
+
+prepare stmt23 from select a,d from t1 where a=?;
+set @a=1;
+execute stmt23 using @a;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt23 using @a;
+deallocate prepare stmt23;
+
+
+#drop where used column and add t
+prepare stmt24 from select a,b from t1 where d=?;
+set @d=1;
+execute stmt24 using @d;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt24 using @d;
+deallocate prepare stmt24;
+
+
+
+#drop between used column and add it
+prepare stmt25 from select a,b from t1 where d between 4 and 1;
+execute stmt25;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt25;
+select * from t1;
+deallocate prepare stmt25;
+
+
+#drop in used column and add it
+prepare stmt26 from select a,b from t1 where d in (1,2,3,4);
+execute stmt26;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt26;
+select * from t1;
+deallocate prepare stmt26;
+
+
+
+#drop not in used column and add it
+prepare stmt27 from select a,b from t1 where d not in (1,2,3,4);
+execute stmt27;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt27;
+select * from t1;
+deallocate prepare stmt27;
+
+
+#drop order by used column and add it
+prepare stmt28 from select a,b from t1 order by d;
+execute stmt28;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt28;
+select * from t1;
+deallocate prepare stmt28;
+
+
+#drop group by used column and add it
+prepare stmt29 from select a,b from t1 group by d;
+execute stmt29;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt29;
+select * from t1;
+deallocate prepare stmt29;
+
+
+#drop max used column and add it
+
+prepare stmt30 from select a,max(d) from t1 group by a;
+execute stmt30;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt30;
+select * from t1;
+deallocate prepare stmt30;
+
+
+#drop min used column and add it
+prepare stmt31 from select a,min(d) from t1 group by a;
+execute stmt31;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt31;
+select * from t1;
+deallocate prepare stmt31;
+
+
+#drop avg used column and add it
+prepare stmt32 from select a,avg(d) from t1 group by a;
+execute stmt32;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt32;
+select * from t1;
+deallocate prepare stmt32;
+
+
+#drop count used column and add it
+
+prepare stmt33 from select a,count(d) from t1 group by a;
+execute stmt33;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt33;
+select * from t1;
+deallocate prepare stmt33;
+
+
+#drop sum used column and add it
+prepare stmt34 from select a,sum(d) from t1 group by a;
+execute stmt34;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt34;
+select * from t1;
+deallocate prepare stmt34;
+
+
+#drop having used column and add it
+prepare stmt35 from select a from t1 group by a having sum(d)=4;
+execute stmt35;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt35;
+select * from t1;
+deallocate prepare stmt35;
+
+#----------------drop a column and add it with different type----------------------
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+#drop no use column and add it
+prepare stmt36 from select b from t1 where a=2 group by b;
+execute stmt36;
+alter table t1 drop d;
+alter table t1 add  d varchar(255);
+execute stmt36;
+select * from t1;
+deallocate prepare stmt36;
+
+
+
+#drop  select used column and add it
+
+prepare stmt37 from select d from t1 where a=2;
+execute stmt37;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt37;
+select * from t1;
+deallocate prepare stmt37;
+
+
+#drop select used column and add it
+
+prepare stmt38 from select d from t1 where a=?;
+set @a=1;
+execute stmt38 using @a;
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+
+execute stmt38 using @a;
+deallocate prepare stmt38;
+
+
+prepare stmt39 from select a,d from t1 where a=?;
+set @a=1;
+execute stmt39 using @a;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt39 using @a;
+deallocate prepare stmt39;
+
+
+#drop where used column and add t
+prepare stmt40 from select a,b from t1 where d=?;
+set @d=1;
+execute stmt40 using @d;
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+
+execute stmt40 using @d;
+deallocate prepare stmt40;
+
+
+
+#drop between used column and add it
+prepare stmt41 from select a,b from t1 where d between 4 and 1;
+execute stmt41;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt41;
+select * from t1;
+deallocate prepare stmt41;
+
+
+#drop in used column and add it
+prepare stmt42 from select a,b from t1 where d in (1,2,3,4);
+execute stmt42;
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+
+execute stmt42;
+select * from t1;
+deallocate prepare stmt42;
+
+
+
+#drop not in used column and add it
+prepare stmt43 from select a,b from t1 where d not in (1,2,3,4);
+execute stmt43;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt43;
+select * from t1;
+deallocate prepare stmt43;
+
+
+#drop order by used column and add it
+prepare stmt44 from select a,b from t1 order by d;
+execute stmt44;
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+
+execute stmt44;
+select * from t1;
+deallocate prepare stmt44;
+
+
+#drop group by used column and add it
+prepare stmt45 from select a,b from t1 group by d;
+execute stmt45;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt45;
+select * from t1;
+deallocate prepare stmt45;
+
+
+#drop max used column and add it
+
+prepare stmt46 from select a,max(d) from t1 group by a;
+execute stmt46;
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+
+execute stmt46;
+select * from t1;
+deallocate prepare stmt46;
+
+
+#drop min used column and add it
+prepare stmt47 from select a,min(d) from t1 group by a;
+execute stmt47;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt47;
+select * from t1;
+deallocate prepare stmt47;
+
+
+#drop avg used column and add it
+prepare stmt48 from select a,avg(d) from t1 group by a;
+execute stmt48;
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+
+execute stmt48;
+select * from t1;
+deallocate prepare stmt48;
+
+
+#drop count used column and add it
+
+prepare stmt49 from select a,count(d) from t1 group by a;
+execute stmt49;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt49;
+select * from t1;
+deallocate prepare stmt49;
+
+
+#drop sum used column and add it
+prepare stmt50 from select a,sum(d) from t1 group by a;
+execute stmt50;
+alter table t1 drop d;
+alter table t1 add d varchar(255);
+
+execute stmt50;
+select * from t1;
+deallocate prepare stmt50;
+
+
+#drop having used column and add it
+prepare stmt51 from select a from t1 group by a having sum(d)=4;
+execute stmt51;
+alter table t1 drop d;
+alter table t1 add d int;
+
+execute stmt51;
+select * from t1;
+deallocate prepare stmt51;
+#--------------drop table which be used------------------
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+
+#drop  table be used
+
+prepare stmt52 from select d from t1 where a=2;
+execute stmt52;
+drop table t1;
+--error 5019
+execute stmt52;
+deallocate prepare stmt52;
+
+
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+prepare stmt53 from select d from t1 where a=?;
+set @a=1;
+execute stmt53 using @a;
+drop table t1;
+--error 5019
+execute stmt53 using @a;
+deallocate prepare stmt53;
+
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+prepare stmt54 from select a,b from t1 where d between 4 and 1;
+execute stmt54;
+drop table t1;
+--error 5019
+execute stmt54;
+deallocate prepare stmt54;
+
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+prepare stmt55 from select a,b from t1 where d in (1,2,3,4);
+execute stmt55;
+drop table t1;
+--error 5019
+execute stmt55;
+deallocate prepare stmt55;
+
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+prepare stmt56 from select a,b from t1 where d not in (1,2,3,4);
+execute stmt56;
+drop table t1;
+--error 5019
+execute stmt56;
+deallocate prepare stmt56;
+
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+prepare stmt57 from select a,b from t1 order by d;
+execute stmt57;
+drop table t1;
+--error 5019
+execute stmt57;
+deallocate prepare stmt57;
+
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+prepare stmt58 from select a,b from t1 group by d;
+execute stmt58;
+drop table t1;
+--error 5019
+execute stmt58;
+deallocate prepare stmt58;
+
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+prepare stmt59 from select a,max(d) from t1 group by a;
+execute stmt59;
+drop table t1;
+--error 5019
+execute stmt59;
+deallocate prepare stmt59;
+
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+prepare stmt60 from select a,min(d) from t1 group by a;
+execute stmt60;
+drop table t1;
+--error 5019
+execute stmt60;
+deallocate prepare stmt60;
+
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+prepare stmt61 from select a,avg(d) from t1 group by a;
+execute stmt61;
+drop table t1;
+--error 5019
+execute stmt61;
+deallocate prepare stmt61;
+
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+prepare stmt62 from select a,count(d) from t1 group by a;
+execute stmt62;
+drop table t1;
+--error 5019
+execute stmt62;
+deallocate prepare stmt62;
+
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+
+prepare stmt63 from select a,sum(d) from t1 group by a;
+execute stmt63;
+drop table t1;
+--error 5019
+execute stmt63;
+deallocate prepare stmt63;
+
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+prepare stmt64 from select a from t1 group by a having sum(d)=4;
+execute stmt64;
+drop table t1;
+--error 5019
+execute stmt64;
+deallocate prepare stmt64;
+#--------------drop table which be used and add it again------------------
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+
+#drop  table be used
+
+prepare stmt65 from select d from t1 where a=2;
+execute stmt65;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+execute stmt65;
+select * from t1;
+deallocate prepare stmt65;
+
+prepare stmt66 from select d from t1 where a=?;
+set @a=1;
+execute stmt66 using @a;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+execute stmt66 using @a;
+deallocate prepare stmt66;
+
+#drop table add a new table with diff schema lost no use column
+prepare stmt67 from select a,b from t1 where a between 4 and 1;
+execute stmt67;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+execute stmt67;
+select * from t1;
+deallocate prepare stmt67;
+
+#drop table add new with diff schema,lost where used column
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+prepare stmt68 from select a,b from t1 where c between 4 and 1;
+execute stmt68;
+drop table t1;
+create table t1( a int primary key,b varchar(255));
+insert into t1 values(1,'a'),(2,'b'),(3,'c');
+--error 5009
+execute stmt68;
+select * from t1;
+deallocate prepare stmt68;
+
+#drop table add new with diff schema,lost select used column
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int,d int);
+insert into t1 values(1,'a',2,3),(2,'b',3,2),(3,'c',4,1);
+
+prepare stmt69 from select a,b from t1 where c between 4 and 1;
+execute stmt69;
+drop table t1;
+create table t1( a int primary key,c int);
+insert into t1 values(1,2),(2,4),(3,5);
+--error 5009
+execute stmt69;
+select * from t1;
+deallocate prepare stmt69;
+#--------------------------muti table join-------------------------
+#join
+drop table t1;      
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+create table t2( a int primary key,b varchar(255),c int);
+insert into t2 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+#add a table new column
+prepare stmt70 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+execute stmt70;
+alter table t1 add d int;
+execute stmt70;
+select * from t1;
+deallocate prepare stmt70;
+
+#drop a table column no use
+prepare stmt71 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+execute stmt71;
+alter table t1 drop d;
+execute stmt71;
+select * from t1;
+deallocate prepare stmt71;
+
+#drop a table column used
+prepare stmt72 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+execute stmt72;
+alter table t1 drop b;
+--error 5009
+execute stmt72;
+select * from t1;
+deallocate prepare stmt72;
+
+#drop a table
+alter table t1 add b varchar(255);
+prepare stmt73 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+execute stmt73;
+drop table t1;
+--error 5019
+execute stmt73;
+deallocate prepare stmt73;
+
+#drop table and add it with same schema
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+prepare stmt74 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+execute stmt74;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+execute stmt74;
+select * from t1;
+deallocate prepare stmt74;
+
+#drop table and add it with diff schema
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+prepare stmt75 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+execute stmt75;
+drop table t1;
+create table t1( a int primary key,c int);
+insert into t1 values(1,2),(2,3),(3,4);
+--error 5009
+execute stmt75;
+select * from t1;
+deallocate prepare stmt75;
+
+
+
+
+#---------------------------------inner join-----------------------
+drop table t1;  
+    
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+drop table t2;
+create table t2( a int primary key,b varchar(255),c int);
+insert into t2 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+#add a table new column
+prepare stmt76 from select t1.b,t2.b from t1 inner join t2 on t1.a=t2.a where t1.a=1;
+execute stmt76;
+alter table t1 add d int;
+execute stmt76;
+select * from t1;
+deallocate prepare stmt76;
+
+#drop a table column no use
+prepare stmt77 from select t1.b,t2.b from t1 inner join t2 on t1.a=t2.a where t1.a=1;
+execute stmt77;
+alter table t1 drop d;
+execute stmt77;
+select * from t1;
+deallocate prepare stmt77;
+
+#drop a table column used
+prepare stmt78 from select t1.b,t2.b from t1 inner join t2 on t1.a=t2.a where t1.a=1;
+execute stmt78;
+alter table t1 drop b;
+--error 5009
+execute stmt78;
+select * from t1;
+deallocate prepare stmt78;
+
+#drop a table
+alter table t1 add b varchar(255);
+prepare stmt79 from select t1.b,t2.b from t1 inner join t2 on t1.a=t2.a where t1.a=1;
+execute stmt79;
+drop table t1;
+--error 5019
+execute stmt79;
+deallocate prepare stmt79;
+
+#drop table and add it with same schema
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+prepare stmt80 from select t1.b,t2.b from t1 inner join t2 on t1.a=t2.a where t1.a=1;
+execute stmt80;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+execute stmt80;
+select * from t1;
+deallocate prepare stmt80;
+
+#drop table and add it with diff schema
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+prepare stmt81 from select t1.b,t2.b from t1 inner join t2 on t1.a=t2.a where t1.a=1;
+execute stmt81;
+drop table t1;
+create table t1( a int primary key,c int);
+insert into t1 values(1,2),(2,3),(3,4);
+--error 5009
+execute stmt81;
+select * from t1;
+deallocate prepare stmt81;
+#----------------------------left join-----------------------------
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+drop table t2;
+create table t2( a int primary key,b varchar(255),c int);
+insert into t2 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+#add a table new column
+prepare stmt82 from select t1.b,t2.b from t1 left join t2 on t1.a=t2.a where t1.a=1;
+execute stmt82;
+alter table t1 add d int;
+execute stmt82;
+select * from t1;
+deallocate prepare stmt82;
+
+#drop a table column no use
+prepare stmt83 from select t1.b,t2.b from t1 left join t2 on t1.a=t2.a where t1.a=1;
+execute stmt83;
+alter table t1 drop d;
+execute stmt83;
+select * from t1;
+deallocate prepare stmt83;
+
+#drop a table column used
+prepare stmt84 from select t1.b,t2.b from t1 left join t2 on t1.a=t2.a where t1.a=1;
+execute stmt84;
+alter table t1 drop b;
+--error 5009
+execute stmt84;
+select * from t1;
+deallocate prepare stmt84;
+
+#drop a table
+alter table t1 add b varchar(255);
+prepare stmt85 from select t1.b,t2.b from t1 left join t2 on t1.a=t2.a where t1.a=1;
+execute stmt85;
+drop table t1;
+--error 5019
+execute stmt85;
+deallocate prepare stmt85;
+
+#drop table and add it with same schema
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+prepare stmt86 from select t1.b,t2.b from t1 left join t2 on t1.a=t2.a where t1.a=1;
+execute stmt86;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+execute stmt86;
+select * from t1;
+deallocate prepare stmt86;
+
+#drop table and add it with diff schema
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+prepare stmt87 from select t1.b,t2.b from t1 left join t2 on t1.a=t2.a where t1.a=1;
+execute stmt87;
+drop table t1;
+create table t1( a int primary key,c int);
+insert into t1 values(1,2),(2,3),(3,4);
+--error 5009
+execute stmt87;
+select * from t1;
+deallocate prepare stmt87;
+
+#------------------------------right join---------------------------
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+drop table t2;
+create table t2( a int primary key,b varchar(255),c int);
+insert into t2 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+#add a table new column
+prepare stmt88 from select t1.b,t2.b from t1 right join t2 on t1.a=t2.a where t1.a=1;
+execute stmt88;
+alter table t1 add d int;
+execute stmt88;
+select * from t1;
+deallocate prepare stmt88;
+
+#drop a table column no use
+prepare stmt89 from select t1.b,t2.b from t1 right join t2 on t1.a=t2.a where t1.a=1;
+execute stmt89;
+alter table t1 drop d;
+execute stmt89;
+select * from t1;
+deallocate prepare stmt89;
+
+#drop a table column used
+prepare stmt90 from select t1.b,t2.b from t1 right join t2 on t1.a=t2.a where t1.a=1;
+execute stmt90;
+alter table t1 drop b;
+--error 5009
+execute stmt90;
+select * from t1;
+deallocate prepare stmt90;
+#drop a table
+alter table t1 add b varchar(255);
+prepare stmt91 from select t1.b,t2.b from t1 right join t2 on t1.a=t2.a where t1.a=1;
+execute stmt91;
+drop table t1;
+--error 5019
+execute stmt91;
+deallocate prepare stmt91;
+
+#drop table and add it with same schema
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+prepare stmt92 from select t1.b,t2.b from t1 right join t2 on t1.a=t2.a where t1.a=1;
+execute stmt92;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+execute stmt92;
+select * from t1;
+deallocate prepare stmt92;
+
+#drop table and add it with diff schema
+
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+prepare stmt93 from select t1.b,t2.b from t1 right join t2 on t1.a=t2.a where t1.a=1;
+execute stmt93;
+drop table t1;
+create table t1( a int primary key,c int);
+insert into t1 values(1,2),(2,3),(3,4);
+--error 5009
+execute stmt93;
+select * from t1;
+deallocate prepare stmt93;
+
+#--------------------------muti table union-------------------------
+drop table t1;      
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+drop table t2;
+create table t2( a int primary key,b varchar(255),c int);
+insert into t2 values(1,'a',2),(2,'b',3),(3,'c',4);
+
+prepare stmt94 from (select t1.a from t1) union (select t2.a from t2);
+execute stmt94;
+drop table t1;
+--error 5019
+execute stmt94;
+
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt95 from (select t1.a from t1) union (select t2.a from t2);
+execute stmt95;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+execute stmt95;
+select * from t1;
+

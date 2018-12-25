@@ -1,0 +1,139 @@
+-- ok
+<<Part 1 : SQL STRING>>
+select * from order_list where user_id < 100 intersect select * from order_list where item_id > 0;
+
+<<Part 2 : PARSE TREE>>
+
+<<Part 3 : LOGICAL PLAN>>
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        LEFTQUERY ::= <2>
+        <INTERSECT ALL>
+        RIGHTQUERY ::= <3>
+        ObSelectStmt 0 End
+        ObSelectStmt 1 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1003, TableName:order_list, AliasName:NULL, Type:BASE_TABLE, RefId: 1003}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:2, ColumnName:id, TableRef:1003}
+            {Num 1, ColumnId:3, ColumnName:user_id, TableRef:1003}
+            {Num 2, ColumnId:4, ColumnName:item_id, TableRef:1003}
+            {Num 3, ColumnId:5, ColumnName:qty, TableRef:1003}
+            {Num 4, ColumnId:6, ColumnName:order_time, TableRef:1003}
+            {Num 5, ColumnId:7, ColumnName:order_desc, TableRef:1003}
+        <ColumnItemList End>
+        WHERE ::= <7>
+        SELECT ::= <1, id>, <2, user_id>, <3, item_id>, <4, qty>, <5, order_time>, <6, order_desc>
+        FROM ::= <1003>
+        ObSelectStmt 1 End
+        ObSelectStmt 2 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1003, TableName:order_list, AliasName:NULL, Type:BASE_TABLE, RefId: 1003}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:2, ColumnName:id, TableRef:1003}
+            {Num 1, ColumnId:3, ColumnName:user_id, TableRef:1003}
+            {Num 2, ColumnId:4, ColumnName:item_id, TableRef:1003}
+            {Num 3, ColumnId:5, ColumnName:qty, TableRef:1003}
+            {Num 4, ColumnId:6, ColumnName:order_time, TableRef:1003}
+            {Num 5, ColumnId:7, ColumnName:order_desc, TableRef:1003}
+        <ColumnItemList End>
+        WHERE ::= <14>
+        SELECT ::= <8, id>, <9, user_id>, <10, item_id>, <11, qty>, <12, order_time>, <13, order_desc>
+        FROM ::= <1003>
+        ObSelectStmt 2 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (1003 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 2]
+        ObSqlRawExpr 0 End
+        ObSqlRawExpr 1 Begin
+        expr_id = 2
+        (table_id : column_id) = (1003 : 3)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 3]
+        ObSqlRawExpr 1 End
+        ObSqlRawExpr 2 Begin
+        expr_id = 3
+        (table_id : column_id) = (1003 : 4)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 4]
+        ObSqlRawExpr 2 End
+        ObSqlRawExpr 3 Begin
+        expr_id = 4
+        (table_id : column_id) = (1003 : 5)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+        ObSqlRawExpr 3 End
+        ObSqlRawExpr 4 Begin
+        expr_id = 5
+        (table_id : column_id) = (1003 : 6)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 6]
+        ObSqlRawExpr 4 End
+        ObSqlRawExpr 5 Begin
+        expr_id = 6
+        (table_id : column_id) = (1003 : 7)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 7]
+        ObSqlRawExpr 5 End
+        ObSqlRawExpr 6 Begin
+        expr_id = 7
+        (table_id : column_id) = (NULL : 18446744073709551614)
+        T_OP_LT
+            T_REF_COLUMN : [table_id, column_id] = [1003, 3]
+            T_INT : 100
+        ObSqlRawExpr 6 End
+        ObSqlRawExpr 7 Begin
+        expr_id = 8
+        (table_id : column_id) = (1003 : 2)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 2]
+        ObSqlRawExpr 7 End
+        ObSqlRawExpr 8 Begin
+        expr_id = 9
+        (table_id : column_id) = (1003 : 3)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 3]
+        ObSqlRawExpr 8 End
+        ObSqlRawExpr 9 Begin
+        expr_id = 10
+        (table_id : column_id) = (1003 : 4)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 4]
+        ObSqlRawExpr 9 End
+        ObSqlRawExpr 10 Begin
+        expr_id = 11
+        (table_id : column_id) = (1003 : 5)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+        ObSqlRawExpr 10 End
+        ObSqlRawExpr 11 Begin
+        expr_id = 12
+        (table_id : column_id) = (1003 : 6)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 6]
+        ObSqlRawExpr 11 End
+        ObSqlRa[2012-07-17 15:19:16] WARN  set_expression (ob_postfix_expression.cpp:738) [47123780730880] unexpected postfix expression header element type. ObIntType expected[type:0]
+[2012-07-17 15:19:16] DEBUG ../../src/common/hash/ob_hashutils.h:1106 [47123780730880] new succ block=0x2b087b70 block_size=57368 node_size=56 type=[N9oceanbase6common4list4NodeIPNS_3sql13ObPhyOperatorEEE]
+[2012-07-17 15:19:16] DEBUG ../../src/common/hash/ob_hashutils.h:1106 [47123780730880] new succ block=0x2b7fc8b0 block_size=90136 node_size=88 type=[N9oceanbase6common4list4NodeINS_3sql8ObBitSetEEE]
+[2012-07-17 15:19:16] DEBUG ../../src/common/hash/ob_hashutils.h:1106 [47123780730880] new succ block=0x2b087b70 block_size=57368 node_size=56 type=[N9oceanbase6common4list4NodeIPNS_3sql13ObPhyOperatorEEE]
+[2012-07-17 15:19:16] DEBUG ../../src/common/hash/ob_hashutils.h:1106 [47123780730880] new succ block=0x2b7fc8b0 block_size=90136 node_size=88 type=[N9oceanbase6common4list4NodeINS_3sql8ObBitSetEEE]
+wExpr 12 Begin
+        expr_id = 13
+        (table_id : column_id) = (1003 : 7)
+        T_REF_COLUMN : [table_id, column_id] = [1003, 7]
+        ObSqlRawExpr 12 End
+        ObSqlRawExpr 13 Begin
+        expr_id = 14
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_OP_GT
+            T_REF_COLUMN : [table_id, column_id] = [1003, 4]
+            T_INT : 0
+        ObSqlRawExpr 13 End
+    <ExprList End>
+<logical_plan End>
+
+
+<<Part 4 : PHYSICAL PLAN>>
+
+ObPhysicalPlan Begin
+Main Query:
+ObPhysicalPlan End
+
+
+

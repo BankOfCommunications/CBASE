@@ -1,0 +1,11 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob1.reboot;
+sleep 10;
+deploy ob1.source include/merge.inc;
+sleep 10;
+deploy ob1.prepare;
+deploy ob1.major_freeze;
+deploy ob1.check_cs_version 2;
+deploy ob1.cs0.force_stop;
+sleep 10;
+deploy ob1.mysql create table tt(c1 int primary key, c2 int);

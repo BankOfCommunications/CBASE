@@ -1,0 +1,16 @@
+ob1=OBI(cluster=1233, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable)
+ob1.cs0.set sstable_dist=1
+ob1.cs1.set sstable_dist=2
+ob1.cs2.set sstable_dist=3
+ob1.rs0.set extra_config=balance_tolerance_count=60,tablet_replicas_num=1,enable_balance=True
+ob1.reboot
+ob1.source include/migrate.inc
+ob1.prepare
+ob1.start_check
+cs0 not migrate
+cs1 not migrate
+cs2 not migrate
+ob1.mysql alter system set balance_tolerance_count='10' server_type=rootserver
+ob1.check_cs_sstable 202
+ob1.check_cs_balance
+ob1.stop_check

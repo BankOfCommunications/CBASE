@@ -1,0 +1,44 @@
+deploy ob1=OBI(cluster=1122);
+
+deploy ob1.reboot;
+sleep 60;
+
+deploy ob1.source include/merge.inc;
+
+deploy ob1.create_client;
+
+create table t1(i1 int primary key, v1 varchar(20));
+create table t2(i1 int primary key, v1 varchar(20));
+
+let $cnt=100;
+while($cnt)
+{
+    eval replace into t1 values($cnt, 't1_version2_$cnt');
+    dec $cnt;
+}
+
+let $cnt=200;
+while($cnt)
+{
+    eval replace into t2 values($cnt, 't2_version2_$cnt');
+    dec $cnt;
+}
+
+#merge
+deploy ob1.major_freeze;
+
+#check merge done
+deploy ob1.check_cs_version 2;
+
+let $cnt=300;
+while($cnt)
+{
+    eval replace into t2 values($cnt, 't2_version3_$cnt');
+    dec $cnt;
+}
+
+#check data is version2
+select /*+read_consistency(frozen)*/ t1.i1, t1.v1, t2.v1 from t1, t2 where t1.i1=t2.i1;
+
+
+

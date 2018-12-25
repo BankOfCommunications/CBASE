@@ -1,0 +1,6 @@
+-- fail, In operands contain different column(s)
+select (user_id, item_id, 10) in ((1, 8, 9), 9, (user_id, item_id, qty)) from order_list;
+In operands contain different column(s)
+Resolve error!
+
+

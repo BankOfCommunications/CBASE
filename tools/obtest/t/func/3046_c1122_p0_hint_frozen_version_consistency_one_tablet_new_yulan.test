@@ -1,0 +1,68 @@
+deploy ob1=OBI(cluster=1122);
+
+deploy ob1.reboot;
+sleep 60;
+
+deploy ob1.source include/merge.inc;
+
+deploy ob1.mysql alter system set merge_delay_for_lsync='60s' server_type=chunkserver;
+
+deploy ob1.create_client;
+
+create table t1(i1 int primary key, v1 varchar(20));
+
+let $cnt=20;
+while($cnt)
+{
+    eval replace into t1 values($cnt,'version2');
+    dec $cnt;
+}
+
+select /*+read_consistency(frozen)*/* from t1;
+
+#merge
+deploy ob1.major_freeze;
+
+let $cnt=30;
+while($cnt)
+{
+    let $v=deploy_get_value(ob1.ups0.monitor frozen_version);
+    if($v == 2)
+    {
+	let $cnt=0;
+    }
+    sleep 1;
+}
+sleep 10;
+select /*+read_consistency(frozen)*/* from t1;
+
+let $cnt=10;
+while($cnt)
+{
+    eval replace into t1 values($cnt,'version2-1');
+    dec $cnt;
+}
+
+select /*+read_consistency(frozen)*/* from t1;
+#check merge done
+deploy ob1.check_cs_version 2;
+
+select /*+read_consistency(frozen)*/* from t1;
+
+deploy ob1.major_freeze;
+
+let $cnt=30;
+while($cnt)
+{
+    let $v=deploy_get_value(ob1.ups0.monitor frozen_version);
+    if($v == 3)
+    {
+        let $cnt=0;
+    }
+    sleep 1;
+}
+sleep 10;
+select /*+read_consistency(frozen)*/* from t1;
+
+
+

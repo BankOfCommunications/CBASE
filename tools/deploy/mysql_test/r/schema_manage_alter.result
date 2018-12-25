@@ -1,0 +1,32 @@
+drop table if exists t1,t_table_have_many_columns_so_what;
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t_table_have_many_columns_so_what(c1 double ,c2 int ,c3 decimal(4,3),c4 varchar(10),c5 int ,c6 datetime,c7 bool ,c8 int ,c9 bool ,c10 double ,c11 real ,c12 decimal(2,1),c13 int ,c14 datetime ,c15 varchar(100),c16 int ,c17 int ,c18 bool ,primary key (c1,c2,c3,c4,c5,c6,c7,c8,c9,c11,c12,c10,c13,c14,c15,c16));
+desc t_table_have_many_columns_so_what;
+field	type	nullable	key	default	extra
+c1	double	1	1	NULL	
+c2	int32	1	2	NULL	
+c3	decimal(4,3)	1	3	NULL	
+c4	varchar(10)	1	4	NULL	
+c5	int32	1	5	NULL	
+c6	timestamp	1	6	NULL	
+c7	bool	1	7	NULL	
+c8	int32	1	8	NULL	
+c9	bool	1	9	NULL	
+c10	double	1	12	NULL	
+c11	double	1	10	NULL	
+c12	decimal(2,1)	1	11	NULL	
+c13	int32	1	13	NULL	
+c14	timestamp	1	14	NULL	
+c15	varchar(100)	1	15	NULL	
+c16	int32	1	16	NULL	
+c17	int32	1	0	NULL	
+c18	bool	1	0	NULL	
+insert into t_table_have_many_columns_so_what values(1.09,2,1.234,'23232',2,'2012-12-31 12:00:00',1,2,1,22.02,21.3232323232,1.1,1 ,'2012-12-21 12:00:00','let the rain clean the drity of the world',1,1,1);
+alter table t_table_have_many_columns_so_what add c_long_name decimal(19,10), drop c18, rename c1 to c_first,rename c2 to c_second, rename c3 to c_third ,rename c4 to c_fourth,rename c5 to c_fifth ,rename c6 to c_six ,rename c7 to c_senventh;
+"refersh schema ,operation_type=4"
+alter table t_table_have_many_columns_so_what add c20 int;
+drop table t_table_have_many_columns_so_what;
+"drop table right ,operation_type=2"
+rename table t_table_have_many_columns_so_what to t1;
+ERROR 42S02: Table 't_table_have_many_columns_so_what' doesn't exist

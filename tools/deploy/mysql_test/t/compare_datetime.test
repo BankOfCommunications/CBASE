@@ -1,0 +1,135 @@
+#--disable_abort_on_error
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+
+create table  t1(dt datetime primary key, c int);
+
+let $day = 12;
+while ($day <= 14) 
+{
+  let $hour = 0;
+  while( $hour < 24) 
+  {
+    eval insert into t1 values('2012-2-$day $hour:00:00', 1);
+    inc $hour;
+  }
+  inc $day;
+}
+let $var_first = '2012-2-12 0:0:0';
+let $var_last = '2012-2-14 23:0:0';
+let $var_mid  = '2012-2-12 12:00:00';
+
+eval select * from t1 where dt < $var_first;
+
+eval select * from t1 where dt <= $var_first;
+eval select * from t1 where dt = $var_first;
+eval select * from t1 where dt <> $var_first;
+eval select * from t1 where dt != $var_first;
+eval select * from t1 where dt > $var_first;
+eval select * from t1 where dt >= $var_first;
+
+eval select * from t1 where dt < $var_mid;
+eval select * from t1 where dt <= $var_mid;
+eval select * from t1 where dt = $var_mid;
+eval select * from t1 where dt <> $var_mid;
+eval select * from t1 where dt != $var_mid;
+eval select * from t1 where dt > $var_mid;
+eval select * from t1 where dt >= $var_mid;
+
+eval select * from t1 where dt < $var_last;
+eval select * from t1 where dt <= $var_last;
+eval select * from t1 where dt = $var_last;
+eval select * from t1 where dt <> $var_last;
+eval select * from t1 where dt != $var_last;
+eval select * from t1 where dt > $var_last;
+eval select * from t1 where dt >= $var_last;
+
+
+eval select * from t1 where dt between '2010-1-1 0:0:0' and  $var_first;
+eval select * from t1 where dt between $var_first and  $var_mid;
+eval select * from t1 where dt between $var_mid and  $var_last;
+eval select * from t1 where dt between $var_last and '2014-1-1 0:0:0' ;
+
+# short
+
+let $var_first = '2012-2-12';
+let $var_last = '2012-2-14';
+let $var_mid  = '2012-2-13';
+
+eval select * from t1 where dt < $var_first;
+eval select * from t1 where dt <= $var_first;
+eval select * from t1 where dt = $var_first;
+eval select * from t1 where dt <> $var_first;
+eval select * from t1 where dt != $var_first;
+eval select * from t1 where dt > $var_first;
+eval select * from t1 where dt >= $var_first;
+
+eval select * from t1 where dt < $var_mid;
+eval select * from t1 where dt <= $var_mid;
+eval select * from t1 where dt = $var_mid;
+eval select * from t1 where dt <> $var_mid;
+eval select * from t1 where dt != $var_mid;
+eval select * from t1 where dt > $var_mid;
+eval select * from t1 where dt >= $var_mid;
+
+eval select * from t1 where dt < $var_last;
+eval select * from t1 where dt <= $var_last;
+eval select * from t1 where dt = $var_last;
+eval select * from t1 where dt <> $var_last;
+eval select * from t1 where dt != $var_last;
+eval select * from t1 where dt > $var_last;
+eval select * from t1 where dt >= $var_last;
+
+
+eval select * from t1 where dt between '2010-1-1' and  $var_first;
+eval select * from t1 where dt between $var_first and  $var_mid;
+eval select * from t1 where dt between $var_mid and  $var_last;
+eval select * from t1 where dt between $var_last and '2014-1-1' ;
+
+
+drop table t1;
+
+
+
+
+create table  t1(dt1 datetime primary key, dt2 datetime, dt3 datetime);
+
+let $day = 12;
+let $hour = 0;
+while( $hour < 24) 
+{
+    eval insert into t1 values('2012-2-$day $hour:01:00', '2012-2-$day $hour:02:00','2012-2-$day $hour:03:00');
+    inc $hour;
+}
+
+inc $day;
+let $hour = 0;
+while( $hour < 24) 
+{
+    eval insert into t1 values('2012-2-$day $hour:03:00', '2012-2-$day $hour:02:00','2012-2-$day $hour:01:00');
+    inc $hour;
+}
+
+inc $day;
+let $hour = 0;
+while( $hour < 24) 
+{
+    eval insert into t1 values('2012-2-$day $hour:02:00', '2012-2-$day $hour:02:00','2012-2-$day $hour:02:00');
+    inc $hour;
+}
+
+select * from t1 where dt1 > dt2;
+select * from t1 where dt1 >= dt2;
+select * from t1 where dt1 < dt2;
+select * from t1 where dt1 <= dt2;
+select * from t1 where dt1 = dt2;
+select * from t1 where dt1 <> dt2;
+select * from t1 where dt2 between dt1 and dt3;
+select * from t1 where dt2 between dt1 and '2012-2-13 12:00:00';
+select * from t1 where dt2 between '2012-2-12 12:00:00' and dt1;
+
+select * from t1 where dt1 in ('2012-2-12 12:01:00','2012-2-13 12:03:00','2012-2-14 12:02:00');
+select * from t1 where dt1 not in ('2012-2-12 12:01:00','2012-2-13 12:03:00','2012-2-14 12:02:00');
+
+#create table  t1(dt1 datetime primary key, dt2 datetime);

@@ -1,0 +1,18 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob1.reboot;
+
+#set diamond user and pwd
+deploy ob1.set_diamond_user admin;
+deploy ob1.set_diamond_pwd admin;
+
+deploy ob1.start_diamond localhost;
+sleep 5;
+deploy ob1.set username=,passwd=;
+deploy ob1.create_client;
+
+#sql
+create table t1(a int primary key,b int);
+insert into t1 values(1,1),(2,2);
+select * from t1;
+
+deploy ob1.stop_diamond;

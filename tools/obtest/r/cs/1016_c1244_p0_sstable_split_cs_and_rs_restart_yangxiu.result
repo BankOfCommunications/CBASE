@@ -1,0 +1,24 @@
+ob1=OBI(cluster=1222)
+ob2=OBI(cluster=1222)
+ob2.rs0.set master=ob1.rs0
+ob1.reboot
+ob2.reboot
+ob1.source include/merge.inc
+ob1.create_client
+create table t1(a int primary key,b varchar) TABLET_MAX_SIZE=500000;
+create table t2(a int primary key,b varchar) TABLET_MAX_SIZE=20000000;
+ob1.major_freeze
+ob1.cs0.restart
+ob1.cs1.restart
+ob1.rs0.restart
+ob1.rs0.set_obi_role OBI_MASTER
+ob1.check_cs_version 2
+ob2.check_cs_version 2
+18;
+23;
+18;
+23;
+count(*)
+20000;
+count(*)
+20000;

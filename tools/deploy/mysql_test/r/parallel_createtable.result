@@ -1,0 +1,310 @@
+10
+create table t1 (pk int primary key, c1 int);
+create table t2 (pk int primary key, c1 int);
+create table t3 (pk int primary key, c1 int);
+create table t4 (pk int primary key, c1 int);
+create table t5 (pk int primary key, c1 int);
+insert into t1 values(1,1);
+insert into t2 values(1,1);
+insert into t3 values(1,1);
+insert into t4 values(1,1);
+insert into t5 values(1,1);
+select * from t1;
+select * from t2;
+select * from t3;
+select * from t4;
+select * from t5;
+pk	c1
+1	1
+drop table t1;
+pk	c1
+1	1
+drop table t2;
+pk	c1
+1	1
+drop table t3;
+pk	c1
+1	1
+drop table t4;
+pk	c1
+1	1
+drop table t5;
+9
+create table t1 (pk int primary key, c1 int);
+create table t2 (pk int primary key, c1 int);
+create table t3 (pk int primary key, c1 int);
+create table t4 (pk int primary key, c1 int);
+create table t5 (pk int primary key, c1 int);
+insert into t1 values(1,1);
+insert into t2 values(1,1);
+insert into t3 values(1,1);
+insert into t4 values(1,1);
+insert into t5 values(1,1);
+select * from t1;
+select * from t2;
+select * from t3;
+select * from t4;
+select * from t5;
+pk	c1
+1	1
+drop table t1;
+pk	c1
+1	1
+drop table t2;
+pk	c1
+1	1
+drop table t3;
+pk	c1
+1	1
+drop table t4;
+pk	c1
+1	1
+drop table t5;
+8
+create table t1 (pk int primary key, c1 int);
+create table t2 (pk int primary key, c1 int);
+create table t3 (pk int primary key, c1 int);
+create table t4 (pk int primary key, c1 int);
+create table t5 (pk int primary key, c1 int);
+insert into t1 values(1,1);
+insert into t2 values(1,1);
+insert into t3 values(1,1);
+insert into t4 values(1,1);
+insert into t5 values(1,1);
+select * from t1;
+select * from t2;
+select * from t3;
+select * from t4;
+select * from t5;
+pk	c1
+1	1
+drop table t1;
+pk	c1
+1	1
+drop table t2;
+pk	c1
+1	1
+drop table t3;
+pk	c1
+1	1
+drop table t4;
+pk	c1
+1	1
+drop table t5;
+7
+create table t1 (pk int primary key, c1 int);
+create table t2 (pk int primary key, c1 int);
+create table t3 (pk int primary key, c1 int);
+create table t4 (pk int primary key, c1 int);
+create table t5 (pk int primary key, c1 int);
+insert into t1 values(1,1);
+insert into t2 values(1,1);
+insert into t3 values(1,1);
+insert into t4 values(1,1);
+insert into t5 values(1,1);
+select * from t1;
+select * from t2;
+select * from t3;
+select * from t4;
+select * from t5;
+pk	c1
+1	1
+drop table t1;
+pk	c1
+1	1
+drop table t2;
+pk	c1
+1	1
+drop table t3;
+pk	c1
+1	1
+drop table t4;
+pk	c1
+1	1
+drop table t5;
+6
+create table t1 (pk int primary key, c1 int);
+create table t2 (pk int primary key, c1 int);
+create table t3 (pk int primary key, c1 int);
+create table t4 (pk int primary key, c1 int);
+create table t5 (pk int primary key, c1 int);
+insert into t1 values(1,1);
+insert into t2 values(1,1);
+insert into t3 values(1,1);
+insert into t4 values(1,1);
+insert into t5 values(1,1);
+select * from t1;
+select * from t2;
+select * from t3;
+select * from t4;
+select * from t5;
+pk	c1
+1	1
+drop table t1;
+pk	c1
+1	1
+drop table t2;
+pk	c1
+1	1
+drop table t3;
+pk	c1
+1	1
+drop table t4;
+pk	c1
+1	1
+drop table t5;
+5
+create table t1 (pk int primary key, c1 int);
+create table t2 (pk int primary key, c1 int);
+create table t3 (pk int primary key, c1 int);
+create table t4 (pk int primary key, c1 int);
+create table t5 (pk int primary key, c1 int);
+insert into t1 values(1,1);
+insert into t2 values(1,1);
+insert into t3 values(1,1);
+insert into t4 values(1,1);
+insert into t5 values(1,1);
+select * from t1;
+select * from t2;
+select * from t3;
+select * from t4;
+select * from t5;
+pk	c1
+1	1
+drop table t1;
+pk	c1
+1	1
+drop table t2;
+pk	c1
+1	1
+drop table t3;
+pk	c1
+1	1
+drop table t4;
+pk	c1
+1	1
+drop table t5;
+4
+create table t1 (pk int primary key, c1 int);
+create table t2 (pk int primary key, c1 int);
+create table t3 (pk int primary key, c1 int);
+create table t4 (pk int primary key, c1 int);
+create table t5 (pk int primary key, c1 int);
+insert into t1 values(1,1);
+insert into t2 values(1,1);
+insert into t3 values(1,1);
+insert into t4 values(1,1);
+insert into t5 values(1,1);
+select * from t1;
+select * from t2;
+select * from t3;
+select * from t4;
+select * from t5;
+pk	c1
+1	1
+drop table t1;
+pk	c1
+1	1
+drop table t2;
+pk	c1
+1	1
+drop table t3;
+pk	c1
+1	1
+drop table t4;
+pk	c1
+1	1
+drop table t5;
+3
+create table t1 (pk int primary key, c1 int);
+create table t2 (pk int primary key, c1 int);
+create table t3 (pk int primary key, c1 int);
+create table t4 (pk int primary key, c1 int);
+create table t5 (pk int primary key, c1 int);
+insert into t1 values(1,1);
+insert into t2 values(1,1);
+insert into t3 values(1,1);
+insert into t4 values(1,1);
+insert into t5 values(1,1);
+select * from t1;
+select * from t2;
+select * from t3;
+select * from t4;
+select * from t5;
+pk	c1
+1	1
+drop table t1;
+pk	c1
+1	1
+drop table t2;
+pk	c1
+1	1
+drop table t3;
+pk	c1
+1	1
+drop table t4;
+pk	c1
+1	1
+drop table t5;
+2
+create table t1 (pk int primary key, c1 int);
+create table t2 (pk int primary key, c1 int);
+create table t3 (pk int primary key, c1 int);
+create table t4 (pk int primary key, c1 int);
+create table t5 (pk int primary key, c1 int);
+insert into t1 values(1,1);
+insert into t2 values(1,1);
+insert into t3 values(1,1);
+insert into t4 values(1,1);
+insert into t5 values(1,1);
+select * from t1;
+select * from t2;
+select * from t3;
+select * from t4;
+select * from t5;
+pk	c1
+1	1
+drop table t1;
+pk	c1
+1	1
+drop table t2;
+pk	c1
+1	1
+drop table t3;
+pk	c1
+1	1
+drop table t4;
+pk	c1
+1	1
+drop table t5;
+1
+create table t1 (pk int primary key, c1 int);
+create table t2 (pk int primary key, c1 int);
+create table t3 (pk int primary key, c1 int);
+create table t4 (pk int primary key, c1 int);
+create table t5 (pk int primary key, c1 int);
+insert into t1 values(1,1);
+insert into t2 values(1,1);
+insert into t3 values(1,1);
+insert into t4 values(1,1);
+insert into t5 values(1,1);
+select * from t1;
+select * from t2;
+select * from t3;
+select * from t4;
+select * from t5;
+pk	c1
+1	1
+drop table t1;
+pk	c1
+1	1
+drop table t2;
+pk	c1
+1	1
+drop table t3;
+pk	c1
+1	1
+drop table t4;
+pk	c1
+1	1
+drop table t5;

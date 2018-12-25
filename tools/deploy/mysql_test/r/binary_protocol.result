@@ -1,0 +1,10 @@
+drop table if exists t1;
+create table t1 (mat_id INT  NOT NULL  PRIMARY KEY, matintnum CHAR(6) NOT NULL);
+insert into t1 values (1, 'hello');
+SELECT mat_id, matintnum FROM t1 union SELECT 0, 0 from t1;
+ERROR HY000: Invalid character found in a character string argument or A numeric value 'Decimal' is too long
+SELECT mat_id, matintnum FROM t1 union SELECT 10, 0x4141 from t1;
+mat_id	matintnum
+1	hello
+10	AA
+drop table t1;

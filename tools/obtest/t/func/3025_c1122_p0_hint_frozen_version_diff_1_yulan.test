@@ -1,0 +1,53 @@
+deploy ob1=OBI(cluster=1122, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable);
+
+deploy ob1.cs0.set sstable_dist={1,2};
+deploy ob1.cs1.set sstable_dist=3;
+
+deploy ob1.rs0.set extra_config=tablet_replicas_num=1,enable_balance=False;
+
+deploy ob1.cs1.set use_iof=1;
+
+deploy ob1.reboot;
+sleep 60;
+
+deploy ob1.source include/merge.inc;
+
+deploy ob1.create_client;
+
+deploy ob1.cs1.iof EACCES 3 256259 1;
+deploy ob1.cs1.iof EACCES 3 256771 1;
+deploy ob1.cs1.iof EACCES 3 257027 1;
+deploy ob1.cs1.iof EACCES 3 256259 1;
+
+deploy ob1.smart_insert item_info,0,100,0;
+deploy ob1.smart_insert collect_info,1999,100,0;
+deploy ob1.smart_insert collect_info,2000,100,0;
+
+#start merge
+deploy ob1.major_freeze;
+
+deploy ob1.smart_insert item_info,0,100,2;
+deploy ob1.smart_insert collect_info,1999,100,2;
+deploy ob1.smart_insert collect_info,2000,100,2;
+
+#check cs1 merge
+let $cnt=20;
+while($cnt)
+{
+   let $v=deploy_get_value(ob1.cs0.monitor serving_version);
+   if($v == 2)
+   {
+      let $cnt=0;
+   }
+   sleep 30;
+}
+
+deploy ob1.cs1.iof EACCES 3 256259 0;
+deploy ob1.cs1.iof EACCES 3 256771 0;
+deploy ob1.cs1.iof EACCES 3 257027 0;
+deploy ob1.cs1.iof EACCES 3 256259 0;
+
+select /*+read_consistency(frozen)*/ user_nick,is_shared,note,collect_time,stat,tag,category,title,picurl,owner_id,owner_nick,price ,ends,proper_xml,comment_count ,collector_count,total_money,collect_time_precise,user_id,item_type,item_id from collect_info where user_id>=3472328296245049657 and user_id <= 3472328296261234736 and item_id=3472328296227745840;
+
+
+

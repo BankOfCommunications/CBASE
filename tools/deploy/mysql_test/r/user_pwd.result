@@ -1,0 +1,11 @@
+drop table if exists t1,t2,t3,t4;
+create user 'u1' identified by 'pass1', 'u2' identified by 'pass2', 'u3' identified by 'pass3', 'u4' identified by 'pass4';
+GRANT SELECT ON test.* TO 'u1';
+create user 'u11' identified by '';
+ERROR 01007: password must not be empty
+set password for 'u1' = 'pass11';
+set password for 'u_notexist' = 'pass11';
+ERROR 01007: user not exist
+set password = 'pass111';
+set password = '';
+ERROR HY000: password can not be empty

@@ -1,0 +1,9 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\rpm
+2
+5
+11:oceanbase-VER.txt|1|166f7750796|9|85d018e|2adac45668af11e8a8030002c8c1274c|0
+13:oceanbase_test.spec|1|166f775073f|13e9|a57ffe2d|235ac41e68af11e8a8030002c8c1274c|0
+e:oceanbase.spec|1|166f7750765|1611|b796ab10|26aac43a68af11e8a8030002c8c1274c|0
+12:oceanbase-build.sh|1|166f77507b3|779|191a4cdc|2d0ac47268af11e8a8030002c8c1274c|0
+7:scm.xml|1|166f7750817|227|2691b2b7|2feac48e68af11e8a8030002c8c1274c|0

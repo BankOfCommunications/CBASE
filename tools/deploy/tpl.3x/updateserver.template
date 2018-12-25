@@ -1,0 +1,84 @@
+
+[public]
+log_file = log/updateserver.log.$ip:$port
+pid_file = log/updateserver.pid.$ip:$port
+log_level = $log_level
+trace_log_level=$trace_log_level
+
+[update_server]
+vip = $ip
+port = $port
+ups_inner_port = $inner_port
+dev_name = $dev
+instance_master_ip = $master_ip
+instance_master_port = $master_port
+lsync_ip = $lsync_ip
+lsync_port = $lsync_port
+app_name = $app_name
+log_size_mb = $log_size
+log_dir_path = data/ups_commitlog
+fetch_schema_times = 10
+fetch_schema_timeout_us = 3000000
+resp_root_times = 10
+resp_root_timeout_us = 1000000
+log_sync_type = $log_sync_type
+# 0.2 without us, 0.3 has
+lsync_fetch_timeout = 1000000
+lsync_fetch_timeout_us = 1000000
+read_thread_count = 14
+store_thread_count = 4
+read_task_queue_size = 1000
+write_task_queue_size = 1000
+log_task_queue_size = 1000
+
+write_group_commit_num = 1024
+
+replay_checksum_flag = ${replay_checksum_flag}
+log_sync_limit_kb = 51200
+replay_wait_time_us = 5000
+state_check_period_us = 500000
+log_sync_delay_warn_time_threshold_us=500001
+max_n_lagged_log_allowed=10000
+log_sync_delay_warn_time_report_interval_us=10000000
+fetch_log_wait_time_us=500000
+
+using_hash_index=1
+#total_memory_limit = 9
+total_memory_limit = ${total_memory_limit}
+#table_memory_limit = 4
+table_memory_limit = ${table_memory_limit}
+lease_interval_us = 15000000
+lease_reserved_time_us = 10000000
+lease_on = 1
+log_sync_timeout_us = 500000
+log_sync_retry_times = 2
+max_thread_memblock_num = 10
+packet_max_timewait = 1000000
+transaction_process_time_warning_us = 1000000
+store_root = data/ups_data
+raid_regex = ^raid[0-9]+$
+dir_regex = ^store[0-9]+$
+
+warm_up_time_s = ${warm_up_time_s}
+
+#blockcache_size_mb = 512
+blockcache_size_mb = ${blockcache_size_mb}
+blockindex_cache_size_mb = ${blockindex_cache_size_mb}
+
+#active_mem_limit_gb = 1
+active_mem_limit_gb = ${active_mem_limit_gb}
+minor_num_limit = ${minor_num_limit}
+#frozen_mem_limit_gb = 1
+#frozen_mem_limit_gb = ${frozen_mem_limit_gb}
+table_available_warn_size_gb = 3
+table_available_error_size_gb = 2
+sstable_time_limit_s = 604800
+major_freeze_duty_time = -1
+min_major_freeze_interval_s = 1
+
+sstable_compressor_name = none
+sstable_block_size = 4096
+
+[root_server]
+vip = ${rs0.ip}
+port = ${rs0.port}

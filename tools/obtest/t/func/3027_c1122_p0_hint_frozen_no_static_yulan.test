@@ -1,0 +1,21 @@
+deploy ob1=OBI(cluster=1122);
+
+deploy ob1.reboot;
+sleep 60;
+
+deploy ob1.source include/merge.inc;
+
+deploy ob1.create_client;
+
+create table t1(i1 int primary key, v1 varchar(20));
+
+let $cnt=200;
+while($cnt)
+{
+    eval replace into t1 values($cnt, 'version1');
+    dec $cnt;
+}
+
+#check data is version1
+select /*+read_consistency(frozen)*/* from t1;
+

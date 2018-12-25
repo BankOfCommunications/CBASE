@@ -1,0 +1,25 @@
+
+# config server content
+obmonster.config-server=${config_server}
+obmonster.dataid=${data_id}
+obmonster.core-jar-version=${core_jar_version}
+obmonster.core-jar-md5=${core_jar_md5}
+
+
+# oceanbase listener ms
+obmonster.lms=${ms0.ip}:${mysql_port}
+obmonster.threads=${threads}
+obmonster.ps-mode=${ps}
+obmonster.batch-replace=${replace_batch}
+obmonster.skip-trx=${skip_trx}
+obmonster.trx-num=${max_trx}
+obmonster.time=${max_time}
+obmonster.commit-num=${commit_num}
+
+obmonster.sleep=0
+obmonster.reconnect=0
+obmonster.stmt-per-query=0
+obmonster.ps-cache=enable
+obmonster.smart-prepare=disable
+
+obmonster.client-type=java

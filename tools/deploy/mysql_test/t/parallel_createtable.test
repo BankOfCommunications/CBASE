@@ -1,0 +1,107 @@
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn3,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn4,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn5,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+let $cnt=10;
+while($cnt)
+{ 
+--echo $cnt
+
+connection conn1;
+send create table t1 (pk int primary key, c1 int);
+
+connection conn2;
+send create table t2 (pk int primary key, c1 int);
+
+connection conn3;
+send create table t3 (pk int primary key, c1 int);
+
+connection conn4;
+send create table t4 (pk int primary key, c1 int);
+
+connection conn5;
+send create table t5 (pk int primary key, c1 int);
+
+
+connection conn1;
+reap;
+send insert into t1 values(1,1);
+
+connection conn2;
+reap;
+send insert into t2 values(1,1);
+
+connection conn3;
+reap;
+send insert into t3 values(1,1);
+
+connection conn4;
+reap;
+send insert into t4 values(1,1);
+
+connection conn5;
+reap;
+send insert into t5 values(1,1);
+
+
+connection conn1;
+reap;
+send select * from t1;
+
+connection conn2;
+reap;
+send select * from t2;
+
+connection conn3;
+reap;
+send select * from t3;
+
+connection conn4;
+reap;
+send select * from t4;
+
+connection conn5;
+reap;
+send select * from t5;
+
+
+connection conn1;
+reap;
+send drop table t1;
+
+connection conn2;
+reap;
+send drop table t2;
+
+connection conn3;
+reap;
+send drop table t3;
+
+connection conn4;
+reap;
+send drop table t4;
+
+connection conn5;
+reap;
+send drop table t5;
+
+
+connection conn1;
+reap;
+
+connection conn2;
+reap;
+
+connection conn3;
+reap;
+
+connection conn4;
+reap;
+
+connection conn5;
+reap;
+
+dec $cnt;
+}

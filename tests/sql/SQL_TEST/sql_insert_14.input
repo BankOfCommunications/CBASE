@@ -1,0 +1,4 @@
+-- fail
+insert into user values (100, 'da fen qi', 15, 'a turtle') select * from item;
+parse_sql error!
+syntax error at 1:60

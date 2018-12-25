@@ -1,0 +1,21 @@
+select table_name,table_id,table_type,load_type,table_def_type,rowkey_column_num,column_num,max_used_column_id,create_mem_version,max_rowkey_length,compress_func_name,is_use_bloomfilter,merge_write_sstable_version,is_pure_update_table,rowkey_split,expire_condition from __first_tablet_entry;
+table_name	table_id	table_type	load_type	table_def_type	rowkey_column_num	column_num	max_used_column_id	create_mem_version	max_rowkey_length	compress_func_name	is_use_bloomfilter	merge_write_sstable_version	is_pure_update_table	rowkey_split	expire_condition
+__all_cchecksum_info	801	1	1	1	4	NULL	20	1	64	none	0	2	0	0	
+__all_client	13	1	1	1	2	NULL	23	1	64	none	0	2	0	0	
+__all_cluster	8	1	1	1	1	NULL	24	1	8	none	0	2	0	0	
+__all_database	15	1	1	1	1	NULL	19	1	16	none	0	2	0	0	
+__all_database_privilege	16	1	1	1	2	NULL	30	1	16	none	0	2	0	0	
+__all_sequence	17	1	1	1	1	NULL	29	1	8	none	0	2	0	0	
+__all_server	9	1	1	1	4	NULL	23	1	64	none	0	2	0	0	
+__all_server_session	512	1	1	1	1	NULL	25	1	64	none	0	2	0	0	
+__all_server_stat	511	1	1	1	4	NULL	21	1	64	none	0	2	0	0	
+__all_statement	513	1	1	1	3	NULL	25	1	64	none	0	2	0	0	
+__all_sys_config	11	1	1	1	5	NULL	45	1	64	none	0	2	0	0	
+__all_sys_config_stat	12	1	1	1	5	NULL	45	1	64	none	0	2	0	0	
+__all_sys_param	4	1	1	1	2	NULL	20	1	264	none	0	2	0	0	
+__all_sys_stat	5	1	1	1	2	NULL	20	1	264	none	0	2	0	0	
+__all_table_privilege	7	1	1	1	3	NULL	30	1	8	none	0	2	0	0	
+__all_trigger_event	10	1	1	1	1	NULL	21	1	8	none	0	2	0	0	
+__all_truncate_op	18	1	1	1	2	NULL	23	1	64	none	0	2	0	0	
+__all_user	6	1	1	1	1	NULL	32	1	8	none	0	2	0	0	
+__index_process_info	802	1	1	1	2	NULL	18	1	64	none	0	2	0	0	

@@ -1,0 +1,98 @@
+drop table if exists t1,t2;
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1(c1 int primary key,c2 int,c3 int);
+insert into t1 values(1,9,2),(2,8,4),(3,7,5),(4,7,6),(5,7,4);
+select * from t1;
+c1	c2	c3
+1	9	2
+2	8	4
+3	7	5
+4	7	6
+5	7	4
+select * from t1 order by c1 desc;
+c1	c2	c3
+5	7	4
+4	7	6
+3	7	5
+2	8	4
+1	9	2
+select * from t1 order by c1 asc;
+c1	c2	c3
+1	9	2
+2	8	4
+3	7	5
+4	7	6
+5	7	4
+select * from t1 order by c1 desc,c1 desc;
+c1	c2	c3
+5	7	4
+4	7	6
+3	7	5
+2	8	4
+1	9	2
+select * from t1 order by c2 desc,c2 asc;
+c1	c2	c3
+1	9	2
+2	8	4
+3	7	5
+4	7	6
+5	7	4
+select * from t1 order by c2 asc,c2 desc;
+c1	c2	c3
+3	7	5
+4	7	6
+5	7	4
+2	8	4
+1	9	2
+select * from t1 order by c3 asc,c3 desc,c3 asc,c3 desc,c3 asc,c3 desc,c3 asc,c3 desc,c3 asc,c3 desc,c3 asc,c3 desc,c3 asc,c3 desc,c3 asc,c3 desc;
+c1	c2	c3
+1	9	2
+2	8	4
+5	7	4
+3	7	5
+4	7	6
+[major_freeze] err=0
+select * from t1 order by c1 desc;
+c1	c2	c3
+5	7	4
+4	7	6
+3	7	5
+2	8	4
+1	9	2
+select * from t1 order by c1 asc;
+c1	c2	c3
+1	9	2
+2	8	4
+3	7	5
+4	7	6
+5	7	4
+select * from t1 order by c1 desc,c1 desc;
+c1	c2	c3
+5	7	4
+4	7	6
+3	7	5
+2	8	4
+1	9	2
+select * from t1 order by c2 desc,c2 asc;
+c1	c2	c3
+1	9	2
+2	8	4
+3	7	5
+4	7	6
+5	7	4
+select * from t1 order by c2 asc,c2 desc;
+c1	c2	c3
+3	7	5
+4	7	6
+5	7	4
+2	8	4
+1	9	2
+select * from t1 order by c3 asc,c3 desc,c3 asc,c3 desc,c3 asc,c3 desc,c3 asc,c3 desc,c3 asc,c3 desc,c3 asc,c3 desc,c3 asc,c3 desc,c3 asc,c3 desc;
+c1	c2	c3
+1	9	2
+2	8	4
+5	7	4
+3	7	5
+4	7	6
+drop table if exists t1,t2;

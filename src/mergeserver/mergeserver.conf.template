@@ -1,0 +1,65 @@
+[merge_server]
+#listen port
+port=2800
+#listen device
+dev_name=bond0
+#建议配置50000
+task_queue_size=50000
+#libeasy用于接收网络数据的线程数
+io_thread_count=3
+#建议配置30~50，取决于机器上部署的模块，可以使用的核心的4倍
+task_thread_count=32
+#ms与cs、ups的网络通信超时时间，建议配置3000000(3s)，复杂查询可以增大
+network_timeout_us=3000000
+# task left time for drop ahead (200 ms)
+task_left_time_us=200000
+#tablet location cache size in Mbytes，建议最小配置32M(256*tablet数量*1.2)
+location_cache_size_mb=32
+# ups black list fail threshold count (20)
+blacklist_fail_count=20
+# ups black list timeout (10s)
+blacklist_timeout_us=10000000
+# fetch ups list interval (40s)
+upslist_interval_us=40000000
+#tablet location cache timeout in us，建议配置分钟级，默认配置10分钟
+location_cache_timeout_us=600000000
+#日志文件路径
+log_file=./log/mergeserver.log
+#pid文件路径
+pid_file=./log/mergeserver.pid
+#建议配置info
+log_level=info
+#建议配置1024M
+max_log_file_size=1024
+#mergeserver处理请求时保存中间结果可使用的内存大小，
+#磁盘到内存的扩张倍数大约为4
+intermediate_buffer_size_mbyte=8
+#mergeserver最多可以使用的内存占系统物理内存的百分比
+memory_size_limit_percent=15
+#每个请求同一时刻最多并发执行的子请求数量，表示一个请求同时会involve多少个cs线程并发执行
+max_parellel_count=32
+#每个请求最多可以访问的tablet数量，防止异常操作的时候一个请求访问了过多的tablet导致系统hang住
+#内部实现可能不确实限制确切的tablet数量，而是限制对cs发起rpc请求的数量
+max_tablet_count_perq=64
+#ms向cs发送的每个get请求最多包含的行数，默认值20，如果设置为0，ms向cs发送的每个get请求
+#最多包含的行数不受限制，本选项设置较小，可以获得更小的响应时间，但可能会增加ms向cs发起
+#rpc次数，从而减少整个OB系统的qps，本选项设置得太大，ms处理get请求的响应时间决定于ms发送
+#给cs的最大的一个get请求的耗时，响应时间可能比较长。需要根据应用场景设置一个折中值
+max_get_rows_per_subreq=20
+
+# 设置请求处理最长超时时间
+max_req_process_time_us = 1500000
+
+# 慢查询时间门槛，单位us
+slow_query_threshold = 100000
+
+#query cache允许使用的内存大小，默认值为0，不启用query cache，设置值大于0启用
+query_cache_size_mbyte=0
+
+[root_server]
+vip=10.1.1.1
+port=2500
+
+[obmysql]
+# SQL服务端口，默认2828
+obmysql_port=2828

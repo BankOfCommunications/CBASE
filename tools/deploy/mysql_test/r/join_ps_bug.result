@@ -1,0 +1,42 @@
+drop table if exists seller_item,seller_item_tag;
+create table seller_item
+(
+sellerid int not null,
+itemid   int not null,
+col03     int,
+col04     int,
+col05     int,
+col06     int,
+col07     int,
+col08     int,
+col09     int,
+col10     int,
+primary key (sellerid, itemid)
+);
+create table seller_item_tag
+(
+sellerid int not null,
+itemid   int not null,
+tagid    int not null,
+col4     int,
+primary key (sellerid, itemid, tagid)
+);
+prepare st from select a.sellerid, a.itemid, a.tagid, b.col04, b.col05 from      (select * from seller_item_tag where sellerid > ? and sellerid < ?) as A,      (select * from seller_item where sellerid > ? and sellerid < ?) as B   where a.sellerid = b.sellerid and a.itemid = b.itemid;
+set @a=1;
+set @b=2;
+execute st using @a,@b,@a,@b;
+sellerid	itemid	tagid	col04	col05
+set @a=2;
+set @b=3;
+execute st using @a,@b,@a,@b;
+sellerid	itemid	tagid	col04	col05
+execute st using @a,@b,@a,@b;
+sellerid	itemid	tagid	col04	col05
+execute st using @a,@b,@a,@b;
+sellerid	itemid	tagid	col04	col05
+execute st using @a,@b,@a,@b;
+sellerid	itemid	tagid	col04	col05
+execute st using @a,@b,@a,@b;
+sellerid	itemid	tagid	col04	col05
+execute st using @a,@b,@a,@b;
+sellerid	itemid	tagid	col04	col05

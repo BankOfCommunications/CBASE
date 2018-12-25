@@ -1,0 +1,4 @@
+-- fail, Unknown item_id in having clause
+select user_id, sum(qty) sum_qty from order_list group by user_id having item_id >9;
+Unknown item_id in having clause
+Resolve error!

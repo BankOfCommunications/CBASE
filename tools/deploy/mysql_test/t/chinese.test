@@ -1,0 +1,15 @@
+--echo case 1: commit
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connection conn1;
+show variables like 'autocommit';
+drop table if exists t1;
+create table t1 (c1 int primary key, c2 varchar);
+set autocommit=0;
+insert into t1 values (1, '中国');
+select * from t1 where c1 = 1 for update;
+commit;
+set autocommit=1;
+select * from t1;
+disconnect conn1;
+
+

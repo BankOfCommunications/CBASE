@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<simonConfig name="OceanBase" >
+    
+    <!-- BLURBS (AGGREGATOR INPUT -->
+    <blurbMessage name="SysbenchState" version="1" period="5" >
+        <blurb name="SysbenchPerHost">
+	  <tag name="Hostname" type="string"/>
+          <counter name="RequestCount" type="long"/>
+          <gauge name="RequestLatency" type="long"/>
+          <counter name="PrepareCount" type="long"/>
+          <gauge name="PrepareLatency" type="long"/>
+        </blurb>
+    </blurbMessage>
+    
+    <reportPeriod name="defaultPeriod" seconds="5"/>
+    
+    <!-- REPORTS (AGGREGATOR OUTPUT) -->
+    <report name="sysbench report" version="1" periods="defaultPeriod">
+
+        <reportItem name="Sysbench" blurb="SysbenchPerHost">
+            <key name="HostName" tag="Hostname"/>
+            <value name="Requests_Per_Second">RequestCount/period</value>
+            <value name="Request_Latency">RequestLatency</value>
+            <value name="Prepare_RPS">PrepareCount/period</value>
+            <value name="Prepare_Latency">PrepareLatency</value>
+        </reportItem>
+    </report>
+    
+</simonConfig>

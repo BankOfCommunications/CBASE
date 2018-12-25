@@ -1,0 +1,51 @@
+create table stu(id int primary key, name char(9));
+insert into stu(id, name) values(1, 'zhang fei');
+insert into stu(id, name) values(2, 'zhao yun');
+insert into stu(id, name) values(3, 'zhen ji');
+insert into stu(id, name) values(4, 'zhou yu');
+insert into stu(id, name) values(5, 'zhu ge liang');
+insert into stu(id, name) values(6, 'ma chao');
+
+alter table stu add c1 int;
+alter table stu add column c2 char(90);
+
+insert into stu (id, name, c1) values (7, 'han mei mei', 18);
+insert into stu (id, name, c2) values (8, 'li lei', 'a boy');
+select * from stu;
+
+alter table stu add column c3 float, add column c4 varchar, add column c5 int default 10;
+insert into stu (id, c3, c4, c5) values (9, '3.1415926', 'pi', 10);
+select * from stu;
+
+--error 5008
+alter table stu add column c1 int;
+
+--error 5057
+alter table stu add column c7 int primary key;
+--error 5056
+alter table stu add column c7 createtime;     
+--error 5056
+alter table stu add column c7 modifytime;
+
+alter table stu drop c5;
+alter table stu drop column c4, drop c3, drop column c2;
+select * from stu;
+
+--error 5002
+alter table stu drop id;
+
+create table stu_time(id int primary key, c_time createtime, m_time modifytime);
+insert into stu_time(id) values(1);
+--error 5056
+alter table stu_time drop column c_time;
+--error 5056
+alter table stu_time drop column m_time;
+drop table stu_time;
+
+--error 5008
+alter table stu add column c8 int, add column c8 int;
+--error 5008
+alter table stu add column c8 int, drop column c8;
+
+alter table stu drop column c1, add column c8 int;
+drop table stu;

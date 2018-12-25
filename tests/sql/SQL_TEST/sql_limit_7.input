@@ -1,0 +1,4 @@
+-- fail, Every derived table must have its own alias
+select * from (select * from user) u, (select * from order_list where user_id>0 order by qty) limit 5, 2;
+parse_sql error!
+sub-select must has alias name in from clause! at 1:39

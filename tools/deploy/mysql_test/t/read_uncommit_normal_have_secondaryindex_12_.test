@@ -1,0 +1,27 @@
+drop table if exists c,d;
+create table c (c1 int primary key, c2 varchar(8));
+create table d (d1 int primary key, d2 varchar(8));
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create index c_index on c(c2);
+create index d_index on d(d2);
+--echo "merge"
+exec $LOCAL_DIR/tools/ups_admin  -a $MASTER_UPS_IP -p $MASTER_UPS_PORT -t major_freeze;
+--real_sleep 1000
+show index on c;
+show index on d;
+set autocommit= 0 ;						
+insert into c values(1,1);
+insert into d values(1,1);			
+select * from c,d where c.c1 = d.d1;
+select * from c 
+left join d on c.c1 = d.d1;
+select * from c 
+right join d on c.c1 = d.d1;
+select * from c 
+inner join d on c.c1 = d.d1;
+select/*+join(si)*/ * from c 
+left join d on c.c1 = d.d1;
+select/*+join(bloomfilter_join)*/ * from c 
+left join d on c.c1 = d.d1;
+commit;

@@ -1,0 +1,107 @@
+[2013-06-04 11:00:46][INFO ] [Diamond        :40] - config content => 
+dataId=obmonster_junyue_perf
+clusterAddress=10.232.23.17:2865
+coreJarVersion=1.0.0
+enableUpdate=true
+coreJarPath=http://obconsole.test.alibaba-inc.com/jarrepo/get?version=
+percentage=50
+whiteList=
+MD5=a481e5321f16ec901f3187d1630376db
+[2013-06-04 11:00:46][INFO ] [Diamond        :45] - config url => http://10.232.4.35:9000/method=get&key=obmonster_junyue_perf
+[2013-06-04 11:00:46][INFO ] [Diamond        :49] - register result => sun.net.www.protocol.http.HttpURLConnection$HttpInputStream@5975d6ab
+[2013-06-04 11:00:46][INFO ] [OBMonster      :121] - prepare start ... 
+[2013-06-04 11:00:46][INFO ] [OBMonster      :128] - schema => Test Schema
+[2013-06-04 11:00:46][INFO ] [OceanbaseDataSourceProxy:39] - OceanbaseDataSourceProxy init start
+[2013-06-04 11:00:46][INFO ] [OBDataSourceConfig:72] - [10.232.23.17:2865]
+[2013-06-04 11:00:47][WARN ] [OBDataSourceConfig:96] - get cluster list from 10.232.23.17:2865 failed
+java.lang.NullPointerException
+	at com.alipay.oceanbase.util.OBMetaDataSource.getClusterListFromRs(OBMetaDataSource.java:54)
+	at com.alipay.oceanbase.util.OBDataSourceConfig.getConfigFromRs(OBDataSourceConfig.java:91)
+	at com.alipay.oceanbase.util.OBDataSourceConfig.getConfigFromURL(OBDataSourceConfig.java:73)
+	at com.alipay.oceanbase.OBGroupDataSource.getConfig(OBGroupDataSource.java:196)
+	at com.alipay.oceanbase.OBGroupDataSource.init(OBGroupDataSource.java:68)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at com.alipay.oceanbase.Loader.loadRemoteCoreJar(Loader.java:54)
+	at com.alipay.oceanbase.OceanbaseDataSourceProxy.init(OceanbaseDataSourceProxy.java:42)
+	at com.etao.monster.db.Session.init(Session.java:83)
+	at com.etao.monster.schema.Table.initialize(Table.java:232)
+	at com.etao.monster.schema.Schema.initialize(Schema.java:146)
+	at com.etao.monster.worker.PrepareWorker.run(PrepareWorker.java:28)
+[2013-06-04 11:00:47][INFO ] [OBDataSourceConfig:103] - clusters:[10.232.23.17:2865]
+[2013-06-04 11:00:47][WARN ] [OBDataSourceConfig:114] - get mslist from 10.232.23.17:2865 failed,com.alipay.oceanbase.OceanBaseRuntimeException: ms not found
+[2013-06-04 11:00:47][WARN ] [OBGroupDataSource:201] - both url and rs list are null
+[2013-06-04 11:00:47][INFO ] [OBMonster      :141] - prepare  finish...
+[2013-06-04 11:00:47][INFO ] [OBMonitor      :105] - start time: Tue Jun 04 11:00:46 CST 2013 current time: Tue Jun 04 11:00:47 CST 2013
+[2013-06-04 11:00:47][INFO ] [OBMonitor      :106] - TIME   => 0 s
+[2013-06-04 11:00:47][INFO ] [OBMonitor      :107] - QPS    => NaN qps
+[2013-06-04 11:00:47][INFO ] [OBMonitor      :108] - AVG RT => NaN ms
+[2013-06-04 11:00:47][ERROR] [Launcher       :61] - / by zero
+[2013-06-04 11:06:28][INFO ] [Diamond        :40] - config content => 
+dataId=obmonster_junyue_perf
+clusterAddress=10.232.23.17:2865
+coreJarVersion=1.0.0
+enableUpdate=true
+coreJarPath=http://obconsole.test.alibaba-inc.com/jarrepo/get?version=
+percentage=50
+whiteList=
+MD5=a481e5321f16ec901f3187d1630376db
+[2013-06-04 11:06:28][INFO ] [Diamond        :45] - config url => http://10.232.4.35:9000/method=get&key=obmonster_junyue_perf
+[2013-06-04 11:06:28][INFO ] [Diamond        :49] - register result => sun.net.www.protocol.http.HttpURLConnection$HttpInputStream@5975d6ab
+[2013-06-04 11:06:28][INFO ] [OBMonster      :121] - prepare start ... 
+[2013-06-04 11:06:28][INFO ] [OBMonster      :128] - schema => Test Schema
+[2013-06-04 11:06:28][INFO ] [OceanbaseDataSourceProxy:39] - OceanbaseDataSourceProxy init start
+[2013-06-04 11:06:28][INFO ] [OBDataSourceConfig:72] - [10.232.23.17:2865]
+[2013-06-04 11:06:28][INFO ] [OBDataSourceConfig:103] - clusters:[10.232.23.17:2865]
+[2013-06-04 11:06:28][INFO ] [OBGroupDataSource:197] - get config from url:http://10.232.4.35:9000/method=get&key=obmonster_junyue_perf
+[2013-06-04 11:06:28][ERROR] [DruidDataSource:407] - mysql should not use 'PoolPreparedStatements'
+[2013-06-04 11:06:28][INFO ] [DruidDataSource:456] - {dataSource-1} inited
+[2013-06-04 11:06:28][INFO ] [OBGroupDataSource:89] - 
+add cluster 10.232.23.17:2865:100, ms:10.232.23.17:2865 
+
+[2013-06-04 11:06:28][INFO ] [OceanbaseDataSourceProxy:46] - OceanbaseDataSourceProxy init end
+[2013-06-04 11:06:28][INFO ] [OBDataSourceConfig:72] - [10.232.23.17:2865]
+[2013-06-04 11:06:28][INFO ] [OBMonster      :141] - prepare  finish...
+[2013-06-04 11:06:28][INFO ] [OBMonitor      :105] - start time: Tue Jun 04 11:06:28 CST 2013 current time: Tue Jun 04 11:06:28 CST 2013
+[2013-06-04 11:06:28][INFO ] [OBMonitor      :106] - TIME   => 0 s
+[2013-06-04 11:06:28][INFO ] [OBMonitor      :107] - QPS    => NaN qps
+[2013-06-04 11:06:28][INFO ] [OBMonitor      :108] - AVG RT => NaN ms
+[2013-06-04 11:06:28][ERROR] [Launcher       :61] - / by zero
+[2013-06-04 11:08:56][INFO ] [Diamond        :40] - config content => 
+dataId=obmonster_junyue_perf
+clusterAddress=10.232.23.17:2865
+coreJarVersion=1.0.0
+enableUpdate=true
+coreJarPath=http://obconsole.test.alibaba-inc.com/jarrepo/get?version=
+percentage=50
+whiteList=
+MD5=a481e5321f16ec901f3187d1630376db
+[2013-06-04 11:08:56][INFO ] [Diamond        :45] - config url => http://10.232.4.35:9000/method=get&key=obmonster_junyue_perf
+[2013-06-04 11:08:56][INFO ] [Diamond        :49] - register result => sun.net.www.protocol.http.HttpURLConnection$HttpInputStream@5975d6ab
+[2013-06-04 11:08:56][INFO ] [OBMonster      :121] - prepare start ... 
+[2013-06-04 11:08:56][INFO ] [OBMonster      :128] - schema => Test Schema
+[2013-06-04 11:08:56][INFO ] [OceanbaseDataSourceProxy:39] - OceanbaseDataSourceProxy init start
+[2013-06-04 11:08:56][INFO ] [OBDataSourceConfig:72] - [10.232.23.17:2865]
+[2013-06-04 11:08:56][INFO ] [OBDataSourceConfig:103] - clusters:[10.232.23.17:2865]
+[2013-06-04 11:08:56][INFO ] [OBGroupDataSource:197] - get config from url:http://10.232.4.35:9000/method=get&key=obmonster_junyue_perf
+[2013-06-04 11:08:56][ERROR] [DruidDataSource:407] - mysql should not use 'PoolPreparedStatements'
+[2013-06-04 11:08:56][INFO ] [DruidDataSource:456] - {dataSource-1} inited
+[2013-06-04 11:08:56][INFO ] [OBGroupDataSource:89] - 
+add cluster 10.232.23.17:2865:100, ms:10.232.23.17:2865 
+
+[2013-06-04 11:08:56][INFO ] [OceanbaseDataSourceProxy:46] - OceanbaseDataSourceProxy init end
+[2013-06-04 11:08:57][WARN ] [Session        :87] - data source has been inited
+[2013-06-04 11:09:18][INFO ] [OBMonster      :141] - prepare  finish...
+[2013-06-04 11:09:18][INFO ] [OBMonitor      :105] - start time: Tue Jun 04 11:08:56 CST 2013 current time: Tue Jun 04 11:09:18 CST 2013
+[2013-06-04 11:09:18][INFO ] [OBMonitor      :106] - TIME   => 22 s
+[2013-06-04 11:09:18][INFO ] [OBMonitor      :107] - QPS    => 4.5454545 qps
+[2013-06-04 11:09:18][INFO ] [OBMonitor      :108] - AVG RT => 197.33 ms
+[2013-06-04 11:09:18][INFO ] [OBMonitor      :117] - RT < 1 ms => 0 %
+[2013-06-04 11:09:18][INFO ] [OBMonitor      :117] - RT < 5 ms => 0 %
+[2013-06-04 11:09:18][INFO ] [OBMonitor      :117] - RT < 10 ms => 0 %
+[2013-06-04 11:09:18][INFO ] [OBMonitor      :117] - RT < 20 ms => 0 %
+[2013-06-04 11:09:18][INFO ] [OBMonitor      :117] - RT < 50 ms => 0 %
+[2013-06-04 11:09:18][INFO ] [OBMonitor      :117] - RT < 100 ms => 0 %
+[2013-06-04 11:09:18][INFO ] [OBMonitor      :117] - RT < 500 ms => 0 %

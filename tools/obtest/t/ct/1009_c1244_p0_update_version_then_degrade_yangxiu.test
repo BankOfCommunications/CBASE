@@ -1,0 +1,43 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob1.reboot;
+
+deploy ob1.start_diamond localhost;
+sleep 5;
+deploy ob1.set unloadDelaytime=10;
+deploy ob1.create_client;
+deploy ob1.prepare;
+deploy ob1.start_check;
+
+#sql
+create table t2(a int primary key,b int);
+insert into t2 values(-1,-1),(-2,-2),(0,0),(1,1);
+select * from t2;
+
+#set diamond
+sleep 10;
+deploy ob1.set_diamond coreJarVersion=9.0.2,enableUpdate=true,percentage=100,MD5=87a6a137f05b4e730f99dd02ae891908;
+sleep 60;
+
+#check __all_client
+let $a=deploy_get_value(ob1.mysql_p select count(*)=2 from __all_client);
+--echo $a
+
+#check local 
+deploy ob1.sh ls ~/.obdatasource/9.0.2 ;
+
+
+#set diamond
+sleep 10;
+deploy ob1.set_diamond coreJarVersion=9.0.1,enableUpdate=true,percentage=100;
+sleep 60;
+
+
+#check __all_client
+let $a=deploy_get_value(ob1.mysql_p select count(*)=3 from __all_client);
+--echo $a
+
+#check local
+deploy ob1.sh ls ~/.obdatasource/9.0.1;
+
+deploy ob1.stop_check;
+deploy ob1.stop_diamond;

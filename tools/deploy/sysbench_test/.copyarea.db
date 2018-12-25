@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\deploy\sysbench_test
+2
+4
+6:README|1|166f778adc4|3e2|443704a0|5c5c07d668c811e8a8030002c8c1274c|0
+b:sysbench.py|1|166f778ae08|22dd|15108e87|5e6c07f268c811e8a8030002c8c1274c|0
+9:config.py|1|166f778ae41|b4f|ced3c5f2|607c080e68c811e8a8030002c8c1274c|0
+b:__init__.py|1|166f778ae74|4a|caf2187c|634c082a68c811e8a8030002c8c1274c|0

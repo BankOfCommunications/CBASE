@@ -1,0 +1,64 @@
+ob1=OBI(cluster=1222);
+ob2=OBI(cluster=1222);
+ob2.rs0.set master = ob1.rs0;
+ob1.reboot;
+ob2.reboot;
+ob1.create_client;
+ob1.mysql alter system set merge_delay_interval='1s' server_type=chunkserver server_ip='$ip' server_port=$port
+ob1.mysql_p select value from __all_sys_config_stat where name='merge_delay_interval' and svr_ip='$csip1' and svr_port=$csport1
+value
+600s
+ob1.mysql_p select value from __all_sys_config_stat where name='merge_delay_interval' and svr_ip='$csip2' and svr_port=$csport2
+value
+600s
+ob1.mysql_p select value from __all_sys_config_stat where name='merge_delay_interval' and svr_ip='$csip1' and svr_port=$csport1
+value
+1s
+ob1.mysql_p select value from __all_sys_config_stat where name='merge_delay_interval' and svr_ip='$csip2' and svr_port=$csport2
+value
+600s
+alter system set merge_delay_interval='10s' server_type=chunkserver;
+select value from __all_sys_config_stat where svr_type='chunkserver' and name='merge_delay_interval';
+value
+10s
+10s
+10s
+10s
+alter system set merge_delay_interval='5s' server_type=chunkserver cluster=1;
+select value from __all_sys_config_stat where cluster_id=1 and name='merge_delay_interval';
+value
+5s
+5s
+select value from __all_sys_config_stat where cluster_id=2 and name='merge_delay_interval';
+value
+10s
+10s
+alter system set merge_delay_interval='7s' server_type=chunkserver cluster=0;
+select value from __all_sys_config_stat where svr_type='chunkserver' and name='merge_delay_interval';
+value
+7s
+7s
+7s
+7s
+alter system set merge_delay_interval='500s' server_type=chunkserver cluster=2;
+select value from __all_sys_config_stat where cluster_id=1 and name='merge_delay_interval';
+value
+7s
+7s
+select value from __all_sys_config_stat where cluster_id=2 and name='merge_delay_interval';
+value
+500s
+500s
+ob1.mysql alter system set merge_delay_interval='1s' server_type=chunkserver server_ip='$ip' server_port=$port
+ob1.mysql_p select value from __all_sys_config_stat where name='merge_delay_interval' and svr_ip='$csip1' and svr_port=$csport1
+value
+7s
+ob1.mysql_p select value from __all_sys_config_stat where name='merge_delay_interval' and svr_ip='$csip2' and svr_port=$csport2
+value
+500s
+ob1.mysql_p select value from __all_sys_config_stat where name='merge_delay_interval' and svr_ip='$csip1' and svr_port=$csport1
+value
+7s
+ob1.mysql_p select value from __all_sys_config_stat where name='merge_delay_interval' and svr_ip='$csip2' and svr_port=$csport2
+value
+1s

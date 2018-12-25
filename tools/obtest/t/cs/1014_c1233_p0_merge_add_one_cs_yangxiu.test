@@ -1,0 +1,44 @@
+deploy ob1=OBI(cluster=1233, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable);
+
+deploy ob1.cs0.set sstable_dist={1,2,3};
+deploy ob1.cs1.set sstable_dist={1,2,3};
+deploy ob1.cs2.set sstable_dist={2,3};
+
+deploy ob1.cs2.set status=disable;
+
+deploy ob1.rs0.set extra_config=tablet_replicas_num=2,enable_balance=True;
+
+deploy ob1.reboot;
+sleep 10;
+
+deploy ob1.source include/merge.inc;
+deploy ob1.source include/migrate.inc;
+sleep 10;
+
+deploy ob1.prepare;
+deploy ob1.start_check;
+
+#merge
+deploy ob1.major_freeze;
+
+sleep 10;
+
+#start one cs;
+deploy ob1.cs2.set status=enable;
+deploy ob1.cs2.start;
+
+sleep 20;
+#check not migrate
+deploy ob1.cs2.check_log_until_success "merge running, cannot migrate";
+
+sleep 30;
+
+#check merge done;
+deploy ob1.check_cs_version 2;
+
+#check migrate
+deploy ob1.check_cs_sstable 404;
+deploy ob1.check_cs_balance;
+
+deploy ob1.stop_check;
+

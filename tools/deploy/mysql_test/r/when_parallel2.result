@@ -1,0 +1,219 @@
+drop table if exists t1,t2;
+create table t1(pk int primary key, i1 int, v1 varchar(20));
+create table t2(pk int primary key, i1 int, v1 varchar(20));
+insert into t1 values(1,1,'a'),(2,2,'b');
+insert into t2 values(1,1,'a'),(2,2,'b');
+begin;
+update t1 set v1='new_m1' where pk=1 when row_count(insert into t1 values(1,1,'new') when row_count(delete from t1 where pk=1)=1)=1;
+begin;
+update t2 set v1='new_m2' where pk=1 when row_count(delete from t1 where pk=1)=1;
+ERROR HY000: Exclusive lock conflict 'int32:1' for key 'PRIMARY'
+commit;
+update t2 set v1='new_m3' where pk=1 when row_count(delete from t1 where pk=1)=1;
+commit;
+select * from t1;
+pk	i1	v1
+2	2	b
+select * from t2;
+pk	i1	v1
+1	1	new_m3
+2	2	b
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+begin;
+update t1 set v1='new_m1' where pk=1 when row_count(insert into t1 values(1,1,'new') when row_count(delete from t1 where pk=1)=1)=1;
+begin;
+update t2 set v1='new_m2' where pk=1 when row_count(delete from t1 where pk=2)=1;
+rollback;
+commit;
+select * from t1;
+pk	i1	v1
+1	1	a
+select * from t2;
+pk	i1	v1
+1	1	new_m2
+2	2	b
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+begin;
+update t1 set v1='new_m1' where pk=1 when row_count(update t1 set v1='new_m2' where pk=5 when row_count(insert into t1 values(3,3,'c'))=1)=1;
+begin;
+update t2 set v1='new_m2' where pk=1 when row_count(insert into t1 values(3,3,'c'))=1;
+ERROR HY000: Number 2 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+commit;
+commit;
+select * from t1;
+pk	i1	v1
+1	1	a
+2	2	b
+3	3	c
+select * from t2;
+pk	i1	v1
+1	1	new_m2
+2	2	b
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+begin;
+update t1 set v1='new_m1' where pk=1 when row_count(delete from t1 where pk=4 when row_count(insert into t1 values(3,3,'c'))=1)=1;
+begin;
+update t2 set v1='new_m2' where pk=1 when row_count(insert into t1 values(3,3,'c'))=1;
+ERROR HY000: Number 2 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+update t2 set v1='new_m3' where pk=1 when row_count(insert into t1 values(4,4,'d'))=1;
+commit;
+commit;
+select * from t1;
+pk	i1	v1
+1	1	a
+2	2	b
+3	3	c
+4	4	d
+select * from t2;
+pk	i1	v1
+1	1	new_m2
+2	2	b
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+begin;
+delete from t1 where pk=1 when row_count(insert into t1 values(1,1,'new') when row_count(delete from t1 where pk=1)=1)=1;
+begin;
+delete from t1 where pk=1 when row_count(delete from t1 where pk=2)=1;
+ERROR HY000: Exclusive lock conflict 'int32:1' for key 'PRIMARY'
+commit;
+delete from t1 where pk=1 when row_count(delete from t1 where pk=2)=1;
+commit;
+select * from t1;
+pk	i1	v1
+select * from t2;
+pk	i1	v1
+1	1	a
+2	2	b
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+begin;
+delete from t1 where pk=1 when row_count(insert into t1 values(1,1,'new') when row_count(delete from t1 where pk=1)=1)=1;
+begin;
+delete from t1 where pk=1 when row_count(delete from t1 where pk=1)=1;
+rollback;
+commit;
+select * from t1;
+pk	i1	v1
+2	2	b
+select * from t2;
+pk	i1	v1
+1	1	a
+2	2	b
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+begin;
+delete from t1 where pk=1 when row_count(update t1 set v1='new_m2' where pk=5 when row_count(insert into t1 values(3,3,'c'))=1)=1;
+begin;
+delete from t1 where pk=1 when row_count(insert into t1 values(3,3,'c'))=1;
+ERROR HY000: Number 2 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+commit;
+commit;
+select * from t1;
+pk	i1	v1
+2	2	b
+3	3	c
+select * from t2;
+pk	i1	v1
+1	1	a
+2	2	b
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+begin;
+delete from t1 where pk=1 when row_count(delete from t1 where pk=4 when row_count(insert into t1 values(3,3,'c'))=1)=1;
+begin;
+delete from t1 where pk=1 when row_count(insert into t1 values(3,3,'c'))=1;
+ERROR HY000: Number 2 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+delete from t1 where pk=1 when row_count(insert into t1 values(4,4,'d'))=1;
+commit;
+commit;
+select * from t1;
+pk	i1	v1
+2	2	b
+3	3	c
+4	4	d
+select * from t2;
+pk	i1	v1
+1	1	a
+2	2	b
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+begin;
+delete from t1 where pk=1 when row_count(update t1 set v1='new_n' where pk=1 when row_count(insert into t1 values(3,3,'c'))=1)=1;
+begin;
+delete from t1 where pk=2 when row_count(update t1 set v1='new_m' where pk=3)=1;
+commit;
+commit;
+select * from t1;
+pk	i1	v1
+3	3	new_m
+select * from t2;
+pk	i1	v1
+1	1	a
+2	2	b
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+begin;
+delete from t1 where pk=1 when row_count(update t1 set v1='new_n' where pk=1 when row_count(insert into t1 values(3,3,'c'))=1)=1;
+begin;
+delete from t1 where pk=2 when row_count(update t1 set v1='new_m' where pk=3)=1;
+rollback;
+ERROR HY000: Number 1 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+commit;
+select * from t1;
+pk	i1	v1
+1	1	a
+2	2	b
+select * from t2;
+pk	i1	v1
+1	1	a
+2	2	b
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+begin;
+update t1 set v1='new_x' where pk=1 when row_count(insert into t2 values(1,1,'a1') when row_count(delete from t2 where pk=4 when row_count(insert into t1 values(3,3,'c'))=1)=1)=1;
+begin;
+update t2 set v1='new_y' where pk=1 when row_count(delete from t2 where pk=1 when row_count(delete from t1 where pk=2 when row_count(update t1 set v1='new_z' where pk=1)=1)=1)=1;
+ERROR HY000: Number 2 When filter failed, ret=-5064, func 1: ROW_COUNT()=0
+insert into t1 values(3,3,'c');
+commit;
+commit;
+select * from t1;
+pk	i1	v1
+1	1	new_z
+3	3	c
+select * from t2;
+pk	i1	v1
+2	2	b

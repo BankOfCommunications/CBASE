@@ -1,0 +1,20 @@
+drop table if exists c;
+create table c (c1 int primary key, c2 varchar(8));
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create index c_index on c(c2);
+"merge"
+[major_freeze] err=0
+show index on c;
+index_name	status
+__3001__idx__c_index	1
+begin;
+insert into c values(1,1);
+update c set c1 = 2 where c1 = 1;
+begin;
+select * from c where c1 = 1 for update;
+ERROR HY000: Exclusive lock conflict 'int32:1' for key 'PRIMARY'
+select * from c where c1 = 2 for update;
+ERROR HY000: Exclusive lock conflict 'int32:2' for key 'PRIMARY'
+commit;
+commit;

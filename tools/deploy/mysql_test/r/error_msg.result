@@ -1,0 +1,53 @@
+drop table if exists t1;
+test connction close
+#########################
+create table t1(a int primary key,b int);
+ERROR HY000: MySQL server has gone away
+select * from t1;
+ERROR HY000: MySQL server has gone away
+drop table t1;
+ERROR HY000: MySQL server has gone away
+#########################
+test table exists
+#########################
+create table t1(a int primary key, b int);
+create table t1(a int primary key, b int);
+ERROR 42S01: table 't1' already exists
+drop table t1;
+#########################
+test table does not exist
+#########################
+select * from t1;
+ERROR 42S02: table 'test.t1' does not exist
+drop table t1;
+ERROR 42S02: table 'test.t1' does not exist
+#########################
+test use keyword
+#########################
+create table t1(int int);
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'int int)' at line 1
+#########################
+test no primary key
+#########################
+create table t1(a int);
+ERROR HY000: no primary key specified:table_name[t1]
+#########################
+test primary key null
+#########################
+create table t1(a int primary key,b int);
+insert into t1(b) values(1);
+ERROR HY000: primary key can not be empty
+drop table t1;
+create table t1(a int primary key,b int);
+insert into t1(a) values(NULL);
+drop table t1;
+create table t1(a int, b int, primary key(a,b), c int);
+insert into t1(a,b) values(NULL,1);
+insert into t1(a,b) values(1,NULL);
+drop table t1;
+#########################
+test syntax err
+#########################
+create ;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'create ' at line 1
+#########################

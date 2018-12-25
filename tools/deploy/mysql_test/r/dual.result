@@ -1,0 +1,116 @@
+drop table if exists t1,t2,t3;
+select 1;
+1
+1
+select 1+2;
+1+2
+3
+select 1+2+3;
+1+2+3
+6
+select 1-1;
+1-1
+0
+select 1-1-1;
+1-1-1
+-1
+select 2-1-0;
+2-1-0
+1
+select 1/0;
+ERROR 22012: OB-78: Divided by zero
+select 1/2;
+1/2
+0
+select 2/1;
+2/1
+2
+select 4/2/2;
+4/2/2
+1
+select 1*0;
+1*0
+0
+select 1*2*3;
+1*2*3
+6
+select (1+2.5)*3/5-10*0.1*8/0.2-2 limit 10;
+(1+2.5)*3/5-10*0.1*8/0.2-2
+-39.900000000000000000000000000000000000
+select 0.1;
+0.1
+0.1
+select 0.1+0.2;
+0.1+0.2
+0.3
+select 0.1+1;
+0.1+1
+1.1
+select 0.2/0.1;
+0.2/0.1
+2.0000000000000000000000000000000000000
+select 1 limit 1;
+1
+1
+select 1+1 limit 2;
+1+1
+2
+create table t1(pk int primary key,extra int);
+select 1 from (select pk from t1) as t;
+1
+insert into t1(pk) values(1),(2);
+select 1 from (select * from t1) as t;
+1
+1
+1
+select 1 from (select 1 ) as t;
+1
+1
+drop table t1;
+select 'a';
+'a'
+a
+select 'a' + 'b';
+'a' + 'b'
+0
+select 'a'-'b';
+'a'-'b'
+0
+select '1' + '2';
+'1' + '2'
+3
+select '1' / '2';
+'1' / '2'
+0.5
+select '1' * '2';
+'1' * '2'
+2
+select '1.5';
+'1.5'
+1.5
+select '1.5' + '2.0';
+'1.5' + '2.0'
+3
+select (1+'2.5')*3/5-'10'*0.1*8/'0.2'-2 limit 10;
+(1+'2.5')*3/5-'10'*0.1*8/'0.2'-2
+-41.000000000000000000000000000000000000
+select 1 from dual;
+1
+1
+select '1' from dual where 1 limit 20;
+'1'
+1
+select '1' from dual where 0 limit 20;
+'1'
+select 1 union select 1 from dual;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'union select 1 from dual' at line 1
+select 1 union select 1;
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'union select 1' at line 1
+create table dual(name varchar primary key,a int);
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'dual(name varchar primary key,a int)' at line 1
+insert into dual values(1);
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near 'dual values(1)' at line 1
+select *;
+ERROR HY000: No tables used
+select * from dual;
+ERROR HY000: No tables used

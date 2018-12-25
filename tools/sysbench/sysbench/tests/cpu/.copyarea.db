@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\sysbench\sysbench\tests\cpu
+2
+4
+8:sb_cpu.c|1|166f7761a69|d7e|104047d2|178b37be68b811e8a8030002c8c1274c|0
+b:Makefile.am|1|166f7761a40|36b|c61c1c7d|157b37a268b811e8a8030002c8c1274c|0
+e:CMakeLists.txt|1|166f7761a9d|33e|6ff00db7|198b37da68b811e8a8030002c8c1274c|0
+b:Makefile.in|1|166f7761bac|4136|c76dc065|1bbb37f668b811e8a8030002c8c1274c|0

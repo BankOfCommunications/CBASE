@@ -1,0 +1,82 @@
+drop table if exists t1,t2,t3,t4;
+create table t1 (id int primary key, i2 int);
+create table t2 (id int primary key, i2 int);
+insert into t1(id) values (75);
+insert into t1(id) values (79);
+insert into t1(id) values (78);
+insert into t1(id) values (77);
+insert into t1(id) values (104);
+insert into t1(id) values (103);
+insert into t1(id) values (102);
+insert into t1(id) values (101);
+insert into t1(id) values (105);
+insert into t1(id) values (106);
+insert into t1(id) values (107);
+insert into t2(id) values (107),(75),(1000);
+select /*+ join(si) */ t1.id, count(t2.id) from t1,t2 where t2.id = t1.id group by t1.id;
+id	count(t2.id)
+75	1
+107	1
+select /*+ join(si) */ t1.id, count(t2.id) from t1,t2 where t2.id = t1.id group by t2.id;
+id	count(t2.id)
+75	1
+107	1
+select /*+ join(si) */ t1.id, count(t2.id) from t1,t2 where t2.id = t1.id group by t2.id;
+id	count(t2.id)
+75	1
+107	1
+select /*+ join(si) */ t1.id, count(t2.id) from t1 left join t2 on t1.i2=t2.i2 where t2.id = t1.id group by t2.id;
+id	count(t2.id)
+select /*+ join(si) */ t1.id, count(t2.id) from t1 right join t2 on t1.i2=t2.i2 where t2.id = t1.id group by t2.id;
+ERROR HY000: OB-5205: semi join:function is on the way!
+select /*+ join(si) */ t1.id, count(t2.id) from t1 inner join t2 on t1.i2=t2.i2 where t2.id = t1.id group by t2.id;
+id	count(t2.id)
+select /*+ join(si) */ t1.id, count(t2.id) from t1 full join t2 on t1.i2=t2.i2 where t2.id = t1.id group by t2.id;
+id	count(t2.id)
+select /*+ join(merge_join) */ t1.id, count(t2.id) from t1,t2 where t2.id = t1.id group by t1.id;
+id	count(t2.id)
+75	1
+107	1
+select /*+ join(merge_join) */ t1.id, count(t2.id) from t1,t2 where t2.id = t1.id group by t2.id;
+id	count(t2.id)
+75	1
+107	1
+select /*+ join(merge_join) */ t1.id, count(t2.id) from t1,t2 where t2.id = t1.id group by t2.id;
+id	count(t2.id)
+75	1
+107	1
+select /*+ join(merge_join) */ t1.id, count(t2.id) from t1 left join t2 on t1.i2=t2.i2 where t2.id = t1.id group by t2.id;
+id	count(t2.id)
+select /*+ join(merge_join) */ t1.id, count(t2.id) from t1 right join t2 on t1.i2=t2.i2 where t2.id = t1.id group by t2.id;
+id	count(t2.id)
+select /*+ join(merge_join) */ t1.id, count(t2.id) from t1 inner join t2 on t1.i2=t2.i2 where t2.id = t1.id group by t2.id;
+id	count(t2.id)
+select /*+ join(merge_join) */ t1.id, count(t2.id) from t1 full join t2 on t1.i2=t2.i2 where t2.id = t1.id group by t2.id;
+id	count(t2.id)
+CREATE TABLE t3 (
+t1_id int default NULL,
+t2_id int default NULL,
+type varchar(20),
+cost_unit varchar(20),
+min_value double default NULL,
+max_value double default NULL,
+t3_id int default NULL,
+item_id int default NULL,
+primary key(t1_id)
+);
+INSERT INTO t3 VALUES (12,5,'Percent','Cost',-1,0,-1,-1),(14,4,'Percent','Cost',-1,0,-1,-1),(18,5,'Percent','Cost',-1,0,-1,-1),(19,4,'Percent','Cost',-1,0,-1,-1),(20,5,'Percent','Cost',100,-1,22,291),(21,5,'Percent','Cost',100,-1,18,291),(22,1,'Percent','Cost',100,-1,6,291),(23,1,'Percent','Cost',100,-1,21,291),(24,1,'Percent','Cost',100,-1,9,291),(25,1,'Percent','Cost',100,-1,4,291),(26,1,'Percent','Cost',100,-1,20,291),(27,4,'Percent','Cost',100,-1,7,202),(28,1,'Percent','Cost',50,-1,-1,137),(29,2,'Percent','Cost',100,-1,4,354),(30,2,'Percent','Cost',100,-1,9,137),(93,2,'Cost','Cost',-1,10000000,-1,-1);
+CREATE TABLE t4 (
+id int,
+name varchar(255) default NULL,
+PRIMARY KEY  (id)
+);
+INSERT INTO t4 VALUES (1,'s1'),(2,'s2'),(3,'s3'),(4,'s4'),(5,'s5');
+select /*+ join(si) */ t3.*, t4.*  from t3, t4 where t4.id=t3.t2_id limit 2;
+t1_id	t2_id	type	cost_unit	min_value	max_value	t3_id	item_id	id	name
+22	1	Percent	Cost	100	-1	6	291	1	s1
+23	1	Percent	Cost	100	-1	21	291	1	s1
+select /*+ join(si) */ t3.*, t4.*  from t3 left join t4 on t4.id=t3.t2_id limit 2;
+t1_id	t2_id	type	cost_unit	min_value	max_value	t3_id	item_id	id	name
+22	1	Percent	Cost	100	-1	6	291	1	s1
+23	1	Percent	Cost	100	-1	21	291	1	s1
+drop table t1,t2,t3,t4;

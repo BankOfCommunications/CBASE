@@ -1,0 +1,17 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tests\obsql
+2
+d
+d:sql_ob_init.h|1|166f7753c28|2ee|24f3ec35|d1ead9c268b011e8a8030002c8c1274c|0
+e:mysql_client.c|1|166f7753c83|343|6b10d80|d65ad9fa68b011e8a8030002c8c1274c|0
+e:mysql_thread.c|1|166f7753cb4|c73|a6bfa9e8|d85ada1668b011e8a8030002c8c1274c|0
+8:Makefile|1|166f7753c45|264|e67bd1d|d45ad9de68b011e8a8030002c8c1274c|0
+e:mysql_server.c|1|166f7753cde|762|184650ee|da5ada3268b011e8a8030002c8c1274c|0
+b:mysql_trx.c|1|166f7753d8c|1bf3|3d394728|dc7ada4e68b011e8a8030002c8c1274c|0
+c:mysql_list.c|1|166f7753dec|50f|63b3952f|de7ada6a68b011e8a8030002c8c1274c|0
+b:mysql_err.c|1|166f7753dff|3dd|b95f33e9|e0aada8668b011e8a8030002c8c1274c|0
+10:mysql_query_ps.c|1|166f7753e1d|3208|efb82095|e31adaa268b011e8a8030002c8c1274c|0
+d:mysql_query.c|1|166f7753e3c|2b7c|ba73df43|e56adabe68b011e8a8030002c8c1274c|0
+c:mysql_init.c|1|166f7753e59|73d|baaf3e1b|e7cadada68b011e8a8030002c8c1274c|0
+c:mysql_ping.c|1|166f7753e74|331|8012fcd5|ea4adaf668b011e8a8030002c8c1274c|0
+10:mysql_lib_init.c|1|166f7753e96|40e|298a48e6|ecfadb1268b011e8a8030002c8c1274c|0

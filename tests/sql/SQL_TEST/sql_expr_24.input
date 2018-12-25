@@ -1,0 +1,43 @@
+-- ok
+select (user_id, item_id, 10) in ((1, 8, 9), (2,9,6), (user_id, item_id, qty)) from order_list;
+<logical_plan Begin>
+    <StmtList Begin>
+        ObSelectStmt 0 Begin
+        <TableItemList Begin>
+            {Num 0, TableId:1003, TableName:order_list, AliasName:NULL, Type:BASE_TABLE, RefId: 1003}
+        <TableItemList End>
+        <ColumnItemList Begin>
+            {Num 0, ColumnId:3, ColumnName:user_id, TableRef:1003}
+            {Num 1, ColumnId:4, ColumnName:item_id, TableRef:1003}
+            {Num 2, ColumnId:5, ColumnName:qty, TableRef:1003}
+        <ColumnItemList End>
+        SELECT ::= <1>
+        FROM ::= <1003>
+        ObSelectStmt 0 End
+    <StmtList End>
+    <ExprList Begin>
+        ObSqlRawExpr 0 Begin
+        expr_id = 1
+        (table_id : column_id) = (NULL : 18446744073709551613)
+        T_OP_IN
+            T_OP_ROW
+                T_REF_COLUMN : [table_id, column_id] = [1003, 3]
+                T_REF_COLUMN : [table_id, column_id] = [1003, 4]
+                T_INT : 10
+            T_OP_ROW
+                T_OP_ROW
+                    T_INT : 1
+                    T_INT : 8
+                    T_INT : 9
+                T_OP_ROW
+                    T_INT : 2
+                    T_INT : 9
+                    T_INT : 6
+                T_OP_ROW
+                    T_REF_COLUMN : [table_id, column_id] = [1003, 3]
+                    T_REF_COLUMN : [table_id, column_id] = [1003, 4]
+                    T_REF_COLUMN : [table_id, column_id] = [1003, 5]
+        ObSqlRawExpr 0 End
+    <ExprList End>
+<logical_plan End>
+

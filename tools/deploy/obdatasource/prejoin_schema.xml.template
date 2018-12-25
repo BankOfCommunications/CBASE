@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE dbmonster-schema PUBLIC "-//kernelpanic.pl//DBMonster Database Schema DTD 1.1//EN" "http://dbmonster.kernelpanic.pl/dtd/db
+monster-schema-1.1.dtd">
+<dbmonster-schema>
+        <name>prejoinTable</name>
+        <table name="collect" rows="${cs_rows}">
+                <key databaseDefault="false">
+                        <generator type="com.etao.monster.generator.MaxKeyGenerator">
+                                <property name="columnName" value="user_id" />
+                                <property name="nextId" value="0" />
+                        </generator>
+                </key>
+                <column name="item_id" databaseDefault="false">
+                        <generator type="com.etao.monster.generator.NumberGenerator">
+                                <property name="maxValue" value="${cs_rows}" />
+                                <property name="minValue" value="0" />
+                                <property name="nulls" value="0" />
+                                <property name="returnedType" value="long" />
+                                <property name="scale" value="0" />
+                        </generator>
+                </column>
+                <column name="name" databaseDefault="false">
+                        <generator type="com.etao.monster.generator.StringGenerator">
+                                <property name="allowSpaces" value="true" />
+                                <property name="excludeChars" value="" />
+                                <property name="maxLength" value="30" />
+                                <property name="minLength" value="10" />
+                                <property name="nulls" value="0" />
+                        </generator>
+                </column>
+        </table>
+
+	<table name="item" rows="500">
+		<key databaseDefault="fales">
+			<generator type="com.etao.monster.generator.MaxKeyGenerator">
+				<property name="columnName" value="item_id" />
+				<property name="nextId" value="0"/>
+			</generator>
+		</key>
+		<column name="price" databaseDefault="false">
+			<generator type="com.etao.monster.generator.NumberGenerator">
+				<property name="maxValue" value="${cs_rows}" />
+				<property name="minValue" value="0" />
+				<property name="nulls" value="0" />
+				<property name="returnedType" value="long" />
+				<property name="scale" value="0" />
+			</generator>
+		</column>
+		<column name="title" databaseDefault="false">
+			<generator type="com.etao.monster.generator.StringGenerator">
+				<property name="allowSpaces" value="true" />
+				<property name="excludeChars" value="" />
+				<property name="maxLength" value="60" />
+				<property name="minLength" value="10" />
+				<property name="nulls" value="0" />
+			</generator>
+		</column>
+		</table>			
+</dbmonster-schema>
+

@@ -1,0 +1,14 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\log_tool
+2
+a
+c:ob_utils.cpp|1|166f777aba5|63e5|5d437138|ca5bb3aa68c111e8a8030002c8c1274c|0
+9:builder.h|1|166f777abf7|dd75|d929436f|cc8bb3c668c111e8a8030002c8c1274c|0
+c:ob_client2.h|1|166f777ad4c|42c1|149999b2|cebbb3e268c111e8a8030002c8c1274c|0
+c:log_tool.cpp|1|166f777ad7b|ecb7|4e6da8d8|d0bbb3fe68c111e8a8030002c8c1274c|0
+b:Makefile.am|1|166f777ab57|6ac|9bfd3911|c7fbb38e68c111e8a8030002c8c1274c|0
+c:file_utils.h|1|166f777adb2|8d4|3e7b8e52|d30bb41a68c111e8a8030002c8c1274c|0
+a:ob_utils.h|1|166f777ade3|154e|301ef562|d53bb43668c111e8a8030002c8c1274c|0
+e:ob_client2.cpp|1|166f777ae12|11f71|61fe93ac|d74bb45268c111e8a8030002c8c1274c|0
+d:cached_item.h|1|166f777ae74|ee7|40083dc4|dbfbb48a68c111e8a8030002c8c1274c|0
+11:cmd_args_parser.h|1|166f777ae42|f00|933c698b|d97bb46e68c111e8a8030002c8c1274c|0

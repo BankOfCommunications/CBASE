@@ -1,0 +1,250 @@
+select table_name,table_id,table_type,load_type,table_def_type,rowkey_column_num,column_num,max_used_column_id,create_mem_version,max_rowkey_length,compress_func_name,is_use_bloomfilter,merge_write_sstable_version,is_pure_update_table,rowkey_split,expire_condition from __first_tablet_entry;
+table_name	table_id	table_type	load_type	table_def_type	rowkey_column_num	column_num	max_used_column_id	create_mem_version	max_rowkey_length	compress_func_name	is_use_bloomfilter	merge_write_sstable_version	is_pure_update_table	rowkey_split	expire_condition
+__all_cchecksum_info	801	1	1	1	4	NULL	20	1	64	none	0	2	0	0	
+__all_client	13	1	1	1	2	NULL	23	1	64	none	0	2	0	0	
+__all_cluster	8	1	1	1	1	NULL	24	1	8	none	0	2	0	0	
+__all_database	15	1	1	1	1	NULL	19	1	16	none	0	2	0	0	
+__all_database_privilege	16	1	1	1	2	NULL	30	1	16	none	0	2	0	0	
+__all_sequence	17	1	1	1	1	NULL	29	1	8	none	0	2	0	0	
+__all_server	9	1	1	1	4	NULL	23	1	64	none	0	2	0	0	
+__all_server_session	512	1	1	1	1	NULL	25	1	64	none	0	2	0	0	
+__all_server_stat	511	1	1	1	4	NULL	21	1	64	none	0	2	0	0	
+__all_statement	513	1	1	1	3	NULL	25	1	64	none	0	2	0	0	
+__all_sys_config	11	1	1	1	5	NULL	45	1	64	none	0	2	0	0	
+__all_sys_config_stat	12	1	1	1	5	NULL	45	1	64	none	0	2	0	0	
+__all_sys_param	4	1	1	1	2	NULL	20	1	264	none	0	2	0	0	
+__all_sys_stat	5	1	1	1	2	NULL	20	1	264	none	0	2	0	0	
+__all_table_privilege	7	1	1	1	3	NULL	30	1	8	none	0	2	0	0	
+__all_trigger_event	10	1	1	1	1	NULL	21	1	8	none	0	2	0	0	
+__all_truncate_op	18	1	1	1	2	NULL	23	1	64	none	0	2	0	0	
+__all_user	6	1	1	1	1	NULL	32	1	8	none	0	2	0	0	
+__index_process_info	802	1	1	1	2	NULL	18	1	64	none	0	2	0	0	
+select table_id,column_name,table_name,column_id,column_group_id,rowkey_id,length_in_rowkey,order_in_rowkey,join_table_id,join_column_id,data_type,data_length,data_precision,data_scale,nullable from __all_all_column;
+table_id	column_name	table_name	column_id	column_group_id	rowkey_id	length_in_rowkey	order_in_rowkey	join_table_id	join_column_id	data_type	data_length	data_precision	data_scale	nullable
+4	cluster_id	NULL	16	0	1	8	1	-1	-1	1	8	0	0	0
+4	data_type	NULL	18	0	0	8	1	-1	-1	1	8	0	0	0
+4	gm_create	NULL	2	0	0	8	1	-1	-1	8	8	0	0	0
+4	gm_modify	NULL	3	0	0	8	1	-1	-1	9	8	0	0	0
+4	info	NULL	20	0	0	256	1	-1	-1	6	256	0	0	0
+4	name	NULL	17	0	2	256	1	-1	-1	6	256	0	0	0
+4	value	NULL	19	0	0	256	1	-1	-1	6	256	0	0	0
+5	cluster_id	NULL	16	0	1	8	1	-1	-1	1	8	0	0	0
+5	data_type	NULL	18	0	0	8	1	-1	-1	1	8	0	0	0
+5	gm_create	NULL	2	0	0	8	1	-1	-1	8	8	0	0	0
+5	gm_modify	NULL	3	0	0	8	1	-1	-1	9	8	0	0	0
+5	info	NULL	20	0	0	256	1	-1	-1	6	256	0	0	0
+5	name	NULL	17	0	2	256	1	-1	-1	6	256	0	0	0
+5	value	NULL	19	0	0	256	1	-1	-1	6	256	0	0	0
+6	gm_create	NULL	2	0	0	8	1	-1	-1	8	8	0	0	0
+6	gm_modify	NULL	3	0	0	8	1	-1	-1	9	8	0	0	0
+6	info	NULL	19	0	0	1024	1	-1	-1	6	1024	0	0	1
+6	is_locked	NULL	31	0	0	8	1	-1	-1	1	8	0	0	0
+6	pass_word	NULL	18	0	0	1024	1	-1	-1	6	1024	0	0	0
+6	priv_all	NULL	20	0	0	8	1	-1	-1	1	8	0	0	0
+6	priv_alter	NULL	21	0	0	8	1	-1	-1	1	8	0	0	0
+6	priv_create	NULL	22	0	0	8	1	-1	-1	1	8	0	0	0
+6	priv_create_user	NULL	23	0	0	8	1	-1	-1	1	8	0	0	0
+6	priv_delete	NULL	24	0	0	8	1	-1	-1	1	8	0	0	0
+6	priv_drop	NULL	25	0	0	8	1	-1	-1	1	8	0	0	0
+6	priv_grant_option	NULL	26	0	0	8	1	-1	-1	1	8	0	0	0
+6	priv_insert	NULL	27	0	0	8	1	-1	-1	1	8	0	0	0
+6	priv_replace	NULL	30	0	0	8	1	-1	-1	1	8	0	0	0
+6	priv_select	NULL	29	0	0	8	1	-1	-1	1	8	0	0	0
+6	priv_update	NULL	28	0	0	8	1	-1	-1	1	8	0	0	0
+6	user_id	NULL	17	0	0	8	1	-1	-1	1	8	0	0	0
+6	user_name	NULL	16	0	1	1024	1	-1	-1	6	1024	0	0	0
+7	db_id	NULL	29	0	2	8	1	-1	-1	1	8	0	0	1
+7	gm_create	NULL	2	0	0	8	1	-1	-1	8	8	0	0	0
+7	gm_modify	NULL	3	0	0	8	1	-1	-1	9	8	0	0	0
+7	priv_all	NULL	18	0	0	8	1	-1	-1	1	8	0	0	0
+7	priv_alter	NULL	19	0	0	8	1	-1	-1	1	8	0	0	0
+7	priv_create	NULL	20	0	0	8	1	-1	-1	1	8	0	0	0
+7	priv_create_user	NULL	21	0	0	8	1	-1	-1	1	8	0	0	0
+7	priv_delete	NULL	22	0	0	8	1	-1	-1	1	8	0	0	0
+7	priv_drop	NULL	23	0	0	8	1	-1	-1	1	8	0	0	0
+7	priv_grant_option	NULL	24	0	0	8	1	-1	-1	1	8	0	0	0
+7	priv_insert	NULL	25	0	0	8	1	-1	-1	1	8	0	0	0
+7	priv_replace	NULL	28	0	0	8	1	-1	-1	1	8	0	0	0
+7	priv_select	NULL	27	0	0	8	1	-1	-1	1	8	0	0	0
+7	priv_update	NULL	26	0	0	8	1	-1	-1	1	8	0	0	0
+7	table_id	NULL	17	0	3	8	1	-1	-1	1	8	0	0	0
+7	user_id	NULL	16	0	1	8	1	-1	-1	1	8	0	0	0
+8	cluster_flow_percent	NULL	22	0	0	8	1	-1	-1	1	8	0	0	0
+8	cluster_id	NULL	16	0	1	8	1	-1	-1	1	8	0	0	0
+8	cluster_info	NULL	21	0	0	128	1	-1	-1	6	128	0	0	0
+8	cluster_name	NULL	20	0	0	128	1	-1	-1	6	128	0	0	0
+8	cluster_port	NULL	18	0	0	8	1	-1	-1	1	8	0	0	0
+8	cluster_role	NULL	19	0	0	8	1	-1	-1	1	8	0	0	0
+8	cluster_vip	NULL	17	0	0	32	1	-1	-1	6	32	0	0	0
+8	gm_create	NULL	2	0	0	8	1	-1	-1	8	8	0	0	0
+8	gm_modify	NULL	3	0	0	8	1	-1	-1	9	8	0	0	0
+8	read_strategy	NULL	23	0	0	8	1	-1	-1	1	8	0	0	0
+8	rootserver_port	NULL	24	0	0	8	1	-1	-1	1	8	0	0	0
+9	cluster_id	NULL	16	0	1	8	1	-1	-1	1	8	0	0	0
+9	gm_create	NULL	2	0	0	8	1	-1	-1	8	8	0	0	0
+9	gm_modify	NULL	3	0	0	8	1	-1	-1	9	8	0	0	0
+9	inner_port	NULL	20	0	0	8	1	-1	-1	1	8	0	0	0
+9	svr_ip	NULL	18	0	3	32	1	-1	-1	6	32	0	0	0
+9	svr_port	NULL	19	0	4	8	1	-1	-1	1	8	0	0	0
+9	svr_role	NULL	21	0	0	8	1	-1	-1	1	8	0	0	0
+9	svr_type	NULL	17	0	2	16	1	-1	-1	6	16	0	0	0
+9	svr_version	NULL	22	0	0	64	1	-1	-1	6	64	0	0	0
+10	event_param	NULL	19	0	0	8	1	-1	-1	1	8	0	0	0
+10	event_ts	NULL	16	0	1	8	1	-1	-1	5	8	0	0	0
+10	event_type	NULL	18	0	0	8	1	-1	-1	1	8	0	0	0
+10	extra	NULL	20	0	0	5000	1	-1	-1	6	5000	0	0	1
+10	gm_create	NULL	2	0	0	8	1	-1	-1	8	8	0	0	0
+10	gm_modify	NULL	3	0	0	8	1	-1	-1	9	8	0	0	0
+10	src_ip	NULL	17	0	0	32	1	-1	-1	6	32	0	0	0
+11	cluster_id	NULL	16	0	1	8	1	-1	-1	1	8	0	0	0
+11	data_type	NULL	22	0	0	256	1	-1	-1	6	256	0	0	0
+11	gm_create	NULL	2	0	0	8	1	-1	-1	8	8	0	0	0
+11	gm_modify	NULL	3	0	0	8	1	-1	-1	9	8	0	0	0
+11	info	NULL	25	0	0	512	1	-1	-1	6	512	0	0	1
+11	name	NULL	20	0	5	256	1	-1	-1	6	256	0	0	0
+11	section	NULL	21	0	0	256	1	-1	-1	6	256	0	0	1
+11	svr_ip	NULL	18	0	3	32	1	-1	-1	6	32	0	0	0
+11	svr_port	NULL	19	0	4	8	1	-1	-1	1	8	0	0	0
+11	svr_type	NULL	17	0	2	16	1	-1	-1	6	16	0	0	0
+11	value	NULL	23	0	0	256	1	-1	-1	6	256	0	0	0
+11	value_strict	NULL	24	0	0	512	1	-1	-1	6	512	0	0	0
+12	cluster_id	NULL	16	0	1	8	1	-1	-1	1	8	0	0	0
+12	data_type	NULL	22	0	0	256	1	-1	-1	6	256	0	0	0
+12	gm_create	NULL	2	0	0	8	1	-1	-1	8	8	0	0	0
+12	gm_modify	NULL	3	0	0	8	1	-1	-1	9	8	0	0	0
+12	info	NULL	25	0	0	512	1	-1	-1	6	512	0	0	1
+12	name	NULL	20	0	5	256	1	-1	-1	6	256	0	0	0
+12	section	NULL	21	0	0	256	1	-1	-1	6	256	0	0	1
+12	svr_ip	NULL	18	0	3	32	1	-1	-1	6	32	0	0	0
+12	svr_port	NULL	19	0	4	8	1	-1	-1	1	8	0	0	0
+12	svr_type	NULL	17	0	2	16	1	-1	-1	6	16	0	0	0
+12	value	NULL	23	0	0	256	1	-1	-1	6	256	0	0	0
+12	value_strict	NULL	24	0	0	512	1	-1	-1	6	512	0	0	0
+13	client_ip	NULL	16	0	1	32	1	-1	-1	6	32	0	0	0
+13	extra1	NULL	19	0	0	32	1	-1	-1	6	32	0	0	0
+13	extra2	NULL	20	0	0	8	1	-1	-1	1	8	0	0	0
+13	gm_create	NULL	2	0	0	8	1	-1	-1	8	8	0	0	0
+13	gm_modify	NULL	3	0	0	8	1	-1	-1	9	8	0	0	0
+13	status	NULL	18	0	0	32	1	-1	-1	6	32	0	0	0
+13	version	NULL	17	0	2	16	1	-1	-1	6	16	0	0	0
+15	db_id	NULL	17	0	0	8	1	-1	-1	1	8	0	0	0
+15	db_name	NULL	16	0	1	16	1	-1	-1	6	16	0	0	0
+15	gm_create	NULL	2	0	0	8	1	-1	-1	8	8	0	0	0
+15	gm_modify	NULL	3	0	0	8	1	-1	-1	9	8	0	0	0
+15	stat	NULL	18	0	0	1	1	-1	-1	1	1	0	0	0
+16	db_id	NULL	17	0	2	8	1	-1	-1	1	8	0	0	0
+16	gm_create	NULL	2	0	0	8	1	-1	-1	8	8	0	0	0
+16	gm_modify	NULL	3	0	0	8	1	-1	-1	9	8	0	0	0
+16	is_locked	NULL	30	0	0	1	1	-1	-1	1	1	0	0	0
+16	priv_all	NULL	18	0	0	1	1	-1	-1	1	1	0	0	0
+16	priv_alter	NULL	19	0	0	1	1	-1	-1	1	1	0	0	0
+16	priv_create	NULL	22	0	0	1	1	-1	-1	1	1	0	0	0
+16	priv_create_user	NULL	21	0	0	1	1	-1	-1	1	1	0	0	0
+16	priv_delete	NULL	23	0	0	1	1	-1	-1	1	1	0	0	0
+16	priv_drop	NULL	24	0	0	1	1	-1	-1	1	1	0	0	0
+16	priv_grant_option	NULL	25	0	0	1	1	-1	-1	1	1	0	0	0
+16	priv_insert	NULL	26	0	0	1	1	-1	-1	1	1	0	0	0
+16	priv_replace	NULL	29	0	0	1	1	-1	-1	1	1	0	0	0
+16	priv_select	NULL	28	0	0	1	1	-1	-1	1	1	0	0	0
+16	priv_update	NULL	27	0	0	1	1	-1	-1	1	1	0	0	0
+16	user_id	NULL	16	0	1	8	1	-1	-1	1	8	0	0	0
+17	cache_num	NULL	23	0	0	8	1	-1	-1	1	8	0	0	0
+17	can_use_prevval	NULL	27	0	0	8	1	-1	-1	1	8	0	0	0
+17	const_start_with	NULL	26	0	0	128	1	-1	-1	12	128	31	0	0
+17	current_value	NULL	18	0	0	128	1	-1	-1	12	128	31	0	0
+17	data_type	NULL	17	0	0	8	1	-1	-1	1	8	0	0	0
+17	increment_by	NULL	19	0	0	128	1	-1	-1	12	128	31	0	0
+17	is_cycle	NULL	22	0	0	8	1	-1	-1	1	8	0	0	0
+17	is_order	NULL	24	0	0	8	1	-1	-1	1	8	0	0	0
+17	is_valid	NULL	25	0	0	8	1	-1	-1	1	8	0	0	0
+17	max_value	NULL	21	0	0	128	1	-1	-1	12	128	31	0	0
+17	min_value	NULL	20	0	0	128	1	-1	-1	12	128	31	0	0
+17	sequence_name	NULL	16	0	1	128	1	-1	-1	6	128	0	0	0
+17	use_quick_path	NULL	28	0	0	8	1	-1	-1	1	8	0	0	0
+18	info	NULL	20	0	0	512	1	-1	-1	6	512	0	0	0
+18	rs_trun_time	NULL	16	0	1	8	1	-1	-1	5	8	0	0	0
+18	table_id	NULL	17	0	2	8	1	-1	-1	1	8	0	0	0
+18	table_name	NULL	18	0	0	273	1	-1	-1	6	273	0	0	0
+18	user_name	NULL	19	0	0	32	1	-1	-1	6	32	0	0	0
+511	name	NULL	19	0	4	64	1	-1	-1	6	64	0	0	0
+511	svr_ip	NULL	17	0	2	32	1	-1	-1	6	32	0	0	0
+511	svr_port	NULL	18	0	3	8	1	-1	-1	1	8	0	0	0
+511	svr_type	NULL	16	0	1	16	1	-1	-1	6	16	0	0	0
+511	value	NULL	20	0	0	8	1	-1	-1	1	8	0	0	0
+512	command	NULL	20	0	0	1024	1	-1	-1	6	1024	0	0	0
+512	db	NULL	19	0	0	128	1	-1	-1	6	128	0	0	0
+512	host	NULL	18	0	0	128	1	-1	-1	6	128	0	0	0
+512	id	NULL	16	0	1	8	1	-1	-1	1	8	0	0	0
+512	index	NULL	25	0	0	8	1	-1	-1	1	8	0	0	0
+512	info	NULL	23	0	0	128	1	-1	-1	6	128	0	0	0
+512	mergeserver	NULL	24	0	0	128	1	-1	-1	6	128	0	0	0
+512	state	NULL	22	0	0	128	1	-1	-1	6	128	0	0	0
+512	timeelapse	NULL	21	0	0	8	1	-1	-1	1	8	0	0	0
+512	username	NULL	17	0	0	512	1	-1	-1	6	512	0	0	0
+513	avg_execute_usec	NULL	22	0	0	8	1	-1	-1	1	8	0	0	0
+513	create_time	NULL	24	0	0	4	1	-1	-1	5	4	0	0	0
+513	execute_count	NULL	21	0	0	8	1	-1	-1	1	8	0	0	0
+513	id	NULL	19	0	0	8	1	-1	-1	1	8	0	0	0
+513	last_active_time	NULL	25	0	0	4	1	-1	-1	5	4	0	0	0
+513	prepare_count	NULL	20	0	0	8	1	-1	-1	1	8	0	0	0
+513	slow_count	NULL	23	0	0	8	1	-1	-1	1	8	0	0	0
+513	statement	NULL	18	0	3	1024	1	-1	-1	6	1024	0	0	0
+513	svr_ip	NULL	16	0	1	32	1	-1	-1	6	32	0	0	0
+513	svr_port	NULL	17	0	2	8	1	-1	-1	1	8	0	0	0
+801	column_checksum	NULL	20	0	0	1024	1	-1	-1	6	1024	0	0	0
+801	culster_id	NULL	17	0	2	8	1	-1	-1	1	8	0	0	0
+801	range	NULL	19	0	4	1024	1	-1	-1	6	1024	0	0	0
+801	table_id	NULL	16	0	1	8	1	-1	-1	1	8	0	0	0
+801	version	NULL	18	0	3	8	1	-1	-1	1	8	0	0	0
+802	cluster_id	NULL	17	0	2	8	1	-1	-1	1	8	0	0	0
+802	index_id	NULL	16	0	1	8	1	-1	-1	1	8	0	0	0
+802	status	NULL	18	0	0	8	1	-1	-1	1	8	0	0	0
+select left_table_id,left_column_id,right_table_id,right_column_id,left_table_name,left_column_name,left_column_name,right_table_name,right_column_name from __all_join_info;
+left_table_id	left_column_id	right_table_id	right_column_id	left_table_name	left_column_name	left_column_name	right_table_name	right_column_name
+select distinct svr_type from __all_server;
+svr_type
+chunkserver
+mergeserver
+rootserver
+updateserver
+select cluster_id,svr_type,name,section,data_type,value,value_strict,info from __all_sys_config;
+cluster_id	svr_type	name	section	data_type	value	value_strict	info
+select cluster_id,name,data_type,value from __all_sys_param;
+cluster_id	name	data_type	value
+0	auto_increment_increment	1	value
+0	autocommit	1	value
+0	character_set_results	6	value
+0	interactive_timeout	1	value
+0	max_allowed_packet	1	value
+0	ob_app_name	1	value
+0	ob_charset	6	value
+0	ob_disable_create_sys_table	11	value
+0	ob_group_agg_push_down_param	11	value
+0	ob_max_parallel_count	1	value
+0	ob_query_timeout	1	value
+0	ob_read_consistency	1	value
+0	ob_tx_idle_timeout	1	value
+0	ob_tx_timeout	1	value
+0	sql_mode	6	value
+0	tx_isolation	6	value
+0	version_comment	6	value
+0	wait_timeout	1	value
+select cluster_id,name,data_type,value,info from __all_sys_stat;
+cluster_id	name	data_type	value	info
+0	ob_current_privilege_version	1	value	system's newest privilege version
+0	ob_max_database_id	1	value	max database id
+0	ob_max_used_table_id	1	value	max used table id
+0	ob_max_user_id	1	value	max used user id
+select user_id,table_id,priv_all,priv_alter,priv_create,priv_create_user,priv_delete,priv_drop,priv_grant_option,priv_insert,priv_update,priv_select,priv_replace from __all_table_privilege;
+user_id	table_id	priv_all	priv_alter	priv_create	priv_create_user	priv_delete	priv_drop	priv_grant_option	priv_insert	priv_update	priv_select	priv_replace
+2	8	0	0	0	0	0	0	0	0	0	1	0
+2	9	0	0	0	0	0	0	0	0	0	1	0
+select event_type,event_param,extra from __all_trigger_event;
+event_type	event_param	extra
+3	0	NULL
+2	0	NULL
+2	0	NULL
+select user_name,user_id,pass_word,info,priv_all,priv_alter,priv_create,priv_create_user,priv_delete,priv_drop,priv_grant_option,priv_insert,priv_update,priv_select,priv_replace,is_locked from __all_user;
+user_name	user_id	pass_word	info	priv_all	priv_alter	priv_create	priv_create_user	priv_delete	priv_drop	priv_grant_option	priv_insert	priv_update	priv_select	priv_replace	is_locked
+admin	1	ed32f974c5e622767438d999101e5d56f6ac5da9	system administrator	1	1	1	1	1	1	1	1	1	1	1	0
+dsadmin	2	f314cc4760637e4c425528d7af105a6bb07b6654	administrator for datasource	0	0	0	0	0	0	0	0	0	0	0	0

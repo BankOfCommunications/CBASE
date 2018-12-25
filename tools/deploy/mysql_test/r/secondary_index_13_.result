@@ -1,0 +1,42 @@
+drop table if exists t1,t2;
+alter system set merge_delay_interval='5s' server_type=chunkserver;
+alter system set min_major_freeze_interval='5s' server_type=updateserver;
+create table t1 (c1 int ,c2 int ,c3 int ,c4 int ,c5 int ,c6 int ,c7 int ,c8 int ,c9 int ,
+c10 int , c11 int ,c12 int ,c13 int ,c14 int ,c15 int ,c16 int,c17 int,c18 int,
+primary key(c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16) );
+create index il on t1(c17,c18);
+ERROR HY000: index's rowkey column num cannot be greater than 16
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+drop table t1;
+create table t1 (c1 int primary key,c2 int ,c3 int ,c4 int ,c5 int ,c6 int ,c7 int ,c8 int ,c9 int ,
+c10 int , c11 int ,c12 int ,c13 int ,c14 int ,c15 int ,c16 int,c17 int,c18 int);
+create index il on t1(c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18);
+ERROR HY000: index's rowkey column num cannot be greater than 16
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+drop table t1;
+create table t1(c1 int primary key ,c2 int,c3 int);
+create index il on t1(c1);
+create index il on t1(c2);
+ERROR HY000: OB-17: Entry already exist
+"merge"
+[major_freeze] err=0
+show index on t1;
+index_name	status
+__3003__idx__il	1
+drop table t1;
+create table t1(c1 int primary key ,c2 int,c3 int);
+create index il on t1(c4);
+ERROR HY000: Index Columns c4 are not found
+create index il1 on t1(c2) storing(c2);
+ERROR HY000: There is same column in storing columns and index_columns: 'c2'
+create index il2 on t1() storing(c2);
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ') storing(c2)' at line 1
+drop table t1;
+create index il2 on t1(c2) storing();
+ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your OceanBase version for the right syntax to use near ')' at line 1

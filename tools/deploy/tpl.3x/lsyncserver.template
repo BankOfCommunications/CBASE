@@ -1,0 +1,14 @@
+
+[public]
+log_file = ./log/lsyncserver.log.$ip:$port
+pid_file = ./log/lsyncserver.pid.$ip:$port
+log_level = $log_level
+
+[lsync_server]
+convert_switch_log=$convert_switch_log
+dev_name=$dev
+port=$port
+ups_commit_log_dir= data/ups_commitlog
+ups_commit_log_file_start_id=$start_file_id
+timeout=1000
+lsync_retry_wait_time_us=${lsync_retry_wait_time_us}

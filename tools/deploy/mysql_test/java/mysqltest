@@ -1,0 +1,98 @@
+#!/usr/bin/env python2.6
+'''java client test script'''
+# author: junyue
+
+import getopt
+import re
+import sys
+from subprocess import Popen, PIPE
+import shlex
+import glob
+import errno
+import pprint
+import os
+
+
+
+if __name__ == '__main__':
+    ip   = '127.0.0.1'
+    port = 3306
+    username='admin'
+    password='admin'
+    result_file= '../r/join_basic.result'
+    test_file= '../t/join_basic.test'
+    record = False
+    class_path = ''
+    logdir=os.getcwd()
+    lines = 10
+    ps = False
+
+    jars = os.listdir(os.path.dirname(sys.argv[0]))
+    for jar in jars:
+        if jar.find('.jar') != -1 or jar == 'log4j.properties':
+            if class_path != '':
+                class_path = class_path + ":" + os.path.join(os.path.dirname(sys.argv[0]),jar)
+            else:
+                class_path = os.path.join(os.path.dirname(sys.argv[0]),jar)
+    
+    longargs = ['port=', 'logdir=', 'test-file=', 'result-file=', 'record', 'host=', 'user=', 'password=', 'tmpdir=', 'database=', 'timer-file=', 'tail-lines=', 'silent', 'version','ps-protocol']
+
+    opts, args = getopt.getopt( sys.argv[1:], 'x', longargs)
+
+    for o, a in opts:
+        if o == '--port':
+            port = int(a)
+        elif o == '--record':
+            record = True
+        elif o == '--ps-protocol':
+            ps = True
+        elif o == '--test-file':
+            test_file = a
+        elif o == '--result-file':
+            result_file = a
+        elif o == '--host':
+            ip = a
+        elif o == '--user':
+            username = a
+        elif o == '--password':
+            password = a
+        elif o == '--tail-lines':
+            lines = int(a)
+        elif o == '--logdir':
+            logdir = a
+            if os.path.exists(logdir) == False:
+                os.mkdir(logdir)
+        elif o == '--version':
+            print("Ver 3.3 Distrib 5.5.27 java mysqltest")
+            sys.exit(0)
+ 
+    testname = os.path.splitext(os.path.basename(test_file))[0]
+    # this test is too slow
+    if testname == 'delete_bug206717':
+        sys.exit(255)
+    
+
+    if record == False:
+        cmd="java -cp %s com.etao.mytest.main.MyTest -host %s -password %s -username %s -port %d -result_file %s  -test_file %s"%(class_path, ip, username, password, port, result_file, test_file)
+    else :
+        cmd="java -cp %s com.etao.mytest.main.MyTest -host %s -password %s -username %s -port %d -result_file %s  -test_file %s --record"%(class_path, ip, username, password, port, result_file, test_file)
+    if ps == True:
+        cmd = cmd + " -ps"
+    print(cmd)
+    p = Popen(shlex.split(cmd), stdout = PIPE, stderr = PIPE)
+    output, errput = p.communicate()
+
+    log_fp = open(os.path.join(logdir, testname) + '.log', "w")
+    log_fp.write(output);
+    log_fp.close()
+
+    if p.returncode != 0:
+        log_fp = open(os.path.join(logdir, testname) + '.log', "r")
+        all_line=[]
+        for line in log_fp.readlines():
+            all_line.append(line)
+        for i in range(lines-2*lines,0):
+            if abs(i) <= len(all_line):
+                sys.stderr.write(all_line[i])
+        log_fp.close()
+        sys.exit(p.returncode)

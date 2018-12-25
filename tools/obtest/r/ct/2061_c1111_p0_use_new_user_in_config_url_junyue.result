@@ -1,0 +1,38 @@
+ob1=OBI(cluster=1111)
+ob1.reboot
+ob1.mysql create table test(c1 int primary key, c2 int)
+ob1.mysql create user 'u1' identified by 'pass1'
+ob1.mysql grant REPLACE on __all_client to 'u1';
+ob1.mysql grant SELECT on __all_cluster to 'u1';
+ob1.mysql grant SELECT on __all_server to 'u1';
+ob1.mysql grant ALL PRIVILEGES on test to 'u1';
+ob1.set_diamond_user u1
+ob1.set_diamond_pwd  pass1
+ob1.create_client
+insert into test values(1,1);
+insert into test values(2,2);
+replace into test values(2,2);
+update test set c2=0 where c1=1;
+select * from test;
+c1	c2
+1	0
+2	2
+show tables;
+table_name
+__first_tablet_entry
+__all_all_column
+__all_join_info
+__all_client
+__all_cluster
+__all_server
+__all_server_session
+__all_server_stat
+__all_statement
+__all_sys_config
+__all_sys_config_stat
+__all_sys_param
+__all_sys_stat
+__all_table_privilege
+__all_trigger_event
+__all_user
+test

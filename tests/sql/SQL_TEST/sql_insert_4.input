@@ -1,0 +1,4 @@
+-- fail, Column count doesn't match value count
+insert into user (user_id, user_name, user_desc) values (100, 'da fen qi', 15, 'a turtle');
+Column count doesn't match value count
+Resolve error!

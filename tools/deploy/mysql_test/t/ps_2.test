@@ -1,0 +1,161 @@
+--disable_warnings
+drop table if exists t1,t2,t3,t4;
+--enable_warnings
+#
+# Bug#9777 - another occurrence of the problem stated in Bug#9096:
+# we can not compare basic constants by their names, because a placeholder
+# is a basic constant while his name is always '?'
+#
+
+
+create table t1 (
+   id int not null auto_increment,
+   code varchar(20) not null default '',
+   company_name varchar(250) ,
+   setup_mode int default null,
+   start_date createtime default null,
+   primary key  (id)
+);
+
+create table t2 (
+   id int,
+   email varchar(250),
+   name varchar(250),
+   t1_id int,
+   pwd varchar(250),
+   primary_contact int,
+   email_opt_in int,
+   primary key  (id)
+);
+
+insert into t1(id,code,company_name,setup_mode) values
+(1, 'demo', 'demo s', 0 ),
+(2, 'code2', 'name 2', 0),
+(3, 'code3', 'name 3', 0);
+
+insert into t2 values
+(2, 'email1', 'name1', 3, 'password1', 0, 0),
+(3, 'email2', 'name1', 1, 'password2', 1, 0),
+(5, 'email3', 'name3', 2, 'password3', 0, 0);
+
+
+
+prepare stmt from select t2.id from t2, t1 where (t1.id=? and t2.t1_id=t1.id);
+set @a=1;
+execute stmt using @a;
+
+
+select t2.id from t2, t1 where (t1.id=1 and t2.t1_id=t1.id);
+
+
+drop table t1, t2;
+
+#
+# A test case for Bug#12734 'prepared statement may return incorrect result
+# set @for a select SQL request': test that canDoTurboBM is reset @for each
+# execute of a prepared statement.
+#
+
+create table t1 (
+  word_id int not null default '0' primary key,
+  formatted varchar(20) not null default ''
+);
+
+insert into t1 values
+  (80,'pendant'), (475,'pretendants'), (989,'tendances'),
+  (1019,'cependant'),(1022,'abondance'),(1205,'independants'),
+  (13,'lessiver'),(25,'lambiner'),(46,'situer'),(71,'terminer'),
+  (82,'decrocher');
+
+select count(*) from t1 where formatted like '%ndan%';
+select count(*) from t1 where formatted like '%er';
+
+
+
+prepare stmt from select count(*) from t1 where formatted like ?;
+set @alike='%ndan%';
+execute stmt using @alike;
+set @alike='%er';
+execute stmt using @alike;
+set @alike='%ndan%';
+execute stmt using @alike;
+set @alike='%er';
+execute stmt using @alike;
+drop table t1;
+
+
+# Bug#16248 'WHERE (col1,col2) IN ((?,?)) gives wrong results':
+# check that ROW implementation is reexecution-friendly.
+#
+
+create table t1 (col1 integer primary key, col2 integer);
+insert into t1 values(100,100),(101,101),(102,102),(103,103);
+
+
+prepare stmt from select col1, col2 from t1 where (col1, col2) in ((?,?));
+set @a=100;
+set @b=100;
+execute stmt using @a,@b;
+set @a=101;
+set @b=101;
+execute stmt using @a,@b;
+set @a=102;
+set @b=102;
+execute stmt using @a,@b;
+set @a=102;
+set @b=103;
+execute stmt using @a,@b;
+drop table t1;
+
+
+
+#
+# BUG#21354: (COUNT(*) = 1) not working in SELECT inside prepared
+# statement
+#
+--disable_warnings
+DROP TABLE IF EXISTS t1;
+--enable_warnings
+
+
+CREATE TABLE t1 (i int primary key, j int);
+INSERT INTO t1 VALUES (1,1);
+
+
+PREPARE stmt FROM SELECT (COUNT(i) = 1), COUNT(i) FROM t1 WHERE i = ?;
+SET @a = 0;
+EXECUTE stmt USING @a;
+SET @a = 1;
+EXECUTE stmt USING @a;
+SET @a = 0;
+EXECUTE stmt USING @a;
+
+PREPARE stmt FROM SELECT (AVG(i) = 1), AVG(i) FROM t1 WHERE i = ?;
+SET @a = 0;
+EXECUTE stmt USING @a;
+SET @a = 1;
+EXECUTE stmt USING @a;
+SET @a = 0;
+EXECUTE stmt USING @a;
+DROP TABLE t1;
+
+DEALLOCATE PREPARE stmt;
+
+#
+# Bug #27937: crash on the second execution for prepared statement
+#             from UNION with ORDER BY an expression containing RAND()
+#
+
+
+CREATE TABLE t1(a int primary key, b int);
+INSERT INTO t1 VALUES (2,1), (3,1), (1,1);
+
+
+PREPARE st1 FROM
+  (SELECT a FROM t1) UNION (SELECT a+10 FROM t1) ORDER BY 0+a;
+
+EXECUTE st1;
+EXECUTE st1;
+
+DEALLOCATE PREPARE st1;
+DROP TABLE t1;

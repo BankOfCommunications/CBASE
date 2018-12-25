@@ -1,0 +1,16 @@
+ob1=OBI(cluster=1222,sub_dir_list={1..2});
+ob1.cs0.set extra_config=task_thread_count=1
+ob1.cs0.set use_iof=1;
+ob1.cs1.set use_iof=1;
+ob1.reboot;
+ob1.source include/merge.inc;
+ob1.source include/migrate.inc;
+ob1.create_client;
+create table t1 (a int primary key,b varchar);
+ob1.major_freeze;
+ob1.check_cs_version 2;
+ob1.cs1.stop;
+ob1.cs0.iof ETIMEDOUT $diskno $c 1;
+ob1.cs1.nstart;
+ob1.cs0.rm_sstable $diskno;
+ob1.cs0.cs_admin install_disk /home/$user/obtest_data/$diskno;

@@ -1,0 +1,31 @@
+ob1=OBI(cluster=1222);
+ob2=OBI(cluster=1222);
+ob2.rs0.set master=ob1.rs0;
+ob2.rs0.set  extra_config=monitor_row_checksum_interval='120s';
+ob1.reboot;
+ob2.reboot;
+sleep 30;
+ob1.mysql alter system set report_tablet_time='1m' server_type=rootserver;
+ob1.source include/merge.inc;
+sleep 10;
+ob1.create_client;
+create table test(id int primary key, name varchar, addr varchar, birthday timestamp, money int, score float) TABLET_MAX_SIZE=512000;
+create table t1(c1 int primary key ,c2 int) TABLET_MAX_SIZE=4000;
+create table t2(c1 int primary key ,c2 int);
+create table t3(c1 int primary key ,c2 int);
+sleep 60;
+
+ob1.prepare;
+
+ob1.major_freeze;
+sleep 10;
+ob1.check_cs_version 2;
+ob2.check_cs_version 2;
+
+ob1.rs_admin  clean_root_table;
+ob2.rs_admin  clean_root_table;
+
+sleep 120;
+ob2.rs0.nfind_log "check row_checksum failed";
+
+

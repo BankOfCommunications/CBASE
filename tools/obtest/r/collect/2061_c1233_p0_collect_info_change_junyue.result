@@ -1,0 +1,29 @@
+ob1=OBI(cluster=1233, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable)
+ob1.reboot
+put item info to ups
+ob1.smart_insert item_info,0,0,0
+ob1.source include/merge.inc
+delete collect info
+ob1.smart_update collect_info,0,0,0
+select  user_nick,is_shared,note,collect_time,stat,tag,category,title,picurl,owner_id,owner_nick,price,ends,proper_xml,comment_count,collector_count,total_money,collect_time_precise,user_id,item_type,item_id from collect_info where user_id=3472328296227680304 and item_id=3472328296227680304;
+user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	total_money	collect_time_precise	user_id	item_type	item_id
+32	33	34	1970-01-01 08:00:35.0	36	39	40	00000000-32	00000000-33	34	00000000-35	36	2010-11-16 21:52:06.0	00000000-38	39	40	42	1970-01-01 08:00:00.52	3472328296227680304	48	3472328296227680304
+ob1.smart_query select  user_nick,is_shared,note,collect_time,stat,tag,category,title,picurl,owner_id,owner_nick,price,ends,proper_xml,comment_count,collector_count,total_money,collect_time_precise,user_id,item_type,item_id from collect_info where user_id=0 and item_id=0 and item_info=0
+new userid 3000
+ob1.smart_insert collect_info,3000,0,0
+ob1.check 3000,0,0
+ob1.smart_update collect_info,3000,0,0
+select  user_nick,is_shared,note,collect_time,stat,tag,category,title,picurl,owner_id,owner_nick,price,ends,proper_xml,comment_count,collector_count,total_money,collect_time_precise,user_id,item_type,item_id from collect_info where user_id=3472328296278011952 and item_id=3472328296227680304;
+user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	total_money	collect_time_precise	user_id	item_type	item_id
+3032	3033	3034	1970-01-01 08:50:35.0	3036	3039	3040	00000000-32	00000000-33	34	00000000-35	36	2010-11-16 21:52:06.0	00000000-38	39	40	42	1970-01-01 08:00:00.3052	3472328296278011952	48	3472328296227680304
+ob1.smart_query select  user_nick,is_shared,note,collect_time,stat,tag,category,title,picurl,owner_id,owner_nick,price,ends,proper_xml,comment_count,collector_count,total_money,collect_time_precise,user_id,item_type,item_id from collect_info where user_id=3000 and item_id=0 and item_info=0
+ob1.major_freeze
+ob1.check_cs_version 2
+select  user_nick,is_shared,note,collect_time,stat,tag,category,title,picurl,owner_id,owner_nick,price,ends,proper_xml,comment_count,collector_count,total_money,collect_time_precise,user_id,item_type,item_id from collect_info where user_id=3472328296227680304 and item_id=3472328296227680304;
+user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	total_money	collect_time_precise	user_id	item_type	item_id
+32	33	34	1970-01-01 08:00:35.0	36	39	40	00000000-32	00000000-33	34	00000000-35	36	2010-11-16 21:52:06.0	00000000-38	39	40	42	1970-01-01 08:00:00.52	3472328296227680304	48	3472328296227680304
+ob1.smart_query select  user_nick,is_shared,note,collect_time,stat,tag,category,title,picurl,owner_id,owner_nick,price,ends,proper_xml,comment_count,collector_count,total_money,collect_time_precise,user_id,item_type,item_id from collect_info where user_id=0 and item_id=0 and item_info=0
+select  user_nick,is_shared,note,collect_time,stat,tag,category,title,picurl,owner_id,owner_nick,price,ends,proper_xml,comment_count,collector_count,total_money,collect_time_precise,user_id,item_type,item_id from collect_info where user_id=3472328296278011952 and item_id=3472328296227680304;
+user_nick	is_shared	note	collect_time	stat	tag	category	title	picurl	owner_id	owner_nick	price	ends	proper_xml	comment_count	collector_count	total_money	collect_time_precise	user_id	item_type	item_id
+3032	3033	3034	1970-01-01 08:50:35.0	3036	3039	3040	00000000-32	00000000-33	34	00000000-35	36	2010-11-16 21:52:06.0	00000000-38	39	40	42	1970-01-01 08:00:00.3052	3472328296278011952	48	3472328296227680304
+ob1.smart_query select  user_nick,is_shared,note,collect_time,stat,tag,category,title,picurl,owner_id,owner_nick,price,ends,proper_xml,comment_count,collector_count,total_money,collect_time_precise,user_id,item_type,item_id from collect_info where user_id=3000 and item_id=0 and item_info=0

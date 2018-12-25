@@ -1,0 +1,11 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\tools\deploy\mysql_test\import-export\tmp
+2
+7
+7:im2-bad|2|0|0|0|3f9c1f2e68ca11e8a8030002c8c1274c|0
+6:ex-bad|2|0|0|0|412c1f4a68ca11e8a8030002c8c1274c|0
+6:ex-log|2|0|0|0|42cc1f6668ca11e8a8030002c8c1274c|0
+7:im1-log|2|0|0|0|465c1f9e68ca11e8a8030002c8c1274c|0
+7:im2-log|2|0|0|0|446c1f8268ca11e8a8030002c8c1274c|0
+7:im1-bad|2|0|0|0|480c1fba68ca11e8a8030002c8c1274c|0
+6:ex-del|2|0|0|0|49ac1fd668ca11e8a8030002c8c1274c|0

@@ -1,0 +1,44 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob2=OBI(cluster=1244);
+deploy ob2.rs0.set master=ob1.rs0;
+
+deploy ob1.reboot;
+deploy ob2.reboot;
+sleep 60;
+
+deploy ob1.prepare s;
+
+# new data
+deploy ob1.create_client;
+create table t1(c1 int primary key,c2 int);
+
+# wait slave cluster cs create tablet
+sleep 60;
+insert into t1 values(1,1),(2,2),(3,3),(4,4);
+
+# scan ups
+select * from t1;
+
+#switch cluster once
+deploy ob1.switch_cluster ob2;
+
+#new master cluster ups restart
+let $master_ups = deploy_get_value(ob1.get_master_ups);
+let $slave_ups = deploy_get_value(ob1.get_slave_ups);
+deploy ob1.$master_ups.restart;
+deploy ob1.$slave_ups.restart;
+
+#sleep for ups sync from rs
+sleep 10;
+
+#sql
+insert into t1 values(5,1),(6,2),(7,3),(8,4);
+select * from t1;
+
+#cluster switch twice
+deploy ob2.switch_cluster ob1;
+
+#sql
+update t1 set c2=10 where c1=8;
+select * from t1;
+

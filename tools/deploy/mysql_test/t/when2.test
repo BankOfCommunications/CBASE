@@ -1,0 +1,684 @@
+drop table if exists t1,t2;
+
+create table t1(pk int primary key, i1 int, v1 varchar(20));
+create table t2(pk int primary key, i1 int, v1 varchar(20));
+
+#############when 1: update insert##############
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+update t1 set v1='m1' where pk=1 when row_count(insert into t1 values(3,3,'c'))=1;
+update t1 set v1='m2' where pk=1 when row_count(insert into t2 values(3,3,'c'))=1;
+select * from t1;
+select * from t2;
+
+--error 5024
+update t1 set v1='m1' where pk=1 when row_count(insert into t1 values(1,1,'c'))=1;
+--error 5024
+update t1 set v1='m2' where pk=1 when row_count(insert into t2 values(1,1,'c'))=1;
+select * from t1;
+select * from t2;
+
+#############when 1: update replace##############
+replace into t1 values(10,10,'a'),(19,19,'b');
+replace into t2 values(10,10,'a'),(19,19,'b');
+update t1 set v1='m1' where pk=10 when row_count(replace into t1 values(11,11,'c'),(12,12,'d'))=2;
+update t1 set v1='m2' where pk=10 when row_count(replace into t2 values(11,11,'c'),(12,12,'d'))=2;
+select * from t1 where pk>=10 and pk<20;
+select * from t2 where pk>=10 and pk<20;
+
+update t1 set v1='m1' where pk=10 when row_count(replace into t1 values(10,10,'c'))=1;
+update t1 set v1='m2' where pk=10 when row_count(replace into t2 values(10,10,'c'))=1;
+select * from t1 where pk>=10 and pk<20;
+select * from t2 where pk>=10 and pk<20;
+
+#############when 1: update delete##############
+replace into t1 values(20,20,'a'),(21,21,'b'),(22,22,'b');
+replace into t2 values(20,20,'a'),(21,21,'b'),(22,22,'b');
+update t1 set v1='m1' where pk=20 when row_count(delete from t1 where pk=22)=1;
+update t1 set v1='m2' where pk=20 when row_count(delete from t2 where pk=22)=1;
+select * from t1 where pk>=20 and pk<30;
+select * from t2 where pk>=20 and pk<30;
+
+update t1 set v1='m1' where pk=21 when row_count(delete from t1 where pk=21)=1;
+update t1 set v1='m2' where pk=21 when row_count(delete from t2 where pk=21)=1;
+select * from t1 where pk>=20 and pk<30; 
+select * from t2 where pk>=20 and pk<30;
+
+#############when 1: update update##############
+replace into t1 values(30,30,'a'),(31,31,'b');
+replace into t2 values(30,30,'a'),(31,31,'b');
+update t1 set v1='m1' where pk=30 when row_count(update t1 set v1='mm1' where pk=30)=1;
+update t1 set v1='m2' where pk=30 when row_count(update t2 set v1='mm2' where pk=30)=1;
+select * from t1 where pk>=30 and pk<40;
+select * from t2 where pk>=30 and pk<40;
+
+update t1 set v1='m1' where pk=31 when row_count(update t1 set v1='mm1' where pk=31)=1;
+update t1 set v1='m2' where pk=31 when row_count(update t2 set v1='mm2' where pk=31)=1;
+select * from t1 where pk>=30 and pk<40;
+select * from t2 where pk>=30 and pk<40;
+
+#############when 1: delete insert##############
+replace into t1 values(40,40,'a'),(49,49,'b');
+replace into t2 values(40,40,'a'),(49,49,'b');
+delete from t1 where pk=50 when row_count(insert into t1 values(53,53,'m3'))=1;
+delete from t1 where pk=50 when row_count(insert into t2 values(53,53,'m3'))=1;
+select * from t1 where pk>=40 and pk<50;
+select * from t2 where pk>=40 and pk<50;
+
+--error 5024
+delete from t1 where pk=53 when row_count(insert into t1 values(53,53,'m3'))=1;
+--error 5024 
+delete from t1 where pk=53 when row_count(insert into t2 values(53,53,'m3'))=1;
+select * from t1 where pk>=40 and pk<50;
+select * from t2 where pk>=40 and pk<50;
+
+#############when 1: delete replace##############
+replace into t1 values(50,50,'a'),(59,59,'b');
+replace into t2 values(50,50,'a'),(59,59,'b');
+delete from t1 where pk=50 when row_count(replace into t1 values(52,52,'m3'))=1;
+delete from t1 where pk=50 when row_count(replace into t2 values(52,52,'m3'))=1;
+select * from t1 where pk>=50 and pk<60;
+select * from t2 where pk>=50 and pk<60;
+
+--error 5064
+delete from t1 where pk=1 when row_count(replace into t1 values(50,50,'m3'),(59,59,'m4'))=1;
+select * from t1 where pk>=50 and pk<60;
+
+#############when 1: delete delete##############
+replace into t1 values(60,60,'a'),(61,61,'b'),(62,62,'c'),(69,69,'d');
+replace into t2 values(60,60,'a'),(61,61,'b'),(62,62,'c'),(69,69,'d');
+delete from t1 where pk=60 when row_count(delete from t1 where pk=69)=1;
+delete from t1 where pk=60 when row_count(delete from t2 where pk=69)=1;
+select * from t1 where pk>=60 and pk<70;
+select * from t2 where pk>=60 and pk<70;
+
+--error 5064
+delete from t1 where pk=60 when row_count(delete from t1 where pk=63)=1;
+--error 5064
+delete from t1 where pk=60 when row_count(delete from t2 where pk=63)=1;
+select * from t1 where pk>=60 and pk<70;
+select * from t2 where pk>=60 and pk<70;
+
+#############when 1: delete update##############
+replace into t1 values(70,70,'a'),(72,72,'b');
+replace into t2 values(70,70,'a'),(72,72,'b');
+delete from t1 where pk=70 when row_count(update t1 set v1='mm1' where pk=72)=1;
+delete from t1 where pk=70 when row_count(update t2 set v1='mm2' where pk=72)=1;
+select * from t1 where pk>=70 and pk<80;
+select * from t2 where pk>=70 and pk<80;
+
+--error 5064
+delete from t1 where pk=70 when row_count(update t1 set v1='mm1' where pk=73)=1;
+--error 5064
+delete from t1 where pk=70 when row_count(update t2 set v1='mm1' where pk=73)=1;
+select * from t1 where pk>=70 and pk<80;
+select * from t2 where pk>=70 and pk<80;
+
+#############when 2: update insert insert##############
+replace into t1 values(80,80,'a'),(82,82,'b');
+replace into t2 values(80,80,'a'),(82,82,'b');
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t1 values(83,83,'t1') when row_count(insert into t1 values(84,84,'t1'))=1)=1;
+--error 5024 
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t1 values(85,85,'t1') when row_count(insert into t1 values(80,80,'t1'))=1)=1;
+select * from t1 where pk>=80 and pk<90;
+select * from t2 where pk>=80 and pk<90;
+
+--error 5024
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t2 values(81,81,'t2') when row_count(insert into t1 values(80,80,'t1'))=1)=1;
+--error 5024
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t1 values(80,80,'t1') when row_count(insert into t2 values(86,86,'t1'))=1)=1;
+select * from t1 where pk>=80 and pk<90;
+select * from t2 where pk>=80 and pk<90;
+
+--error 5064
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t2 values(83,83,'t1') when row_count(insert into t1 values(87,87,'t1'),(88,88,'t1'))=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t1 values(89,89,'t1'),(81,81,'t1') when row_count(insert into t2 values(84,84,'t2'))=1)=1;
+select * from t1 where pk>=80 and pk<90;
+select * from t2 where pk>=80 and pk<90;
+
+#############when 2: update insert update##############
+replace into t1 values(90,90,'a'),(91,91,'b');
+replace into t2 values(90,90,'a'),(91,92,'b');
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t1 values(93,93,'t1') when row_count(update t1 set v1='t1_2' where pk=90)=1)=1;
+--error 5024
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t1 values(90,90,'t1') when row_count(update t1 set v1='t1_2' where pk=90)=1)=1;
+select * from t1 where pk>=90 and pk<100;
+select * from t2 where pk>=90 and pk<100;
+
+--error 5024
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t2 values(90,90,'t1') when row_count(update t1 set v1='t1_2' where pk=90)=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t1 values(93,93,'t1') when row_count(update t1 set v1='t1_2' where pk=94)=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t1 values(94,94,'t1'),(95,95,'t1') when row_count(update t1 set v1='t1_2' where pk=90)=1)=1;
+select * from t1 where pk>=90 and pk<100;
+select * from t2 where pk>=90 and pk<100;
+
+#############when 2: update insert delete##############
+replace into t1 values(100,100,'a'),(101,101,'b');
+replace into t2 values(100,100,'a'),(101,101,'b');
+update t1 set v1='t1_1' where pk=100 when row_count(insert into t1 values(102,102,'t1') when row_count(delete from t1 where pk=101)=1)=1;
+--error 5024
+update t1 set v1='t1_1' where pk=100 when row_count(insert into t1 values(102,102,'t1') when row_count(delete from t1 where pk=100)=1)=1;
+select * from t1 where pk>=100 and pk<110;
+select * from t2 where pk>=100 and pk<110;
+
+--error 5024
+update t1 set v1='t1_1' where pk=100 when row_count(insert into t2 values(100,100,'t1') when row_count(delete from t1 where pk=100)=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=100 when row_count(insert into t1 values(104,104,'t1') when row_count(delete from t1 where pk=104)=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=100 when row_count(insert into t1 values(105,105,'t1'),(104,104,'t1') when row_count(delete from t1 where pk=100)=1)=1;
+select * from t1 where pk>=100 and pk<110;
+select * from t2 where pk>=100 and pk<110;
+
+#############when 2: update insert replace##############
+replace into t1 values(110,110,'a'),(111,111,'b');
+replace into t2 values(110,110,'a'),(111,111,'b');
+update t1 set v1='t1_1' where pk=110 when row_count(insert into t1 values(112,112,'t1') when row_count(replace into t1 values(113,113,'c'))=1)=1;
+--error 5024
+update t1 set v1='t1_1' where pk=110 when row_count(insert into t1 values(111,111,'t1') when row_count(replace into t1 values(111,111,'c'))=1)=1;
+select * from t1 where pk>=100 and pk<120;
+select * from t2 where pk>=100 and pk<120;
+
+--error 5024
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t2 values(110,110,'t1') when row_count(replace into t1 values(115,115,'c'))=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t1 values(110,110,'t1') when row_count(replace into t1 values(113,113,'c'),(111,111,'a'))=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=1 when row_count(insert into t1 values(115,115,'t1'),(116,116,'t1') when row_count(replace into t1 values(113,113,'c'))=1)=1;
+select * from t1 where pk>=100 and pk<120;
+select * from t2 where pk>=100 and pk<120;
+
+#############when 2: update replace insert##############
+replace into t1 values(120,120,'a'),(121,121,'b');
+replace into t2 values(120,120,'a'),(121,121,'b');
+update t1 set v1='t1_1' where pk=120 when row_count(replace into t1 values(122,122,'t1') when row_count(insert into t1 values(123,123,'c'))=1)=1;
+--error 5024
+update t1 set v1='t1_1' where pk=120 when row_count(replace into t1 values(122,122,'t1') when row_count(insert into t1 values(120,120,'c'))=1)=1;
+select * from t1 where pk>=120 and pk<130;
+select * from t2 where pk>=120 and pk<130;
+
+--error 5024
+update t1 set v1='t1_1' where pk=120 when row_count(replace into t1 values(124,124,'t1') when row_count(insert into t2 values(120,120,'c'))=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=120 when row_count(replace into t1 values(120,120,'t1') when row_count(insert into t1 values(125,125,'c'),(126,126,'a'))=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=120 when row_count(replace into t1 values(127,127,'t1'),(128,128,'t1') when row_count(insert into t1 values(127,127,'c'))=1)=1;
+select * from t1 where pk>=120 and pk<130;
+select * from t2 where pk>=120 and pk<130;
+
+#############when 2: update replace update##############
+replace into t1 values(130,130,'a'),(131,131,'b');
+replace into t2 values(130,130,'a'),(131,131,'b');
+update t1 set v1='t1_1' where pk=130 when row_count(replace into t1 values(132,132,'t1') when row_count(update t1 set v1='t1_2' where pk=130)=1)=1;
+update t1 set v1='t1_1' where pk=130 when row_count(replace into t2 values(130,130,'t1') when row_count(update t1 set v1='t1_2' where pk=130)=1)=1;
+select * from t1 where pk>=130 and pk<140;
+select * from t2 where pk>=130 and pk<140;
+
+--error 5064
+update t1 set v1='t1_1' where pk=130 when row_count(replace into t1 values(130,130,'t1') when row_count(update t1 set v1='t1_2' where pk=130)=0)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=130 when row_count(replace into t1 values(131,131,'t1'),(132,132,'t1') when row_count(update t1 set v1='t1_2' where pk=130)=1)=1;
+select * from t1 where pk>=130 and pk<140;
+select * from t2 where pk>=130 and pk<140;
+
+#############when 2: update replace delete##############
+replace into t1 values(140,140,'a'),(141,141,'b');
+replace into t2 values(140,140,'a'),(141,141,'b');
+update t1 set v1='t1_1' where pk=140 when row_count(replace into t1 values(142,142,'t1') when row_count(delete from t1 where pk=140)=1)=1;
+update t1 set v1='t1_1' where pk=140 when row_count(replace into t2 values(143,143,'t1') when row_count(delete from t1 where pk=141)=1)=1;
+select * from t1 where pk>=140 and pk<150;
+select * from t2 where pk>=140 and pk<150;
+
+--error 5064
+update t1 set v1='t1_1' where pk=140 when row_count(replace into t1 values(140,140,'t1') when row_count(delete from t1 where pk=144)=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=140 when row_count(replace into t1 values(143,143,'t1'),(144,144,'t1') when row_count(delete from t1 where pk=142)=1)=1;
+select * from t1 where pk>=140 and pk<150;
+select * from t2 where pk>=140 and pk<150;
+
+#############when 2: update replace replace##############
+replace into t1 values(150,150,'a'),(151,151,'b');
+replace into t2 values(150,150,'a'),(151,151,'b');
+update t1 set v1='t1_1' where pk=150 when row_count(replace into t1 values(152,152,'t1') when row_count(replace into t1 values(150,150,'c'))=1)=1;
+update t1 set v1='t1_1' where pk=150 when row_count(replace into t1 values(152,152,'t1') when row_count(replace into t1 values(150,150,'c'))=1)=1;
+select * from t1 where pk>=150 and pk<160;
+select * from t2 where pk>=150 and pk<160;
+
+--error 5064
+update t1 set v1='t1_1' where pk=150 when row_count(replace into t1 values(150,150,'t1') when row_count(replace into t1 values(151,151,'c'),(152,152,'a'))=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=150 when row_count(replace into t1 values(151,151,'t1'),(152,152,'t1') when row_count(replace into t1 values(151,151,'c'))=1)=1;
+select * from t1 where pk>=150 and pk<160;
+select * from t2 where pk>=150 and pk<160;
+
+#############when 2: update update insert##############
+replace into t1 values(160,160,'a'),(161,161,'b');
+replace into t2 values(160,160,'a'),(161,161,'b');
+update t1 set v1='t1_1' where pk=160 when row_count(update t1 set v1='t1_2' where pk=160 when row_count(insert into t1 values(162,162,'t1'))=1)=1;
+--error 5024 
+update t1 set v1='t1_1' where pk=160 when row_count(update t1 set v1='t1_2' where pk=160  when row_count(insert into t1 values(160,160,'t1'))=1)=1;
+select * from t1 where pk>=160 and pk<170;
+select * from t2 where pk>=160 and pk<170;
+
+--error 5024
+update t1 set v1='t1_1' where pk=160 when row_count(update t2 set v1='t1_2' where pk=160  when row_count(insert into t1 values(160,160,'t1'))=1)=1;
+--error 5024
+update t1 set v1='t1_1' where pk=160 when row_count(update t1 set v1='t1_2' where pk=160  when row_count(insert into t2 values(161,161,'t1'))=1)=1;
+select * from t1 where pk>=160 and pk<170;
+select * from t2 where pk>=160 and pk<170;
+
+--error 5064
+update t1 set v1='t1_1' where pk=160 when row_count(update t1 set v1='t1_2' where pk=160 when row_count(insert into t1 values(163,163,'t1'),(164,164,'t1'))=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=160 when row_count(update t1 set v1='t1_2' where pk=169  when row_count(insert into t2 values(163,163,'t2'))=1)=1;
+select * from t1 where pk>=160 and pk<170;
+select * from t2 where pk>=160 and pk<170;
+
+#############when 2: update update update##############
+replace into t1 values(170,170,'a'),(171,171,'b');
+replace into t2 values(170,170,'a'),(171,171,'b');
+update t1 set v1='t1_1' where pk=170 when row_count(update t1 set v1='t1_2' where pk=170 when row_count(update t1 set v1='t1_2' where pk=170)=1)=1;
+update t1 set v1='t1_1' where pk=170 when row_count(update t2 set v1='t2_2' where pk=170 when row_count(update t1 set v1='t1_2' where pk=170)=1)=1;
+select * from t1 where pk>=170 and pk<180;
+select * from t2 where pk>=170 and pk<180;
+
+--error 5064
+update t1 set v1='t1_1' where pk=170 when row_count(update t1 set v1='t1_2' where pk=1 when row_count(update t1 set v1='t1_2' where pk=172)=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=170 when row_count(update t1 set v1='t1_2' where pk=173 when row_count(update t1 set v1='t1_2' where pk=170)=1)=1;
+select * from t1 where pk>=170 and pk<180;
+select * from t2 where pk>=170 and pk<180;
+
+#############when 2: update update delete##############
+replace into t1 values(180,180,'a'),(181,181,'b'),(182,182,'b');
+replace into t2 values(180,180,'a'),(181,181,'b'),(182,182,'b');
+update t1 set v1='t1_1' where pk=180 when row_count(update t1 set v1='t1_2' where pk=181 when row_count(delete from t1 where pk=180)=1)=1;
+update t1 set v1='t1_1' where pk=180 when row_count(update t2 set v1='t1_2' where pk=182 when row_count(delete from t1 where pk=181)=1)=1;
+select * from t1 where pk>=180 and pk<190;
+select * from t2 where pk>=180 and pk<190;
+
+--error 5064
+update t1 set v1='t1_1' where pk=180 when row_count(update t1 set v1='t1_2' where pk=180 when row_count(delete from t1 where pk=183)=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=180 when row_count(update t1 set v1='t1_2' where pk=189 when row_count(delete from t1 where pk=180)=1)=1;
+select * from t1 where pk>=180 and pk<190;
+select * from t2 where pk>=180 and pk<190;
+
+#############when 2: update update replace##############
+replace into t1 values(190,190,'a'),(191,191,'b');
+replace into t2 values(190,190,'a'),(191,191,'b');
+update t1 set v1='t1_1' where pk=190 when row_count(update t1 set v1='t1_2' where pk=190 when row_count(replace into t1 values(191,191,'c'))=1)=1;
+update t1 set v1='t1_1' where pk=190 when row_count(update t2 set v1='t1_2' where pk=190 when row_count(replace into t1 values(191,191,'c'))=1)=1;
+select * from t1 where pk>=190 and pk<200;
+select * from t2 where pk>=190 and pk<200;
+
+--error 5064
+update t1 set v1='t1_1' where pk=190 when row_count(update t1 set v1='t1_2' where pk=190 when row_count(replace into t1 values(190,190,'c'),(191,191,'d'))=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=190 when row_count(update t1 set v1='t1_2' where pk=199 when row_count(replace into t1 values(190,190,'c'))=1)=1;
+select * from t1 where pk>=190 and pk<200;
+select * from t2 where pk>=190 and pk<200;
+
+#############when 2: update delete insert##############
+replace into t1 values(200,200,'a'),(201,201,'b'),(202,202,'c');
+replace into t2 values(200,200,'a'),(201,201,'b'),(202,202,'c');
+update t1 set v1='t1_1' where pk=200 when row_count(delete from t1 where pk=200 when row_count(insert into t1 values(203,203,'t1'))=1)=1;
+--error 5024 
+update t1 set v1='t1_1' where pk=200 when row_count(delete from t1 where pk=200  when row_count(insert into t1 values(201,201,'t1'))=1)=1;
+select * from t1 where pk>=200 and pk<210;
+select * from t2 where pk>=200 and pk<210;
+
+--error 5024
+update t1 set v1='t1_1' where pk=200 when row_count(delete from t2 where pk=200  when row_count(insert into t1 values(202,202,'t1'))=1)=1;
+--error 5024
+update t1 set v1='t1_1' where pk=200 when row_count(delete from t1 where pk=200  when row_count(insert into t2 values(202,202,'t1'))=1)=1;
+select * from t1 where pk>=200 and pk<210;
+select * from t2 where pk>=200 and pk<210;
+
+--error 5064
+update t1 set v1='t1_1' where pk=200 when row_count(delete from t1 where pk=200 when row_count(insert into t1 values(204,204,'t1'),(205,205,'t1'))=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=200 when row_count(delete from t1 where pk=209  when row_count(insert into t2 values(206,206,'t2'))=1)=1;
+select * from t1 where pk>=200 and pk<210;
+select * from t2 where pk>=200 and pk<210;
+
+#############when 2: update delete update##############
+replace into t1 values(210,210,'a'),(211,211,'b'),(212,212,'c'),(213,213,'d');
+replace into t2 values(210,210,'a'),(211,211,'b'),(212,212,'c'),(213,213,'d');
+update t1 set v1='t1_1' where pk=210 when row_count(delete from t1 where pk=210 when row_count(update t1 set v1='t1_2' where pk=210)=1)=1;
+update t1 set v1='t1_1' where pk=210 when row_count(delete from t2 where pk=210 when row_count(update t1 set v1='t1_2' where pk=211)=1)=1;
+select * from t1 where pk>=210 and pk<220;
+select * from t2 where pk>=210 and pk<220;
+
+--error 5064
+update t1 set v1='t1_1' where pk=210 when row_count(delete from t1  where pk=210 when row_count(update t1 set v1='t1_2' where pk=214)=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=210 when row_count(delete from t1  where pk=215 when row_count(update t1 set v1='t1_2' where pk=213)=1)=1;
+select * from t1 where pk>=210 and pk<220;
+select * from t2 where pk>=210 and pk<220;
+
+#############when 2: update delete delete##############
+replace into t1 values(220,220,'a'),(221,221,'b'),(222,222,'c'),(223,223,'d');
+replace into t2 values(220,220,'a'),(221,221,'b'),(222,222,'c'),(223,223,'d');
+update t1 set v1='t1_1' where pk=220 when row_count(delete from t1 where pk=221 when row_count(delete from t1 where pk=220)=1)=1;
+update t1 set v1='t1_1' where pk=220 when row_count(delete from t2 where pk=220 when row_count(delete from t1 where pk=222)=1)=1;
+select * from t1 where pk>=220 and pk<230;
+select * from t2 where pk>=220 and pk<230;
+
+--error 5064
+update t1 set v1='t1_1' where pk=220 when row_count(delete from t1 where pk=222 when row_count(delete from t1 where pk=224)=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=220 when row_count(delete from t1 where pk=225 when row_count(delete from t1 where pk=223)=1)=1;
+select * from t1 where pk>=220 and pk<230;
+select * from t2 where pk>=220 and pk<230;
+
+#############when 2: update delete replace##############
+replace into t1 values(230,230,'a'),(231,231,'b'),(232,232,'c'),(233,233,'d');
+replace into t2 values(230,230,'a'),(231,231,'b'),(232,232,'c'),(233,233,'d');
+update t1 set v1='t1_1' where pk=230 when row_count(delete from t1 where pk=230 when row_count(replace into t1 values(231,231,'c'))=1)=1;
+update t1 set v1='t1_1' where pk=230 when row_count(delete from t2 where pk=231 when row_count(replace into t1 values(233,233,'c'))=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=230 when row_count(delete from t2 where pk=235 when row_count(replace into t1 values(232,232,'c'))=1)=1;
+select * from t1 where pk>=230 and pk<240;
+select * from t2 where pk>=230 and pk<240;
+
+--error 5064
+update t1 set v1='t1_1' where pk=230 when row_count(delete from t2 where pk=230 when row_count(replace into t1 values(231,231,'c'),(232,232,'d'))=1)=1;
+--error 5064
+update t1 set v1='t1_1' where pk=230 when row_count(delete from t2 where pk=239 when row_count(replace into t1 values(231,231,'c'))=1)=1;
+select * from t1 where pk>=230 and pk<240;
+select * from t2 where pk>=230 and pk<240;
+
+#############when 2: delete insert insert##############
+replace into t1 values(240,240,'a'),(241,241,'b'),(242,242,'c'),(243,243,'d');
+replace into t2 values(240,240,'a'),(241,241,'b'),(242,242,'c'),(243,243,'d');
+delete from t1 where pk=240 when row_count(insert into t1 values(244,244,'t1') when row_count(insert into t1 values(245,245,'t1'))=1)=1;
+--error 5024 
+delete from t1 where pk=240 when row_count(insert into t1 values(245,245,'t1') when row_count(insert into t1 values(242,242,'t1'))=1)=1;
+select * from t1 where pk>=240 and pk<250;
+select * from t2 where pk>=240 and pk<250;
+
+--error 5024
+delete from t1 where pk=240 when row_count(insert into t2 values(5,5,'t1') when row_count(insert into t1 values(3,3,'t1'))=1)=1;
+--error 5024
+delete from t1 where pk=240 when row_count(insert into t1 values(3,3,'t1') when row_count(insert into t2 values(6,6,'t1'))=1)=1;
+select * from t1 where pk>=240 and pk<250;
+select * from t2 where pk>=240 and pk<250;
+
+--error 5064
+delete from t1 where pk=240 when row_count(insert into t2 values(246,246,'t1') when row_count(insert into t1 values(247,247,'t1'),(248,248,'t1'))=1)=1;
+--error 5064
+delete from t1 where pk=240 when row_count(insert into t1 values(249,249,'t1'),(248,248,'t1') when row_count(insert into t2 values(245,245,'t2'))=1)=1;
+select * from t1 where pk>=240 and pk<250;
+select * from t2 where pk>=240 and pk<250;
+
+#############when 2: delete insert update##############
+replace into t1 values(250,250,'a'),(251,251,'b'),(252,252,'c'),(253,253,'d');
+replace into t2 values(250,250,'a'),(251,251,'b'),(252,252,'c'),(253,253,'d');
+delete from t1  where pk=250 when row_count(insert into t1 values(254,254,'t1') when row_count(update t1 set v1='t1_2' where pk=250)=1)=1;
+--error 5024
+delete from t1  where pk=250 when row_count(insert into t1 values(252,252,'t1') when row_count(update t1 set v1='t1_2' where pk=251)=1)=1;
+select * from t1 where pk>=250 and pk<260;
+select * from t2 where pk>=250 and pk<260;
+
+--error 5024
+delete from t1 where pk=250 when row_count(insert into t2 values(253,253,'t1') when row_count(update t1 set v1='t1_2' where pk=254)=1)=1;
+--error 5064
+delete from t1 where pk=250 when row_count(insert into t1 values(256,256,'t1') when row_count(update t1 set v1='t1_2' where pk=255)=1)=1;
+--error 5064
+delete from t1  where pk=250 when row_count(insert into t1 values(257,257,'t1'),(258,258,'t1') when row_count(update t1 set v1='t1_2' where pk=252)=1)=1;
+select * from t1 where pk>=250 and pk<260;
+select * from t2 where pk>=250 and pk<260;
+
+#############when 2: delete insert delete##############
+replace into t1 values(260,260,'a'),(261,261,'b'),(262,262,'c'),(263,263,'d');
+replace into t2 values(260,260,'a'),(261,261,'b'),(262,262,'c'),(263,263,'d');
+delete from t1 where pk=260 when row_count(insert into t1 values(264,264,'t1') when row_count(delete from t1 where pk=261)=1)=1;
+--error 5024
+delete from t1 where pk=260 when row_count(insert into t1 values(263,263,'t1') when row_count(delete from t1 where pk=262)=1)=1;
+select * from t1 where pk>=260 and pk<270;
+select * from t2 where pk>=260 and pk<270;
+
+--error 5024
+delete from t1 where pk=260 when row_count(insert into t2 values(260,260,'t1') when row_count(delete from t1 where pk=263)=1)=1;
+--error 5064
+delete from t1 where pk=260 when row_count(insert into t1 values(265,265,'t1') when row_count(delete from t1 where pk=261)=1)=1;
+--error 5064
+delete from t1 where pk=260 when row_count(insert into t1 values(266,266,'t1'),(267,267,'t1') when row_count(delete from t1 where pk=263)=1)=1;
+select * from t1 where pk>=260 and pk<270;
+select * from t2 where pk>=260 and pk<270;
+
+#############when 2: delete insert replace##############
+replace into t1 values(270,270,'a'),(271,271,'b'),(272,272,'c'),(273,273,'d');
+replace into t2 values(270,270,'a'),(271,271,'b'),(272,272,'c'),(273,273,'d');
+delete from t1 where pk=270 when row_count(insert into t1 values(274,274,'t1') when row_count(replace into t1 values(271,271,'c'))=1)=1;
+--error 5024
+delete from t1 where pk=271 when row_count(insert into t1 values(272,272,'t1') when row_count(replace into t1 values(271,271,'c'))=1)=1;
+select * from t1 where pk>=270 and pk<280;
+select * from t2 where pk>=270 and pk<280;
+
+--error 5024
+delete from t1 where pk=270 when row_count(insert into t2 values(272,272,'t1') when row_count(replace into t1 values(273,273,'c'))=1)=1;
+--error 5064
+delete from t1 where pk=270 when row_count(insert into t1 values(276,276,'t1') when row_count(replace into t1 values(271,271,'c'),(272,272,'a'))=1)=1;
+--error 5064
+delete from t1 where pk=270 when row_count(insert into t1 values(277,277,'t1'),(278,278,'t1') when row_count(replace into t1 values(273,273,'c'))=1)=1;
+select * from t1 where pk>=270 and pk<280;
+select * from t2 where pk>=270 and pk<280;
+
+#############when 2: delete replace insert##############
+replace into t1 values(280,280,'a'),(281,281,'b'),(282,282,'c'),(283,283,'d');
+replace into t2 values(280,280,'a'),(281,281,'b'),(282,282,'c'),(283,283,'d');
+delete from t1 where pk=280 when row_count(replace into t1 values(281,281,'t1') when row_count(insert into t1 values(284,284,'c'))=1)=1;
+--error 5024
+delete from t1 where pk=280 when row_count(replace into t1 values(281,281,'t1') when row_count(insert into t1 values(284,284,'c'))=1)=1;
+select * from t1 where pk>=280 and pk<290;
+select * from t2 where pk>=280 and pk<290;
+
+--error 5024
+delete from t1 where pk=280 when row_count(replace into t1 values(281,281,'t1') when row_count(insert into t2 values(282,282,'c'))=1)=1;
+--error 5064
+delete from t1 where pk=280 when row_count(replace into t1 values(282,282,'t1') when row_count(insert into t1 values(285,285,'c'),(286,286,'a'))=1)=1;
+--error 5064
+delete from t1 where pk=280 when row_count(replace into t1 values(287,287,'t1'),(288,288,'t1') when row_count(insert into t1 values(287,287,'c'))=1)=1;
+select * from t1 where pk>=280 and pk<290;
+select * from t2 where pk>=280 and pk<290;
+
+#############when 2: delete replace update##############
+replace into t1 values(290,290,'a'),(291,291,'b'),(292,292,'c'),(293,293,'d');
+replace into t2 values(290,290,'a'),(291,291,'b'),(292,292,'c'),(293,293,'d');
+delete from t1 where pk=290 when row_count(replace into t1 values(294,294,'t1') when row_count(update t1 set v1='t1_2' where pk=290)=1)=1;
+delete from t1 where pk=291 when row_count(replace into t2 values(290,290,'t1') when row_count(update t1 set v1='t1_2' where pk=292)=1)=1;
+select * from t1 where pk>=290 and pk<300;
+select * from t2 where pk>=290 and pk<300;
+
+--error 5064
+delete from t1 where pk=1 when row_count(replace into t1 values(291,291,'t1') when row_count(update t1 set v1='t1_2' where pk=295)=1)=1;
+--error 5064
+delete from t1 where pk=1 when row_count(replace into t1 values(291,291,'t1'),(292,292,'t1') when row_count(update t1 set v1='t1_2' where pk=292)=1)=1;
+select * from t1 where pk>=290 and pk<300;
+select * from t2 where pk>=290 and pk<300;
+
+#############when 2: delete replace delete##############
+replace into t1 values(300,300,'a'),(301,301,'b'),(302,302,'c'),(303,303,'d');
+replace into t2 values(300,300,'a'),(301,301,'b'),(302,302,'c'),(303,303,'d');
+delete from t1 where pk=300 when row_count(replace into t1 values(304,304,'t1') when row_count(delete from t1 where pk=300)=1)=1;
+delete from t1 where pk=300 when row_count(replace into t2 values(303,303,'t1') when row_count(delete from t1 where pk=301)=1)=1;
+select * from t1 where pk>=300 and pk<309;
+select * from t2 where pk>=300 and pk<309;
+
+--error 5064
+delete from t1 where pk=1 when row_count(replace into t1 values(304,304,'t1') when row_count(delete from t1 where pk=309)=1)=1;
+--error 5064
+delete from t1 where pk=1 when row_count(replace into t1 values(302,302,'t1'),(304,304,'t1') when row_count(delete from t1 where pk=302)=1)=1;
+select * from t1 where pk>=300 and pk<309;
+select * from t2 where pk>=300 and pk<309;
+
+#############when 2: delete replace replace##############
+replace into t1 values(310,310,'a'),(311,311,'b'),(312,312,'c'),(313,313,'d');
+replace into t2 values(310,310,'a'),(311,311,'b'),(312,312,'c'),(313,313,'d');
+delete from t1 where pk=313 when row_count(replace into t1 values(312,312,'t1') when row_count(replace into t1 values(311,311,'c'))=1)=1;
+delete from t1 where pk=313 when row_count(replace into t2 values(313,313,'t2') when row_count(replace into t1 values(311,311,'c'))=1)=1;
+select * from t1 where pk>=310 and pk<319;
+select * from t2 where pk>=310 and pk<319;
+
+--error 5064
+delete from t1 where pk=310 when row_count(replace into t1 values(310,310,'t1') when row_count(replace into t1 values(310,310,'c'),(311,311,'a'))=1)=1;
+--error 5064
+delete from t1 where pk=310 when row_count(replace into t1 values(311,311,'t1'),(310,310,'t1') when row_count(replace into t1 values(311,311,'c'))=1)=1;
+select * from t1 where pk>=310 and pk<319;
+select * from t2 where pk>=310 and pk<319;
+
+#############when 2: delete update insert##############
+replace into t1 values(320,320,'a'),(321,321,'b'),(322,322,'c'),(323,323,'d');
+replace into t2 values(320,320,'a'),(321,321,'b'),(322,322,'c'),(323,323,'d');
+delete from t1 where pk=321 when row_count(update t1 set v1='t1_2' where pk=320 when row_count(insert into t1 values(324,324,'t1'))=1)=1;
+--error 5024 
+delete from t1 where pk=321 when row_count(update t1 set v1='t1_2' where pk=320  when row_count(insert into t1 values(320,320,'t1'))=1)=1;
+select * from t1 where pk>=320 and pk<329;
+select * from t2 where pk>=320 and pk<329;
+
+--error 5024
+delete from t1 where pk=320 when row_count(update t2 set v1='t1_2' where pk=322  when row_count(insert into t1 values(320,320,'t1'))=1)=1;
+--error 5024
+delete from t1 where pk=320 when row_count(update t1 set v1='t1_2' where pk=320  when row_count(insert into t2 values(322,322,'t1'))=1)=1;
+select * from t1 where pk>=320 and pk<329;
+select * from t2 where pk>=320 and pk<329;
+
+--error 5064
+delete from t1 where pk=320 when row_count(update t1 set v1='t1_2' where pk=320 when row_count(insert into t1 values(325,325,'t1'),(326,326,'t1'))=1)=1;
+--error 5064
+delete from t1 where pk=320 when row_count(update t1 set v1='t1_2' where pk=329  when row_count(insert into t2 values(327,328,'t2'))=1)=1;
+select * from t1 where pk>=320 and pk<329;
+select * from t2 where pk>=320 and pk<329;
+
+#############when 2: delete update update##############
+replace into t1 values(330,330,'a'),(331,331,'b'),(332,332,'c'),(333,333,'d');
+replace into t2 values(330,330,'a'),(331,331,'b'),(332,332,'c'),(333,333,'d');
+delete from t1 where pk=331 when row_count(update t1 set v1='t1_2' where pk=330 when row_count(update t1 set v1='t1_2' where pk=330)=1)=1;
+delete from t1 where pk=331 when row_count(update t2 set v1='t2_2' where pk=330 when row_count(update t1 set v1='t1_2' where pk=330)=1)=1;
+select * from t1  where pk>=330 and pk<339; 
+select * from t2  where pk>=330 and pk<339;
+
+--error 5064
+delete from t1 where pk=330 when row_count(update t1 set v1='t1_2' where pk=330 when row_count(update t1 set v1='t1_2' where pk=339)=1)=1;
+--error 5064
+delete from t1 where pk=330 when row_count(update t1 set v1='t1_2' where pk=338 when row_count(update t1 set v1='t1_2' where pk=330)=1)=1;
+select * from t1  where pk>=330 and pk<339;
+select * from t2  where pk>=330 and pk<339;
+
+#############when 2: delete update delete##############
+replace into t1 values(340,340,'a'),(341,341,'b'),(342,342,'c'),(343,343,'d');
+replace into t2 values(340,340,'a'),(341,341,'b'),(342,342,'c'),(343,343,'d');
+delete from t1 where pk=340 when row_count(update t1 set v1='t1_2' where pk=340 when row_count(delete from t1 where pk=341)=1)=1;
+delete from t1 where pk=341 when row_count(update t2 set v1='t1_2' where pk=340 when row_count(delete from t1 where pk=342)=1)=1;
+select * from t1 where pk>=340 and pk<349;
+select * from t2 where pk>=340 and pk<349;
+
+--error 5064
+delete from t1 where pk=340 when row_count(update t1 set v1='t1_2' where pk=340 when row_count(delete from t1 where pk=345)=1)=1;
+--error 5064
+delete from t1 where pk=340 when row_count(update t1 set v1='t1_2' where pk=349 when row_count(delete from t1 where pk=343)=0)=1;
+select * from t1 where pk>=340 and pk<349;
+select * from t2 where pk>=340 and pk<349;
+
+#############when 2: delete update replace##############
+replace into t1 values(350,350,'a'),(351,351,'b'),(352,352,'c'),(353,353,'d');
+replace into t2 values(350,350,'a'),(351,351,'b'),(352,352,'c'),(353,353,'d');
+delete from t1 where pk=350 when row_count(update t1 set v1='t1_2' where pk=350 when row_count(replace into t1 values(353,353,'c'))=1)=1;
+delete from t1 where pk=350 when row_count(update t2 set v1='t1_2' where pk=350 when row_count(replace into t1 values(3353,353,'c'))=1)=1;
+select * from t1 where pk>=350 and pk<359;
+select * from t2 where pk>=350 and pk<359;
+
+--error 5064
+delete from t1 where pk=350 when row_count(update t1 set v1='t1_2' where pk=353 when row_count(replace into t1 values(351,351,'c'),(352,352,'d'))=1)=1;
+--error 5064
+delete from t1 where pk=350 when row_count(update t1 set v1='t1_2' where pk=359 when row_count(replace into t1 values(351,351,'c'))=1)=1;
+select * from t1 where pk>=350 and pk<359;
+select * from t2 where pk>=350 and pk<359;
+
+#############when 2: delete delete insert##############
+replace into t1 values(360,360,'a'),(361,361,'b'),(362,362,'c'),(363,363,'d');
+replace into t2 values(360,360,'a'),(361,361,'b'),(362,362,'c'),(363,363,'d');
+delete from t1 where pk=360 when row_count(delete from t1 where pk=360 when row_count(insert into t1 values(364,364,'t1'))=1)=1;
+--error 5024 
+delete from t1 where pk=360 when row_count(delete from t1 where pk=361  when row_count(insert into t1 values(362,362,'t1'))=1)=1;
+select * from t1 where pk>=360 and pk<369;
+select * from t2 where pk>=360 and pk<369;
+
+--error 5024
+delete from t1 where pk=360 when row_count(delete from t2 where pk=362  when row_count(insert into t1 values(361,361,'t1'))=1)=1;
+--error 5024
+delete from t1 where pk=360 when row_count(delete from t1 where pk=362  when row_count(insert into t2 values(362,362,'t1'))=1)=1;
+select * from t1 where pk>=360 and pk<369;
+select * from t2 where pk>=360 and pk<369;
+
+--error 5064
+delete from t1 where pk=360 when row_count(delete from t1 where pk=360 when row_count(insert into t1 values(365,365,'t1'),(366,366,'t1'))=1)=1;
+--error 5064
+delete from t1 where pk=360 when row_count(delete from t1 where pk=369  when row_count(insert into t2 values(367,367,'t2'))=1)=1;
+select * from t1 where pk>=360 and pk<369;
+select * from t2 where pk>=360 and pk<369;
+
+#############when 2: update delete update##############
+replace into t1 values(370,370,'a'),(371,371,'b'),(372,372,'c'),(373,373,'d');
+replace into t2 values(370,370,'a'),(371,371,'b'),(372,372,'c'),(373,373,'d');
+delete from t1 where pk=370 when row_count(delete from t1 where pk=370 when row_count(update t1 set v1='t1_2' where pk=370)=1)=1;
+delete from t1 where pk=371 when row_count(delete from t2 where pk=370 when row_count(update t1 set v1='t1_2' where pk=371)=1)=1;
+select * from t1 where pk>=370 and pk<379;
+select * from t2 where pk>=370 and pk<379;
+
+--error 5064
+delete from t1 where pk=370 when row_count(delete from t1  where pk=372 when row_count(update t1 set v1='t1_2' where pk=379)=1)=1;
+--error 5064
+delete from t1 where pk=370 when row_count(delete from t1  where pk=378 when row_count(update t1 set v1='t1_2' where pk=372)=1)=1;
+select * from t1 where pk>=370 and pk<379;
+select * from t2 where pk>=370 and pk<379;
+
+#############when 2: delete delete delete##############
+replace into t1 values(380,380,'a'),(381,381,'b'),(382,382,'c'),(383,383,'d'),(384,384,'d'),(385,385,'e');
+replace into t2 values(380,380,'a'),(381,381,'b'),(382,382,'c'),(383,383,'d'),(384,384,'d'),(385,385,'e');
+delete from t1 where pk=380 when row_count(delete from t1 where pk=381 when row_count(delete from t1 where pk=382)=1)=1;
+delete from t1 where pk=380 when row_count(delete from t2 where pk=384 when row_count(delete from t1 where pk=383)=1)=1;
+select * from t1 where pk>=380 and pk<389;
+select * from t2 where pk>=380 and pk<389;
+
+--error 5064
+delete from t1 where pk=380 when row_count(delete from t1 where pk=384 when row_count(delete from t1 where pk=389)=1)=1;
+--error 5064
+delete from t1 where pk=380 when row_count(delete from t1 where pk=388 when row_count(delete from t1 where pk=384)=1)=1;
+select * from t1 where pk>=380 and pk<389;
+select * from t2 where pk>=380 and pk<389;
+
+#############when 2: delete delete replace##############
+replace into t1 values(390,390,'a'),(391,391,'b'),(392,392,'c'),(393,393,'d');
+replace into t2 values(390,390,'a'),(391,391,'b'),(392,392,'c'),(393,393,'d');
+delete from t1 where pk=390 when row_count(delete from t1 where pk=393 when row_count(replace into t1 values(394,394,'c'))=1)=1;
+delete from t1 where pk=391 when row_count(delete from t2 where pk=392 when row_count(replace into t1 values(393,393,'c'))=1)=1;
+delete from t1 where pk=392 when row_count(delete from t2 where pk=393 when row_count(replace into t1 values(395,395,'c'))=1)=1;
+select * from t1 where pk>=390 and pk<399;
+select * from t2 where pk>=390 and pk<399;
+
+--error 5064
+delete from t1 where pk=390 when row_count(delete from t2 where pk=1 when row_count(replace into t1 values(391,391,'c'),(392,392,'d'))=1)=1;
+--error 5064
+delete from t1 where pk=390 when row_count(delete from t2 where pk=399 when row_count(replace into t1 values(391,391,'c'))=1)=1;
+select * from t1 where pk>=390 and pk<399;
+select * from t2 where pk>=390 and pk<399;
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+

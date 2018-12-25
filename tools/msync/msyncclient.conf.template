@@ -1,0 +1,4 @@
+[public]
+log_file = ./log/msyncclient.log
+pid_file = ./log/msyncclient.pid
+log_level = info

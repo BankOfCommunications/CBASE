@@ -1,0 +1,12 @@
+drop table if exists c;
+create table c (c1 int primary key, c2 varchar(8));
+begin;
+insert into c values(1,1);
+update c set c1 = 2 where c1 = 1;
+begin;
+select * from c where c1 = 1 for update;
+ERROR HY000: Exclusive lock conflict 'int32:1' for key 'PRIMARY'
+select * from c where c1 = 2 for update;
+ERROR HY000: Exclusive lock conflict 'int32:2' for key 'PRIMARY'
+commit;
+commit;

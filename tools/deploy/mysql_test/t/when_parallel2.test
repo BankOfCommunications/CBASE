@@ -1,0 +1,306 @@
+drop table if exists t1,t2;
+create table t1(pk int primary key, i1 int, v1 varchar(20));
+create table t2(pk int primary key, i1 int, v1 varchar(20));
+
+insert into t1 values(1,1,'a'),(2,2,'b');
+insert into t2 values(1,1,'a'),(2,2,'b');
+
+connect (conn1,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+connect (conn2,$OBMYSQL_MS0,admin,admin,test,$OBMYSQL_PORT);
+
+##case 1 
+connection conn1;
+begin;
+send update t1 set v1='new_m1' where pk=1 when row_count(insert into t1 values(1,1,'new') when row_count(delete from t1 where pk=1)=1)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+--error 5049
+update t2 set v1='new_m2' where pk=1 when row_count(delete from t1 where pk=1)=1;
+
+connection conn1;
+reap;
+commit;
+
+connection conn2;
+update t2 set v1='new_m3' where pk=1 when row_count(delete from t1 where pk=1)=1;
+commit;
+
+select * from t1;
+select * from t2;
+
+##case 2
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+connection conn1;
+begin;
+send update t1 set v1='new_m1' where pk=1 when row_count(insert into t1 values(1,1,'new') when row_count(delete from t1 where pk=1)=1)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+send update t2 set v1='new_m2' where pk=1 when row_count(delete from t1 where pk=2)=1;
+
+connection conn1;
+reap;
+rollback;
+
+connection conn2;
+reap;
+commit;
+
+select * from t1;
+select * from t2;
+
+##case 3
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+connection conn1;
+begin;
+send update t1 set v1='new_m1' where pk=1 when row_count(update t1 set v1='new_m2' where pk=5 when row_count(insert into t1 values(3,3,'c'))=1)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+send update t2 set v1='new_m2' where pk=1 when row_count(insert into t1 values(3,3,'c'))=1;
+
+connection conn1;
+--error 5064
+reap;
+commit;
+
+connection conn2;
+reap;
+commit;
+
+select * from t1;
+select * from t2;
+
+##case 4
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+connection conn1;
+begin;
+send update t1 set v1='new_m1' where pk=1 when row_count(delete from t1 where pk=4 when row_count(insert into t1 values(3,3,'c'))=1)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+send update t2 set v1='new_m2' where pk=1 when row_count(insert into t1 values(3,3,'c'))=1;
+
+connection conn1;
+--error 5064
+reap;
+update t2 set v1='new_m3' where pk=1 when row_count(insert into t1 values(4,4,'d'))=1;
+commit;
+
+connection conn2;
+reap;
+commit;
+
+select * from t1;
+select * from t2;
+
+##case 5 
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+connection conn1;
+begin;
+send delete from t1 where pk=1 when row_count(insert into t1 values(1,1,'new') when row_count(delete from t1 where pk=1)=1)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+--error 5049
+delete from t1 where pk=1 when row_count(delete from t1 where pk=2)=1;
+
+connection conn1;
+reap;
+commit;
+
+connection conn2;
+delete from t1 where pk=1 when row_count(delete from t1 where pk=2)=1;
+commit;
+
+select * from t1;
+select * from t2;
+
+##case 6
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+connection conn1;
+begin;
+send delete from t1 where pk=1 when row_count(insert into t1 values(1,1,'new') when row_count(delete from t1 where pk=1)=1)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+send delete from t1 where pk=1 when row_count(delete from t1 where pk=1)=1;
+
+connection conn1;
+reap;
+rollback;
+
+connection conn2;
+reap;
+commit;
+
+select * from t1;
+select * from t2;
+
+##case 6
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+connection conn1;
+begin;
+send delete from t1 where pk=1 when row_count(update t1 set v1='new_m2' where pk=5 when row_count(insert into t1 values(3,3,'c'))=1)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+send delete from t1 where pk=1 when row_count(insert into t1 values(3,3,'c'))=1;
+
+connection conn1;
+--error 5064
+reap;
+commit;
+
+connection conn2;
+reap;
+commit;
+
+select * from t1;
+select * from t2;
+
+##case 7
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+connection conn1;
+begin;
+send delete from t1 where pk=1 when row_count(delete from t1 where pk=4 when row_count(insert into t1 values(3,3,'c'))=1)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+send delete from t1 where pk=1 when row_count(insert into t1 values(3,3,'c'))=1;
+
+connection conn1;
+--error 5064
+reap;
+delete from t1 where pk=1 when row_count(insert into t1 values(4,4,'d'))=1;
+commit;
+
+connection conn2;
+reap;
+commit;
+
+select * from t1;
+select * from t2;
+
+##case 8
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+connection conn1;
+begin;
+send delete from t1 where pk=1 when row_count(update t1 set v1='new_n' where pk=1 when row_count(insert into t1 values(3,3,'c'))=1)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+send delete from t1 where pk=2 when row_count(update t1 set v1='new_m' where pk=3)=1;
+
+connection conn1;
+reap;
+commit;
+
+connection conn2;
+reap;
+commit;
+
+select * from t1;
+select * from t2;
+
+##case 9
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+connection conn1;
+begin;
+send delete from t1 where pk=1 when row_count(update t1 set v1='new_n' where pk=1 when row_count(insert into t1 values(3,3,'c'))=1)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+send delete from t1 where pk=2 when row_count(update t1 set v1='new_m' where pk=3)=1;
+
+connection conn1;
+reap;
+rollback;
+
+connection conn2;
+--error 5064
+reap;
+commit;
+
+select * from t1;
+select * from t2;
+
+##case 10
+delete from t1 where pk=3;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=4;
+replace into t1 values(1,1,'a'),(2,2,'b');
+replace into t2 values(1,1,'a'),(2,2,'b');
+connection conn1;
+begin;
+send update t1 set v1='new_x' where pk=1 when row_count(insert into t2 values(1,1,'a1') when row_count(delete from t2 where pk=4 when row_count(insert into t1 values(3,3,'c'))=1)=1)=1;
+
+connection conn2;
+begin;
+--real_sleep 1
+send update t2 set v1='new_y' where pk=1 when row_count(delete from t2 where pk=1 when row_count(delete from t1 where pk=2 when row_count(update t1 set v1='new_z' where pk=1)=1)=1)=1;
+
+connection conn1;
+--error 5064
+reap;
+insert into t1 values(3,3,'c');
+commit;
+
+connection conn2;
+reap;
+commit;
+
+select * from t1;
+select * from t2;
+
+
+
+
+

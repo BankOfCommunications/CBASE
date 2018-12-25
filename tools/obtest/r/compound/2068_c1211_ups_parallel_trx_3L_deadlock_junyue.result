@@ -1,0 +1,694 @@
+ob1=OBI(cluster=1211);
+ob1.reboot;
+ob1.mysql set global ob_read_consistency=3;
+ob1.mysql_p show variables like 'ob_read_consistency';
+variable_name	value
+ob_read_consistency	3
+ob1.mysql_p select name,value from __all_sys_config_stat where name = 'read_master_master_ups_percent' or name = 'read_slave_master_ups_percent';
+name	value
+read_master_master_ups_percent	50
+read_slave_master_ups_percent	50
+ob1.$m_ups.status;
+master
+ob1.$s_ups.status;
+sync
+ob1.create_client;
+create table t1(pk int primary key, c1 int);
+set session ob_query_timeout=10000000;
+set autocommit=0;
+set session ob_query_timeout=20000000;
+set autocommit=0;
+ob1.connect checker;
+set autocommit=1;
+insert into t1 values(1,1);
+insert into t1 values(2,2);
+update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=2)=1)=1;
+update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=1)=1)=1;
+ERROR HY000: Exclusive lock conflict 'int:2' for key 'PRIMARY'
+commit;
+commit;
+expect:1,2;2,4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+delete from t1 where pk=1;
+delete from t1 where pk=2;
+ob1.$m_ups.status;
+master
+ob1.$s_ups.status;
+sync
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+ob1.$m_ups.nfind_log "checksum_error";
+ob1.$s_ups.nfind_log "checksum_error";
+insert into t1 values(1,1);
+insert into t1 values(2,2);
+update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=2)=1)=1;
+update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=2 when row_count(insert into t1 values(1,2))=1)=1;
+ERROR HY000: Exclusive lock conflict 'int:2' for key 'PRIMARY'
+rollback;
+commit;
+expect:1,2;2,4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+delete from t1 where pk=1;
+delete from t1 where pk=2;
+ob1.$m_ups.status;
+master
+ob1.$s_ups.status;
+sync
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+ob1.$m_ups.nfind_log "checksum_error";
+ob1.$s_ups.nfind_log "checksum_error";
+insert into t1 values(1,1);
+insert into t1 values(2,2);
+update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=1)=1)=1;
+update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=2)=1)=1;
+ERROR HY000: Exclusive lock conflict 'int:2' for key 'PRIMARY'
+commit;
+commit;
+expect:1,2;2,4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+select * from t1;
+pk	c1
+1	2
+2	4
+delete from t1 where pk=1;
+delete from t1 where pk=2;
+ob1.$m_ups.status;
+master
+ob1.$s_ups.status;
+sync
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+ob1.$m_ups.nfind_log "checksum_error";
+ob1.$s_ups.nfind_log "checksum_error";
+insert into t1 values(1,1);
+insert into t1 values(2,2);
+update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=1)=1)=1;
+update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=2)=1)=1;
+ERROR HY000: Exclusive lock conflict 'int:2' for key 'PRIMARY'
+rollback;
+commit;
+expect:2,4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+select * from t1;
+pk	c1
+2	4
+delete from t1 where pk=2;
+ob1.$m_ups.status;
+master
+ob1.$s_ups.status;
+sync
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+ob1.$m_ups.nfind_log "checksum_error";
+ob1.$s_ups.nfind_log "checksum_error";
+insert into t1 values(1,1) when row_count(insert into t1 values(2,2) when row_count(insert into t1 values(3,3))=1)=1;
+insert into t1 values(4,4) when row_count(insert into t1 values(5,5) when row_count(insert into t1 values(6,6))=1)=1;
+update t1 set c1=c1+1 where pk=6 when row_count(update t1 set c1=c1+1 where pk=4 when row_count(update t1 set c1=c1+1 where pk=5)=1)=1;
+update t1 set c1=c1+1 where pk=3 when row_count(update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=1)=1)=1;
+ERROR HY000: Exclusive lock conflict 'int:5' for key 'PRIMARY'
+commit;
+commit;
+expect:,1,2;2,3;3,4;4,4;5,5;6,6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+select * from t1;
+pk	c1
+1	2
+2	3
+3	4
+4	4
+5	5
+6	6
+delete from t1 where pk=1;
+delete from t1 where pk=2;
+delete from t1 where pk=3;
+delete from t1 where pk=4;
+delete from t1 where pk=5;
+delete from t1 where pk=6;
+ob1.$m_ups.status;
+master
+ob1.$s_ups.status;
+sync
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+ob1.$m_ups.nfind_log "checksum_error";
+ob1.$s_ups.nfind_log "checksum_error";
+insert into t1 values(1,1),(2,2),(3,3);
+update t1 set c1=c1+1 where pk=3 when row_count(update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=1)=1)=1;
+update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=3)=1)=1;
+ERROR HY000: Exclusive lock conflict 'int:3' for key 'PRIMARY'
+commit;
+update t1 set c1=c1+1 where pk=1 when row_count(update t1 set c1=c1+1 where pk=2 when row_count(update t1 set c1=c1+1 where pk=3)=1)=1;
+commit;
+expect:,1,3;2,4;3,5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+select * from t1;
+pk	c1
+1	3
+2	4
+3	5
+delete from t1 where pk=1;
+delete from t1 where pk=2;
+delete from t1 where pk=3;
+ob1.$m_ups.status;
+master
+ob1.$s_ups.status;
+sync
+ob1.$m_ups.exist;
+ob1.$s_ups.exist;
+ob1.$m_ups.nfind_log "checksum_error";
+ob1.$s_ups.nfind_log "checksum_error";

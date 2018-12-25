@@ -1,0 +1,29 @@
+create table t_quota(id int primary key, "Create" char(90));
+
+insert into t_quota values(1, 'sigle quotation marks');
+
+--error 5006
+insert into t_quota values(2, "double quotation marks");
+
+select * from t_quota;
+
+select * from t_quota where "Create" like '%quotation%';
+
+--error 5001
+select * from t_quota order by Create;
+
+create table t_quota_another("Id" int primary key, "Create" char(90));
+
+--error 5009
+select * from t_quota_another order by id;
+
+--error 5001
+create table t_quota_another('Id' int primary key, "Create" char(90)); 
+
+insert into t_quota_another values(1, 'sigle quotation marks'), (2, 'value 2');
+
+select * from t_quota_another where "Id" > 1;
+
+drop table t_quota_another;
+
+drop table t_quota;

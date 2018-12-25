@@ -1,0 +1,56 @@
+drop table if exists t1,t2,t3,t4;
+create table if not exists t1
+(
+c1 TINYINT not null default 0 auto_increment primary key,
+c2 SMALLINT not null default 0,
+c3 MEDIUMINT not null default 0,
+c4 INT not null default 0,
+c5 INTEGER not null default 0,
+c6 BIGINT not null default 0,
+c7 REAL not null default 1.5,
+c8 DOUBLE ,
+c9 FLOAT ,
+c10 TIMESTAMP ,
+c11 DATETIME,
+c12 CHAR,
+c13 VARCHAR,
+c14 BINARY,
+c15 VARBINARY,
+c16 CREATETIME,
+c17 MODIFYTIME
+)REPLICA_NUM=3,TABLET_MAX_SIZE=100000000,COMPRESS_METHOD='lzo_1_0',USE_BLOOM_FILTER=true,EXPIRE_INFO='c8=0',TABLET_BLOCK_SIZE=4096, CONSISTENT_MODE=STATIC, COMMENT='this is comment';
+create table if not exists t1
+(
+c1 TINYINT primary key,
+c2 int
+);
+show create table t1;
+table_name	table_definition
+test.t1	CREATE TABLE test.t1 (
+c16 CREATETIME
+, c17 MODIFYTIME
+, c1 INT32
+, c2 INT32
+, c3 INT32
+, c4 INT32
+, c5 INT32
+, c6 INT
+, c7 DOUBLE
+, c8 DOUBLE
+, c9 FLOAT
+, c10 DATETIME
+, c11 DATETIME
+, c12 VARCHAR
+, c13 VARCHAR
+, c14 VARCHAR
+, c15 VARCHAR
+, PRIMARY KEY(c1)
+) TABLET_MAX_SIZE = 100000000, TABLET_BLOCK_SIZE = 4096, EXPIRE_INFO = 'c8=0', CONSISTENT_MODE=STATIC USE_BLOOM_FILTER = TRUE
+select table_name,table_id,table_type,load_type,table_def_type,rowkey_column_num,column_num,max_used_column_id,create_mem_version,max_rowkey_length,compress_func_name,is_use_bloomfilter,merge_write_sstable_version,is_pure_update_table,rowkey_split,expire_condition,tablet_block_size,is_read_static from __first_tablet_entry where table_id=3001;
+table_name	table_id	table_type	load_type	table_def_type	rowkey_column_num	column_num	max_used_column_id	create_mem_version	max_rowkey_length	compress_func_name	is_use_bloomfilter	merge_write_sstable_version	is_pure_update_table	rowkey_split	expire_condition	tablet_block_size	is_read_static
+t1	3001	1	1	2	1	NULL	30	1	0	lzo_1_0	1	2	0	0	c8=0	4096	1
+drop table t1;
+create table t1(f1 int primary key);
+ERROR HY000: OB-2: Invalid argument
+create table t1(f1 int,f2 varchar, primary key(f1,f2));
+ERROR HY000: OB-2: Invalid argument

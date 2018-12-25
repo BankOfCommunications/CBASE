@@ -1,0 +1,188 @@
+--source $LOCAL_DIR/mysql_test/import-export/include.inc 
+
+--let $TABLE=ie_incorrect_column_mapping
+--let $DB=test
+--let $TEST_NAME=$TABLE
+--let $IM_FILE=$IM_DEL/$TEST_NAME.del
+--let $EX_FILE=$EX_DEL/$TEST_NAME.del
+
+eval using database $DB;
+# --disable_warnings
+eval drop table if exists $TABLE;
+# --enable_warnings
+
+eval create table $TABLE
+(
+id int,
+it0 int,
+it1 int,
+it2 int,
+
+bg0 bigint,
+bg1 bigint,
+bg2 bigint,
+
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256),
+
+primary key(id, bg0, vc0)
+
+);
+
+exec > $IM2_LOG/$TABLE.log;
+
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+       -l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE
+--column-mapping "10:id,seq(1),1;it0,[321];it1,3;vc1,8,['Hello,world'];vc2,['hello']"
+&> /dev/null | cat;
+
+exec grep 'parse_column_map_grammar' $IM2_LOG/$TABLE.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";
+
+exec > $IM2_LOG/$TABLE.log;
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+       -l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE
+--column-mapping "10:id,seq();it0,1,[321];it1,3;vc1,8,['Hello,world'];vc2,[hello]"
+&> /dev/null|cat;
+
+exec grep 'parse_column_map_grammar' $IM2_LOG/$TABLE.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";
+
+exec > $IM2_LOG/$TABLE.log;
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+       -l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE
+--column-mapping "10:id,seq(100,5);it0,1,[321];it1,3;vc1,8,['Hello,world'];vc2,['hello'],['world']"
+&> /dev/null | cat;
+
+exec grep 'parse_column_map_grammar' $IM2_LOG/$TABLE.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";
+
+exec > $IM2_LOG/$TABLE.log;
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+       -l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE
+--column-mapping "10:id,seq(100,5);it0,1,[321];it1,1;vc1,8,['Hello,world'];vc2,['hello']"
+&> /dev/null | cat;
+
+exec grep 'parse_column_map_grammar' $IM2_LOG/$TABLE.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";
+
+exec > $IM2_LOG/$TABLE.log;
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+       -l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE
+--column-mapping "10:id,seq(100,5);it0,1,[321];it1,1,3;vc1,8,['Hello,world'];vc2,['hello']"
+&> /dev/null | cat;
+
+exec grep 'parse_column_map_grammar' $IM2_LOG/$TABLE.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";
+
+exec > $IM2_LOG/$TABLE.log;
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+       -l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE
+--column-mapping "10:id,seq(100,5);it1,1,[321];it1,3;vc1,8,['Hello,world'];vc2,['hello']"
+&> /dev/null | cat;
+
+exec grep 'parse_column_map_grammar' $IM2_LOG/$TABLE.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";
+
+exec > $IM2_LOG/$TABLE.log;
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+       -l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE
+--column-mapping "10:id,seq(100,5);it1,1,[321],3;it1,3;vc1,8,['Hello,world'];vc2,['hello']"
+&> /dev/null | cat;
+
+exec grep 'parse_column_map_grammar' $IM2_LOG/$TABLE.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";
+
+exec > $IM2_LOG/$TABLE.log;
+exec $IM2_EXE
+-t $TABLE 
+-h $RS0_IP 
+-p $RS0_PORT 
+       -l $IM2_LOG/$TABLE.log 
+--badfile $IM2_BAD/$TABLE.bad 
+--dbname $DB 
+-f $IM_FILE
+--column-mapping "10:id,seq(100,5);it1,1,[321];it1,;vc1,8,['Hello,world'];vc2,['hello']"
+&> /dev/null | cat;
+
+exec grep 'parse_column_map_grammar' $IM2_LOG/$TABLE.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";
+
+exec > $IM2_LOG/$TABLE.log;
+exec $IM2_EXE
+-t $TABLE
+-h $RS0_IP
+-p $RS0_PORT
+       -l $IM2_LOG/$TABLE.log
+--badfile $IM2_BAD/$TABLE.bad
+--dbname $DB
+-f $IM_FILE
+--column-mapping "10:"
+&> /dev/null | cat;
+
+exec grep 'parse_column_map_grammar' $IM2_LOG/$TABLE.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";
+
+exec > $IM2_LOG/$TABLE.log;
+exec $IM2_EXE
+-t $TABLE
+-h $RS0_IP
+-p $RS0_PORT
+       -l $IM2_LOG/$TABLE.log
+--badfile $IM2_BAD/$TABLE.bad
+--dbname $DB
+-f $IM_FILE
+--column-mapping "10:id"
+&> /dev/null | cat;
+
+exec grep 'parse_column_map_grammar' $IM2_LOG/$TABLE.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";
+
+exec > $IM2_LOG/$TABLE.log;
+exec $IM2_EXE
+-t $TABLE
+-h $RS0_IP
+-p $RS0_PORT
+       -l $IM2_LOG/$TABLE.log
+--badfile $IM2_BAD/$TABLE.bad
+--dbname $DB
+-f $IM_FILE
+--column-mapping "4:id,seq(1);it0,[321],1;it1,3;vc1,['Hello,world'],8;vc2,['hello']"
+&> /dev/null | cat;
+
+exec grep 'parse_column_map_grammar' $IM2_LOG/$TABLE.log | awk "{print \$3\" \"\$4;for(i=7;i<=NF;i++) printf \$i\" \";printf \"\n\";}";
+
+eval select * from $TABLE;

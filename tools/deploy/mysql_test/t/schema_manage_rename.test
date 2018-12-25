@@ -1,0 +1,51 @@
+select table_id,operation_type from __all_ddl_operation ; 
+--let $value = query_get_value(select count(*) from __all_ddl_operation ,count(*),1)
+--let $op_id = query_get_value(select operation_type from __all_ddl_operation where gm_modify in(select max(gm_modify) from __all_ddl_operation); ,operation_type,1)
+if($value==14)
+{
+echo boot_strap succ ";
+} 
+
+if($op_id==4)
+{
+echo boot_strap succ ";
+} 
+
+--let $sql_head = create table t
+--let $count =50
+--let $sql_end = (c1 int primary key ,c2 int ,c3 int);
+--let $drop_head =  drop table t50
+--let $table_list = 
+--let $drop =
+--let $sql =
+#create  50 table 
+while ($count)
+{
+--let $sql=$sql_head$count$sql_end
+dec $count;
+eval $sql;
+}
+# drop one time
+--let $count =49
+while ($count)
+{
+--let $table_list=$table_list,t$count
+dec $count;
+}
+--let $drop = $drop_head$table_list;
+eval $drop;
+--let $value1= query_get_value(select count(*) from __all_ddl_operation ,count(*),1)
+--let $op_id = query_get_value(select operation_type from __all_ddl_operation where gm_modify in(select max(gm_modify) from __all_ddl_operation); ,operation_type,1)
+if($value1 == inc ($value+100))
+{
+echo "right";
+}
+
+
+
+
+
+
+
+
+

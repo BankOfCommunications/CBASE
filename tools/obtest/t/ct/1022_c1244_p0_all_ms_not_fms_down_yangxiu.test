@@ -1,0 +1,28 @@
+deploy ob1=OBI(cluster=1244);
+deploy ob1.reboot;
+sleep 30;
+
+deploy ob1.create_client;
+create table t1(c1 int primary key,c2 int);
+insert into t1 values(1,1),(2,2),(3,3),(4,4);
+select * from t1;
+
+#stop ms
+deploy ob1.ms0.stop;
+deploy ob1.ms1.stop;
+deploy ob1.ms2.stop;
+deploy ob1.ms3.stop;
+
+sleep 60;
+
+#start ms 
+deploy ob1.ms0.start;
+deploy ob1.ms1.start;
+deploy ob1.ms2.start;
+deploy ob1.ms3.start;
+
+sleep 100;
+
+#sql
+insert into t1 values(5,1),(6,2),(7,3),(8,4);
+select * from t1;

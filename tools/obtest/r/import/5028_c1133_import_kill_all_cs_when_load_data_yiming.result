@@ -1,0 +1,24 @@
+ob_import=OBI(cluster=1133)
+ob_import.reboot
+ob_import.create_client
+ob_import.cs0.plugin ProxyServer.reboot
+ob_import.cs1.plugin ProxyServer.reboot
+ob_import.cs2.plugin ProxyServer.reboot
+ob_import.rs0.plugin ImportServer.reboot
+ob_import.source t/import/inc/importconf.inc
+ob_import.rs0.plugin ImportCli.reboot
+ob_import.rs0.plugin ImportCli.execute -t CREATE_BYPASS_CONFIG collect_info
+ob_import.rs0.plugin ImportCli.check_conf collect_info collect_info.ini
+ob_import.rs0.plugin ImportCli.execute -t OVERWRITE /group/public/yiming/tables_data_new/collect_info collect_info >log/importcli.log 2>&1 &
+ob_import.cs0.check_log_until_success "begin migrate data type=DATA_SOURCE_PROXY"
+ob_import.cs0.force_stop
+ob_import.cs1.force_stop
+ob_import.cs2.force_stop
+ob_import.cs0.nstart
+ob_import.cs1.nstart
+ob_import.cs2.nstart
+ob_import.rs0.check_log_until_success "load table success, table_name=collect_info table_id=3005"
+select table_name, table_id, status from load_data_history;
+table_name	table_id	status
+collect_info	3005	DONE
+ob_import.rs0.plugin ImportCli.check collect_info

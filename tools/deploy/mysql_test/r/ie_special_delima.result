@@ -1,0 +1,20 @@
+using database test;
+drop table if exists ie_special_delima;
+create table ie_special_delima
+(
+it0 int,
+dc0 decimal(20,4),
+vc0 varchar(256),
+vc1 varchar(256),
+vc2 varchar(256),
+primary key(it0, dc0, vc0)
+);
+select * from ie_special_delima;
+it0	dc0	vc0	vc1	vc2
+0	1333.3300	ACC001	FA0001	31089
+1	1054.6200	A002	FACT202	31089
+2	34.4500	CCREP005	F0005	31006
+3	900.0000	ACCRE9	F0023	1108
+4	900.0000	ACCREP3	F100000	110899
+5	3000.0000	0003	FAC0003	3108
+01333.3300ACC001FA00013108911054.6200A002FACT20231089234.4500CCREP005F0005310063900.0000ACCRE9F002311084900.0000ACCREP3F10000011089953000.00000003FAC00033108

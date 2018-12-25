@@ -1,0 +1,12 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\compactsstable
+2
+8
+19:ob_compactsstable_mem.cpp|1|166f7733a39|4413|e159d15f|6ac9eee6689e11e8a8030002c8c1274c|0
+10:ob_compact_row.h|1|166f7733a62|aca|c28d45af|6cd9ef02689e11e8a8030002c8c1274c|0
+b:Makefile.am|1|166f7733a19|2e3|c53fddc0|6879eeca689e11e8a8030002c8c1274c|0
+12:ob_compact_row.cpp|1|166f7733ad0|6fe6|627cf6c7|6ed9ef1e689e11e8a8030002c8c1274c|0
+17:ob_compactsstable_mem.h|1|166f7733afb|19d3|ce8b915a|7149ef3a689e11e8a8030002c8c1274c|0
+10:ob_compact_obj.h|1|166f7733b28|9c8|4114d8bd|7389ef56689e11e8a8030002c8c1274c|0
+11:ob_block_membuf.h|1|166f7733b56|a3b|b2730f02|75f9ef72689e11e8a8030002c8c1274c|0
+13:ob_block_membuf.cpp|1|166f7733b75|1357|b59e2a1d|7839ef8e689e11e8a8030002c8c1274c|0

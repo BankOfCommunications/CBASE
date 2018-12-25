@@ -1,0 +1,106 @@
+ob1=OBI(cluster=1244);
+ob2=OBI(cluster=1244);
+
+ob2.rs0.set master=ob1.rs0;
+
+ob1.reboot;
+ob2.reboot;
+
+sleep 60;
+ob1.source include/merge.inc;
+sleep 10;
+
+ob1.create_client ob1,ob2;
+#ob1.create_client;
+
+ob1.prepare;
+sleep 60;
+
+ob1.start_check;
+
+ob1.major_freeze;
+ob1.check_cs_version 2;
+
+ob1.stop_check;
+
+ob1.fs0.force_stop;
+let $cnt=0;
+while($cnt < 4)
+{
+   ob1.ms$cnt.force_stop;
+   inc $cnt;
+}
+
+deploy ob2.mysql update __all_cluster set cluster_flow_percent=0 where cluster_id=1;
+deploy ob2.mysql update __all_cluster set cluster_flow_percent=100 where cluster_id=2;
+sleep 60;
+
+ob2.force_switch_cluster ob2;
+
+deploy ob2.mysql update __all_cluster set cluster_flow_percent=0 where cluster_id=1;
+deploy ob2.mysql update __all_cluster set cluster_flow_percent=100 where cluster_id=2;
+sleep 60;
+
+ob2.start_check;
+
+ob2.major_freeze;
+ob2.check_cs_version 3;
+
+ob2.stop_check;
+
+create table t1(i1 int primary key, v1 varchar(20));
+
+let $cnt=500;
+while($cnt)
+{
+   eval insert into t1 values($cnt,'v$cnt');
+   dec $cnt;	
+}
+
+let $cnt=500;
+while($cnt)
+{
+   eval select * from t1  where i1=$cnt;
+   dec $cnt;
+}
+
+let $cnt=500;
+while($cnt)
+{
+   eval update t1 set v1='vv$cnt' where i1=$cnt;
+   dec $cnt;
+}
+
+let $cnt=500;
+while($cnt)
+{
+   eval select * from t1  where i1=$cnt;
+   dec $cnt;
+}
+
+let $cnt=500;
+while($cnt)
+{
+   eval delete from t1 where i1=$cnt;
+   dec $cnt;
+}
+
+let $cnt=500;
+while($cnt)
+{
+   eval select * from t1  where i1=$cnt;
+   dec $cnt;
+}
+
+drop table t1;
+
+
+
+
+
+
+
+
+
+
+

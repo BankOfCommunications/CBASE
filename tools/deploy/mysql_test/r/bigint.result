@@ -1,0 +1,121 @@
+drop table if exists t1, t2;
+create table t1 (pk bigint,a bigint, primary key(pk));
+insert into t1 values (1,18446744073709551615), (2,18446744073709551613), (3,18446744073709551612);
+select * from t1;
+pk	a
+1	9223372036854775807
+2	9223372036854775807
+3	9223372036854775807
+select * from t1 where a=18446744073709551615;
+pk	a
+1	9223372036854775807
+2	9223372036854775807
+3	9223372036854775807
+select * from t1 where a=18446744073709551613;
+pk	a
+1	9223372036854775807
+2	9223372036854775807
+3	9223372036854775807
+select * from t1 where a='18446744073709551615';
+pk	a
+select * from t1;
+pk	a
+1	9223372036854775807
+2	9223372036854775807
+3	9223372036854775807
+drop table t1;
+create table t1 ( a bigint primary key, big bigint );
+insert into t1 (a,big) values (1,-1),(2,12345678901234567),(3,9223372036854775807),(4,18446744073709551615);
+select * from t1;
+a	big
+1	-1
+2	12345678901234567
+3	9223372036854775807
+4	9223372036854775807
+select min(big),max(big),max(big)-1 from t1;
+min(big)	max(big)	max(big)-1
+-1	9223372036854775807	9223372036854775806
+select min(big),max(big),max(big)-1 from t1 group by a;
+min(big)	max(big)	max(big)-1
+-1	-1	-2
+12345678901234567	12345678901234567	12345678901234566
+9223372036854775807	9223372036854775807	9223372036854775806
+9223372036854775807	9223372036854775807	9223372036854775806
+insert into t1 (a,big) values (5,18446744073709551615);
+select * from t1;
+a	big
+1	-1
+2	12345678901234567
+3	9223372036854775807
+4	9223372036854775807
+5	9223372036854775807
+select min(big),max(big),max(big)-1 from t1;
+min(big)	max(big)	max(big)-1
+-1	9223372036854775807	9223372036854775806
+select min(big),max(big),max(big)-1 from t1 group by a;
+min(big)	max(big)	max(big)-1
+-1	-1	-2
+12345678901234567	12345678901234567	12345678901234566
+9223372036854775807	9223372036854775807	9223372036854775806
+9223372036854775807	9223372036854775807	9223372036854775806
+9223372036854775807	9223372036854775807	9223372036854775806
+drop table t1;
+CREATE TABLE t1 ( pk bigint primary key, f double);
+insert into t1 values (1,10000000000000000000);
+insert into t1 values (2,10000000000000000000.0);
+insert into t1 values (3,'10000000000000000000');
+select * from t1;
+pk	f
+1	9.223372036854776e18
+2	1e19
+3	1e19
+drop table t1;
+create table t1 (
+value64  bigint ,
+value32  bigint,
+extra    bigint,
+primary key(value64, value32)
+);
+create table t2 (
+value64  bigint,
+value32  bigint,
+extra    bigint,
+primary key(value64, value32)
+);
+insert into t1(value64,value32)  values(17156792991891826145, 1);
+insert into t1(value64,value32)  values( 9223372036854775807, 2);
+insert into t2(value64,value32)  values(17156792991891826145, 3);
+insert into t2(value64,value32)  values( 9223372036854775807, 4);
+select * from t1;
+value64	value32	extra
+9223372036854775807	1	NULL
+9223372036854775807	2	NULL
+select * from t2;
+value64	value32	extra
+9223372036854775807	3	NULL
+9223372036854775807	4	NULL
+drop table t1, t2;
+create table t1 (sint64 bigint primary key, a bigint);
+insert into t1(sint64) values (-9223372036854775808);
+select * from t1;
+sint64	a
+-9223372036854775807	NULL
+drop table t1;
+create table t1 (a char(100) primary key, b varchar(100), c varchar(256), d varchar(256));
+insert into t1 values(
+18446744073709551615,18446744073709551615,
+18446744073709551615, 18446744073709551615
+);
+select * from t1;
+a	b	c	d
+9223372036854775807	9223372036854775807	9223372036854775807	9223372036854775807
+drop table t1;
+create table t1 ( quantity double primary key, extra bigint);
+insert into t1(quantity) values (500), (-500), (0), (-1);
+select * from t1;
+quantity	extra
+-500	NULL
+-1	NULL
+0	NULL
+500	NULL
+drop table t1;

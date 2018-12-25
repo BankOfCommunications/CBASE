@@ -1,0 +1,2 @@
+## requrement: mysqlclient.a ##
+yum install -b test t-mysql.x86_64  

@@ -1,0 +1,14 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\client\java\src\main\java\com\taobao\oceanbase\util\result
+2
+a
+12:SelectHandler.java|1|166f774b7a4|30a|c337fe99|017a9b4e68ac11e8a8030002c8c1274c|0
+14:SequenceHandler.java|1|166f774b739|18e|7ee280ec|f8ca9ade68ab11e8a8030002c8c1274c|0
+10:NoOpHandler.java|1|166f774b783|104|1b0b5761|feca9b3268ab11e8a8030002c8c1274c|0
+11:LimitHandler.java|1|166f774b692|20e|93a7ae10|f6aa9ac268ab11e8a8030002c8c1274c|0
+13:OrderByHandler.java|1|166f774b763|45e|cb8b6c9a|fcca9b1668ab11e8a8030002c8c1274c|0
+16:PaginationHandler.java|1|166f774b66c|313|f181009d|f49a9aa668ab11e8a8030002c8c1274c|0
+11:ResultFilter.java|1|166f774b646|612|5d04f69f|f1ba9a8a68ab11e8a8030002c8c1274c|0
+15:StatsFuncHandler.java|1|166f774b74e|37c|9dbc23e1|faca9afa68ab11e8a8030002c8c1274c|0
+13:GroupByHandler.java|1|166f774b621|50e|de4d9b7c|efca9a6e68ab11e8a8030002c8c1274c|0
+c:Handler.java|1|166f774b5d7|63|c52e1fed|ed8a9a5268ab11e8a8030002c8c1274c|0

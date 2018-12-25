@@ -1,0 +1,131 @@
+deploy ob1=OBI(cluster=1222, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable);
+
+deploy ob1.cs0.set sstable_dist={1,2,3};
+deploy ob1.cs1.set sstable_dist=0;
+
+deploy ob1.rs0.set extra_config=tablet_replicas_num=1,enable_balance=False;
+
+deploy ob1.reboot;
+
+deploy ob1.create_client;
+deploy ob1.prepare;
+deploy ob1.start_check;
+
+#stop ms cs
+--echo cs0,ms0 stop
+deploy ob1.cs0.stop;
+deploy ob1.ms0.stop;
+sleep 10;
+
+#check __all_server
+let $ret=deploy_get_value(ob1.mysql_p select count(*)=5 from __all_server);
+--echo $ret 
+
+#restart ms cs
+--echo cs0,ms0 nstart
+deploy ob1.cs0.nstart;
+deploy ob1.ms0.nstart;
+sleep 10;
+
+#check __all_server
+let $ret=deploy_get_value(ob1.mysql_p select count(*)=7 from __all_server);
+--echo $ret
+
+#create/drop table
+create table test_1 (a int primary key, b int);
+create table test_2 (a int primary key, b int);
+
+#check schema
+let $a1 = deploy_get_value(ob1.mysql_p select count(*)=18 from __first_tablet_entry);
+--echo $a1
+let $b1 = deploy_get_value(ob1.mysql_p select count(*)=179 from __all_all_column);
+--echo $b1
+
+insert into test_1 values(1,1),(2,2),(3,3);
+insert into test_2 values(-1,-1),(-2,-2),(-3,-3);
+
+#drop table
+drop table test_1;
+
+#check schema
+let $a1 = deploy_get_value(ob1.mysql_p select count(*)=17 from __first_tablet_entry);
+--echo $a1
+let $b1 = deploy_get_value(ob1.mysql_p select count(*)=177 from __all_all_column);
+--echo $b1
+
+deploy ob1.stop_check;
+
+#select master ups
+let $master=deploy_get_value(ob1.get_master_ups);
+deploy ob1.$master.stop;
+sleep 10;
+
+let $newmaster=deploy_get_value(ob1.get_master_ups);
+if($master == $newmaster)
+{
+	echo select new master fail
+}
+
+deploy ob1.$master.nstart;
+
+#replication
+deploy ob1.source include/migrate.inc;
+deploy ob1.mysql alter system set tablet_replicas_num=2 server_type=rootserver;
+sleep 30;
+
+deploy ob1.check_cs_sstable 406;
+
+#merge
+deploy ob1.source include/merge.inc;
+sleep 10;
+
+deploy ob1.major_freeze;
+sleep 50;
+deploy ob1.check_cs_version 2;
+
+#restart rs
+deploy ob1.rs0.restart;
+sleep 10;
+deploy ob1.set_obi_role OBI_MASTER;
+sleep 10;
+
+create table test_1 (a int primary key,b int);
+insert into test_1 values(1,1),(-1,-1);
+
+#sql
+update test_1 set b=0 where a=-1;
+update test_2 set b=1 where a=0;
+select * from test_1;
+select * from test_2;
+
+#ups change master
+let $slave = deploy_get_value(ob1.get_slave_ups);
+deploy ob1.change_ups_master $slave;
+sleep 15;
+
+#merge and split
+--disable_query_log
+--disable_result_log
+create table test_4(a int primary key,b varchar) TABLET_MAX_SIZE=500000;
+let $cnt = 10000;
+while($cnt >0)
+{
+   	eval replace into test_4 values($cnt,'aaaaaaaaaaaaaaaaaffffffffffffffffffffffffffcccccccccccccccccccccddddddddddddddddddddddeeeeeeeeeeeeeeeeeeeeeeee');
+	dec $cnt;
+}
+
+deploy ob1.major_freeze;
+sleep 50;
+deploy ob1.check_cs_version 3;
+
+let $a = deploy_get_value(ob1.cs0.monitor old_ver_tablets_num);
+let $b = deploy_get_value(ob1.cs0.monitor new_ver_tablets_num);
+let $c = math($b-$a);
+if( $c != 2)
+{
+	--echo tablet split fail
+}
+
+
+
+

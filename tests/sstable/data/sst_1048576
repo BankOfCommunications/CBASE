@@ -1,0 +1,160 @@
+////===================================================================
+ //
+ // cs_filecache.cpp / hash / common / Oceanbase
+ //
+ // Copyright (C) 2010 Taobao.com, Inc.
+ //
+ // Created on 2010-08-13 by Yubai (yubai.lk@taobao.com) 
+ //
+ // -------------------------------------------------------------------
+ //
+ // Description
+ //
+ //
+ // -------------------------------------------------------------------
+ // 
+ // Change Log
+ //
+////====================================================================
+
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <pthread.h>
+#include <new>
+#include <algorithm>
+#include "ob_define.h"
+#include "cs_fileinfo_cache.h"
+
+namespace oceanbase
+{
+  namespace chunkserver
+  {
+    using namespace common;
+    FileInfo::FileInfo()
+    {
+    }
+
+    FileInfo::~FileInfo()
+    {
+    }
+
+    int FileInfo::init(uint64_t sstable_id, FileInfoCache *fileinfo_cache)
+    {
+      int ret = OB_SUCCESS;
+      char *sstable_fname = NULL;
+      if (NULL == fileinfo_cache)
+      {
+        TBSYS_LOG(WARN, "invalid param fileinfo_cache null pointer");
+      }
+      else if (NULL == (sstable_fname = get_sstable_fname_(sstable_id)))
+      {
+        TBSYS_LOG(WARN, "get sstable filename fail sstable_id=%lu", sstable_id);
+        ret = OB_ERROR;
+      }
+      else if (-1 == (fd_ = open(sstable_fname, FILE_OPEN_RFLAG)))
+      {
+        TBSYS_LOG(WARN, "open sstable file fail errno=%u filename=%s sstable_id=%lu", errno, sstable_fname, sstable_id);
+        ret = OB_ERROR;
+      }
+      else
+      {
+        sstable_id_ = sstable_id;
+        fileinfo_cache_ = fileinfo_cache;
+      }
+      return ret;
+    }
+
+    void FileInfo::release()
+    {
+      if (-1 != fd_)
+      {
+        close(fd_);
+        fd_ = -1;
+      }
+      if (NULL != fileinfo_cache_)
+      {
+        fileinfo_cache_->release_fileinfo_(this);
+        fileinfo_cache_ = NULL;
+      }
+    }
+
+    int FileInfo::get_fd() const
+    {
+      return fd_;
+    }
+
+    char *FileInfo::get_sstable_fname_(uint64_t sstable_id)
+    {
+      // TODO
+      static const int32_t fname_buf_size = 2048;
+      static __thread char fname_buf[fname_buf_size];
+      snprintf(fname_buf, fname_buf_size, "./data/sst_%lu", sstable_id);
+      return fname_buf;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    FileInfoCache::FileInfoCache()
+    {
+    }
+
+    FileInfoCache::~FileInfoCache()
+    {
+    }
+
+    int FileInfoCache::init(const int64_t max_cache_num, const int64_t min_gc_timeo)
+    {
+      return lrucache_.init(max_cache_num, min_gc_timeo);
+    };
+
+    int FileInfoCache::destroy()
+    {
+      return lrucache_.destroy();
+    };
+
+    FileInfo *FileInfoCache::get_fileinfo(const uint64_t sstable_id)
+    {
+      FileInfo *ret = NULL;
+      if (NULL == (ret = lrucache_.get(sstable_id)))
+      {
+        FileInfo *tmp = NULL;
+        if (NULL == (tmp = allocer_.allocate()))
+        {
+          TBSYS_LOG(WARN, "allocate file info fail sstable_id=%lu", sstable_id);
+        }
+        else if (OB_SUCCESS != tmp->init(sstable_id, this)
+                || OB_SUCCESS != lrucache_.set(sstable_id, tmp))
+        {
+          TBSYS_LOG(WARN, "init file info or set to lrucache fail fd=%d sstable_id=%lu", tmp->get_fd(), sstable_id);
+          allocer_.deallocate(tmp);
+          tmp = NULL;
+        }
+        else
+        {
+          ret = lrucache_.get(sstable_id);
+        }
+      }
+      return ret;
+    }
+
+    int FileInfoCache::revert_fileinfo(const uint64_t sstable_id)
+    {
+      return lrucache_.revert(sstable_id);
+    }
+
+    void FileInfoCache::gc()
+    {
+      lrucache_.gc();
+    }
+
+    void FileInfoCache::release_fileinfo_(FileInfo *fileinfo)
+    {
+      if (NULL != fileinfo)
+      {
+        allocer_.deallocate(fileinfo);
+      }
+    }
+  }
+}
+

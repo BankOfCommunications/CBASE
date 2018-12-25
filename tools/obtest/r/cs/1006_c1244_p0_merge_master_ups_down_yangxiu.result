@@ -1,0 +1,8 @@
+ob1=OBI(cluster=1244, app_name=collect, schema_file=./collect.schema, local_sstable_dir=~/sstable)
+ob1.reboot
+ob1.source include/merge.inc
+ob1.prepare
+ob1.major_freeze
+ob1.$master_ups.stop
+OK
+ob1.check_cs_version 2

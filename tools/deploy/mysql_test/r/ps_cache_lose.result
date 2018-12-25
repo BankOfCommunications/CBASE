@@ -1,0 +1,252 @@
+drop table if exists t1, t2;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from select a,b from t1 where a=?;
+set @a=1;
+execute stmt1 using @a;
+a	b
+1	a
+set @a=2;
+execute stmt1 using @a;
+a	b
+2	b
+prepare stmt1 from replace into t1 values (1,'d',3),(4,?,6);
+set @b='f';
+execute stmt1 using @b;
+set @b='q';
+execute stmt1 using @b;
+prepare stmt1 from insert into t1 values (?,'d',7);
+set @b=7;
+execute stmt1 using @b;
+set @b=8;
+execute stmt1 using @b;
+prepare stmt1 from update t1 set b='k' where a=3;
+execute stmt1;
+prepare stmt1 from delete from  t1 where a=3;
+execute stmt1;
+deallocate prepare stmt1;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from select a,b from t1 where a=?;
+set @a=1;
+alter table t1 add d int;
+execute stmt1 using @a;
+a	b
+1	a
+prepare stmt1 from select a,b from t1 where a=?;
+alter table t1 add e int;
+set @a=1;
+execute stmt1 using @a;
+a	b
+1	a
+prepare stmt1 from select a,b from t1 where a=?;
+set @a=1;
+alter table t1 drop c;
+execute stmt1 using @a;
+a	b
+1	a
+prepare stmt1 from select a,b from t1 where a=?;
+alter table t1 drop d;
+set @a=1;
+execute stmt1 using @a;
+a	b
+1	a
+prepare stmt1 from select a,b from t1 where a=?;
+alter table t1 drop b;
+set @a=1;
+execute stmt1 using @a;
+ERROR HY000: unknown internal error, errno=-1
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from select a,c from t1 where a=3;
+alter table t1 drop c;
+execute stmt1;
+ERROR HY000: unknown internal error, errno=-1
+prepare stmt1 from select a,b from t1 where a=?;
+set @a=1;
+execute stmt1 using @a;
+a	b
+1	a
+alter table t1 add c int;
+alter table t1 drop c;
+execute stmt1 using @a;
+a	b
+1	a
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from select a,b from t1 where a=?;
+set @a=1;
+execute stmt1 using @a;
+a	b
+1	a
+alter table t1 drop b;
+alter table t1 add b varchar(255);
+execute stmt1 using @a;
+ERROR HY000: unknown internal error, errno=-1
+prepare stmt1 from select a,b from t1 where a=?;
+set @a=1;
+execute stmt1 using @a;
+a	b
+1	NULL
+alter table t1 drop b;
+alter table t1 add b int;
+execute stmt1 using @a;
+ERROR HY000: unknown internal error, errno=-1
+prepare stmt1 from select a,b from t1 where a=?;
+set @a=1;
+drop table t1;
+execute stmt1 using @a;
+ERROR HY000: unknown internal error, errno=-1
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from replace into t1 values (1,'d',3),(2,'f',6);
+alter table t1 add d int;
+execute stmt1;
+alter table t1 drop d;
+prepare stmt1 from replace into t1 values (3,'d',3),(4,'f',6);
+alter table t1 drop c;
+execute stmt1;
+ERROR HY000: unknown internal error, errno=18
+prepare stmt1 from replace into t1 values (3,'d'),(4,'f');
+alter table t1 add c int;
+alter table t1 drop c;
+execute stmt1;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from replace into t1 values (5,'d',4),(4,'f',2);
+alter table t1 drop b;
+alter table t1 add b varchar(255);
+execute stmt1;
+ERROR HY000: unknown internal error, errno=18
+prepare stmt1 from replace into t1 values (5,'d',4),(4,'f',2);
+alter table t1 drop b;
+alter table t1 add b int;
+execute stmt1;
+ERROR HY000: unknown internal error, errno=18
+prepare stmt1 from replace into t1 values (1,2,3),(2,5,1);
+drop table t1;
+execute stmt1;
+ERROR HY000: unknown internal error, errno=29
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from insert into t1 values (4,'d',3),(5,'f',6);
+alter table t1 add d int;
+execute stmt1;
+prepare stmt1 from insert into t1 values (6,'d',3,1),(7,'f',6,1);
+alter table t1 drop d;
+execute stmt1;
+ERROR HY000: unknown internal error, errno=18
+prepare stmt1 from insert into t1 values (8,'d',3),(9,'f',2);
+alter table t1 add d int;
+alter table t1 drop d;
+execute stmt1;
+prepare stmt1 from insert into t1 values (10,'d',4),(11,'f',2);
+alter table t1 drop b;
+alter table t1 add b varchar(255);
+execute stmt1;
+ERROR HY000: unknown internal error, errno=18
+prepare stmt1 from insert into t1 values (12,'d',4),(13,'f',2);
+alter table t1 drop b;
+alter table t1 add b int;
+execute stmt1;
+ERROR HY000: unknown internal error, errno=18
+prepare stmt1 from insert into t1 values (14,2,5),(15,3,4);
+drop table t1;
+execute stmt1;
+ERROR HY000: unknown internal error, errno=-1
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from insert into t1 values (12,'d',4),(13,'f',2);
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+execute stmt1;
+ERROR HY000: unknown internal error, errno=-1
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from update t1 set b='ok' where a=1;
+alter table t1 add d int;
+execute stmt1;
+prepare stmt1 from update t1 set b='ok' where a=1;
+alter table t1 drop d ;
+execute stmt1;
+prepare stmt1 from update t1 set b='ok' where a=1;
+alter table t1 drop b ;
+execute stmt1;
+ERROR HY000: unknown internal error, errno=18
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from update t1 set b='ok' where a=1;
+alter table t1 add d int;
+alter table t1 drop d ;
+execute stmt1;
+prepare stmt1 from update t1 set b='ok' where a=1;
+alter table t1 drop c ;
+alter table t1 add c int;
+execute stmt1;
+prepare stmt1 from update t1 set b='ok' where a=1;
+alter table t1 drop b ;
+alter table t1 add b varchar(255);
+execute stmt1;
+ERROR HY000: unknown internal error, errno=18
+prepare stmt1 from update t1 set b='ok' where a=1;
+alter table t1 drop b ;
+alter table t1 add b int;
+execute stmt1;
+ERROR HY000: unknown internal error, errno=-1
+prepare stmt1 from update t1 set b='ok' where a=1;
+drop table t1;
+execute stmt1;
+ERROR HY000: unknown internal error, errno=-1
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from update t1 set b='ok' where a=1;
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+execute stmt1;
+ERROR HY000: unknown internal error, errno=-1
+drop table t1;
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from delete from  t1 where a=3;
+alter table t1 add d int;
+execute stmt1;
+prepare stmt1 from delete from  t1 where a=2;
+alter table t1 drop d;
+execute stmt1;
+prepare stmt1 from delete from  t1 where a=3;
+alter table t1 drop a;
+ERROR HY000: Primary key column can not be dropped, column name = 'a'
+execute stmt1;
+prepare stmt1 from delete from  t1 where a=1;
+drop table t1;
+execute stmt1;
+ERROR HY000: unknown internal error, errno=-1
+create table t1( a int primary key,b varchar(255),c int);
+insert into t1 values(1,'a',2),(2,'b',3),(3,'c',4);
+create table t2( a int primary key,b varchar(255),c int);
+insert into t2 values(1,'a',2),(2,'b',3),(3,'c',4);
+prepare stmt1 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+alter table t1 add d int;
+execute stmt1;
+b	b
+a	a
+prepare stmt1 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+alter table t1 drop d ;
+execute stmt1;
+b	b
+a	a
+prepare stmt1 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+alter table t1 drop c;
+execute stmt1;
+b	b
+a	a
+prepare stmt1 from select t1.b,t2.b from t1 join t2 on t1.a=t2.a where t1.a=1;
+drop table t1;
+execute stmt1;
+ERROR HY000: unknown internal error, errno=-1

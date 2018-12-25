@@ -1,0 +1,39 @@
+--disable_warnings
+drop table if exists t1,t2,left_table;
+--enable_warnings
+
+
+##
+## Bug: http://bugfree.corp.taobao.com/bug/200729
+##
+--error SHY000
+create table t1 (c_int int, c_ts timestamp, c_vchar varchar(250));
+
+--error 5019
+drop table t1;
+
+
+##
+## Bug: http://bugfree.corp.taobao.com/bug/200583
+##
+
+create table t1( a int primary key,b int);
+insert into t1 values(1,1);
+select a from t1;
+drop table t1;
+--error 5019
+select * from t1;
+
+##
+## Bug: http://bugfree.corp.taobao.com/bug/202440
+##
+create table left_table (      k1 varchar,      k2 varchar,      v1 int ,      v2 varchar,      v3 int,      primary key (k1, k2) );
+--error 5025
+create table left_table (      k1 varchar,      k2 varchar,      v1 int ,      v2 varchar,      v3 int,      primary key (k1, k2) );
+
+create table t1 (v varchar(30), c char(3), e char(20), t varchar(256) primary key);
+
+--error 5025
+create table t1 (v varchar(30), c char(3), e char(20), t varchar(256) primary key);
+drop table t1;
+drop table left_table;

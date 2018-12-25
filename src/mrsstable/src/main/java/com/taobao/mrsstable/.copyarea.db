@@ -1,0 +1,10 @@
+ClearCase CopyAreaDB|4
+vobs\ocba\ocba_code\CBASE开源\code\src\mrsstable\src\main\java\com\taobao\mrsstable
+2
+6
+15:TextInputSampler.java|1|166f773dfb5|4790|ec3cd70b|677a39e268a411e8a8030002c8c1274c|0
+d:MRLogger.java|1|166f773dfd3|367|42e10b60|6a1a39fe68a411e8a8030002c8c1274c|0
+18:SSTableOutputformat.java|1|166f773df91|2619|13c2cc8c|653a39c668a411e8a8030002c8c1274c|0
+11:MRGenSstable.java|1|166f773df28|98a7|afa0d6a|5d7a397268a411e8a8030002c8c1274c|0
+13:SSTableBuilder.java|1|166f773df73|176|7b2980fe|630a39aa68a411e8a8030002c8c1274c|0
+14:MrsstableRunner.java|1|166f773df46|1bfe|a8af9f1|60fa398e68a411e8a8030002c8c1274c|0
