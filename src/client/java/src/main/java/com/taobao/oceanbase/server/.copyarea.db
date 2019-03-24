@@ -1,8 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\src\client\java\src\main\java\com\taobao\oceanbase\server
-2
-4
-11:UpdateServer.java|1|166f774c0e2|e2c|9886b931|78caa16668ac11e8a8030002c8c1274c|0
-16:ObInstanceManager.java|1|166f774c0b8|22b2|ded1e5a8|763aa14a68ac11e8a8030002c8c1274c|0
-f:RootServer.java|1|166f774c066|2e07|f8c800e7|742aa12e68ac11e8a8030002c8c1274c|0
-10:MergeServer.java|1|166f774c105|b11|456ba2b|7adaa18268ac11e8a8030002c8c1274c|0

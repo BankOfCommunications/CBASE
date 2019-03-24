@@ -1,7 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tests\common\compress
-2
-3
-10:test_libcomp.cpp|1|166f775d6ee|15be|c8c1b5e|c6eb1a0668b511e8a8030002c8c1274c|0
-b:Makefile.am|1|166f775d66d|20c|ef25a87a|c4cb19ea68b511e8a8030002c8c1274c|0
-4:data|2|0|0|0|ca6b1a2e68b511e8a8030002c8c1274c|0

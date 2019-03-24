@@ -1,9 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tools\sysbench\sysbench\drivers
-2
-5
-5:mysql|2|0|0|0|744b3c5e68b811e8a8030002c8c1274c|0
-5:pgsql|2|0|0|0|684b3bc268b811e8a8030002c8c1274c|0
-6:oracle|2|0|0|0|82ab3d1668b811e8a8030002c8c1274c|0
-b:Makefile.am|1|166f77625c8|386|dc342032|7fbb3cee68b811e8a8030002c8c1274c|0
-b:Makefile.in|1|166f7762615|3e79|e827294e|8d7b3da668b811e8a8030002c8c1274c|0

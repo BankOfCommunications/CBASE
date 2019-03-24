@@ -1,9 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tools\deploy\histest
-2
-5
-9:table.sql|1|166f77a3c8e|1666|d8ecaa22|f12c8bea68d211e8a8030002c8c1274c|0
-7:fin.sql|1|166f77a3cc2|1f0f|3081ddb7|f35c8c0668d211e8a8030002c8c1274c|0
-9:stress.sh|1|166f77a3d15|ec4|8695aefe|f5bc8c2268d211e8a8030002c8c1274c|0
-a:histest.py|1|166f77a3d45|51f|ea4ab9cd|f82c8c3e68d211e8a8030002c8c1274c|0
-15:histest.conf.template|1|166f77a3d75|4fc|5cc5e2c1|fa6c8c5a68d211e8a8030002c8c1274c|0

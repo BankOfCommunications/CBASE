@@ -1,9 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tests\clustermanager
-2
-5
-11:test_ocm_meta.cpp|1|166f775b1cc|5e9a|22ce3a47|f76b0f8e68b411e8a8030002c8c1274c|0
-b:Makefile.am|1|166f775b1a8|362|af3320bc|f50b0f7268b411e8a8030002c8c1274c|0
-15:test_ocm_instance.cpp|1|166f775b1f5|1d2a|1a84effd|f9cb0faa68b411e8a8030002c8c1274c|0
-10:test_ocm_app.cpp|1|166f775b23c|260d|546292a7|fe0b0fe268b411e8a8030002c8c1274c|0
-19:test_ocm_meta_manager.cpp|1|166f775b219|53d2|d6890b1d|fbbb0fc668b411e8a8030002c8c1274c|0

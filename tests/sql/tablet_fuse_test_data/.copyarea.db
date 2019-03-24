@@ -1,7 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tests\sql\tablet_fuse_test_data
-2
-3
-c:ups_scan.ini|1|166f7759502|63|a5a314a4|390af8f268b311e8a8030002c8c1274c|0
-a:result.ini|1|166f77595de|66|db21676|3d8af92a68b311e8a8030002c8c1274c|0
-b:sstable.ini|1|166f77595ad|57|dd4b12c8|3afaf90e68b311e8a8030002c8c1274c|0

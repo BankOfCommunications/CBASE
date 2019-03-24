@@ -1,8 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tools\deploy\mixed_test
-2
-4
-d:mixed_test.py|1|166f778beb6|251|245bcf27|0bac10ee68c911e8a8030002c8c1274c|0
-8:Makefile|1|166f778be62|135|81ad622b|099c10d268c911e8a8030002c8c1274c|0
-9:stress.sh|1|166f778bee6|7da|b6685941|0dcc110a68c911e8a8030002c8c1274c|0
-11:mixed_test.schema|1|166f778bf1a|ea1|b2eb4925|101c112668c911e8a8030002c8c1274c|0

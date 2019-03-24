@@ -1,7 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\src\client\java\src\test\java\com\taobao\oceanbase\parsermysql
-2
-3
-12:CollectRowKey.java|1|166f774d042|46c|f6935f77|35aaab1268ad11e8a8030002c8c1274c|0
-e:ParseInfo.java|1|166f774d0b3|12bb|57e97320|39caab4a68ad11e8a8030002c8c1274c|0
-e:ParseItem.java|1|166f774d061|15d7|32ad2607|37baab2e68ad11e8a8030002c8c1274c|0

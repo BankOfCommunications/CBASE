@@ -1,8 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tools\sysbench\sysbench\drivers\pgsql
-2
-4
-b:Makefile.am|1|166f7762640|377|a32520d5|6a3b3bde68b811e8a8030002c8c1274c|0
-e:CMakeLists.txt|1|166f7762663|4a|3eef16fe|6cab3bfa68b811e8a8030002c8c1274c|0
-b:drv_pgsql.c|1|166f7762726|3a86|587dea8e|6ebb3c1668b811e8a8030002c8c1274c|0
-b:Makefile.in|1|166f776275c|4205|25491a1b|70cb3c3268b811e8a8030002c8c1274c|0

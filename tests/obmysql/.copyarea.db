@@ -1,8 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tests\obmysql
-2
-4
-20:test_ob_mysql_command_packet.cpp|1|166f7753f77|7dd|5fd1807a|007adc1268b111e8a8030002c8c1274c|0
-17:test_ob_mysql_state.cpp|1|166f775403a|7d7|dbab6813|027adc2e68b111e8a8030002c8c1274c|0
-b:Makefile.am|1|166f7753f54|29c|f80adad7|fe7adbf668b011e8a8030002c8c1274c|0
-16:test_ob_mysql_dtoa.cpp|1|166f775405a|ed4|3adc3a55|047adc4a68b111e8a8030002c8c1274c|0

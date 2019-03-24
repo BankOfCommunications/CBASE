@@ -1,8 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\src\client\obsql
-2
-4
-3:src|2|0|0|0|e94a8cfa68aa11e8a8030002c8c1274c|0
-b:Makefile.am|1|166f7749584|15|4bd30747|e60a8cd268aa11e8a8030002c8c1274c|0
-4:test|2|0|0|0|4daa921268ab11e8a8030002c8c1274c|0
-4:demo|2|0|0|0|5c4a92ca68ab11e8a8030002c8c1274c|0

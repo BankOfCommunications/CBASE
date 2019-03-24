@@ -1,9 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tools\deploy\bigquery
-2
-5
-8:Makefile|1|166f778ccef|15e|bf657053|73bc162a68c911e8a8030002c8c1274c|0
-9:stress.sh|1|166f778cd27|3e8|4522266c|75cc164668c911e8a8030002c8c1274c|0
-b:bigquery.py|1|166f778cd7e|2a1|1d41e8d8|77cc166268c911e8a8030002c8c1274c|0
-16:bigquery.conf.template|1|166f778cdcb|ff|94b55de0|79cc167e68c911e8a8030002c8c1274c|0
-f:bigquery.schema|1|166f778ce17|311|a2e61403|7bec169a68c911e8a8030002c8c1274c|0

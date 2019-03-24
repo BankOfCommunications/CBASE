@@ -1,7 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tools\sstable_builder\test
-2
-3
-f:data_syntax.ini|1|166f77ad858|277|65ed4c8|350cc17e68d711e8a8030002c8c1274c|0
-9:range.lst|1|166f77ad8a0|da|22ad2ed0|373cc19a68d711e8a8030002c8c1274c|0
-a:schema.ini|1|166f77ad8f8|1cb|c99fa543|395cc1b668d711e8a8030002c8c1274c|0

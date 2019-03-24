@@ -1,8 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\src\client\obsql\demo
-2
-4
-b:Makefile.am|1|166f774a4a4|1c4|59518e6f|5eaa92e668ab11e8a8030002c8c1274c|0
-12:ob_sql_demo_mt.cpp|1|166f774a4be|55c|d6629a81|60ba930268ab11e8a8030002c8c1274c|0
-1b:ob_sql_demo_transaction.cpp|1|166f774a4d8|df7|bb0443a3|62aa931e68ab11e8a8030002c8c1274c|0
-f:ob_sql_demo.cpp|1|166f774a512|262d|4e7f5805|64ca933a68ab11e8a8030002c8c1274c|0

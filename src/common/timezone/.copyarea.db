@@ -1,8 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\src\common\timezone
-2
-4
-8:tzfile.h|1|166f774791a|1486|2d1d5bf9|1efa5cbe68a711e8a8030002c8c1274c|0
-b:localtime.c|1|166f774793a|cb6a|999e27ca|210a5cda68a711e8a8030002c8c1274c|0
-b:Makefile.am|1|166f77478f9|30b|6675e4a4|1cea5ca268a711e8a8030002c8c1274c|0
-9:private.h|1|166f7747b1b|27cd|c4213b9e|238a5cf668a711e8a8030002c8c1274c|0

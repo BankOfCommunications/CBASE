@@ -1,9 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tests\compactsstablev2
-2
-5
-15:ob_fileinfo_cache.cpp|1|166f7753b37|15b0|6dd4f8e4|c68ad92668b011e8a8030002c8c1274c|0
-b:Makefile.am|1|166f7753b19|4a8|d6e98504|c44ad90a68b011e8a8030002c8c1274c|0
-12:test_disk_path.cpp|1|166f7753b64|1312|de40636e|c8aad94268b011e8a8030002c8c1274c|0
-1f:test_compact_sstable_writer.cpp|1|166f7753b99|1625c|56ffc919|cabad95e68b011e8a8030002c8c1274c|0
-13:ob_fileinfo_cache.h|1|166f7753c07|cca|769d107|cccad97a68b011e8a8030002c8c1274c|0
