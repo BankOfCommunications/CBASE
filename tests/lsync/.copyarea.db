@@ -1,6 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tests\lsync
-2
-2
-b:Makefile.am|1|166f77565a0|4a8|29a087bc|471aec9268b211e8a8030002c8c1274c|0
-e:test_lsync.cpp|1|166f77565b7|1ea9|fe4887dd|492aecae68b211e8a8030002c8c1274c|0

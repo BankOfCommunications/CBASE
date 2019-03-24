@@ -1,6 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\src\client\libmysql_example
-2
-2
-8:Makefile|1|166f774d162|a4|28c733a4|549aac9268ad11e8a8030002c8c1274c|0
-12:ob_sql_example.cpp|1|166f774d1ab|c91|d0a3eadd|568aacae68ad11e8a8030002c8c1274c|0

@@ -1,8 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\src\client\java\src\test\java\com\taobao\oceanbase\base\table
-2
-4
-b:ITable.java|1|166f774cbdb|2ec|2c4cfec7|e4faa70a68ac11e8a8030002c8c1274c|0
-15:CollectInfoTable.java|1|166f774cc05|5bc|e462d1b7|e6faa72668ac11e8a8030002c8c1274c|0
-a:Table.java|1|166f774cbb1|9dd|d92623d1|e0eaa6d268ac11e8a8030002c8c1274c|0
-12:ItemInfoTable.java|1|166f774cbc7|48f|22306b71|e2faa6ee68ac11e8a8030002c8c1274c|0

@@ -1,9 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tools\sysbench\sysbench\tests\trx
-2
-5
-b:Makefile.am|1|166f776115f|4fa|e99aa175|b0db32aa68b711e8a8030002c8c1274c|0
-b:libsboltp.a|1|166f776119a|38f84|e3e6fc2e|b58b32e268b711e8a8030002c8c1274c|0
-e:CMakeLists.txt|1|166f7761175|340|749d1225|b37b32c668b711e8a8030002c8c1274c|0
-8:sb_trx.c|1|166f776136e|1df49|bff85|ba0b331a68b711e8a8030002c8c1274c|0
-b:Makefile.in|1|166f77611d1|42cb|361e4e7b|b7eb32fe68b711e8a8030002c8c1274c|0

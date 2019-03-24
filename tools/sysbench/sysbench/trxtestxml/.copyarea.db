@@ -1,9 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tools\sysbench\sysbench\trxtestxml
-2
-5
-10:simon_trxtest.cc|1|166f7760cd2|178a|250d11d2|841b306a68b711e8a8030002c8c1274c|0
-11:simon_trxtest.xml|1|166f7760d04|a55|7e53222|863b308668b711e8a8030002c8c1274c|0
-12:libsimon_trxtest.a|1|166f7760d2a|27d6c|bbc0c289|885b30a268b711e8a8030002c8c1274c|0
-8:Makefile|1|166f7760ca6|209|271ca111|820b304e68b711e8a8030002c8c1274c|0
-f:simon_trxtest.h|1|166f7760d46|1770|7ed34529|8abb30be68b711e8a8030002c8c1274c|0

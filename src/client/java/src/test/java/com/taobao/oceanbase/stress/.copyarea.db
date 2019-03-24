@@ -1,7 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\src\client\java\src\test\java\com\taobao\oceanbase\stress
-2
-3
-11:TestOBRowkey.java|1|166f774cfe4|30d|e538faba|2e0aaaae68ad11e8a8030002c8c1274c|0
-f:StressTest.java|1|166f774cfc1|1dbb|1be68791|2c0aaa9268ad11e8a8030002c8c1274c|0
-e:SQLClient.java|1|166f774d013|596|8b8c76f|300aaaca68ad11e8a8030002c8c1274c|0

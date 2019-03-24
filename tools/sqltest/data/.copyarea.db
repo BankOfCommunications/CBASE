@@ -1,7 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\tools\sqltest\data
-2
-3
-e:sqlpattern.txt|1|166f77774f4|945|f1c13164|f95ba93e68c011e8a8030002c8c1274c|0
-a:schema.ini|1|166f777753d|1c4|108a9e5c|fb8ba95a68c011e8a8030002c8c1274c|0
-9:mysql.sql|1|166f7777579|13d|e1b46926|fdfba97668c011e8a8030002c8c1274c|0

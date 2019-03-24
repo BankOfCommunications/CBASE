@@ -1,7 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\script\supervisor
-2
-3
-6:ms.ini|1|166f77af25f|e24|70708df6|bc5cc84e68d711e8a8030002c8c1274c|0
-7:lms.ini|1|166f77af2bb|e25|68288e62|be5cc86a68d711e8a8030002c8c1274c|0
-b:Makefile.am|1|166f77af216|56|3ce51e27|ba4cc83268d711e8a8030002c8c1274c|0

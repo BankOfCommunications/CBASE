@@ -1,9 +1,0 @@
-ClearCase CopyAreaDB|4
-vobs\ocba\ocba_code\CBASE开源\code\src\client\obsql\test
-2
-5
-b:Makefile.am|1|166f774a02f|359|dad5115a|4f7a922e68ab11e8a8030002c8c1274c|0
-1a:test_group_data_source.cpp|1|166f774a2b1|2a85|d7030acb|518a924a68ab11e8a8030002c8c1274c|0
-f:ob_sql_test.cpp|1|166f774a46a|21d4|a5af2eec|56ba928268ab11e8a8030002c8c1274c|0
-15:ob_sql_while_test.cpp|1|166f774a450|6f7|d64c19f3|548a926668ab11e8a8030002c8c1274c|0
-15:ob_sql_test_multh.cpp|1|166f774a483|1f64|716f4a2b|58ca929e68ab11e8a8030002c8c1274c|0
